@@ -34,7 +34,7 @@ client = Datagrid(
     api_key=os.environ.get("DATAGRID_API_KEY"),  # This is the default and can be omitted
 )
 
-knowledge = client.knowledge.create(
+knowledge = client.knowledge.create2(
     files=[b"raw file contents"],
 )
 print(knowledge.id)
@@ -60,7 +60,7 @@ client = AsyncDatagrid(
 
 
 async def main() -> None:
-    knowledge = await client.knowledge.create(
+    knowledge = await client.knowledge.create2(
         files=[b"raw file contents"],
     )
     print(knowledge.id)
@@ -159,7 +159,7 @@ from datagrid_ai import Datagrid
 client = Datagrid()
 
 try:
-    client.knowledge.create(
+    client.knowledge.create2(
         files=[b"raw file contents"],
     )
 except datagrid_ai.APIConnectionError as e:
@@ -204,7 +204,7 @@ client = Datagrid(
 )
 
 # Or, configure per-request:
-client.with_options(max_retries=5).knowledge.create(
+client.with_options(max_retries=5).knowledge.create2(
     files=[b"raw file contents"],
 )
 ```
@@ -229,7 +229,7 @@ client = Datagrid(
 )
 
 # Override per-request:
-client.with_options(timeout=5.0).knowledge.create(
+client.with_options(timeout=5.0).knowledge.create2(
     files=[b"raw file contents"],
 )
 ```
@@ -272,12 +272,12 @@ The "raw" Response object can be accessed by prefixing `.with_raw_response.` to 
 from datagrid_ai import Datagrid
 
 client = Datagrid()
-response = client.knowledge.with_raw_response.create(
+response = client.knowledge.with_raw_response.create2(
     files=[b'raw file contents'],
 )
 print(response.headers.get('X-My-Header'))
 
-knowledge = response.parse()  # get the object that `knowledge.create()` would have returned
+knowledge = response.parse()  # get the object that `knowledge.create2()` would have returned
 print(knowledge.id)
 ```
 
@@ -292,7 +292,7 @@ The above interface eagerly reads the full response body when you make the reque
 To stream the response body, use `.with_streaming_response` instead, which requires a context manager and only reads the response body once you call `.read()`, `.text()`, `.json()`, `.iter_bytes()`, `.iter_text()`, `.iter_lines()` or `.parse()`. In the async client, these are async methods.
 
 ```python
-with client.knowledge.with_streaming_response.create(
+with client.knowledge.with_streaming_response.create2(
     files=[b"raw file contents"],
 ) as response:
     print(response.headers.get("X-My-Header"))

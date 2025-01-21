@@ -6,7 +6,7 @@ from typing import List, Mapping, cast
 
 import httpx
 
-from ..types import knowledge_list_params, knowledge_create_params, knowledge_update_params
+from ..types import knowledge_list_params, knowledge_update_params, knowledge_create2_params
 from .._types import NOT_GIVEN, Body, Query, Headers, NoneType, NotGiven, FileTypes
 from .._utils import (
     extract_files,
@@ -49,54 +49,6 @@ class KnowledgeResource(SyncAPIResource):
         For more information, see https://www.github.com/stainless-sdks/datagrid-python#with_streaming_response
         """
         return KnowledgeResourceWithStreamingResponse(self)
-
-    def create(
-        self,
-        *,
-        files: List[FileTypes],
-        name: str | NotGiven = NOT_GIVEN,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> Knowledge:
-        """
-        Create knowledge which will be learned and leveraged by agents.
-
-        Args:
-          files: The files to be uploaded and learned. Supported media types are `pdf`, `json`,
-              `csv`, `text`, `png`, `jpeg`, `excel`, `google sheets`.
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        body = deepcopy_minimal(
-            {
-                "files": files,
-                "name": name,
-            }
-        )
-        extracted_files = extract_files(cast(Mapping[str, object], body), paths=[["files", "<array>"]])
-        # It should be noted that the actual Content-Type header that will be
-        # sent to the server will contain a `boundary` parameter, e.g.
-        # multipart/form-data; boundary=---abc--
-        extra_headers = {"Content-Type": "multipart/form-data", **(extra_headers or {})}
-        return self._post(
-            "/knowledge",
-            body=maybe_transform(body, knowledge_create_params.KnowledgeCreateParams),
-            files=extracted_files,
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=Knowledge,
-        )
 
     def retrieve(
         self,
@@ -258,28 +210,7 @@ class KnowledgeResource(SyncAPIResource):
             cast_to=NoneType,
         )
 
-
-class AsyncKnowledgeResource(AsyncAPIResource):
-    @cached_property
-    def with_raw_response(self) -> AsyncKnowledgeResourceWithRawResponse:
-        """
-        This property can be used as a prefix for any HTTP method call to return
-        the raw response object instead of the parsed content.
-
-        For more information, see https://www.github.com/stainless-sdks/datagrid-python#accessing-raw-response-data-eg-headers
-        """
-        return AsyncKnowledgeResourceWithRawResponse(self)
-
-    @cached_property
-    def with_streaming_response(self) -> AsyncKnowledgeResourceWithStreamingResponse:
-        """
-        An alternative to `.with_raw_response` that doesn't eagerly read the response body.
-
-        For more information, see https://www.github.com/stainless-sdks/datagrid-python#with_streaming_response
-        """
-        return AsyncKnowledgeResourceWithStreamingResponse(self)
-
-    async def create(
+    def create2(
         self,
         *,
         files: List[FileTypes],
@@ -317,15 +248,36 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         # sent to the server will contain a `boundary` parameter, e.g.
         # multipart/form-data; boundary=---abc--
         extra_headers = {"Content-Type": "multipart/form-data", **(extra_headers or {})}
-        return await self._post(
+        return self._post(
             "/knowledge",
-            body=await async_maybe_transform(body, knowledge_create_params.KnowledgeCreateParams),
+            body=maybe_transform(body, knowledge_create2_params.KnowledgeCreate2Params),
             files=extracted_files,
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=Knowledge,
         )
+
+
+class AsyncKnowledgeResource(AsyncAPIResource):
+    @cached_property
+    def with_raw_response(self) -> AsyncKnowledgeResourceWithRawResponse:
+        """
+        This property can be used as a prefix for any HTTP method call to return
+        the raw response object instead of the parsed content.
+
+        For more information, see https://www.github.com/stainless-sdks/datagrid-python#accessing-raw-response-data-eg-headers
+        """
+        return AsyncKnowledgeResourceWithRawResponse(self)
+
+    @cached_property
+    def with_streaming_response(self) -> AsyncKnowledgeResourceWithStreamingResponse:
+        """
+        An alternative to `.with_raw_response` that doesn't eagerly read the response body.
+
+        For more information, see https://www.github.com/stainless-sdks/datagrid-python#with_streaming_response
+        """
+        return AsyncKnowledgeResourceWithStreamingResponse(self)
 
     async def retrieve(
         self,
@@ -487,14 +439,59 @@ class AsyncKnowledgeResource(AsyncAPIResource):
             cast_to=NoneType,
         )
 
+    async def create2(
+        self,
+        *,
+        files: List[FileTypes],
+        name: str | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> Knowledge:
+        """
+        Create knowledge which will be learned and leveraged by agents.
+
+        Args:
+          files: The files to be uploaded and learned. Supported media types are `pdf`, `json`,
+              `csv`, `text`, `png`, `jpeg`, `excel`, `google sheets`.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        body = deepcopy_minimal(
+            {
+                "files": files,
+                "name": name,
+            }
+        )
+        extracted_files = extract_files(cast(Mapping[str, object], body), paths=[["files", "<array>"]])
+        # It should be noted that the actual Content-Type header that will be
+        # sent to the server will contain a `boundary` parameter, e.g.
+        # multipart/form-data; boundary=---abc--
+        extra_headers = {"Content-Type": "multipart/form-data", **(extra_headers or {})}
+        return await self._post(
+            "/knowledge",
+            body=await async_maybe_transform(body, knowledge_create2_params.KnowledgeCreate2Params),
+            files=extracted_files,
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=Knowledge,
+        )
+
 
 class KnowledgeResourceWithRawResponse:
     def __init__(self, knowledge: KnowledgeResource) -> None:
         self._knowledge = knowledge
 
-        self.create = to_raw_response_wrapper(
-            knowledge.create,
-        )
         self.retrieve = to_raw_response_wrapper(
             knowledge.retrieve,
         )
@@ -507,15 +504,15 @@ class KnowledgeResourceWithRawResponse:
         self.delete = to_raw_response_wrapper(
             knowledge.delete,
         )
+        self.create2 = to_raw_response_wrapper(
+            knowledge.create2,
+        )
 
 
 class AsyncKnowledgeResourceWithRawResponse:
     def __init__(self, knowledge: AsyncKnowledgeResource) -> None:
         self._knowledge = knowledge
 
-        self.create = async_to_raw_response_wrapper(
-            knowledge.create,
-        )
         self.retrieve = async_to_raw_response_wrapper(
             knowledge.retrieve,
         )
@@ -528,15 +525,15 @@ class AsyncKnowledgeResourceWithRawResponse:
         self.delete = async_to_raw_response_wrapper(
             knowledge.delete,
         )
+        self.create2 = async_to_raw_response_wrapper(
+            knowledge.create2,
+        )
 
 
 class KnowledgeResourceWithStreamingResponse:
     def __init__(self, knowledge: KnowledgeResource) -> None:
         self._knowledge = knowledge
 
-        self.create = to_streamed_response_wrapper(
-            knowledge.create,
-        )
         self.retrieve = to_streamed_response_wrapper(
             knowledge.retrieve,
         )
@@ -549,15 +546,15 @@ class KnowledgeResourceWithStreamingResponse:
         self.delete = to_streamed_response_wrapper(
             knowledge.delete,
         )
+        self.create2 = to_streamed_response_wrapper(
+            knowledge.create2,
+        )
 
 
 class AsyncKnowledgeResourceWithStreamingResponse:
     def __init__(self, knowledge: AsyncKnowledgeResource) -> None:
         self._knowledge = knowledge
 
-        self.create = async_to_streamed_response_wrapper(
-            knowledge.create,
-        )
         self.retrieve = async_to_streamed_response_wrapper(
             knowledge.retrieve,
         )
@@ -569,4 +566,7 @@ class AsyncKnowledgeResourceWithStreamingResponse:
         )
         self.delete = async_to_streamed_response_wrapper(
             knowledge.delete,
+        )
+        self.create2 = async_to_streamed_response_wrapper(
+            knowledge.create2,
         )
