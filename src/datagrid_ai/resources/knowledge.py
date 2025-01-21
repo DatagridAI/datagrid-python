@@ -34,10 +34,10 @@ class KnowledgeResource(SyncAPIResource):
     @cached_property
     def with_raw_response(self) -> KnowledgeResourceWithRawResponse:
         """
-        This property can be used as a prefix for any HTTP method call to return the
+        This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
-        For more information, see https://www.github.com/stainless-sdks/datagrid-python#accessing-raw-response-data-eg-headers
+        For more information, see https://www.github.com/DatagridAI/datagrid-python#accessing-raw-response-data-eg-headers
         """
         return KnowledgeResourceWithRawResponse(self)
 
@@ -46,7 +46,7 @@ class KnowledgeResource(SyncAPIResource):
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
-        For more information, see https://www.github.com/stainless-sdks/datagrid-python#with_streaming_response
+        For more information, see https://www.github.com/DatagridAI/datagrid-python#with_streaming_response
         """
         return KnowledgeResourceWithStreamingResponse(self)
 
@@ -89,7 +89,7 @@ class KnowledgeResource(SyncAPIResource):
         # multipart/form-data; boundary=---abc--
         extra_headers = {"Content-Type": "multipart/form-data", **(extra_headers or {})}
         return self._post(
-            "/v1/knowledge",
+            "/knowledge",
             body=maybe_transform(body, knowledge_create_params.KnowledgeCreateParams),
             files=extracted_files,
             options=make_request_options(
@@ -124,7 +124,7 @@ class KnowledgeResource(SyncAPIResource):
         if not knowledge_id:
             raise ValueError(f"Expected a non-empty value for `knowledge_id` but received {knowledge_id!r}")
         return self._get(
-            f"/v1/knowledge/{knowledge_id}",
+            f"/knowledge/{knowledge_id}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -158,7 +158,7 @@ class KnowledgeResource(SyncAPIResource):
         if not knowledge_id:
             raise ValueError(f"Expected a non-empty value for `knowledge_id` but received {knowledge_id!r}")
         return self._patch(
-            f"/v1/knowledge/{knowledge_id}",
+            f"/knowledge/{knowledge_id}",
             body=maybe_transform({"name": name}, knowledge_update_params.KnowledgeUpdateParams),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
@@ -205,7 +205,7 @@ class KnowledgeResource(SyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         return self._get_api_list(
-            "/v1/knowledge",
+            "/knowledge",
             page=SyncCursorIDPage[Knowledge],
             options=make_request_options(
                 extra_headers=extra_headers,
@@ -251,7 +251,7 @@ class KnowledgeResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `knowledge_id` but received {knowledge_id!r}")
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return self._delete(
-            f"/v1/knowledge/{knowledge_id}",
+            f"/knowledge/{knowledge_id}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -263,10 +263,10 @@ class AsyncKnowledgeResource(AsyncAPIResource):
     @cached_property
     def with_raw_response(self) -> AsyncKnowledgeResourceWithRawResponse:
         """
-        This property can be used as a prefix for any HTTP method call to return the
+        This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
-        For more information, see https://www.github.com/stainless-sdks/datagrid-python#accessing-raw-response-data-eg-headers
+        For more information, see https://www.github.com/DatagridAI/datagrid-python#accessing-raw-response-data-eg-headers
         """
         return AsyncKnowledgeResourceWithRawResponse(self)
 
@@ -275,7 +275,7 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
-        For more information, see https://www.github.com/stainless-sdks/datagrid-python#with_streaming_response
+        For more information, see https://www.github.com/DatagridAI/datagrid-python#with_streaming_response
         """
         return AsyncKnowledgeResourceWithStreamingResponse(self)
 
@@ -318,7 +318,7 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         # multipart/form-data; boundary=---abc--
         extra_headers = {"Content-Type": "multipart/form-data", **(extra_headers or {})}
         return await self._post(
-            "/v1/knowledge",
+            "/knowledge",
             body=await async_maybe_transform(body, knowledge_create_params.KnowledgeCreateParams),
             files=extracted_files,
             options=make_request_options(
@@ -353,7 +353,7 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         if not knowledge_id:
             raise ValueError(f"Expected a non-empty value for `knowledge_id` but received {knowledge_id!r}")
         return await self._get(
-            f"/v1/knowledge/{knowledge_id}",
+            f"/knowledge/{knowledge_id}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -387,7 +387,7 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         if not knowledge_id:
             raise ValueError(f"Expected a non-empty value for `knowledge_id` but received {knowledge_id!r}")
         return await self._patch(
-            f"/v1/knowledge/{knowledge_id}",
+            f"/knowledge/{knowledge_id}",
             body=await async_maybe_transform({"name": name}, knowledge_update_params.KnowledgeUpdateParams),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
@@ -434,7 +434,7 @@ class AsyncKnowledgeResource(AsyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         return self._get_api_list(
-            "/v1/knowledge",
+            "/knowledge",
             page=AsyncCursorIDPage[Knowledge],
             options=make_request_options(
                 extra_headers=extra_headers,
@@ -480,7 +480,7 @@ class AsyncKnowledgeResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `knowledge_id` but received {knowledge_id!r}")
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return await self._delete(
-            f"/v1/knowledge/{knowledge_id}",
+            f"/knowledge/{knowledge_id}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
