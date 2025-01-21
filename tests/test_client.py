@@ -765,7 +765,7 @@ class TestDatagrid:
 
         respx_mock.post("/knowledge").mock(side_effect=retry_handler)
 
-        response = client.knowledge.with_raw_response.create(files=[b"raw file contents"])
+        response = client.knowledge.with_raw_response.create2(files=[b"raw file contents"])
 
         assert response.retries_taken == failures_before_success
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
@@ -789,7 +789,7 @@ class TestDatagrid:
 
         respx_mock.post("/knowledge").mock(side_effect=retry_handler)
 
-        response = client.knowledge.with_raw_response.create(
+        response = client.knowledge.with_raw_response.create2(
             files=[b"raw file contents"], extra_headers={"x-stainless-retry-count": Omit()}
         )
 
@@ -814,7 +814,7 @@ class TestDatagrid:
 
         respx_mock.post("/knowledge").mock(side_effect=retry_handler)
 
-        response = client.knowledge.with_raw_response.create(
+        response = client.knowledge.with_raw_response.create2(
             files=[b"raw file contents"], extra_headers={"x-stainless-retry-count": "42"}
         )
 
@@ -1546,7 +1546,7 @@ class TestAsyncDatagrid:
 
         respx_mock.post("/knowledge").mock(side_effect=retry_handler)
 
-        response = await client.knowledge.with_raw_response.create(files=[b"raw file contents"])
+        response = await client.knowledge.with_raw_response.create2(files=[b"raw file contents"])
 
         assert response.retries_taken == failures_before_success
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
@@ -1571,7 +1571,7 @@ class TestAsyncDatagrid:
 
         respx_mock.post("/knowledge").mock(side_effect=retry_handler)
 
-        response = await client.knowledge.with_raw_response.create(
+        response = await client.knowledge.with_raw_response.create2(
             files=[b"raw file contents"], extra_headers={"x-stainless-retry-count": Omit()}
         )
 
@@ -1597,7 +1597,7 @@ class TestAsyncDatagrid:
 
         respx_mock.post("/knowledge").mock(side_effect=retry_handler)
 
-        response = await client.knowledge.with_raw_response.create(
+        response = await client.knowledge.with_raw_response.create2(
             files=[b"raw file contents"], extra_headers={"x-stainless-retry-count": "42"}
         )
 

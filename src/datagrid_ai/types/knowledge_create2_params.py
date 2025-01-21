@@ -7,10 +7,10 @@ from typing_extensions import Required, TypedDict
 
 from .._types import FileTypes
 
-__all__ = ["KnowledgeCreateParams"]
+__all__ = ["KnowledgeCreate2Params"]
 
 
-class KnowledgeCreateParams(TypedDict, total=False):
+class KnowledgeCreate2Params(TypedDict, total=False):
     files: Required[List[FileTypes]]
     """The files to be uploaded and learned.
 
