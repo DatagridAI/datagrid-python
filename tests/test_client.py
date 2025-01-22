@@ -712,11 +712,11 @@ class TestDatagrid:
     @mock.patch("datagrid_ai._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     def test_retrying_timeout_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
-        respx_mock.post("/knowledge").mock(side_effect=httpx.TimeoutException("Test timeout error"))
+        respx_mock.post("/v1/knowledge").mock(side_effect=httpx.TimeoutException("Test timeout error"))
 
         with pytest.raises(APITimeoutError):
             self.client.post(
-                "/knowledge",
+                "/v1/knowledge",
                 body=cast(object, dict(files=[b"raw file contents"])),
                 cast_to=httpx.Response,
                 options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
@@ -727,11 +727,11 @@ class TestDatagrid:
     @mock.patch("datagrid_ai._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     def test_retrying_status_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
-        respx_mock.post("/knowledge").mock(return_value=httpx.Response(500))
+        respx_mock.post("/v1/knowledge").mock(return_value=httpx.Response(500))
 
         with pytest.raises(APIStatusError):
             self.client.post(
-                "/knowledge",
+                "/v1/knowledge",
                 body=cast(object, dict(files=[b"raw file contents"])),
                 cast_to=httpx.Response,
                 options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
@@ -763,9 +763,9 @@ class TestDatagrid:
                 return httpx.Response(500)
             return httpx.Response(200)
 
-        respx_mock.post("/knowledge").mock(side_effect=retry_handler)
+        respx_mock.post("/v1/knowledge").mock(side_effect=retry_handler)
 
-        response = client.knowledge.with_raw_response.create2(files=[b"raw file contents"])
+        response = client.knowledge.with_raw_response.create(files=[b"raw file contents"])
 
         assert response.retries_taken == failures_before_success
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
@@ -787,9 +787,9 @@ class TestDatagrid:
                 return httpx.Response(500)
             return httpx.Response(200)
 
-        respx_mock.post("/knowledge").mock(side_effect=retry_handler)
+        respx_mock.post("/v1/knowledge").mock(side_effect=retry_handler)
 
-        response = client.knowledge.with_raw_response.create2(
+        response = client.knowledge.with_raw_response.create(
             files=[b"raw file contents"], extra_headers={"x-stainless-retry-count": Omit()}
         )
 
@@ -812,9 +812,9 @@ class TestDatagrid:
                 return httpx.Response(500)
             return httpx.Response(200)
 
-        respx_mock.post("/knowledge").mock(side_effect=retry_handler)
+        respx_mock.post("/v1/knowledge").mock(side_effect=retry_handler)
 
-        response = client.knowledge.with_raw_response.create2(
+        response = client.knowledge.with_raw_response.create(
             files=[b"raw file contents"], extra_headers={"x-stainless-retry-count": "42"}
         )
 
@@ -1492,11 +1492,11 @@ class TestAsyncDatagrid:
     @mock.patch("datagrid_ai._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     async def test_retrying_timeout_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
-        respx_mock.post("/knowledge").mock(side_effect=httpx.TimeoutException("Test timeout error"))
+        respx_mock.post("/v1/knowledge").mock(side_effect=httpx.TimeoutException("Test timeout error"))
 
         with pytest.raises(APITimeoutError):
             await self.client.post(
-                "/knowledge",
+                "/v1/knowledge",
                 body=cast(object, dict(files=[b"raw file contents"])),
                 cast_to=httpx.Response,
                 options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
@@ -1507,11 +1507,11 @@ class TestAsyncDatagrid:
     @mock.patch("datagrid_ai._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     async def test_retrying_status_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
-        respx_mock.post("/knowledge").mock(return_value=httpx.Response(500))
+        respx_mock.post("/v1/knowledge").mock(return_value=httpx.Response(500))
 
         with pytest.raises(APIStatusError):
             await self.client.post(
-                "/knowledge",
+                "/v1/knowledge",
                 body=cast(object, dict(files=[b"raw file contents"])),
                 cast_to=httpx.Response,
                 options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
@@ -1544,9 +1544,9 @@ class TestAsyncDatagrid:
                 return httpx.Response(500)
             return httpx.Response(200)
 
-        respx_mock.post("/knowledge").mock(side_effect=retry_handler)
+        respx_mock.post("/v1/knowledge").mock(side_effect=retry_handler)
 
-        response = await client.knowledge.with_raw_response.create2(files=[b"raw file contents"])
+        response = await client.knowledge.with_raw_response.create(files=[b"raw file contents"])
 
         assert response.retries_taken == failures_before_success
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
@@ -1569,9 +1569,9 @@ class TestAsyncDatagrid:
                 return httpx.Response(500)
             return httpx.Response(200)
 
-        respx_mock.post("/knowledge").mock(side_effect=retry_handler)
+        respx_mock.post("/v1/knowledge").mock(side_effect=retry_handler)
 
-        response = await client.knowledge.with_raw_response.create2(
+        response = await client.knowledge.with_raw_response.create(
             files=[b"raw file contents"], extra_headers={"x-stainless-retry-count": Omit()}
         )
 
@@ -1595,9 +1595,9 @@ class TestAsyncDatagrid:
                 return httpx.Response(500)
             return httpx.Response(200)
 
-        respx_mock.post("/knowledge").mock(side_effect=retry_handler)
+        respx_mock.post("/v1/knowledge").mock(side_effect=retry_handler)
 
-        response = await client.knowledge.with_raw_response.create2(
+        response = await client.knowledge.with_raw_response.create(
             files=[b"raw file contents"], extra_headers={"x-stainless-retry-count": "42"}
         )
 

@@ -10,13 +10,9 @@ import httpx
 
 from . import _exceptions
 from ._qs import Querystring
-from .types import client_converse_params
 from ._types import (
     NOT_GIVEN,
-    Body,
     Omit,
-    Query,
-    Headers,
     Timeout,
     NotGiven,
     Transport,
@@ -25,27 +21,17 @@ from ._types import (
 )
 from ._utils import (
     is_given,
-    maybe_transform,
     get_async_library,
-    async_maybe_transform,
 )
 from ._version import __version__
-from ._response import (
-    to_raw_response_wrapper,
-    to_streamed_response_wrapper,
-    async_to_raw_response_wrapper,
-    async_to_streamed_response_wrapper,
-)
-from .resources import health, knowledge
+from .resources import knowledge
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
 from ._exceptions import DatagridError, APIStatusError
 from ._base_client import (
     DEFAULT_MAX_RETRIES,
     SyncAPIClient,
     AsyncAPIClient,
-    make_request_options,
 )
-from .types.converse_response import ConverseResponse
 
 __all__ = [
     "Timeout",
@@ -61,7 +47,6 @@ __all__ = [
 
 class Datagrid(SyncAPIClient):
     knowledge: knowledge.KnowledgeResource
-    health: health.HealthResource
     with_raw_response: DatagridWithRawResponse
     with_streaming_response: DatagridWithStreamedResponse
 
@@ -106,7 +91,7 @@ class Datagrid(SyncAPIClient):
         if base_url is None:
             base_url = os.environ.get("DATAGRID_BASE_URL")
         if base_url is None:
-            base_url = f"https://api.datagrid.com/v1"
+            base_url = f"https://api.datagrid.com"
 
         super().__init__(
             version=__version__,
@@ -120,7 +105,6 @@ class Datagrid(SyncAPIClient):
         )
 
         self.knowledge = knowledge.KnowledgeResource(self)
-        self.health = health.HealthResource(self)
         self.with_raw_response = DatagridWithRawResponse(self)
         self.with_streaming_response = DatagridWithStreamedResponse(self)
 
@@ -195,64 +179,6 @@ class Datagrid(SyncAPIClient):
     # client.with_options(timeout=10).foo.create(...)
     with_options = copy
 
-    def converse(
-        self,
-        *,
-        prompt: str,
-        agent_id: str | NotGiven = NOT_GIVEN,
-        config: client_converse_params.Config | NotGiven = NOT_GIVEN,
-        conversation_id: str | NotGiven = NOT_GIVEN,
-        stream: bool | NotGiven = NOT_GIVEN,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> ConverseResponse:
-        """
-        Converse with an AI Agent
-
-        Args:
-          prompt: The input prompt.
-
-          agent_id: The ID of the agent that should be used for the converse. If both agent_id and
-              conversation_id aren't provided - the new agent is created.
-
-          config: The config that overrides the default config of the agent for that converse.
-
-          conversation_id: The ID of the present conversation to use. If it's not provided - a new
-              conversation will be created.
-
-          stream: Determines the response type of the converse. Response is the Server-Sent Events
-              if stream is set to true.
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        return self.post(
-            "/converse",
-            body=maybe_transform(
-                {
-                    "prompt": prompt,
-                    "agent_id": agent_id,
-                    "config": config,
-                    "conversation_id": conversation_id,
-                    "stream": stream,
-                },
-                client_converse_params.ClientConverseParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=ConverseResponse,
-        )
-
     @override
     def _make_status_error(
         self,
@@ -289,7 +215,6 @@ class Datagrid(SyncAPIClient):
 
 class AsyncDatagrid(AsyncAPIClient):
     knowledge: knowledge.AsyncKnowledgeResource
-    health: health.AsyncHealthResource
     with_raw_response: AsyncDatagridWithRawResponse
     with_streaming_response: AsyncDatagridWithStreamedResponse
 
@@ -334,7 +259,7 @@ class AsyncDatagrid(AsyncAPIClient):
         if base_url is None:
             base_url = os.environ.get("DATAGRID_BASE_URL")
         if base_url is None:
-            base_url = f"https://api.datagrid.com/v1"
+            base_url = f"https://api.datagrid.com"
 
         super().__init__(
             version=__version__,
@@ -348,7 +273,6 @@ class AsyncDatagrid(AsyncAPIClient):
         )
 
         self.knowledge = knowledge.AsyncKnowledgeResource(self)
-        self.health = health.AsyncHealthResource(self)
         self.with_raw_response = AsyncDatagridWithRawResponse(self)
         self.with_streaming_response = AsyncDatagridWithStreamedResponse(self)
 
@@ -423,64 +347,6 @@ class AsyncDatagrid(AsyncAPIClient):
     # client.with_options(timeout=10).foo.create(...)
     with_options = copy
 
-    async def converse(
-        self,
-        *,
-        prompt: str,
-        agent_id: str | NotGiven = NOT_GIVEN,
-        config: client_converse_params.Config | NotGiven = NOT_GIVEN,
-        conversation_id: str | NotGiven = NOT_GIVEN,
-        stream: bool | NotGiven = NOT_GIVEN,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> ConverseResponse:
-        """
-        Converse with an AI Agent
-
-        Args:
-          prompt: The input prompt.
-
-          agent_id: The ID of the agent that should be used for the converse. If both agent_id and
-              conversation_id aren't provided - the new agent is created.
-
-          config: The config that overrides the default config of the agent for that converse.
-
-          conversation_id: The ID of the present conversation to use. If it's not provided - a new
-              conversation will be created.
-
-          stream: Determines the response type of the converse. Response is the Server-Sent Events
-              if stream is set to true.
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        return await self.post(
-            "/converse",
-            body=await async_maybe_transform(
-                {
-                    "prompt": prompt,
-                    "agent_id": agent_id,
-                    "config": config,
-                    "conversation_id": conversation_id,
-                    "stream": stream,
-                },
-                client_converse_params.ClientConverseParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=ConverseResponse,
-        )
-
     @override
     def _make_status_error(
         self,
@@ -518,41 +384,21 @@ class AsyncDatagrid(AsyncAPIClient):
 class DatagridWithRawResponse:
     def __init__(self, client: Datagrid) -> None:
         self.knowledge = knowledge.KnowledgeResourceWithRawResponse(client.knowledge)
-        self.health = health.HealthResourceWithRawResponse(client.health)
-
-        self.converse = to_raw_response_wrapper(
-            client.converse,
-        )
 
 
 class AsyncDatagridWithRawResponse:
     def __init__(self, client: AsyncDatagrid) -> None:
         self.knowledge = knowledge.AsyncKnowledgeResourceWithRawResponse(client.knowledge)
-        self.health = health.AsyncHealthResourceWithRawResponse(client.health)
-
-        self.converse = async_to_raw_response_wrapper(
-            client.converse,
-        )
 
 
 class DatagridWithStreamedResponse:
     def __init__(self, client: Datagrid) -> None:
         self.knowledge = knowledge.KnowledgeResourceWithStreamingResponse(client.knowledge)
-        self.health = health.HealthResourceWithStreamingResponse(client.health)
-
-        self.converse = to_streamed_response_wrapper(
-            client.converse,
-        )
 
 
 class AsyncDatagridWithStreamedResponse:
     def __init__(self, client: AsyncDatagrid) -> None:
         self.knowledge = knowledge.AsyncKnowledgeResourceWithStreamingResponse(client.knowledge)
-        self.health = health.AsyncHealthResourceWithStreamingResponse(client.health)
-
-        self.converse = async_to_streamed_response_wrapper(
-            client.converse,
-        )
 
 
 Client = Datagrid
