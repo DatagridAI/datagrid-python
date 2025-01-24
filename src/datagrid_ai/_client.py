@@ -211,33 +211,7 @@ class Datagrid(SyncAPIClient):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> ConverseResponse:
-        """
-        Converse with an AI Agent
-
-        Args:
-          prompt: The input prompt.
-
-          agent_id: The ID of the agent that should be used for the converse. If both agent_id and
-              conversation_id aren't provided - the new agent is created.
-
-          config: The config that overrides the default config of the agent for that converse.
-
-          conversation_id: The ID of the present conversation to use. If it's not provided - a new
-              conversation will be created.
-
-          stream: Determines the response type of the converse. Response is the Server-Sent Events
-              if stream is set to true.
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        ...
+    ) -> ConverseResponse: ...
 
     @overload
     def converse(
@@ -254,33 +228,7 @@ class Datagrid(SyncAPIClient):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> Stream[sse_converse.AgentStreamEvent]:
-        """
-        Converse with an AI Agent
-
-        Args:
-          prompt: The input prompt.
-
-          agent_id: The ID of the agent that should be used for the converse. If both agent_id and
-              conversation_id aren't provided - the new agent is created.
-
-          config: The config that overrides the default config of the agent for that converse.
-
-          conversation_id: The ID of the present conversation to use. If it's not provided - a new
-              conversation will be created.
-
-          stream: Determines the response type of the converse. Response is the Server-Sent Events
-              if stream is set to true.
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        ...
+    ) -> Stream[sse_converse.AgentStreamEvent]: ...
 
     @overload
     def converse(
@@ -297,33 +245,7 @@ class Datagrid(SyncAPIClient):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> ConverseResponse | Stream[sse_converse.AgentStreamEvent]:
-        """
-        Converse with an AI Agent
-
-        Args:
-          prompt: The input prompt.
-
-          agent_id: The ID of the agent that should be used for the converse. If both agent_id and
-              conversation_id aren't provided - the new agent is created.
-
-          config: The config that overrides the default config of the agent for that converse.
-
-          conversation_id: The ID of the present conversation to use. If it's not provided - a new
-              conversation will be created.
-
-          stream: Determines the response type of the converse. Response is the Server-Sent Events
-              if stream is set to true.
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        ...
+    ) -> ConverseResponse | Stream[sse_converse.AgentStreamEvent]: ...
 
     def converse(
         self,
@@ -570,33 +492,7 @@ class AsyncDatagrid(AsyncAPIClient):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> ConverseResponse:
-        """
-        Converse with an AI Agent
-
-        Args:
-          prompt: The input prompt.
-
-          agent_id: The ID of the agent that should be used for the converse. If both agent_id and
-              conversation_id aren't provided - the new agent is created.
-
-          config: The config that overrides the default config of the agent for that converse.
-
-          conversation_id: The ID of the present conversation to use. If it's not provided - a new
-              conversation will be created.
-
-          stream: Determines the response type of the converse. Response is the Server-Sent Events
-              if stream is set to true.
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        ...
+    ) -> ConverseResponse: ...
 
     @overload
     async def converse(
@@ -613,33 +509,7 @@ class AsyncDatagrid(AsyncAPIClient):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> AsyncStream[sse_converse.AgentStreamEvent]:
-        """
-        Converse with an AI Agent
-
-        Args:
-          prompt: The input prompt.
-
-          agent_id: The ID of the agent that should be used for the converse. If both agent_id and
-              conversation_id aren't provided - the new agent is created.
-
-          config: The config that overrides the default config of the agent for that converse.
-
-          conversation_id: The ID of the present conversation to use. If it's not provided - a new
-              conversation will be created.
-
-          stream: Determines the response type of the converse. Response is the Server-Sent Events
-              if stream is set to true.
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        ...
+    ) -> AsyncStream[sse_converse.AgentStreamEvent]: ...
 
     @overload
     async def converse(
@@ -656,33 +526,7 @@ class AsyncDatagrid(AsyncAPIClient):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> ConverseResponse | AsyncStream[sse_converse.AgentStreamEvent]:
-        """
-        Converse with an AI Agent
-
-        Args:
-          prompt: The input prompt.
-
-          agent_id: The ID of the agent that should be used for the converse. If both agent_id and
-              conversation_id aren't provided - the new agent is created.
-
-          config: The config that overrides the default config of the agent for that converse.
-
-          conversation_id: The ID of the present conversation to use. If it's not provided - a new
-              conversation will be created.
-
-          stream: Determines the response type of the converse. Response is the Server-Sent Events
-              if stream is set to true.
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        ...
+    ) -> ConverseResponse | AsyncStream[sse_converse.AgentStreamEvent]: ...
 
     async def converse(
         self,
