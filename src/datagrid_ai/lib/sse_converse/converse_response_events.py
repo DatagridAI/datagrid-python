@@ -1,4 +1,4 @@
-# File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+# File created for custom code changes based on our OpenAPI spec.
 
 from typing import Union
 from typing_extensions import Literal, Annotated, TypeAlias
