@@ -20,8 +20,10 @@ base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
 class TestKnowledge:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
+    skip = pytest.mark.skip("Problematic tests - issue with Prism and array of files (multipart/form-data)")
 
     @parametrize
+    @skip
     def test_method_create(self, client: Datagrid) -> None:
         knowledge = client.knowledge.create(
             files=[b"raw file contents"],
@@ -29,6 +31,7 @@ class TestKnowledge:
         assert_matches_type(Knowledge, knowledge, path=["response"])
 
     @parametrize
+    @skip
     def test_method_create_with_all_params(self, client: Datagrid) -> None:
         knowledge = client.knowledge.create(
             files=[b"raw file contents"],
@@ -37,6 +40,7 @@ class TestKnowledge:
         assert_matches_type(Knowledge, knowledge, path=["response"])
 
     @parametrize
+    @skip
     def test_raw_response_create(self, client: Datagrid) -> None:
         response = client.knowledge.with_raw_response.create(
             files=[b"raw file contents"],
@@ -48,6 +52,7 @@ class TestKnowledge:
         assert_matches_type(Knowledge, knowledge, path=["response"])
 
     @parametrize
+    @skip
     def test_streaming_response_create(self, client: Datagrid) -> None:
         with client.knowledge.with_streaming_response.create(
             files=[b"raw file contents"],
@@ -215,8 +220,10 @@ class TestKnowledge:
 
 class TestAsyncKnowledge:
     parametrize = pytest.mark.parametrize("async_client", [False, True], indirect=True, ids=["loose", "strict"])
+    skip = pytest.mark.skip("Problematic tests - issue with Prism and array of files (multipart/form-data)")
 
     @parametrize
+    @skip
     async def test_method_create(self, async_client: AsyncDatagrid) -> None:
         knowledge = await async_client.knowledge.create(
             files=[b"raw file contents"],
@@ -224,6 +231,7 @@ class TestAsyncKnowledge:
         assert_matches_type(Knowledge, knowledge, path=["response"])
 
     @parametrize
+    @skip
     async def test_method_create_with_all_params(self, async_client: AsyncDatagrid) -> None:
         knowledge = await async_client.knowledge.create(
             files=[b"raw file contents"],
@@ -232,6 +240,7 @@ class TestAsyncKnowledge:
         assert_matches_type(Knowledge, knowledge, path=["response"])
 
     @parametrize
+    @skip
     async def test_raw_response_create(self, async_client: AsyncDatagrid) -> None:
         response = await async_client.knowledge.with_raw_response.create(
             files=[b"raw file contents"],
@@ -243,6 +252,7 @@ class TestAsyncKnowledge:
         assert_matches_type(Knowledge, knowledge, path=["response"])
 
     @parametrize
+    @skip
     async def test_streaming_response_create(self, async_client: AsyncDatagrid) -> None:
         async with async_client.knowledge.with_streaming_response.create(
             files=[b"raw file contents"],
