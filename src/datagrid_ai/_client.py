@@ -3,13 +3,14 @@
 from __future__ import annotations
 
 import os
-from typing import Any, Union, Mapping
-from typing_extensions import Self, override
+from typing import Any, Union, Mapping, Optional, overload
+from typing_extensions import Self, Literal, override
 
 import httpx
 
 from . import _exceptions
 from ._qs import Querystring
+from .lib import sse_converse
 from .types import client_converse_params
 from ._types import (
     NOT_GIVEN,
@@ -195,6 +196,7 @@ class Datagrid(SyncAPIClient):
     # client.with_options(timeout=10).foo.create(...)
     with_options = copy
 
+    @overload
     def converse(
         self,
         *,
@@ -202,14 +204,64 @@ class Datagrid(SyncAPIClient):
         agent_id: str | NotGiven = NOT_GIVEN,
         config: client_converse_params.Config | NotGiven = NOT_GIVEN,
         conversation_id: str | NotGiven = NOT_GIVEN,
-        stream: bool | NotGiven = NOT_GIVEN,
+        stream: Optional[Literal[False]] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> ConverseResponse:
+    ) -> ConverseResponse: ...
+
+    @overload
+    def converse(
+        self,
+        *,
+        prompt: str,
+        agent_id: str | NotGiven = NOT_GIVEN,
+        config: client_converse_params.Config | NotGiven = NOT_GIVEN,
+        conversation_id: str | NotGiven = NOT_GIVEN,
+        stream: Literal[True],
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> Stream[sse_converse.AgentStreamEvent]: ...
+
+    @overload
+    def converse(
+        self,
+        *,
+        prompt: str,
+        agent_id: str | NotGiven = NOT_GIVEN,
+        config: client_converse_params.Config | NotGiven = NOT_GIVEN,
+        conversation_id: str | NotGiven = NOT_GIVEN,
+        stream: bool,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> ConverseResponse | Stream[sse_converse.AgentStreamEvent]: ...
+
+    def converse(
+        self,
+        *,
+        prompt: str,
+        agent_id: str | NotGiven = NOT_GIVEN,
+        config: client_converse_params.Config | NotGiven = NOT_GIVEN,
+        conversation_id: str | NotGiven = NOT_GIVEN,
+        stream: Optional[Literal[False]] | Literal[True] | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> ConverseResponse | Stream[sse_converse.AgentStreamEvent]:
         """
         Converse with an AI Agent
 
@@ -251,6 +303,8 @@ class Datagrid(SyncAPIClient):
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=ConverseResponse,
+            stream=stream or False,
+            stream_cls=Stream[sse_converse.AgentStreamEvent],
         )
 
     @override
@@ -423,6 +477,7 @@ class AsyncDatagrid(AsyncAPIClient):
     # client.with_options(timeout=10).foo.create(...)
     with_options = copy
 
+    @overload
     async def converse(
         self,
         *,
@@ -430,14 +485,64 @@ class AsyncDatagrid(AsyncAPIClient):
         agent_id: str | NotGiven = NOT_GIVEN,
         config: client_converse_params.Config | NotGiven = NOT_GIVEN,
         conversation_id: str | NotGiven = NOT_GIVEN,
-        stream: bool | NotGiven = NOT_GIVEN,
+        stream: Literal[False] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> ConverseResponse:
+    ) -> ConverseResponse: ...
+
+    @overload
+    async def converse(
+        self,
+        *,
+        prompt: str,
+        agent_id: str | NotGiven = NOT_GIVEN,
+        config: client_converse_params.Config | NotGiven = NOT_GIVEN,
+        conversation_id: str | NotGiven = NOT_GIVEN,
+        stream: Literal[True],
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> AsyncStream[sse_converse.AgentStreamEvent]: ...
+
+    @overload
+    async def converse(
+        self,
+        *,
+        prompt: str,
+        agent_id: str | NotGiven = NOT_GIVEN,
+        config: client_converse_params.Config | NotGiven = NOT_GIVEN,
+        conversation_id: str | NotGiven = NOT_GIVEN,
+        stream: bool,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> ConverseResponse | AsyncStream[sse_converse.AgentStreamEvent]: ...
+
+    async def converse(
+        self,
+        *,
+        prompt: str,
+        agent_id: str | NotGiven = NOT_GIVEN,
+        config: client_converse_params.Config | NotGiven = NOT_GIVEN,
+        conversation_id: str | NotGiven = NOT_GIVEN,
+        stream: Optional[Literal[False]] | Literal[True] | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> ConverseResponse | AsyncStream[sse_converse.AgentStreamEvent]:
         """
         Converse with an AI Agent
 
@@ -479,6 +584,8 @@ class AsyncDatagrid(AsyncAPIClient):
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=ConverseResponse,
+            stream=stream or False,
+            stream_cls=AsyncStream[sse_converse.AgentStreamEvent],
         )
 
     @override

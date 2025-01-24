@@ -31,7 +31,7 @@ class TestClient:
             agent_id="agent_id",
             config={"knowledge_ids": ["string"]},
             conversation_id="conversation_id",
-            stream=True,
+            stream=False,
         )
         assert_matches_type(ConverseResponse, client_, path=["response"])
 
@@ -77,7 +77,7 @@ class TestAsyncClient:
             agent_id="agent_id",
             config={"knowledge_ids": ["string"]},
             conversation_id="conversation_id",
-            stream=True,
+            stream=False,
         )
         assert_matches_type(ConverseResponse, client, path=["response"])
 
