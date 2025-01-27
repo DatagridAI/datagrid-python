@@ -1,5 +1,36 @@
 # Changelog
 
+## 0.1.0-alpha.2 (2025-01-27)
+
+Full Changelog: [v0.1.0-alpha.1...v0.1.0-alpha.2](https://github.com/DatagridAI/datagrid-python/compare/v0.1.0-alpha.1...v0.1.0-alpha.2)
+
+### Features
+
+* **api:** api update ([93fb0d4](https://github.com/DatagridAI/datagrid-python/commit/93fb0d4e4e1dc6e5172429515e70aad79e0ad6e2))
+* **api:** api update ([941cf45](https://github.com/DatagridAI/datagrid-python/commit/941cf4546e4878e8489756c98c2570c98f570f6c))
+* **api:** api update ([66b6770](https://github.com/DatagridAI/datagrid-python/commit/66b6770bdde6d3a77ed50613b25fcb1fb33220d4))
+* **api:** manual updates ([97e0bd5](https://github.com/DatagridAI/datagrid-python/commit/97e0bd582eb2428bd0abd8423e8c90995b0654f8))
+* **api:** manual updates ([2b17522](https://github.com/DatagridAI/datagrid-python/commit/2b17522f5b743047bba597447667fbdcd302fdf4))
+* sse converse ([d771e3b](https://github.com/DatagridAI/datagrid-python/commit/d771e3bbcbc2cf0be4f368d0d1ab56a523b88c81))
+* sse converse ([d771e3b](https://github.com/DatagridAI/datagrid-python/commit/d771e3bbcbc2cf0be4f368d0d1ab56a523b88c81))
+* support for SSE converse ([0e95ca4](https://github.com/DatagridAI/datagrid-python/commit/0e95ca428a7593a13a7be1f47256aef30ff9b3e9))
+
+
+### Bug Fixes
+
+* proper header ([710309f](https://github.com/DatagridAI/datagrid-python/commit/710309ffd9ed01d181d5d44368454d63c6285a7a))
+* rm docstring from the overloaded def ([75b11ce](https://github.com/DatagridAI/datagrid-python/commit/75b11ceac6c49277ca3e0f51b9648d061077793c))
+* tests ([94160e8](https://github.com/DatagridAI/datagrid-python/commit/94160e8dac5014ea368517637ad7180b0ed514f2))
+
+
+### Chores
+
+* go live ([#1](https://github.com/DatagridAI/datagrid-python/issues/1)) ([b608c44](https://github.com/DatagridAI/datagrid-python/commit/b608c44014061206cd2a0b2023fd6fe715107bfb))
+* go live ([#3](https://github.com/DatagridAI/datagrid-python/issues/3)) ([31dd324](https://github.com/DatagridAI/datagrid-python/commit/31dd324ceb90b1c9a7d546ed984bee88c5dbc1ca))
+* **internal:** codegen related update ([3cd8e1a](https://github.com/DatagridAI/datagrid-python/commit/3cd8e1afe81e4c438b663a1022677045fa052cd8))
+* **internal:** minor formatting changes ([1608034](https://github.com/DatagridAI/datagrid-python/commit/16080345f25c83d34a2fbd2250741f061aedae6c))
+* update SDK settings ([#4](https://github.com/DatagridAI/datagrid-python/issues/4)) ([acd7f70](https://github.com/DatagridAI/datagrid-python/commit/acd7f70e749b1c9dad7df54fe1a1b64f4d42ffe8))
+
 ## 0.1.0-alpha.1 (2025-01-15)
 
 Full Changelog: [v0.0.1-alpha.0...v0.1.0-alpha.1](https://github.com/ToricLabs/datagrid-python/compare/v0.0.1-alpha.0...v0.1.0-alpha.1)
