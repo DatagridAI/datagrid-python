@@ -29,7 +29,11 @@ class TestClient:
         client_ = client.converse(
             prompt="prompt",
             agent_id="agent_id",
-            config={"knowledge_ids": ["string"]},
+            config={
+                "agent_model": "magpie-1",
+                "knowledge_ids": ["string"],
+                "system_prompt": "system_prompt",
+            },
             conversation_id="conversation_id",
             stream=True,
         )
@@ -75,7 +79,11 @@ class TestAsyncClient:
         client = await async_client.converse(
             prompt="prompt",
             agent_id="agent_id",
-            config={"knowledge_ids": ["string"]},
+            config={
+                "agent_model": "magpie-1",
+                "knowledge_ids": ["string"],
+                "system_prompt": "system_prompt",
+            },
             conversation_id="conversation_id",
             stream=True,
         )
