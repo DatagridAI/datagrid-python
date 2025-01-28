@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from typing import List, Optional
-from typing_extensions import Required, TypedDict
+from typing_extensions import Literal, Required, TypedDict
 
 __all__ = ["ClientConverseParams", "Config"]
 
@@ -35,9 +35,15 @@ class ClientConverseParams(TypedDict, total=False):
 
 
 class Config(TypedDict, total=False):
+    agent_model: Literal["magpie-1", "mapgie-1.1"]
+    """The version of Datagrid's agent brain."""
+
     knowledge_ids: Optional[List[str]]
     """Array of Knowledge IDs the agent should use during the converse.
 
     If not provided - default settings are used. If null provided - all available
     knowledge is used.
     """
+
+    system_prompt: str
+    """Directs your AI Agent's operational behavior."""
