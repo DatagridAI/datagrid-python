@@ -36,7 +36,7 @@ from ._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from .resources import health, knowledge
+from .resources import knowledge
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
 from ._exceptions import DatagridError, APIStatusError
 from ._base_client import (
@@ -61,7 +61,6 @@ __all__ = [
 
 class Datagrid(SyncAPIClient):
     knowledge: knowledge.KnowledgeResource
-    health: health.HealthResource
     with_raw_response: DatagridWithRawResponse
     with_streaming_response: DatagridWithStreamedResponse
 
@@ -120,7 +119,6 @@ class Datagrid(SyncAPIClient):
         )
 
         self.knowledge = knowledge.KnowledgeResource(self)
-        self.health = health.HealthResource(self)
         self.with_raw_response = DatagridWithRawResponse(self)
         self.with_streaming_response = DatagridWithStreamedResponse(self)
 
@@ -289,7 +287,6 @@ class Datagrid(SyncAPIClient):
 
 class AsyncDatagrid(AsyncAPIClient):
     knowledge: knowledge.AsyncKnowledgeResource
-    health: health.AsyncHealthResource
     with_raw_response: AsyncDatagridWithRawResponse
     with_streaming_response: AsyncDatagridWithStreamedResponse
 
@@ -348,7 +345,6 @@ class AsyncDatagrid(AsyncAPIClient):
         )
 
         self.knowledge = knowledge.AsyncKnowledgeResource(self)
-        self.health = health.AsyncHealthResource(self)
         self.with_raw_response = AsyncDatagridWithRawResponse(self)
         self.with_streaming_response = AsyncDatagridWithStreamedResponse(self)
 
@@ -518,7 +514,6 @@ class AsyncDatagrid(AsyncAPIClient):
 class DatagridWithRawResponse:
     def __init__(self, client: Datagrid) -> None:
         self.knowledge = knowledge.KnowledgeResourceWithRawResponse(client.knowledge)
-        self.health = health.HealthResourceWithRawResponse(client.health)
 
         self.converse = to_raw_response_wrapper(
             client.converse,
@@ -528,7 +523,6 @@ class DatagridWithRawResponse:
 class AsyncDatagridWithRawResponse:
     def __init__(self, client: AsyncDatagrid) -> None:
         self.knowledge = knowledge.AsyncKnowledgeResourceWithRawResponse(client.knowledge)
-        self.health = health.AsyncHealthResourceWithRawResponse(client.health)
 
         self.converse = async_to_raw_response_wrapper(
             client.converse,
@@ -538,7 +532,6 @@ class AsyncDatagridWithRawResponse:
 class DatagridWithStreamedResponse:
     def __init__(self, client: Datagrid) -> None:
         self.knowledge = knowledge.KnowledgeResourceWithStreamingResponse(client.knowledge)
-        self.health = health.HealthResourceWithStreamingResponse(client.health)
 
         self.converse = to_streamed_response_wrapper(
             client.converse,
@@ -548,7 +541,6 @@ class DatagridWithStreamedResponse:
 class AsyncDatagridWithStreamedResponse:
     def __init__(self, client: AsyncDatagrid) -> None:
         self.knowledge = knowledge.AsyncKnowledgeResourceWithStreamingResponse(client.knowledge)
-        self.health = health.AsyncHealthResourceWithStreamingResponse(client.health)
 
         self.converse = async_to_streamed_response_wrapper(
             client.converse,
