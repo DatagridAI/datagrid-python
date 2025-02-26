@@ -3,7 +3,16 @@
 Types:
 
 ```python
-from datagrid_ai.types import Properties, ConverseResponse
+from datagrid_ai.types import (
+    ActionTools,
+    AgentTools,
+    DataProcessingTools,
+    EnhancedResponsesTools,
+    KnowledgeManagementTools,
+    Properties,
+    WebTools,
+    ConverseResponse,
+)
 ```
 
 Methods:
