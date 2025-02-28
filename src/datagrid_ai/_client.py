@@ -91,7 +91,7 @@ class Datagrid(SyncAPIClient):
         # part of our public interface in the future.
         _strict_response_validation: bool = False,
     ) -> None:
-        """Construct a new synchronous datagrid client instance.
+        """Construct a new synchronous Datagrid client instance.
 
         This automatically infers the `api_key` argument from the `DATAGRID_API_KEY` environment variable if it is not provided.
         """
@@ -370,7 +370,7 @@ class AsyncDatagrid(AsyncAPIClient):
         # part of our public interface in the future.
         _strict_response_validation: bool = False,
     ) -> None:
-        """Construct a new async datagrid client instance.
+        """Construct a new async AsyncDatagrid client instance.
 
         This automatically infers the `api_key` argument from the `DATAGRID_API_KEY` environment variable if it is not provided.
         """
