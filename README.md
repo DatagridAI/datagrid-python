@@ -143,6 +143,28 @@ for knowledge in first_page.data:
 # Remove `await` for non-async usage.
 ```
 
+## Nested params
+
+Nested parameters are dictionaries, typed using `TypedDict`, for example:
+
+```python
+from datagrid_ai import Datagrid
+
+client = Datagrid()
+
+response = client.converse(
+    prompt="prompt",
+    config={
+        "agent_model": "magpie-1",
+        "agent_tools": ["calendar"],
+        "knowledge_ids": ["string"],
+        "llm_model": "gemini-1.5-flash-001",
+        "system_prompt": "system_prompt",
+    },
+)
+print(response.config)
+```
+
 ## Handling errors
 
 When the library is unable to connect to the API (for example, due to network connection problems or a timeout), a subclass of `datagrid_ai.APIConnectionError` is raised.
