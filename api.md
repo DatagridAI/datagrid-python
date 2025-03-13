@@ -3,7 +3,16 @@
 Types:
 
 ```python
-from datagrid_ai.types import Properties, ConverseResponse
+from datagrid_ai.types import (
+    ActionTools,
+    AgentTools,
+    DataProcessingTools,
+    EnhancedResponsesTools,
+    KnowledgeManagementTools,
+    Properties,
+    WebTools,
+    ConverseResponse,
+)
 ```
 
 Methods:
@@ -25,9 +34,3 @@ Methods:
 - <code title="patch /knowledge/{knowledge_id}">client.knowledge.<a href="./src/datagrid_ai/resources/knowledge.py">update</a>(knowledge_id, \*\*<a href="src/datagrid_ai/types/knowledge_update_params.py">params</a>) -> <a href="./src/datagrid_ai/types/knowledge_update_response.py">KnowledgeUpdateResponse</a></code>
 - <code title="get /knowledge">client.knowledge.<a href="./src/datagrid_ai/resources/knowledge.py">list</a>(\*\*<a href="src/datagrid_ai/types/knowledge_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/knowledge.py">SyncCursorIDPage[Knowledge]</a></code>
 - <code title="delete /knowledge/{knowledge_id}">client.knowledge.<a href="./src/datagrid_ai/resources/knowledge.py">delete</a>(knowledge_id) -> None</code>
-
-# Health
-
-Methods:
-
-- <code title="get /health">client.health.<a href="./src/datagrid_ai/resources/health.py">check_api_health</a>() -> None</code>
