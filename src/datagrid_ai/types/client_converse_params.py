@@ -37,7 +37,7 @@ class ClientConverseParams(TypedDict, total=False):
 
 
 class Config(TypedDict, total=False):
-    agent_model: Literal["magpie-1", "mapgie-1.1"]
+    agent_model: Literal["magpie-1", "magpie-1.1"]
     """The version of Datagrid's agent brain."""
 
     agent_tools: Optional[List[AgentTools]]

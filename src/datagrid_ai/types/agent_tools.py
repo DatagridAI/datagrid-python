@@ -18,7 +18,7 @@ AgentTools: TypeAlias = Literal[
     "image_detection",
     "agent_memory",
     "pdf_extraction",
-    "semantic_search_tool",
+    "semantic_search",
     "company_prospect_researcher",
     "people_prospect_researcher",
     "web_search",
