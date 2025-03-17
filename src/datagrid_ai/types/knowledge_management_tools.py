@@ -5,5 +5,5 @@ from typing_extensions import Literal, TypeAlias
 __all__ = ["KnowledgeManagementTools"]
 
 KnowledgeManagementTools: TypeAlias = Literal[
-    "data_analysis", "image_detection", "agent_memory", "pdf_extraction", "semantic_search_tool"
+    "data_analysis", "image_detection", "agent_memory", "pdf_extraction", "semantic_search"
 ]
