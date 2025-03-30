@@ -156,7 +156,7 @@ response = client.converse(
     prompt="prompt",
     config={
         "agent_model": "magpie-1",
-        "agent_tools": ["calendar"],
+        "agent_tools": ["data_analysis"],
         "knowledge_ids": ["string"],
         "llm_model": "gemini-1.5-flash-001",
         "system_prompt": "system_prompt",
