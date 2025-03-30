@@ -45,6 +45,46 @@ class Config(TypedDict, total=False):
 
     If not provided - default tools of the agent are used. If empty list provided -
     none of the tools are used. If null provided - all tools are used.
+
+    Knowledge management tools:
+
+    - data_analysis: Answer statistical or analytical questions like "Show my
+      quarterly revenue growth"
+    - semantic_search: Search knowledge through natural language queries.
+    - agent_memory: Agents can remember experiences, conversations and user
+      preferences.
+    - schema_info: Helps the Agent understand column names and dataset purpose.
+      Avoid disabling
+    - table_info: Allow the AI Agent to get information about datasets and schemas
+    - create_dataset: Agents respond with data tables
+
+    Actions:
+
+    - calendar: Allow the Agent to access and make changes to your Google Calendar
+    - schedule_recurring_message_tool: Eliminate busywork such as: "Send a summary
+      of today's meetings at 5pm on workdays"
+
+    Data processing tools:
+
+    - data_classification: Agents handle queries like "Label these emails as high,
+      medium, or low priority"
+    - data_extraction: Helps the agent understand data from other tools. Avoid
+      disabling
+    - image_detection: Extract information from images using AI
+    - pdf_extraction: Extraction of information from PDFs using AI
+
+    Enhanced response tools:
+
+    - connect_data: Agents provide buttons to import data in response to queries
+      like "Connect Hubspot"
+    - download_data: Agents handle queries like "download the table as CSV"
+
+    Web tools:
+
+    - web_search: Agents search the internet, and provide links to their sources
+    - fetch_url: Fetch URL content
+    - company_prospect_researcher: Agents provide information about companies
+    - people_prospect_researcher: Agents provide information about people
     """
 
     knowledge_ids: Optional[List[str]]
