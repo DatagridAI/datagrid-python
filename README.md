@@ -1,6 +1,6 @@
 # Datagrid Python API library
 
-[![PyPI version](https://img.shields.io/pypi/v/datagrid_ai.svg)](https://pypi.org/project/datagrid_ai/)
+[![PyPI version](https://img.shields.io/pypi/v/datagrid-ai.svg)](https://pypi.org/project/datagrid-ai/)
 
 The Datagrid Python library provides convenient access to the Datagrid REST API from any Python 3.8+
 application. The library includes type definitions for all request params and response fields,
@@ -15,12 +15,9 @@ The REST API documentation can be found on [docs.datagrid.com](https://docs.data
 ## Installation
 
 ```sh
-# install from the production repo
-pip install git+ssh://git@github.com/DatagridAI/datagrid-python.git
+# install from PyPI
+pip install --pre datagrid-ai
 ```
-
-> [!NOTE]
-> Once this package is [published to PyPI](https://app.stainless.com/docs/guides/publish), this will become: `pip install --pre datagrid_ai`
 
 ## Usage
 
