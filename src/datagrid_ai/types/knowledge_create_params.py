@@ -19,4 +19,3 @@ class KnowledgeCreateParams(TypedDict, total=False):
     """
 
     name: str
-    """The name of the knowledge."""

@@ -69,8 +69,6 @@ class KnowledgeResource(SyncAPIResource):
           files: The files to be uploaded and learned. Supported media types are `pdf`, `json`,
               `csv`, `text`, `png`, `jpeg`, `excel`, `google sheets`.
 
-          name: The name of the knowledge.
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -299,8 +297,6 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         Args:
           files: The files to be uploaded and learned. Supported media types are `pdf`, `json`,
               `csv`, `text`, `png`, `jpeg`, `excel`, `google sheets`.
-
-          name: The name of the knowledge.
 
           extra_headers: Send extra headers
 

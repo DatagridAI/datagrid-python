@@ -31,9 +31,7 @@ class TestClient:
             agent_id="agent_id",
             config={
                 "agent_model": "magpie-1",
-                "agent_tools": ["calendar"],
                 "knowledge_ids": ["string"],
-                "llm_model": "gemini-1.5-flash-001",
                 "system_prompt": "system_prompt",
             },
             conversation_id="conversation_id",
@@ -83,9 +81,7 @@ class TestAsyncClient:
             agent_id="agent_id",
             config={
                 "agent_model": "magpie-1",
-                "agent_tools": ["calendar"],
                 "knowledge_ids": ["string"],
-                "llm_model": "gemini-1.5-flash-001",
                 "system_prompt": "system_prompt",
             },
             conversation_id="conversation_id",

@@ -23,7 +23,6 @@ from pydantic import ValidationError
 
 from datagrid_ai import Datagrid, AsyncDatagrid, APIResponseValidationError
 from datagrid_ai._types import Omit
-from datagrid_ai._utils import maybe_transform
 from datagrid_ai._models import BaseModel, FinalRequestOptions
 from datagrid_ai._constants import RAW_RESPONSE_HEADER
 from datagrid_ai._exceptions import DatagridError, APIStatusError, APITimeoutError, APIResponseValidationError
@@ -33,7 +32,6 @@ from datagrid_ai._base_client import (
     BaseClient,
     make_request_options,
 )
-from datagrid_ai.types.knowledge_create_params import KnowledgeCreateParams
 
 from .utils import update_env
 
@@ -720,7 +718,7 @@ class TestDatagrid:
         with pytest.raises(APITimeoutError):
             self.client.post(
                 "/knowledge",
-                body=cast(object, maybe_transform(dict(files=[b"raw file contents"]), KnowledgeCreateParams)),
+                body=cast(object, dict(files=[b"raw file contents"])),
                 cast_to=httpx.Response,
                 options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
             )
@@ -736,7 +734,7 @@ class TestDatagrid:
         with pytest.raises(APIStatusError):
             self.client.post(
                 "/knowledge",
-                body=cast(object, maybe_transform(dict(files=[b"raw file contents"]), KnowledgeCreateParams)),
+                body=cast(object, dict(files=[b"raw file contents"])),
                 cast_to=httpx.Response,
                 options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
             )
@@ -1502,7 +1500,7 @@ class TestAsyncDatagrid:
         with pytest.raises(APITimeoutError):
             await self.client.post(
                 "/knowledge",
-                body=cast(object, maybe_transform(dict(files=[b"raw file contents"]), KnowledgeCreateParams)),
+                body=cast(object, dict(files=[b"raw file contents"])),
                 cast_to=httpx.Response,
                 options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
             )
@@ -1518,7 +1516,7 @@ class TestAsyncDatagrid:
         with pytest.raises(APIStatusError):
             await self.client.post(
                 "/knowledge",
-                body=cast(object, maybe_transform(dict(files=[b"raw file contents"]), KnowledgeCreateParams)),
+                body=cast(object, dict(files=[b"raw file contents"])),
                 cast_to=httpx.Response,
                 options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
             )

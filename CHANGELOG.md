@@ -1,42 +1,5 @@
 # Changelog
 
-## 0.1.0-alpha.5 (2025-03-05)
-
-Full Changelog: [v0.1.0-alpha.4...v0.1.0-alpha.5](https://github.com/DatagridAI/datagrid-python/compare/v0.1.0-alpha.4...v0.1.0-alpha.5)
-
-### Features
-
-* **api:** api update ([1d75da9](https://github.com/DatagridAI/datagrid-python/commit/1d75da98c63d3280a3e03c76121d2fe6b07ce12f))
-* **api:** api update ([60a4ca6](https://github.com/DatagridAI/datagrid-python/commit/60a4ca686fe70137e2bd7e2366fffc1823c6f49b))
-* **api:** api update ([52939fd](https://github.com/DatagridAI/datagrid-python/commit/52939fdb8b703414efc1568bec0659ef23548d80))
-* **client:** allow passing `NotGiven` for body ([80af128](https://github.com/DatagridAI/datagrid-python/commit/80af12839a681c57ffe197630d8909812d72aeec))
-* **client:** send `X-Stainless-Read-Timeout` header ([9be674c](https://github.com/DatagridAI/datagrid-python/commit/9be674c4ae28023120412482e57f860622067800))
-
-
-### Bug Fixes
-
-* asyncify on non-asyncio runtimes ([18b81e5](https://github.com/DatagridAI/datagrid-python/commit/18b81e5b94d50c9ac1d221be9f960c719ea53fcf))
-* **client:** mark some request bodies as optional ([80af128](https://github.com/DatagridAI/datagrid-python/commit/80af12839a681c57ffe197630d8909812d72aeec))
-
-
-### Chores
-
-* **docs:** update client docstring ([cf00c67](https://github.com/DatagridAI/datagrid-python/commit/cf00c6780a611b64a4e6c275e1bf4090f7b8b04f))
-* go live ([#14](https://github.com/DatagridAI/datagrid-python/issues/14)) ([377e546](https://github.com/DatagridAI/datagrid-python/commit/377e546829b09b4bae97dd31870639943577defb))
-* **internal:** bummp ruff dependency ([f4eefdf](https://github.com/DatagridAI/datagrid-python/commit/f4eefdf62acaa67e3cdd64d7e9ae516ddf176546))
-* **internal:** change default timeout to an int ([359c23c](https://github.com/DatagridAI/datagrid-python/commit/359c23c3276a032c7ead84d44f61ead0ec22dd0d))
-* **internal:** fix devcontainers setup ([dce524c](https://github.com/DatagridAI/datagrid-python/commit/dce524c041c77b024e633443ba9e5acbc06b847b))
-* **internal:** fix type traversing dictionary params ([1d381eb](https://github.com/DatagridAI/datagrid-python/commit/1d381ebfed07d84c9763ae80af19aa31ed39a35e))
-* **internal:** minor type handling changes ([bd2ae66](https://github.com/DatagridAI/datagrid-python/commit/bd2ae6666eae680c0c26f05a91a7d6476541fb33))
-* **internal:** properly set __pydantic_private__ ([e4b9ec6](https://github.com/DatagridAI/datagrid-python/commit/e4b9ec680aab049141b55110bc88bc22e8ee94cc))
-* **internal:** remove unused http client options forwarding ([dadae7c](https://github.com/DatagridAI/datagrid-python/commit/dadae7c7cf6949c504bcdcb1fddb14945b1211b3))
-* **internal:** update client tests ([08398a7](https://github.com/DatagridAI/datagrid-python/commit/08398a7439cc156a16a84d2e044864476fd05824))
-
-
-### Documentation
-
-* update URLs from stainlessapi.com to stainless.com ([85a7345](https://github.com/DatagridAI/datagrid-python/commit/85a73452c81fc9186bc48c1916f46f31a890ed04))
-
 ## 0.1.0-alpha.4 (2025-01-29)
 
 Full Changelog: [v0.1.0-alpha.3...v0.1.0-alpha.4](https://github.com/DatagridAI/datagrid-python/compare/v0.1.0-alpha.3...v0.1.0-alpha.4)
