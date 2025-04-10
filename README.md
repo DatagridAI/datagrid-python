@@ -295,7 +295,7 @@ from datagrid_ai import Datagrid
 
 client = Datagrid()
 response = client.knowledge.with_raw_response.create(
-    files=[b'raw file contents'],
+    files=[b"raw file contents"],
 )
 print(response.headers.get('X-My-Header'))
 
