@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import os
-from typing import Any, Union, Mapping, Optional, overload
+from typing import Any, Union, Mapping, Optional, overload, Iterable
 from typing_extensions import Self, Literal, override
 
 import httpx
@@ -37,7 +37,7 @@ from ._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from .resources import knowledge
+from .resources import files, search, knowledge
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
 from ._exceptions import DatagridError, APIStatusError
 from ._base_client import (
@@ -62,6 +62,8 @@ __all__ = [
 
 class Datagrid(SyncAPIClient):
     knowledge: knowledge.KnowledgeResource
+    files: files.FilesResource
+    search: search.SearchResource
     with_raw_response: DatagridWithRawResponse
     with_streaming_response: DatagridWithStreamedResponse
 
@@ -120,6 +122,8 @@ class Datagrid(SyncAPIClient):
         )
 
         self.knowledge = knowledge.KnowledgeResource(self)
+        self.files = files.FilesResource(self)
+        self.search = search.SearchResource(self)
         self.with_raw_response = DatagridWithRawResponse(self)
         self.with_streaming_response = DatagridWithStreamedResponse(self)
 
@@ -198,10 +202,11 @@ class Datagrid(SyncAPIClient):
     def converse(
         self,
         *,
-        prompt: str,
+        prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
         agent_id: str | NotGiven = NOT_GIVEN,
         config: client_converse_params.Config | NotGiven = NOT_GIVEN,
         conversation_id: str | NotGiven = NOT_GIVEN,
+        generate_citations: bool | NotGiven = NOT_GIVEN,
         stream: Optional[Literal[False]] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -264,7 +269,7 @@ class Datagrid(SyncAPIClient):
         Converse with an AI Agent
 
         Args:
-          prompt: The input prompt.
+          prompt: A text prompt to send to the agent.
 
           agent_id: The ID of the agent that should be used for the converse. If both agent_id and
               conversation_id aren't provided - the new agent is created.
@@ -273,6 +278,9 @@ class Datagrid(SyncAPIClient):
 
           conversation_id: The ID of the present conversation to use. If it's not provided - a new
               conversation will be created.
+
+          generate_citations: Determines whether the response should include citations. When enabled, the
+              agent will generate citations for factual statements.
 
           stream: Determines the response type of the converse. Response is the Server-Sent Events
               if stream is set to true.
@@ -293,6 +301,7 @@ class Datagrid(SyncAPIClient):
                     "agent_id": agent_id,
                     "config": config,
                     "conversation_id": conversation_id,
+                    "generate_citations": generate_citations,
                     "stream": stream,
                 },
                 client_converse_params.ClientConverseParams,
@@ -341,6 +350,8 @@ class Datagrid(SyncAPIClient):
 
 class AsyncDatagrid(AsyncAPIClient):
     knowledge: knowledge.AsyncKnowledgeResource
+    files: files.AsyncFilesResource
+    search: search.AsyncSearchResource
     with_raw_response: AsyncDatagridWithRawResponse
     with_streaming_response: AsyncDatagridWithStreamedResponse
 
@@ -399,6 +410,8 @@ class AsyncDatagrid(AsyncAPIClient):
         )
 
         self.knowledge = knowledge.AsyncKnowledgeResource(self)
+        self.files = files.AsyncFilesResource(self)
+        self.search = search.AsyncSearchResource(self)
         self.with_raw_response = AsyncDatagridWithRawResponse(self)
         self.with_streaming_response = AsyncDatagridWithStreamedResponse(self)
 
@@ -477,10 +490,11 @@ class AsyncDatagrid(AsyncAPIClient):
     async def converse(
         self,
         *,
-        prompt: str,
+        prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
         agent_id: str | NotGiven = NOT_GIVEN,
         config: client_converse_params.Config | NotGiven = NOT_GIVEN,
         conversation_id: str | NotGiven = NOT_GIVEN,
+        generate_citations: bool | NotGiven = NOT_GIVEN,
         stream: Literal[False] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -543,7 +557,7 @@ class AsyncDatagrid(AsyncAPIClient):
         Converse with an AI Agent
 
         Args:
-          prompt: The input prompt.
+          prompt: A text prompt to send to the agent.
 
           agent_id: The ID of the agent that should be used for the converse. If both agent_id and
               conversation_id aren't provided - the new agent is created.
@@ -552,6 +566,9 @@ class AsyncDatagrid(AsyncAPIClient):
 
           conversation_id: The ID of the present conversation to use. If it's not provided - a new
               conversation will be created.
+
+          generate_citations: Determines whether the response should include citations. When enabled, the
+              agent will generate citations for factual statements.
 
           stream: Determines the response type of the converse. Response is the Server-Sent Events
               if stream is set to true.
@@ -572,6 +589,7 @@ class AsyncDatagrid(AsyncAPIClient):
                     "agent_id": agent_id,
                     "config": config,
                     "conversation_id": conversation_id,
+                    "generate_citations": generate_citations,
                     "stream": stream,
                 },
                 client_converse_params.ClientConverseParams,
@@ -621,6 +639,8 @@ class AsyncDatagrid(AsyncAPIClient):
 class DatagridWithRawResponse:
     def __init__(self, client: Datagrid) -> None:
         self.knowledge = knowledge.KnowledgeResourceWithRawResponse(client.knowledge)
+        self.files = files.FilesResourceWithRawResponse(client.files)
+        self.search = search.SearchResourceWithRawResponse(client.search)
 
         self.converse = to_raw_response_wrapper(
             client.converse,
@@ -630,6 +650,8 @@ class DatagridWithRawResponse:
 class AsyncDatagridWithRawResponse:
     def __init__(self, client: AsyncDatagrid) -> None:
         self.knowledge = knowledge.AsyncKnowledgeResourceWithRawResponse(client.knowledge)
+        self.files = files.AsyncFilesResourceWithRawResponse(client.files)
+        self.search = search.AsyncSearchResourceWithRawResponse(client.search)
 
         self.converse = async_to_raw_response_wrapper(
             client.converse,
@@ -639,6 +661,8 @@ class AsyncDatagridWithRawResponse:
 class DatagridWithStreamedResponse:
     def __init__(self, client: Datagrid) -> None:
         self.knowledge = knowledge.KnowledgeResourceWithStreamingResponse(client.knowledge)
+        self.files = files.FilesResourceWithStreamingResponse(client.files)
+        self.search = search.SearchResourceWithStreamingResponse(client.search)
 
         self.converse = to_streamed_response_wrapper(
             client.converse,
@@ -648,6 +672,8 @@ class DatagridWithStreamedResponse:
 class AsyncDatagridWithStreamedResponse:
     def __init__(self, client: AsyncDatagrid) -> None:
         self.knowledge = knowledge.AsyncKnowledgeResourceWithStreamingResponse(client.knowledge)
+        self.files = files.AsyncFilesResourceWithStreamingResponse(client.files)
+        self.search = search.AsyncSearchResourceWithStreamingResponse(client.search)
 
         self.converse = async_to_streamed_response_wrapper(
             client.converse,

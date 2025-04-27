@@ -720,7 +720,7 @@ class TestDatagrid:
         with pytest.raises(APITimeoutError):
             self.client.post(
                 "/knowledge",
-                body=cast(object, maybe_transform(dict(files=[b"raw file contents"]), KnowledgeCreateParams)),
+                body=cast(object, maybe_transform(dict(files=[]), KnowledgeCreateParams)),
                 cast_to=httpx.Response,
                 options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
             )
@@ -736,7 +736,7 @@ class TestDatagrid:
         with pytest.raises(APIStatusError):
             self.client.post(
                 "/knowledge",
-                body=cast(object, maybe_transform(dict(files=[b"raw file contents"]), KnowledgeCreateParams)),
+                body=cast(object, maybe_transform(dict(files=[]), KnowledgeCreateParams)),
                 cast_to=httpx.Response,
                 options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
             )
@@ -1502,7 +1502,7 @@ class TestAsyncDatagrid:
         with pytest.raises(APITimeoutError):
             await self.client.post(
                 "/knowledge",
-                body=cast(object, maybe_transform(dict(files=[b"raw file contents"]), KnowledgeCreateParams)),
+                body=cast(object, maybe_transform(dict(files=[]), KnowledgeCreateParams)),
                 cast_to=httpx.Response,
                 options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
             )
@@ -1518,7 +1518,7 @@ class TestAsyncDatagrid:
         with pytest.raises(APIStatusError):
             await self.client.post(
                 "/knowledge",
-                body=cast(object, maybe_transform(dict(files=[b"raw file contents"]), KnowledgeCreateParams)),
+                body=cast(object, maybe_transform(dict(files=[]), KnowledgeCreateParams)),
                 cast_to=httpx.Response,
                 options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
             )
