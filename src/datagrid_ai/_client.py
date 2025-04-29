@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import os
-from typing import Any, Union, Mapping, Optional, overload, Iterable
+from typing import Any, Union, Mapping, Iterable, Optional, overload
 from typing_extensions import Self, Literal, override
 
 import httpx
@@ -224,6 +224,7 @@ class Datagrid(SyncAPIClient):
         agent_id: str | NotGiven = NOT_GIVEN,
         config: client_converse_params.Config | NotGiven = NOT_GIVEN,
         conversation_id: str | NotGiven = NOT_GIVEN,
+        generate_citations: bool | NotGiven = NOT_GIVEN,
         stream: Literal[True],
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -241,6 +242,7 @@ class Datagrid(SyncAPIClient):
         agent_id: str | NotGiven = NOT_GIVEN,
         config: client_converse_params.Config | NotGiven = NOT_GIVEN,
         conversation_id: str | NotGiven = NOT_GIVEN,
+        generate_citations: bool | NotGiven = NOT_GIVEN,
         stream: bool,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -257,6 +259,7 @@ class Datagrid(SyncAPIClient):
         agent_id: str | NotGiven = NOT_GIVEN,
         config: client_converse_params.Config | NotGiven = NOT_GIVEN,
         conversation_id: str | NotGiven = NOT_GIVEN,
+        generate_citations: bool | NotGiven = NOT_GIVEN,
         stream: Optional[Literal[False]] | Literal[True] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -512,6 +515,7 @@ class AsyncDatagrid(AsyncAPIClient):
         agent_id: str | NotGiven = NOT_GIVEN,
         config: client_converse_params.Config | NotGiven = NOT_GIVEN,
         conversation_id: str | NotGiven = NOT_GIVEN,
+        generate_citations: bool | NotGiven = NOT_GIVEN,
         stream: Literal[True],
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -529,6 +533,7 @@ class AsyncDatagrid(AsyncAPIClient):
         agent_id: str | NotGiven = NOT_GIVEN,
         config: client_converse_params.Config | NotGiven = NOT_GIVEN,
         conversation_id: str | NotGiven = NOT_GIVEN,
+        generate_citations: bool | NotGiven = NOT_GIVEN,
         stream: bool,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -545,6 +550,7 @@ class AsyncDatagrid(AsyncAPIClient):
         agent_id: str | NotGiven = NOT_GIVEN,
         config: client_converse_params.Config | NotGiven = NOT_GIVEN,
         conversation_id: str | NotGiven = NOT_GIVEN,
+        generate_citations: bool | NotGiven = NOT_GIVEN,
         stream: Optional[Literal[False]] | Literal[True] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
