@@ -220,7 +220,7 @@ class Datagrid(SyncAPIClient):
     def converse(
         self,
         *,
-        prompt: str,
+        prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
         agent_id: str | NotGiven = NOT_GIVEN,
         config: client_converse_params.Config | NotGiven = NOT_GIVEN,
         conversation_id: str | NotGiven = NOT_GIVEN,
@@ -238,7 +238,7 @@ class Datagrid(SyncAPIClient):
     def converse(
         self,
         *,
-        prompt: str,
+        prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
         agent_id: str | NotGiven = NOT_GIVEN,
         config: client_converse_params.Config | NotGiven = NOT_GIVEN,
         conversation_id: str | NotGiven = NOT_GIVEN,
@@ -255,7 +255,7 @@ class Datagrid(SyncAPIClient):
     def converse(
         self,
         *,
-        prompt: str,
+        prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
         agent_id: str | NotGiven = NOT_GIVEN,
         config: client_converse_params.Config | NotGiven = NOT_GIVEN,
         conversation_id: str | NotGiven = NOT_GIVEN,
@@ -511,7 +511,7 @@ class AsyncDatagrid(AsyncAPIClient):
     async def converse(
         self,
         *,
-        prompt: str,
+        prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
         agent_id: str | NotGiven = NOT_GIVEN,
         config: client_converse_params.Config | NotGiven = NOT_GIVEN,
         conversation_id: str | NotGiven = NOT_GIVEN,
@@ -529,7 +529,7 @@ class AsyncDatagrid(AsyncAPIClient):
     async def converse(
         self,
         *,
-        prompt: str,
+        prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
         agent_id: str | NotGiven = NOT_GIVEN,
         config: client_converse_params.Config | NotGiven = NOT_GIVEN,
         conversation_id: str | NotGiven = NOT_GIVEN,
@@ -546,7 +546,7 @@ class AsyncDatagrid(AsyncAPIClient):
     async def converse(
         self,
         *,
-        prompt: str,
+        prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
         agent_id: str | NotGiven = NOT_GIVEN,
         config: client_converse_params.Config | NotGiven = NOT_GIVEN,
         conversation_id: str | NotGiven = NOT_GIVEN,
