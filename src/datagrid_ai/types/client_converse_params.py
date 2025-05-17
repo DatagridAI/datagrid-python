@@ -83,7 +83,7 @@ class PromptInputItemList(TypedDict, total=False):
 
 
 class Config(TypedDict, total=False):
-    agent_model: Literal["magpie-1", "magpie-1.1"]
+    agent_model: Literal["magpie-1", "magpie-1.1", "magpie-1.1-flash"]
     """The version of Datagrid's agent brain."""
 
     agent_tools: Optional[List[AgentTools]]
@@ -144,10 +144,11 @@ class Config(TypedDict, total=False):
         "gemini-1.5-flash-001",
         "gemini-1.5-flash-002",
         "gemini-2.0-flash-001",
+        "gemini-2.5-flash-preview-04-17",
         "gemini-1.5-pro-001",
         "gemini-1.5-pro-002",
         "chatgpt-4o-latest",
-        "gemini-2.5-pro-exp-03-25",
+        "gemini-2.5-pro-preview-05-06",
         "gpt-4",
         "gpt-4-turbo",
         "gpt-4o",
