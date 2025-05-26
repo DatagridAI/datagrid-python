@@ -1,5 +1,65 @@
 # Changelog
 
+## 0.1.0-alpha.8 (2025-05-26)
+
+Full Changelog: [v0.1.0-alpha.7...v0.1.0-alpha.8](https://github.com/DatagridAI/datagrid-python/compare/v0.1.0-alpha.7...v0.1.0-alpha.8)
+
+### Features
+
+* **api:** api update ([aea656c](https://github.com/DatagridAI/datagrid-python/commit/aea656c2ab600a852c00a334f613e98206d554e6))
+* **api:** api update ([1389cc2](https://github.com/DatagridAI/datagrid-python/commit/1389cc212729fa13bb70bbe3b8090235d8a6f789))
+* **api:** api update ([2fba8c9](https://github.com/DatagridAI/datagrid-python/commit/2fba8c901ccd767d60970e9cabb10d5d427354b9))
+* **api:** api update ([9e42c13](https://github.com/DatagridAI/datagrid-python/commit/9e42c13e25ba478b40dcceeca93c668a4589730d))
+* **api:** api update ([2cfc00c](https://github.com/DatagridAI/datagrid-python/commit/2cfc00cce15bb7ea89af7290c020799cef1738ed))
+* **api:** api update ([3f7a4b6](https://github.com/DatagridAI/datagrid-python/commit/3f7a4b6f54df771231c0dbe607b3245f63c5f375))
+* **api:** api update ([2eced62](https://github.com/DatagridAI/datagrid-python/commit/2eced625be77bfaa14acd5ebd3abe16060a61dc1))
+
+
+### Bug Fixes
+
+* **package:** support direct resource imports ([6aa3ba4](https://github.com/DatagridAI/datagrid-python/commit/6aa3ba4ab0790575ad5711c6e929939a58a19a1b))
+* **package:** support direct resource imports ([79ab574](https://github.com/DatagridAI/datagrid-python/commit/79ab574c90bcd5c3b3d04980e1ce5afe48a5393d))
+* **perf:** optimize some hot paths ([a69daa1](https://github.com/DatagridAI/datagrid-python/commit/a69daa1c5169ff72bc537df7b18c4c50152e7286))
+* **perf:** skip traversing types for NotGiven values ([414feb0](https://github.com/DatagridAI/datagrid-python/commit/414feb0c31bc502bc3546582053069f933c3f85f))
+* **pydantic v1:** more robust ModelField.annotation check ([146f01d](https://github.com/DatagridAI/datagrid-python/commit/146f01d0e7169be367ca05028168460ccf612069))
+
+
+### Chores
+
+* broadly detect json family of content-type headers ([8a68411](https://github.com/DatagridAI/datagrid-python/commit/8a684111c8d66787c5daee7893e1ba81ab545be3))
+* **ci:** add timeout thresholds for CI jobs ([1457fc3](https://github.com/DatagridAI/datagrid-python/commit/1457fc387d89dc9eb9e7cf66d0c636aae74bf079))
+* **ci:** fix installation instructions ([fa43889](https://github.com/DatagridAI/datagrid-python/commit/fa4388974b31ae164cc7f8a79f70547e3cf9baee))
+* **ci:** fix installation instructions ([519082b](https://github.com/DatagridAI/datagrid-python/commit/519082b94778805c818e44644356d7b3994e8518))
+* **ci:** only use depot for staging repos ([7ed9b36](https://github.com/DatagridAI/datagrid-python/commit/7ed9b36be8b24b7cbb2acf98f974d49335ce16b9))
+* **ci:** upload sdks to package manager ([237bec1](https://github.com/DatagridAI/datagrid-python/commit/237bec1db34fa84cc91e9fbe4d262850ae4f4ec8))
+* **ci:** upload sdks to package manager ([c7f7994](https://github.com/DatagridAI/datagrid-python/commit/c7f7994d05bb2c09f9e23860d67d47bf5582fde8))
+* **client:** minor internal fixes ([bb6292d](https://github.com/DatagridAI/datagrid-python/commit/bb6292d31ff45618bd588933e236f01fbf729fac))
+* **docs:** grammar improvements ([6dda73b](https://github.com/DatagridAI/datagrid-python/commit/6dda73bca8237e5bbe40501ce4ea4dd2c6a6a18f))
+* **docs:** grammar improvements ([e3e01f1](https://github.com/DatagridAI/datagrid-python/commit/e3e01f1a3df3a966ec9ddf7b003055b88545bdb2))
+* **internal:** avoid errors for isinstance checks on proxies ([e3c5849](https://github.com/DatagridAI/datagrid-python/commit/e3c5849536afd935133809262975c357acffb538))
+* **internal:** avoid errors for isinstance checks on proxies ([8466e9d](https://github.com/DatagridAI/datagrid-python/commit/8466e9d00af69df60fe3195560545620b917d0ad))
+* **internal:** base client updates ([74039a9](https://github.com/DatagridAI/datagrid-python/commit/74039a90bac677cdb4ecd9ff41167c9055660cf8))
+* **internal:** bump pyright version ([77d0e04](https://github.com/DatagridAI/datagrid-python/commit/77d0e0418254c204eab6fb854d488ccf3fb02d7b))
+* **internal:** codegen related update ([fbc4788](https://github.com/DatagridAI/datagrid-python/commit/fbc4788e7c796fa8fb6d44cd29c8f4a68b66e2da))
+* **internal:** codegen related update ([8119d34](https://github.com/DatagridAI/datagrid-python/commit/8119d347b0f334c56d94c3787a9c05b9b77f28dd))
+* **internal:** codegen related update ([e4a139c](https://github.com/DatagridAI/datagrid-python/commit/e4a139cfe2d534b6006022e48e0c845012097640))
+* **internal:** expand CI branch coverage ([7d209af](https://github.com/DatagridAI/datagrid-python/commit/7d209af6c136f63d93bdcd96a7fd29a2240b1160))
+* **internal:** fix list file params ([c4351ad](https://github.com/DatagridAI/datagrid-python/commit/c4351adc26a005c36216aa69474f4f2383d76207))
+* **internal:** import reformatting ([752a0a6](https://github.com/DatagridAI/datagrid-python/commit/752a0a66d0f870d9b72a02ab132230ef8188ec12))
+* **internal:** reduce CI branch coverage ([57d7ee4](https://github.com/DatagridAI/datagrid-python/commit/57d7ee431da0fb6f254326aec135091afae89056))
+* **internal:** refactor retries to not use recursion ([bfc18e5](https://github.com/DatagridAI/datagrid-python/commit/bfc18e59a26e61857c5d6f3ea46aec4c4f352550))
+* **internal:** remove trailing character ([03603f3](https://github.com/DatagridAI/datagrid-python/commit/03603f38fe84988f4c65b0719ccd5592a85bc59b))
+* **internal:** slight transform perf improvement ([a52f0ef](https://github.com/DatagridAI/datagrid-python/commit/a52f0ef31f266fe06c159f6016cb6776a02450bd))
+* **internal:** update file param examples ([19ce6f7](https://github.com/DatagridAI/datagrid-python/commit/19ce6f71a86377b5f2bc9f9715ea99ca82fb705e))
+* **internal:** update models test ([971e32a](https://github.com/DatagridAI/datagrid-python/commit/971e32a83a6c989f09c73b9762af93a43241c9f1))
+* **internal:** update pyright settings ([eb4dae9](https://github.com/DatagridAI/datagrid-python/commit/eb4dae9b15bc335d0c0fde519500daa7e5159e11))
+* **internal:** version bump ([#24](https://github.com/DatagridAI/datagrid-python/issues/24)) ([f850000](https://github.com/DatagridAI/datagrid-python/commit/f850000c03228166a29845fc18b6b4e2b2c6c9d3))
+* update SDK settings ([b4bfae6](https://github.com/DatagridAI/datagrid-python/commit/b4bfae697b07d2ff8fcab69a5c843ec07903cdab))
+* update SDK settings ([5af1a58](https://github.com/DatagridAI/datagrid-python/commit/5af1a584341a893357a148e3cccf1d462542e53b))
+* update SDK settings ([37733b7](https://github.com/DatagridAI/datagrid-python/commit/37733b7c7d83ab1a717406fafeb2af742d248a0a))
+* update SDK settings ([db8780d](https://github.com/DatagridAI/datagrid-python/commit/db8780d77cf39f92deec8a00e83c4c5215c2d400))
+* update SDK settings ([6851c91](https://github.com/DatagridAI/datagrid-python/commit/6851c91ff6cca9b42d8d9b7dc6039cd626cedfb5))
+
 ## 0.1.0-alpha.7 (2025-04-03)
 
 Full Changelog: [v0.1.0-alpha.6...v0.1.0-alpha.7](https://github.com/DatagridAI/datagrid-python/compare/v0.1.0-alpha.6...v0.1.0-alpha.7)
