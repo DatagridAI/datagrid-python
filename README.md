@@ -32,7 +32,7 @@ client = Datagrid(
 )
 
 knowledge = client.knowledge.create(
-    files=[b"raw file contents"],
+    files=[],
 )
 print(knowledge.id)
 ```
@@ -58,7 +58,7 @@ client = AsyncDatagrid(
 
 async def main() -> None:
     knowledge = await client.knowledge.create(
-        files=[b"raw file contents"],
+        files=[],
     )
     print(knowledge.id)
 
@@ -150,7 +150,7 @@ from datagrid_ai import Datagrid
 client = Datagrid()
 
 response = client.converse(
-    prompt="prompt",
+    prompt="string",
     config={
         "agent_model": "magpie-1",
         "agent_tools": ["data_analysis"],
@@ -161,6 +161,23 @@ response = client.converse(
 )
 print(response.config)
 ```
+
+## File uploads
+
+Request parameters that correspond to file uploads can be passed as `bytes`, or a [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike) instance or a tuple of `(filename, contents, media type)`.
+
+```python
+from pathlib import Path
+from datagrid_ai import Datagrid
+
+client = Datagrid()
+
+client.files.create(
+    file=Path("/path/to/file"),
+)
+```
+
+The async client uses the exact same interface. If you pass a [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike) instance, the file contents will be read asynchronously automatically.
 
 ## Handling errors
 
@@ -179,7 +196,7 @@ client = Datagrid()
 
 try:
     client.knowledge.create(
-        files=[b"raw file contents"],
+        files=[],
     )
 except datagrid_ai.APIConnectionError as e:
     print("The server could not be reached")
@@ -224,13 +241,13 @@ client = Datagrid(
 
 # Or, configure per-request:
 client.with_options(max_retries=5).knowledge.create(
-    files=[b"raw file contents"],
+    files=[],
 )
 ```
 
 ### Timeouts
 
-By default requests time out after 1 minute. You can configure this with a `timeout` option,
+By default requests time out after 3 minutes. You can configure this with a `timeout` option,
 which accepts a float or an [`httpx.Timeout`](https://www.python-httpx.org/advanced/#fine-tuning-the-configuration) object:
 
 ```python
@@ -238,7 +255,7 @@ from datagrid_ai import Datagrid
 
 # Configure the default for all requests:
 client = Datagrid(
-    # 20 seconds (default is 1 minute)
+    # 20 seconds (default is 3 minutes)
     timeout=20.0,
 )
 
@@ -249,7 +266,7 @@ client = Datagrid(
 
 # Override per-request:
 client.with_options(timeout=5.0).knowledge.create(
-    files=[b"raw file contents"],
+    files=[],
 )
 ```
 
@@ -292,7 +309,7 @@ from datagrid_ai import Datagrid
 
 client = Datagrid()
 response = client.knowledge.with_raw_response.create(
-    files=[b'raw file contents'],
+    files=[],
 )
 print(response.headers.get('X-My-Header'))
 
@@ -312,7 +329,7 @@ To stream the response body, use `.with_streaming_response` instead, which requi
 
 ```python
 with client.knowledge.with_streaming_response.create(
-    files=[b"raw file contents"],
+    files=[],
 ) as response:
     print(response.headers.get("X-My-Header"))
 

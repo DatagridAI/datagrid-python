@@ -2,71 +2,71 @@
 
 from __future__ import annotations
 
-from typing import List, Mapping, cast
+from typing import Mapping, cast
 
 import httpx
 
-from ..types import knowledge_list_params, knowledge_create_params, knowledge_update_params
+from ..types import file_list_params, file_create_params
 from .._types import NOT_GIVEN, Body, Query, Headers, NoneType, NotGiven, FileTypes
-from .._utils import is_given, extract_files, maybe_transform, deepcopy_minimal, async_maybe_transform
+from .._utils import extract_files, maybe_transform, deepcopy_minimal, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
 from .._response import (
+    BinaryAPIResponse,
+    AsyncBinaryAPIResponse,
+    StreamedBinaryAPIResponse,
+    AsyncStreamedBinaryAPIResponse,
     to_raw_response_wrapper,
     to_streamed_response_wrapper,
     async_to_raw_response_wrapper,
+    to_custom_raw_response_wrapper,
     async_to_streamed_response_wrapper,
+    to_custom_streamed_response_wrapper,
+    async_to_custom_raw_response_wrapper,
+    async_to_custom_streamed_response_wrapper,
 )
-from .._constants import DEFAULT_TIMEOUT
 from ..pagination import SyncCursorIDPage, AsyncCursorIDPage
 from .._base_client import AsyncPaginator, make_request_options
-from ..types.knowledge import Knowledge
-from ..types.knowledge_update_response import KnowledgeUpdateResponse
+from ..types.file_object import FileObject
 
-__all__ = ["KnowledgeResource", "AsyncKnowledgeResource"]
+__all__ = ["FilesResource", "AsyncFilesResource"]
 
 
-class KnowledgeResource(SyncAPIResource):
+class FilesResource(SyncAPIResource):
     @cached_property
-    def with_raw_response(self) -> KnowledgeResourceWithRawResponse:
+    def with_raw_response(self) -> FilesResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
         For more information, see https://www.github.com/DatagridAI/datagrid-python#accessing-raw-response-data-eg-headers
         """
-        return KnowledgeResourceWithRawResponse(self)
+        return FilesResourceWithRawResponse(self)
 
     @cached_property
-    def with_streaming_response(self) -> KnowledgeResourceWithStreamingResponse:
+    def with_streaming_response(self) -> FilesResourceWithStreamingResponse:
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
         For more information, see https://www.github.com/DatagridAI/datagrid-python#with_streaming_response
         """
-        return KnowledgeResourceWithStreamingResponse(self)
+        return FilesResourceWithStreamingResponse(self)
 
     def create(
         self,
         *,
-        files: List[FileTypes],
-        name: str | NotGiven = NOT_GIVEN,
+        file: FileTypes,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> Knowledge:
+    ) -> FileObject:
         """
-        Create knowledge which will be learned and leveraged by agents.
+        Create files which can be passed as input to agents.
 
         Args:
-          files: The files to be uploaded and learned. Supported media types are `pdf`, `json`,
-              `csv`, `text`, `png`, `jpeg`, `excel`, `google sheets`.
-
-          name: The name of the knowledge.
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -75,32 +75,25 @@ class KnowledgeResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
-            timeout = 120
-        body = deepcopy_minimal(
-            {
-                "files": files,
-                "name": name,
-            }
-        )
-        extracted_files = extract_files(cast(Mapping[str, object], body), paths=[["files", "<array>"]])
+        body = deepcopy_minimal({"file": file})
+        files = extract_files(cast(Mapping[str, object], body), paths=[["file"]])
         # It should be noted that the actual Content-Type header that will be
         # sent to the server will contain a `boundary` parameter, e.g.
         # multipart/form-data; boundary=---abc--
         extra_headers = {"Content-Type": "multipart/form-data", **(extra_headers or {})}
         return self._post(
-            "/knowledge",
-            body=maybe_transform(body, knowledge_create_params.KnowledgeCreateParams),
-            files=extracted_files,
+            "/files",
+            body=maybe_transform(body, file_create_params.FileCreateParams),
+            files=files,
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=Knowledge,
+            cast_to=FileObject,
         )
 
     def retrieve(
         self,
-        knowledge_id: str,
+        file_id: str,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -108,9 +101,9 @@ class KnowledgeResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> Knowledge:
+    ) -> FileObject:
         """
-        Retrieves a knowledge by id.
+        Retrieves a file by id.
 
         Args:
           extra_headers: Send extra headers
@@ -121,49 +114,14 @@ class KnowledgeResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not knowledge_id:
-            raise ValueError(f"Expected a non-empty value for `knowledge_id` but received {knowledge_id!r}")
+        if not file_id:
+            raise ValueError(f"Expected a non-empty value for `file_id` but received {file_id!r}")
         return self._get(
-            f"/knowledge/{knowledge_id}",
+            f"/files/{file_id}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=Knowledge,
-        )
-
-    def update(
-        self,
-        knowledge_id: str,
-        *,
-        name: str,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> KnowledgeUpdateResponse:
-        """
-        Update a knowledge's attributes.
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not knowledge_id:
-            raise ValueError(f"Expected a non-empty value for `knowledge_id` but received {knowledge_id!r}")
-        return self._patch(
-            f"/knowledge/{knowledge_id}",
-            body=maybe_transform({"name": name}, knowledge_update_params.KnowledgeUpdateParams),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=KnowledgeUpdateResponse,
+            cast_to=FileObject,
         )
 
     def list(
@@ -178,8 +136,8 @@ class KnowledgeResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> SyncCursorIDPage[Knowledge]:
-        """Returns the list of knowledge.
+    ) -> SyncCursorIDPage[FileObject]:
+        """Returns the list of files.
 
         Args:
           after: A cursor to use in pagination.
@@ -205,8 +163,8 @@ class KnowledgeResource(SyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         return self._get_api_list(
-            "/knowledge",
-            page=SyncCursorIDPage[Knowledge],
+            "/files",
+            page=SyncCursorIDPage[FileObject],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -218,15 +176,15 @@ class KnowledgeResource(SyncAPIResource):
                         "before": before,
                         "limit": limit,
                     },
-                    knowledge_list_params.KnowledgeListParams,
+                    file_list_params.FileListParams,
                 ),
             ),
-            model=Knowledge,
+            model=FileObject,
         )
 
     def delete(
         self,
-        knowledge_id: str,
+        file_id: str,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -236,7 +194,7 @@ class KnowledgeResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> None:
         """
-        Delete knowledge.
+        Delete file.
 
         Args:
           extra_headers: Send extra headers
@@ -247,59 +205,87 @@ class KnowledgeResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not knowledge_id:
-            raise ValueError(f"Expected a non-empty value for `knowledge_id` but received {knowledge_id!r}")
+        if not file_id:
+            raise ValueError(f"Expected a non-empty value for `file_id` but received {file_id!r}")
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return self._delete(
-            f"/knowledge/{knowledge_id}",
+            f"/files/{file_id}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=NoneType,
         )
 
+    def content(
+        self,
+        file_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> BinaryAPIResponse:
+        """
+        Returns the content of a file.
 
-class AsyncKnowledgeResource(AsyncAPIResource):
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not file_id:
+            raise ValueError(f"Expected a non-empty value for `file_id` but received {file_id!r}")
+        extra_headers = {"Accept": "application/octet-stream", **(extra_headers or {})}
+        return self._get(
+            f"/files/{file_id}/content",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=BinaryAPIResponse,
+        )
+
+
+class AsyncFilesResource(AsyncAPIResource):
     @cached_property
-    def with_raw_response(self) -> AsyncKnowledgeResourceWithRawResponse:
+    def with_raw_response(self) -> AsyncFilesResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
         For more information, see https://www.github.com/DatagridAI/datagrid-python#accessing-raw-response-data-eg-headers
         """
-        return AsyncKnowledgeResourceWithRawResponse(self)
+        return AsyncFilesResourceWithRawResponse(self)
 
     @cached_property
-    def with_streaming_response(self) -> AsyncKnowledgeResourceWithStreamingResponse:
+    def with_streaming_response(self) -> AsyncFilesResourceWithStreamingResponse:
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
         For more information, see https://www.github.com/DatagridAI/datagrid-python#with_streaming_response
         """
-        return AsyncKnowledgeResourceWithStreamingResponse(self)
+        return AsyncFilesResourceWithStreamingResponse(self)
 
     async def create(
         self,
         *,
-        files: List[FileTypes],
-        name: str | NotGiven = NOT_GIVEN,
+        file: FileTypes,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> Knowledge:
+    ) -> FileObject:
         """
-        Create knowledge which will be learned and leveraged by agents.
+        Create files which can be passed as input to agents.
 
         Args:
-          files: The files to be uploaded and learned. Supported media types are `pdf`, `json`,
-              `csv`, `text`, `png`, `jpeg`, `excel`, `google sheets`.
-
-          name: The name of the knowledge.
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -308,32 +294,25 @@ class AsyncKnowledgeResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
-            timeout = 120
-        body = deepcopy_minimal(
-            {
-                "files": files,
-                "name": name,
-            }
-        )
-        extracted_files = extract_files(cast(Mapping[str, object], body), paths=[["files", "<array>"]])
+        body = deepcopy_minimal({"file": file})
+        files = extract_files(cast(Mapping[str, object], body), paths=[["file"]])
         # It should be noted that the actual Content-Type header that will be
         # sent to the server will contain a `boundary` parameter, e.g.
         # multipart/form-data; boundary=---abc--
         extra_headers = {"Content-Type": "multipart/form-data", **(extra_headers or {})}
         return await self._post(
-            "/knowledge",
-            body=await async_maybe_transform(body, knowledge_create_params.KnowledgeCreateParams),
-            files=extracted_files,
+            "/files",
+            body=await async_maybe_transform(body, file_create_params.FileCreateParams),
+            files=files,
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=Knowledge,
+            cast_to=FileObject,
         )
 
     async def retrieve(
         self,
-        knowledge_id: str,
+        file_id: str,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -341,9 +320,9 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> Knowledge:
+    ) -> FileObject:
         """
-        Retrieves a knowledge by id.
+        Retrieves a file by id.
 
         Args:
           extra_headers: Send extra headers
@@ -354,49 +333,14 @@ class AsyncKnowledgeResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not knowledge_id:
-            raise ValueError(f"Expected a non-empty value for `knowledge_id` but received {knowledge_id!r}")
+        if not file_id:
+            raise ValueError(f"Expected a non-empty value for `file_id` but received {file_id!r}")
         return await self._get(
-            f"/knowledge/{knowledge_id}",
+            f"/files/{file_id}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=Knowledge,
-        )
-
-    async def update(
-        self,
-        knowledge_id: str,
-        *,
-        name: str,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> KnowledgeUpdateResponse:
-        """
-        Update a knowledge's attributes.
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not knowledge_id:
-            raise ValueError(f"Expected a non-empty value for `knowledge_id` but received {knowledge_id!r}")
-        return await self._patch(
-            f"/knowledge/{knowledge_id}",
-            body=await async_maybe_transform({"name": name}, knowledge_update_params.KnowledgeUpdateParams),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=KnowledgeUpdateResponse,
+            cast_to=FileObject,
         )
 
     def list(
@@ -411,8 +355,8 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> AsyncPaginator[Knowledge, AsyncCursorIDPage[Knowledge]]:
-        """Returns the list of knowledge.
+    ) -> AsyncPaginator[FileObject, AsyncCursorIDPage[FileObject]]:
+        """Returns the list of files.
 
         Args:
           after: A cursor to use in pagination.
@@ -438,8 +382,8 @@ class AsyncKnowledgeResource(AsyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         return self._get_api_list(
-            "/knowledge",
-            page=AsyncCursorIDPage[Knowledge],
+            "/files",
+            page=AsyncCursorIDPage[FileObject],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -451,15 +395,15 @@ class AsyncKnowledgeResource(AsyncAPIResource):
                         "before": before,
                         "limit": limit,
                     },
-                    knowledge_list_params.KnowledgeListParams,
+                    file_list_params.FileListParams,
                 ),
             ),
-            model=Knowledge,
+            model=FileObject,
         )
 
     async def delete(
         self,
-        knowledge_id: str,
+        file_id: str,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -469,7 +413,7 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> None:
         """
-        Delete knowledge.
+        Delete file.
 
         Args:
           extra_headers: Send extra headers
@@ -480,97 +424,135 @@ class AsyncKnowledgeResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not knowledge_id:
-            raise ValueError(f"Expected a non-empty value for `knowledge_id` but received {knowledge_id!r}")
+        if not file_id:
+            raise ValueError(f"Expected a non-empty value for `file_id` but received {file_id!r}")
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return await self._delete(
-            f"/knowledge/{knowledge_id}",
+            f"/files/{file_id}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=NoneType,
         )
 
+    async def content(
+        self,
+        file_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> AsyncBinaryAPIResponse:
+        """
+        Returns the content of a file.
 
-class KnowledgeResourceWithRawResponse:
-    def __init__(self, knowledge: KnowledgeResource) -> None:
-        self._knowledge = knowledge
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not file_id:
+            raise ValueError(f"Expected a non-empty value for `file_id` but received {file_id!r}")
+        extra_headers = {"Accept": "application/octet-stream", **(extra_headers or {})}
+        return await self._get(
+            f"/files/{file_id}/content",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=AsyncBinaryAPIResponse,
+        )
+
+
+class FilesResourceWithRawResponse:
+    def __init__(self, files: FilesResource) -> None:
+        self._files = files
 
         self.create = to_raw_response_wrapper(
-            knowledge.create,
+            files.create,
         )
         self.retrieve = to_raw_response_wrapper(
-            knowledge.retrieve,
-        )
-        self.update = to_raw_response_wrapper(
-            knowledge.update,
+            files.retrieve,
         )
         self.list = to_raw_response_wrapper(
-            knowledge.list,
+            files.list,
         )
         self.delete = to_raw_response_wrapper(
-            knowledge.delete,
+            files.delete,
+        )
+        self.content = to_custom_raw_response_wrapper(
+            files.content,
+            BinaryAPIResponse,
         )
 
 
-class AsyncKnowledgeResourceWithRawResponse:
-    def __init__(self, knowledge: AsyncKnowledgeResource) -> None:
-        self._knowledge = knowledge
+class AsyncFilesResourceWithRawResponse:
+    def __init__(self, files: AsyncFilesResource) -> None:
+        self._files = files
 
         self.create = async_to_raw_response_wrapper(
-            knowledge.create,
+            files.create,
         )
         self.retrieve = async_to_raw_response_wrapper(
-            knowledge.retrieve,
-        )
-        self.update = async_to_raw_response_wrapper(
-            knowledge.update,
+            files.retrieve,
         )
         self.list = async_to_raw_response_wrapper(
-            knowledge.list,
+            files.list,
         )
         self.delete = async_to_raw_response_wrapper(
-            knowledge.delete,
+            files.delete,
+        )
+        self.content = async_to_custom_raw_response_wrapper(
+            files.content,
+            AsyncBinaryAPIResponse,
         )
 
 
-class KnowledgeResourceWithStreamingResponse:
-    def __init__(self, knowledge: KnowledgeResource) -> None:
-        self._knowledge = knowledge
+class FilesResourceWithStreamingResponse:
+    def __init__(self, files: FilesResource) -> None:
+        self._files = files
 
         self.create = to_streamed_response_wrapper(
-            knowledge.create,
+            files.create,
         )
         self.retrieve = to_streamed_response_wrapper(
-            knowledge.retrieve,
-        )
-        self.update = to_streamed_response_wrapper(
-            knowledge.update,
+            files.retrieve,
         )
         self.list = to_streamed_response_wrapper(
-            knowledge.list,
+            files.list,
         )
         self.delete = to_streamed_response_wrapper(
-            knowledge.delete,
+            files.delete,
+        )
+        self.content = to_custom_streamed_response_wrapper(
+            files.content,
+            StreamedBinaryAPIResponse,
         )
 
 
-class AsyncKnowledgeResourceWithStreamingResponse:
-    def __init__(self, knowledge: AsyncKnowledgeResource) -> None:
-        self._knowledge = knowledge
+class AsyncFilesResourceWithStreamingResponse:
+    def __init__(self, files: AsyncFilesResource) -> None:
+        self._files = files
 
         self.create = async_to_streamed_response_wrapper(
-            knowledge.create,
+            files.create,
         )
         self.retrieve = async_to_streamed_response_wrapper(
-            knowledge.retrieve,
-        )
-        self.update = async_to_streamed_response_wrapper(
-            knowledge.update,
+            files.retrieve,
         )
         self.list = async_to_streamed_response_wrapper(
-            knowledge.list,
+            files.list,
         )
         self.delete = async_to_streamed_response_wrapper(
-            knowledge.delete,
+            files.delete,
+        )
+        self.content = async_to_custom_streamed_response_wrapper(
+            files.content,
+            AsyncStreamedBinaryAPIResponse,
         )
