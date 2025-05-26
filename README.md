@@ -15,12 +15,9 @@ The REST API documentation can be found on [docs.datagrid.com](https://docs.data
 ## Installation
 
 ```sh
-# install from the production repo
-pip install git+ssh://git@github.com/DatagridAI/datagrid-python.git
+# install from PyPI
+pip install --pre datagrid_ai
 ```
-
-> [!NOTE]
-> Once this package is [published to PyPI](https://app.stainless.com/docs/guides/publish), this will become: `pip install --pre datagrid_ai`
 
 ## Usage
 
