@@ -68,11 +68,13 @@ class Datagrid(SyncAPIClient):
 
     # client options
     api_key: str
+    teamspace: str | None
 
     def __init__(
         self,
         *,
         api_key: str | None = None,
+        teamspace: str | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: Union[float, Timeout, None, NotGiven] = NOT_GIVEN,
         max_retries: int = DEFAULT_MAX_RETRIES,
@@ -94,7 +96,9 @@ class Datagrid(SyncAPIClient):
     ) -> None:
         """Construct a new synchronous Datagrid client instance.
 
-        This automatically infers the `api_key` argument from the `DATAGRID_API_KEY` environment variable if it is not provided.
+        This automatically infers the following arguments from their corresponding environment variables if they are not provided:
+        - `api_key` from `DATAGRID_API_KEY`
+        - `teamspace` from `DATAGRID_TEAMSPACE_ID`
         """
         if api_key is None:
             api_key = os.environ.get("DATAGRID_API_KEY")
@@ -103,6 +107,10 @@ class Datagrid(SyncAPIClient):
                 "The api_key client option must be set either by passing api_key to the client or by setting the DATAGRID_API_KEY environment variable"
             )
         self.api_key = api_key
+
+        if teamspace is None:
+            teamspace = os.environ.get("DATAGRID_TEAMSPACE_ID")
+        self.teamspace = teamspace
 
         if base_url is None:
             base_url = os.environ.get("DATAGRID_BASE_URL")
@@ -143,6 +151,7 @@ class Datagrid(SyncAPIClient):
         return {
             **super().default_headers,
             "X-Stainless-Async": "false",
+            "Datagrid-Teamspace": self.teamspace if self.teamspace is not None else Omit(),
             **self._custom_headers,
         }
 
@@ -150,6 +159,7 @@ class Datagrid(SyncAPIClient):
         self,
         *,
         api_key: str | None = None,
+        teamspace: str | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: float | Timeout | None | NotGiven = NOT_GIVEN,
         http_client: httpx.Client | None = None,
@@ -184,6 +194,7 @@ class Datagrid(SyncAPIClient):
         http_client = http_client or self._client
         return self.__class__(
             api_key=api_key or self.api_key,
+            teamspace=teamspace or self.teamspace,
             base_url=base_url or self.base_url,
             timeout=self.timeout if isinstance(timeout, NotGiven) else timeout,
             http_client=http_client,
@@ -303,11 +314,13 @@ class AsyncDatagrid(AsyncAPIClient):
 
     # client options
     api_key: str
+    teamspace: str | None
 
     def __init__(
         self,
         *,
         api_key: str | None = None,
+        teamspace: str | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: Union[float, Timeout, None, NotGiven] = NOT_GIVEN,
         max_retries: int = DEFAULT_MAX_RETRIES,
@@ -329,7 +342,9 @@ class AsyncDatagrid(AsyncAPIClient):
     ) -> None:
         """Construct a new async AsyncDatagrid client instance.
 
-        This automatically infers the `api_key` argument from the `DATAGRID_API_KEY` environment variable if it is not provided.
+        This automatically infers the following arguments from their corresponding environment variables if they are not provided:
+        - `api_key` from `DATAGRID_API_KEY`
+        - `teamspace` from `DATAGRID_TEAMSPACE_ID`
         """
         if api_key is None:
             api_key = os.environ.get("DATAGRID_API_KEY")
@@ -338,6 +353,10 @@ class AsyncDatagrid(AsyncAPIClient):
                 "The api_key client option must be set either by passing api_key to the client or by setting the DATAGRID_API_KEY environment variable"
             )
         self.api_key = api_key
+
+        if teamspace is None:
+            teamspace = os.environ.get("DATAGRID_TEAMSPACE_ID")
+        self.teamspace = teamspace
 
         if base_url is None:
             base_url = os.environ.get("DATAGRID_BASE_URL")
@@ -378,6 +397,7 @@ class AsyncDatagrid(AsyncAPIClient):
         return {
             **super().default_headers,
             "X-Stainless-Async": f"async:{get_async_library()}",
+            "Datagrid-Teamspace": self.teamspace if self.teamspace is not None else Omit(),
             **self._custom_headers,
         }
 
@@ -385,6 +405,7 @@ class AsyncDatagrid(AsyncAPIClient):
         self,
         *,
         api_key: str | None = None,
+        teamspace: str | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: float | Timeout | None | NotGiven = NOT_GIVEN,
         http_client: httpx.AsyncClient | None = None,
@@ -419,6 +440,7 @@ class AsyncDatagrid(AsyncAPIClient):
         http_client = http_client or self._client
         return self.__class__(
             api_key=api_key or self.api_key,
+            teamspace=teamspace or self.teamspace,
             base_url=base_url or self.base_url,
             timeout=self.timeout if isinstance(timeout, NotGiven) else timeout,
             http_client=http_client,
