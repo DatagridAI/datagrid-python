@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.1.0-alpha.10 (2025-06-03)
+
+Full Changelog: [v0.1.0-alpha.9...v0.1.0-alpha.10](https://github.com/DatagridAI/datagrid-python/compare/v0.1.0-alpha.9...v0.1.0-alpha.10)
+
+### Features
+
+* **client:** add follow_redirects request option ([5c794ae](https://github.com/DatagridAI/datagrid-python/commit/5c794ae0ed92b3669a5fcb0d5884cea3f96cbb1b))
+
+
+### Chores
+
+* **docs:** remove reference to rye shell ([ef6eee4](https://github.com/DatagridAI/datagrid-python/commit/ef6eee4fc57446563961f69590d717d207b82760))
+* **docs:** remove unnecessary param examples ([f09ed5e](https://github.com/DatagridAI/datagrid-python/commit/f09ed5ec8c93c8e74ef11ec561eefc706ea60954))
+
 ## 0.1.0-alpha.9 (2025-06-01)
 
 Full Changelog: [v0.1.0-alpha.8...v0.1.0-alpha.9](https://github.com/DatagridAI/datagrid-python/compare/v0.1.0-alpha.8...v0.1.0-alpha.9)
