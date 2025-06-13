@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.1.0-alpha.10 (2025-06-13)
+
+Full Changelog: [v0.1.0-alpha.9...v0.1.0-alpha.10](https://github.com/DatagridAI/datagrid-python/compare/v0.1.0-alpha.9...v0.1.0-alpha.10)
+
+### Features
+
+* **client:** add follow_redirects request option ([5c794ae](https://github.com/DatagridAI/datagrid-python/commit/5c794ae0ed92b3669a5fcb0d5884cea3f96cbb1b))
+
+
+### Bug Fixes
+
+* **client:** correctly parse binary response | stream ([03be065](https://github.com/DatagridAI/datagrid-python/commit/03be065c4e07a8cc7def153f131b80d872aef7e8))
+
+
+### Chores
+
+* **docs:** remove reference to rye shell ([ef6eee4](https://github.com/DatagridAI/datagrid-python/commit/ef6eee4fc57446563961f69590d717d207b82760))
+* **docs:** remove unnecessary param examples ([f09ed5e](https://github.com/DatagridAI/datagrid-python/commit/f09ed5ec8c93c8e74ef11ec561eefc706ea60954))
+* **tests:** run tests in parallel ([a4d5067](https://github.com/DatagridAI/datagrid-python/commit/a4d506709f15ac43062baaf759ef6333a5b16648))
+
 ## 0.1.0-alpha.9 (2025-06-01)
 
 Full Changelog: [v0.1.0-alpha.8...v0.1.0-alpha.9](https://github.com/DatagridAI/datagrid-python/compare/v0.1.0-alpha.8...v0.1.0-alpha.9)
