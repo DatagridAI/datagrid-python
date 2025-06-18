@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.1.0-alpha.11 (2025-06-18)
+
+Full Changelog: [v0.1.0-alpha.10...v0.1.0-alpha.11](https://github.com/DatagridAI/datagrid-python/compare/v0.1.0-alpha.10...v0.1.0-alpha.11)
+
+### Bug Fixes
+
+* **tests:** fix: tests which call HTTP endpoints directly with the example parameters ([4dd9a53](https://github.com/DatagridAI/datagrid-python/commit/4dd9a53b654967f9e5d9ee6f84cd80dcf4b9734a))
+
+
+### Chores
+
+* **ci:** enable for pull requests ([a07a3c0](https://github.com/DatagridAI/datagrid-python/commit/a07a3c0f1ad7869f4078687e9f19b8d597458fdf))
+* **internal:** update conftest.py ([962a1ac](https://github.com/DatagridAI/datagrid-python/commit/962a1acdaba134e06cc4370fed0fd85aa22b4313))
+* **readme:** update badges ([e63d5b8](https://github.com/DatagridAI/datagrid-python/commit/e63d5b8b4538f0a1fcd71b31862a6f60f47de359))
+* **tests:** add tests for httpx client instantiation & proxies ([1e7b9e8](https://github.com/DatagridAI/datagrid-python/commit/1e7b9e81bcbe864b60541a1d5e42df41e7d8d370))
+
 ## 0.1.0-alpha.10 (2025-06-13)
 
 Full Changelog: [v0.1.0-alpha.9...v0.1.0-alpha.10](https://github.com/DatagridAI/datagrid-python/compare/v0.1.0-alpha.9...v0.1.0-alpha.10)
