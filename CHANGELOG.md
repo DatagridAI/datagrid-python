@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.1.0-alpha.12 (2025-06-21)
+
+Full Changelog: [v0.1.0-alpha.11...v0.1.0-alpha.12](https://github.com/DatagridAI/datagrid-python/compare/v0.1.0-alpha.11...v0.1.0-alpha.12)
+
+### Features
+
+* **client:** add support for aiohttp ([b304bb4](https://github.com/DatagridAI/datagrid-python/commit/b304bb47e44d39bd29d8d5d322cd552ae2b2f8b9))
+
+
+### Documentation
+
+* **client:** fix httpx.Timeout documentation reference ([d51d6cd](https://github.com/DatagridAI/datagrid-python/commit/d51d6cd68237bc2f88670d509b986684b6a3d6ce))
+
 ## 0.1.0-alpha.11 (2025-06-18)
 
 Full Changelog: [v0.1.0-alpha.10...v0.1.0-alpha.11](https://github.com/DatagridAI/datagrid-python/compare/v0.1.0-alpha.10...v0.1.0-alpha.11)
