@@ -133,6 +133,9 @@ class Config(TypedDict, total=False):
     - people_prospect_researcher: Agents provide information about people
     """
 
+    custom_prompt: str
+    """Use custom prompt to instruct the style and formatting of the agent's response"""
+
     knowledge_ids: Optional[List[str]]
     """Array of Knowledge IDs the agent should use during the converse.
 
@@ -144,11 +147,14 @@ class Config(TypedDict, total=False):
         "gemini-1.5-flash-001",
         "gemini-1.5-flash-002",
         "gemini-2.0-flash-001",
+        "gemini-2.0-flash",
         "gemini-2.5-flash-preview-04-17",
+        "gemini-2.5-flash",
         "gemini-1.5-pro-001",
         "gemini-1.5-pro-002",
-        "chatgpt-4o-latest",
         "gemini-2.5-pro-preview-05-06",
+        "gemini-2.5-pro",
+        "chatgpt-4o-latest",
         "gpt-4",
         "gpt-4-turbo",
         "gpt-4o",
