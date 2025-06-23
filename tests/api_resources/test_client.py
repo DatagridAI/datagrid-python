@@ -32,6 +32,7 @@ class TestClient:
             config={
                 "agent_model": "magpie-1",
                 "agent_tools": ["data_analysis"],
+                "custom_prompt": "custom_prompt",
                 "knowledge_ids": ["string"],
                 "llm_model": "gemini-1.5-flash-001",
                 "system_prompt": "system_prompt",
@@ -87,6 +88,7 @@ class TestAsyncClient:
             config={
                 "agent_model": "magpie-1",
                 "agent_tools": ["data_analysis"],
+                "custom_prompt": "custom_prompt",
                 "knowledge_ids": ["string"],
                 "llm_model": "gemini-1.5-flash-001",
                 "system_prompt": "system_prompt",
