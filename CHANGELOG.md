@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.1.0-alpha.13 (2025-06-27)
+
+Full Changelog: [v0.1.0-alpha.12...v0.1.0-alpha.13](https://github.com/DatagridAI/datagrid-python/compare/v0.1.0-alpha.12...v0.1.0-alpha.13)
+
+### Bug Fixes
+
+* **ci:** release-doctor — report correct token name ([e3db8d6](https://github.com/DatagridAI/datagrid-python/commit/e3db8d60a1de6a9bc0078b072a241268538e2f61))
+
+
+### Chores
+
+* **tests:** skip some failing tests on the latest python versions ([ab78ea3](https://github.com/DatagridAI/datagrid-python/commit/ab78ea360c718461a625214638325d145e58ee15))
+
 ## 0.1.0-alpha.12 (2025-06-23)
 
 Full Changelog: [v0.1.0-alpha.11...v0.1.0-alpha.12](https://github.com/DatagridAI/datagrid-python/compare/v0.1.0-alpha.11...v0.1.0-alpha.12)
