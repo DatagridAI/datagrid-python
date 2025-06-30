@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.1.0-alpha.14 (2025-06-30)
+
+Full Changelog: [v0.1.0-alpha.13...v0.1.0-alpha.14](https://github.com/DatagridAI/datagrid-python/compare/v0.1.0-alpha.13...v0.1.0-alpha.14)
+
+### Bug Fixes
+
+* **ci:** correct conditional ([6f8ff47](https://github.com/DatagridAI/datagrid-python/commit/6f8ff471850a13b1f708202e62447ac229516cca))
+
+
+### Chores
+
+* **ci:** only run for pushes and fork pull requests ([7f3dac3](https://github.com/DatagridAI/datagrid-python/commit/7f3dac3e1210be75377890c3f7ede8094fbc497b))
+
 ## 0.1.0-alpha.13 (2025-06-27)
 
 Full Changelog: [v0.1.0-alpha.12...v0.1.0-alpha.13](https://github.com/DatagridAI/datagrid-python/compare/v0.1.0-alpha.12...v0.1.0-alpha.13)
