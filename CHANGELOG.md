@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.1.0-alpha.16 (2025-07-10)
+
+Full Changelog: [v0.1.0-alpha.15...v0.1.0-alpha.16](https://github.com/DatagridAI/datagrid-python/compare/v0.1.0-alpha.15...v0.1.0-alpha.16)
+
+### Bug Fixes
+
+* **parsing:** correctly handle nested discriminated unions ([8db4008](https://github.com/DatagridAI/datagrid-python/commit/8db400826d2c272fa9ac3aef1c42e7bb07884882))
+
+
+### Chores
+
+* **internal:** bump pinned h11 dep ([f658efc](https://github.com/DatagridAI/datagrid-python/commit/f658efc24fb9a2df8b4e2a4acf0fd768c72020d4))
+* **package:** mark python 3.13 as supported ([bf4ec47](https://github.com/DatagridAI/datagrid-python/commit/bf4ec471f9ec2bfeb64f632eda4693a4fc8de54c))
+
 ## 0.1.0-alpha.15 (2025-07-04)
 
 Full Changelog: [v0.1.0-alpha.14...v0.1.0-alpha.15](https://github.com/DatagridAI/datagrid-python/compare/v0.1.0-alpha.14...v0.1.0-alpha.15)
