@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.1.0-alpha.17 (2025-07-12)
+
+Full Changelog: [v0.1.0-alpha.16...v0.1.0-alpha.17](https://github.com/DatagridAI/datagrid-python/compare/v0.1.0-alpha.16...v0.1.0-alpha.17)
+
+### Bug Fixes
+
+* **client:** don't send Content-Type header on GET requests ([4732ccc](https://github.com/DatagridAI/datagrid-python/commit/4732cccf189fa83ec1c1838e32288b341fb508e5))
+
+
+### Chores
+
+* **readme:** fix version rendering on pypi ([83e8f48](https://github.com/DatagridAI/datagrid-python/commit/83e8f48587fad3c4fb81522632502046bc688273))
+
 ## 0.1.0-alpha.16 (2025-07-10)
 
 Full Changelog: [v0.1.0-alpha.15...v0.1.0-alpha.16](https://github.com/DatagridAI/datagrid-python/compare/v0.1.0-alpha.15...v0.1.0-alpha.16)
