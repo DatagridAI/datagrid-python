@@ -83,7 +83,6 @@ pip install --pre datagrid_ai[aiohttp]
 Then you can enable it by instantiating the client with `http_client=DefaultAioHttpClient()`:
 
 ```python
-import os
 import asyncio
 from datagrid_ai import DefaultAioHttpClient
 from datagrid_ai import AsyncDatagrid
@@ -91,7 +90,7 @@ from datagrid_ai import AsyncDatagrid
 
 async def main() -> None:
     async with AsyncDatagrid(
-        api_key=os.environ.get("DATAGRID_API_KEY"),  # This is the default and can be omitted
+        api_key="My API Key",
         http_client=DefaultAioHttpClient(),
     ) as client:
         knowledge = await client.knowledge.create(
