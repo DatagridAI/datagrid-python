@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.0-alpha.18 (2025-07-15)
+
+Full Changelog: [v0.1.0-alpha.17...v0.1.0-alpha.18](https://github.com/DatagridAI/datagrid-python/compare/v0.1.0-alpha.17...v0.1.0-alpha.18)
+
+### Features
+
+* clean up environment call outs ([7cc9b31](https://github.com/DatagridAI/datagrid-python/commit/7cc9b315a597741958907b334dc0022652e42730))
+
 ## 0.1.0-alpha.17 (2025-07-12)
 
 Full Changelog: [v0.1.0-alpha.16...v0.1.0-alpha.17](https://github.com/DatagridAI/datagrid-python/compare/v0.1.0-alpha.16...v0.1.0-alpha.17)
