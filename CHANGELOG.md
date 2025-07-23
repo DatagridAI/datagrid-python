@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.0-alpha.19 (2025-07-23)
+
+Full Changelog: [v0.1.0-alpha.18...v0.1.0-alpha.19](https://github.com/DatagridAI/datagrid-python/compare/v0.1.0-alpha.18...v0.1.0-alpha.19)
+
+### Bug Fixes
+
+* **parsing:** parse extra field types ([556dd44](https://github.com/DatagridAI/datagrid-python/commit/556dd44012acef8e2e3aec3e2f389d5561047d29))
+
 ## 0.1.0-alpha.18 (2025-07-22)
 
 Full Changelog: [v0.1.0-alpha.17...v0.1.0-alpha.18](https://github.com/DatagridAI/datagrid-python/compare/v0.1.0-alpha.17...v0.1.0-alpha.18)
