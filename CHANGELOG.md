@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.0-alpha.20 (2025-07-25)
+
+Full Changelog: [v0.1.0-alpha.19...v0.1.0-alpha.20](https://github.com/DatagridAI/datagrid-python/compare/v0.1.0-alpha.19...v0.1.0-alpha.20)
+
+### Chores
+
+* **project:** add settings file for vscode ([d03aa0a](https://github.com/DatagridAI/datagrid-python/commit/d03aa0a5e13ec7bce2197d469f5e414622891e2f))
+
 ## 0.1.0-alpha.19 (2025-07-23)
 
 Full Changelog: [v0.1.0-alpha.18...v0.1.0-alpha.19](https://github.com/DatagridAI/datagrid-python/compare/v0.1.0-alpha.18...v0.1.0-alpha.19)
