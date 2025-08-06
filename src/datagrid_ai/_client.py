@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import os
-from typing import Any, Union, Mapping, Iterable
+from typing import Any, List, Union, Mapping, Iterable, Optional
 from typing_extensions import Self, override
 
 import httpx
@@ -36,7 +36,7 @@ from ._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from .resources import files, search, knowledge
+from .resources import files, search, credits, secrets, knowledge, connectors, connections
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
 from ._exceptions import DatagridError, APIStatusError
 from ._base_client import (
@@ -45,6 +45,8 @@ from ._base_client import (
     AsyncAPIClient,
     make_request_options,
 )
+from .resources.memory import memory
+from .resources.organization import organization
 from .types.converse_response import ConverseResponse
 
 __all__ = [
@@ -61,8 +63,14 @@ __all__ = [
 
 class Datagrid(SyncAPIClient):
     knowledge: knowledge.KnowledgeResource
+    connections: connections.ConnectionsResource
+    connectors: connectors.ConnectorsResource
     files: files.FilesResource
+    credits: credits.CreditsResource
+    secrets: secrets.SecretsResource
     search: search.SearchResource
+    organization: organization.OrganizationResource
+    memory: memory.MemoryResource
     with_raw_response: DatagridWithRawResponse
     with_streaming_response: DatagridWithStreamedResponse
 
@@ -129,8 +137,14 @@ class Datagrid(SyncAPIClient):
         )
 
         self.knowledge = knowledge.KnowledgeResource(self)
+        self.connections = connections.ConnectionsResource(self)
+        self.connectors = connectors.ConnectorsResource(self)
         self.files = files.FilesResource(self)
+        self.credits = credits.CreditsResource(self)
+        self.secrets = secrets.SecretsResource(self)
         self.search = search.SearchResource(self)
+        self.organization = organization.OrganizationResource(self)
+        self.memory = memory.MemoryResource(self)
         self.with_raw_response = DatagridWithRawResponse(self)
         self.with_streaming_response = DatagridWithStreamedResponse(self)
 
@@ -212,11 +226,13 @@ class Datagrid(SyncAPIClient):
         self,
         *,
         prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
-        agent_id: str | NotGiven = NOT_GIVEN,
-        config: client_converse_params.Config | NotGiven = NOT_GIVEN,
-        conversation_id: str | NotGiven = NOT_GIVEN,
-        generate_citations: bool | NotGiven = NOT_GIVEN,
-        stream: bool | NotGiven = NOT_GIVEN,
+        agent_id: Optional[str] | NotGiven = NOT_GIVEN,
+        config: Optional[client_converse_params.Config] | NotGiven = NOT_GIVEN,
+        conversation_id: Optional[str] | NotGiven = NOT_GIVEN,
+        generate_citations: Optional[bool] | NotGiven = NOT_GIVEN,
+        secret_ids: Optional[List[str]] | NotGiven = NOT_GIVEN,
+        stream: Optional[bool] | NotGiven = NOT_GIVEN,
+        text: Optional[client_converse_params.Text] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -241,8 +257,15 @@ class Datagrid(SyncAPIClient):
           generate_citations: Determines whether the response should include citations. When enabled, the
               agent will generate citations for factual statements.
 
+          secret_ids: Array of secret ID's to be included in the context. The secret value will be
+              appended to the prompt but not stored in conversation history.
+
           stream: Determines the response type of the converse. Response is the Server-Sent Events
               if stream is set to true.
+
+          text: Contains the format property used to specify the structured output schema.
+              Structured output is currently only supported by the default agent model,
+              magpie-1.1.
 
           extra_headers: Send extra headers
 
@@ -261,7 +284,9 @@ class Datagrid(SyncAPIClient):
                     "config": config,
                     "conversation_id": conversation_id,
                     "generate_citations": generate_citations,
+                    "secret_ids": secret_ids,
                     "stream": stream,
+                    "text": text,
                 },
                 client_converse_params.ClientConverseParams,
             ),
@@ -307,8 +332,14 @@ class Datagrid(SyncAPIClient):
 
 class AsyncDatagrid(AsyncAPIClient):
     knowledge: knowledge.AsyncKnowledgeResource
+    connections: connections.AsyncConnectionsResource
+    connectors: connectors.AsyncConnectorsResource
     files: files.AsyncFilesResource
+    credits: credits.AsyncCreditsResource
+    secrets: secrets.AsyncSecretsResource
     search: search.AsyncSearchResource
+    organization: organization.AsyncOrganizationResource
+    memory: memory.AsyncMemoryResource
     with_raw_response: AsyncDatagridWithRawResponse
     with_streaming_response: AsyncDatagridWithStreamedResponse
 
@@ -375,8 +406,14 @@ class AsyncDatagrid(AsyncAPIClient):
         )
 
         self.knowledge = knowledge.AsyncKnowledgeResource(self)
+        self.connections = connections.AsyncConnectionsResource(self)
+        self.connectors = connectors.AsyncConnectorsResource(self)
         self.files = files.AsyncFilesResource(self)
+        self.credits = credits.AsyncCreditsResource(self)
+        self.secrets = secrets.AsyncSecretsResource(self)
         self.search = search.AsyncSearchResource(self)
+        self.organization = organization.AsyncOrganizationResource(self)
+        self.memory = memory.AsyncMemoryResource(self)
         self.with_raw_response = AsyncDatagridWithRawResponse(self)
         self.with_streaming_response = AsyncDatagridWithStreamedResponse(self)
 
@@ -458,11 +495,13 @@ class AsyncDatagrid(AsyncAPIClient):
         self,
         *,
         prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
-        agent_id: str | NotGiven = NOT_GIVEN,
-        config: client_converse_params.Config | NotGiven = NOT_GIVEN,
-        conversation_id: str | NotGiven = NOT_GIVEN,
-        generate_citations: bool | NotGiven = NOT_GIVEN,
-        stream: bool | NotGiven = NOT_GIVEN,
+        agent_id: Optional[str] | NotGiven = NOT_GIVEN,
+        config: Optional[client_converse_params.Config] | NotGiven = NOT_GIVEN,
+        conversation_id: Optional[str] | NotGiven = NOT_GIVEN,
+        generate_citations: Optional[bool] | NotGiven = NOT_GIVEN,
+        secret_ids: Optional[List[str]] | NotGiven = NOT_GIVEN,
+        stream: Optional[bool] | NotGiven = NOT_GIVEN,
+        text: Optional[client_converse_params.Text] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -487,8 +526,15 @@ class AsyncDatagrid(AsyncAPIClient):
           generate_citations: Determines whether the response should include citations. When enabled, the
               agent will generate citations for factual statements.
 
+          secret_ids: Array of secret ID's to be included in the context. The secret value will be
+              appended to the prompt but not stored in conversation history.
+
           stream: Determines the response type of the converse. Response is the Server-Sent Events
               if stream is set to true.
+
+          text: Contains the format property used to specify the structured output schema.
+              Structured output is currently only supported by the default agent model,
+              magpie-1.1.
 
           extra_headers: Send extra headers
 
@@ -507,7 +553,9 @@ class AsyncDatagrid(AsyncAPIClient):
                     "config": config,
                     "conversation_id": conversation_id,
                     "generate_citations": generate_citations,
+                    "secret_ids": secret_ids,
                     "stream": stream,
+                    "text": text,
                 },
                 client_converse_params.ClientConverseParams,
             ),
@@ -554,8 +602,14 @@ class AsyncDatagrid(AsyncAPIClient):
 class DatagridWithRawResponse:
     def __init__(self, client: Datagrid) -> None:
         self.knowledge = knowledge.KnowledgeResourceWithRawResponse(client.knowledge)
+        self.connections = connections.ConnectionsResourceWithRawResponse(client.connections)
+        self.connectors = connectors.ConnectorsResourceWithRawResponse(client.connectors)
         self.files = files.FilesResourceWithRawResponse(client.files)
+        self.credits = credits.CreditsResourceWithRawResponse(client.credits)
+        self.secrets = secrets.SecretsResourceWithRawResponse(client.secrets)
         self.search = search.SearchResourceWithRawResponse(client.search)
+        self.organization = organization.OrganizationResourceWithRawResponse(client.organization)
+        self.memory = memory.MemoryResourceWithRawResponse(client.memory)
 
         self.converse = to_raw_response_wrapper(
             client.converse,
@@ -565,8 +619,14 @@ class DatagridWithRawResponse:
 class AsyncDatagridWithRawResponse:
     def __init__(self, client: AsyncDatagrid) -> None:
         self.knowledge = knowledge.AsyncKnowledgeResourceWithRawResponse(client.knowledge)
+        self.connections = connections.AsyncConnectionsResourceWithRawResponse(client.connections)
+        self.connectors = connectors.AsyncConnectorsResourceWithRawResponse(client.connectors)
         self.files = files.AsyncFilesResourceWithRawResponse(client.files)
+        self.credits = credits.AsyncCreditsResourceWithRawResponse(client.credits)
+        self.secrets = secrets.AsyncSecretsResourceWithRawResponse(client.secrets)
         self.search = search.AsyncSearchResourceWithRawResponse(client.search)
+        self.organization = organization.AsyncOrganizationResourceWithRawResponse(client.organization)
+        self.memory = memory.AsyncMemoryResourceWithRawResponse(client.memory)
 
         self.converse = async_to_raw_response_wrapper(
             client.converse,
@@ -576,8 +636,14 @@ class AsyncDatagridWithRawResponse:
 class DatagridWithStreamedResponse:
     def __init__(self, client: Datagrid) -> None:
         self.knowledge = knowledge.KnowledgeResourceWithStreamingResponse(client.knowledge)
+        self.connections = connections.ConnectionsResourceWithStreamingResponse(client.connections)
+        self.connectors = connectors.ConnectorsResourceWithStreamingResponse(client.connectors)
         self.files = files.FilesResourceWithStreamingResponse(client.files)
+        self.credits = credits.CreditsResourceWithStreamingResponse(client.credits)
+        self.secrets = secrets.SecretsResourceWithStreamingResponse(client.secrets)
         self.search = search.SearchResourceWithStreamingResponse(client.search)
+        self.organization = organization.OrganizationResourceWithStreamingResponse(client.organization)
+        self.memory = memory.MemoryResourceWithStreamingResponse(client.memory)
 
         self.converse = to_streamed_response_wrapper(
             client.converse,
@@ -587,8 +653,14 @@ class DatagridWithStreamedResponse:
 class AsyncDatagridWithStreamedResponse:
     def __init__(self, client: AsyncDatagrid) -> None:
         self.knowledge = knowledge.AsyncKnowledgeResourceWithStreamingResponse(client.knowledge)
+        self.connections = connections.AsyncConnectionsResourceWithStreamingResponse(client.connections)
+        self.connectors = connectors.AsyncConnectorsResourceWithStreamingResponse(client.connectors)
         self.files = files.AsyncFilesResourceWithStreamingResponse(client.files)
+        self.credits = credits.AsyncCreditsResourceWithStreamingResponse(client.credits)
+        self.secrets = secrets.AsyncSecretsResourceWithStreamingResponse(client.secrets)
         self.search = search.AsyncSearchResourceWithStreamingResponse(client.search)
+        self.organization = organization.AsyncOrganizationResourceWithStreamingResponse(client.organization)
+        self.memory = memory.AsyncMemoryResourceWithStreamingResponse(client.memory)
 
         self.converse = async_to_streamed_response_wrapper(
             client.converse,

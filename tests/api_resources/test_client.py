@@ -33,13 +33,16 @@ class TestClient:
                 "agent_model": "magpie-1",
                 "agent_tools": ["data_analysis"],
                 "custom_prompt": "custom_prompt",
+                "disabled_agent_tools": ["data_analysis"],
                 "knowledge_ids": ["string"],
                 "llm_model": "gemini-1.5-flash-001",
                 "system_prompt": "system_prompt",
             },
             conversation_id="conversation_id",
             generate_citations=True,
+            secret_ids=["string"],
             stream=True,
+            text={"format": {}},
         )
         assert_matches_type(ConverseResponse, client_, path=["response"])
 
@@ -89,13 +92,16 @@ class TestAsyncClient:
                 "agent_model": "magpie-1",
                 "agent_tools": ["data_analysis"],
                 "custom_prompt": "custom_prompt",
+                "disabled_agent_tools": ["data_analysis"],
                 "knowledge_ids": ["string"],
                 "llm_model": "gemini-1.5-flash-001",
                 "system_prompt": "system_prompt",
             },
             conversation_id="conversation_id",
             generate_citations=True,
+            secret_ids=["string"],
             stream=True,
+            text={"format": {}},
         )
         assert_matches_type(ConverseResponse, client, path=["response"])
 
