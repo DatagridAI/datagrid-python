@@ -35,6 +35,7 @@ client = Datagrid(
 knowledge = client.knowledge.create(
     files=[],
 )
+print(knowledge.id)
 ```
 
 While you can provide an `api_key` keyword argument,
@@ -60,6 +61,7 @@ async def main() -> None:
     knowledge = await client.knowledge.create(
         files=[],
     )
+    print(knowledge.id)
 
 
 asyncio.run(main())
@@ -94,6 +96,7 @@ async def main() -> None:
         knowledge = await client.knowledge.create(
             files=[],
         )
+        print(knowledge.id)
 
 
 asyncio.run(main())
@@ -339,7 +342,7 @@ response = client.knowledge.with_raw_response.create(
 print(response.headers.get('X-My-Header'))
 
 knowledge = response.parse()  # get the object that `knowledge.create()` would have returned
-print(knowledge)
+print(knowledge.id)
 ```
 
 These methods return an [`APIResponse`](https://github.com/DatagridAI/datagrid-python/tree/main/src/datagrid_ai/_response.py) object.

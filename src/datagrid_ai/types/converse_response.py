@@ -4,9 +4,8 @@ from typing import List, Optional
 from typing_extensions import Literal
 
 from .._models import BaseModel
-from .credits_converse_response import CreditsConverseResponse
 
-__all__ = ["ConverseResponse", "Content", "Citation", "CitationKnowledge"]
+__all__ = ["ConverseResponse", "Content", "Citation", "CitationKnowledge", "Credits"]
 
 
 class Content(BaseModel):
@@ -31,6 +30,11 @@ class Citation(BaseModel):
     """Array of knowledges that support this citation."""
 
 
+class Credits(BaseModel):
+    consumed: float
+    """The number of credits consumed by the converse call."""
+
+
 class ConverseResponse(BaseModel):
     agent_id: str
     """The ID of the agent used for the converse."""
@@ -49,4 +53,4 @@ class ConverseResponse(BaseModel):
     response. Each citation includes the referenced text and its knowledges.
     """
 
-    credits: Optional[CreditsConverseResponse] = None
+    credits: Optional[Credits] = None

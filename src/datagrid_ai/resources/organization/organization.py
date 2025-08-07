@@ -2,6 +2,14 @@
 
 from __future__ import annotations
 
+from .credits import (
+    CreditsResource,
+    AsyncCreditsResource,
+    CreditsResourceWithRawResponse,
+    AsyncCreditsResourceWithRawResponse,
+    CreditsResourceWithStreamingResponse,
+    AsyncCreditsResourceWithStreamingResponse,
+)
 from ..._compat import cached_property
 from .teamspaces import (
     TeamspacesResource,
@@ -20,6 +28,10 @@ class OrganizationResource(SyncAPIResource):
     @cached_property
     def teamspaces(self) -> TeamspacesResource:
         return TeamspacesResource(self._client)
+
+    @cached_property
+    def credits(self) -> CreditsResource:
+        return CreditsResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> OrganizationResourceWithRawResponse:
@@ -45,6 +57,10 @@ class AsyncOrganizationResource(AsyncAPIResource):
     @cached_property
     def teamspaces(self) -> AsyncTeamspacesResource:
         return AsyncTeamspacesResource(self._client)
+
+    @cached_property
+    def credits(self) -> AsyncCreditsResource:
+        return AsyncCreditsResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> AsyncOrganizationResourceWithRawResponse:
@@ -74,6 +90,10 @@ class OrganizationResourceWithRawResponse:
     def teamspaces(self) -> TeamspacesResourceWithRawResponse:
         return TeamspacesResourceWithRawResponse(self._organization.teamspaces)
 
+    @cached_property
+    def credits(self) -> CreditsResourceWithRawResponse:
+        return CreditsResourceWithRawResponse(self._organization.credits)
+
 
 class AsyncOrganizationResourceWithRawResponse:
     def __init__(self, organization: AsyncOrganizationResource) -> None:
@@ -82,6 +102,10 @@ class AsyncOrganizationResourceWithRawResponse:
     @cached_property
     def teamspaces(self) -> AsyncTeamspacesResourceWithRawResponse:
         return AsyncTeamspacesResourceWithRawResponse(self._organization.teamspaces)
+
+    @cached_property
+    def credits(self) -> AsyncCreditsResourceWithRawResponse:
+        return AsyncCreditsResourceWithRawResponse(self._organization.credits)
 
 
 class OrganizationResourceWithStreamingResponse:
@@ -92,6 +116,10 @@ class OrganizationResourceWithStreamingResponse:
     def teamspaces(self) -> TeamspacesResourceWithStreamingResponse:
         return TeamspacesResourceWithStreamingResponse(self._organization.teamspaces)
 
+    @cached_property
+    def credits(self) -> CreditsResourceWithStreamingResponse:
+        return CreditsResourceWithStreamingResponse(self._organization.credits)
+
 
 class AsyncOrganizationResourceWithStreamingResponse:
     def __init__(self, organization: AsyncOrganizationResource) -> None:
@@ -100,3 +128,7 @@ class AsyncOrganizationResourceWithStreamingResponse:
     @cached_property
     def teamspaces(self) -> AsyncTeamspacesResourceWithStreamingResponse:
         return AsyncTeamspacesResourceWithStreamingResponse(self._organization.teamspaces)
+
+    @cached_property
+    def credits(self) -> AsyncCreditsResourceWithStreamingResponse:
+        return AsyncCreditsResourceWithStreamingResponse(self._organization.credits)

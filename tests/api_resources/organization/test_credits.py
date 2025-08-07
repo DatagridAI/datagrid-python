@@ -9,7 +9,7 @@ import pytest
 
 from datagrid_ai import Datagrid, AsyncDatagrid
 from tests.utils import assert_matches_type
-from datagrid_ai.types import CreditsResponse
+from datagrid_ai.types.organization import CreditsReport
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -19,26 +19,26 @@ class TestCredits:
 
     @parametrize
     def test_method_get(self, client: Datagrid) -> None:
-        credit = client.credits.get()
-        assert_matches_type(CreditsResponse, credit, path=["response"])
+        credit = client.organization.credits.get()
+        assert_matches_type(CreditsReport, credit, path=["response"])
 
     @parametrize
     def test_raw_response_get(self, client: Datagrid) -> None:
-        response = client.credits.with_raw_response.get()
+        response = client.organization.credits.with_raw_response.get()
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         credit = response.parse()
-        assert_matches_type(CreditsResponse, credit, path=["response"])
+        assert_matches_type(CreditsReport, credit, path=["response"])
 
     @parametrize
     def test_streaming_response_get(self, client: Datagrid) -> None:
-        with client.credits.with_streaming_response.get() as response:
+        with client.organization.credits.with_streaming_response.get() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             credit = response.parse()
-            assert_matches_type(CreditsResponse, credit, path=["response"])
+            assert_matches_type(CreditsReport, credit, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -50,25 +50,25 @@ class TestAsyncCredits:
 
     @parametrize
     async def test_method_get(self, async_client: AsyncDatagrid) -> None:
-        credit = await async_client.credits.get()
-        assert_matches_type(CreditsResponse, credit, path=["response"])
+        credit = await async_client.organization.credits.get()
+        assert_matches_type(CreditsReport, credit, path=["response"])
 
     @parametrize
     async def test_raw_response_get(self, async_client: AsyncDatagrid) -> None:
-        response = await async_client.credits.with_raw_response.get()
+        response = await async_client.organization.credits.with_raw_response.get()
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         credit = await response.parse()
-        assert_matches_type(CreditsResponse, credit, path=["response"])
+        assert_matches_type(CreditsReport, credit, path=["response"])
 
     @parametrize
     async def test_streaming_response_get(self, async_client: AsyncDatagrid) -> None:
-        async with async_client.credits.with_streaming_response.get() as response:
+        async with async_client.organization.credits.with_streaming_response.get() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             credit = await response.parse()
-            assert_matches_type(CreditsResponse, credit, path=["response"])
+            assert_matches_type(CreditsReport, credit, path=["response"])
 
         assert cast(Any, response.is_closed) is True

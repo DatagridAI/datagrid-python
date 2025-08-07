@@ -5,9 +5,8 @@ from datetime import datetime
 from typing_extensions import Literal
 
 from .._models import BaseModel
-from .credits_knowledge_response import CreditsKnowledgeResponse
 
-__all__ = ["Knowledge", "RowCounts"]
+__all__ = ["Knowledge", "RowCounts", "Credits"]
 
 
 class RowCounts(BaseModel):
@@ -19,6 +18,11 @@ class RowCounts(BaseModel):
 
     total: float
     """The total number of rows in the knowledge."""
+
+
+class Credits(BaseModel):
+    consumed: float
+    """The number of credits consumed by the knowledge."""
 
 
 class Knowledge(BaseModel):
@@ -47,7 +51,7 @@ class Knowledge(BaseModel):
     utilized in responses.
     """
 
-    credits: Optional[CreditsKnowledgeResponse] = None
+    credits: Optional[Credits] = None
 
     updated_at: Optional[datetime] = None
     """The ISO string for when the knowledge was last updated."""

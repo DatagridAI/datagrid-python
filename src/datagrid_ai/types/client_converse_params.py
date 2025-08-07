@@ -216,35 +216,35 @@ class Text(TypedDict, total=False):
     The converse response will be a JSON string object, that adheres to the provided
     JSON schema.
 
-    ```json
-      const exampleJsonSchema = {
-        $id: "movie_info",
-        title: "movie_info",
-        type: "object",
-        properties: {
-          name: {
-            type: "string",
-            description: "The name of the movie",
-          },
-          director: {
-            type: "string",
-            description: "The director of the movie",
-          },
-          release_year: {
-            type: "number",
-            description: "The year the movie was released",
-          },
+    ```javascript
+    const exampleJsonSchema = {
+      $id: "movie_info",
+      title: "movie_info",
+      type: "object",
+      properties: {
+        name: {
+          type: "string",
+          description: "The name of the movie",
         },
-        required: ["name", "director", "release_year"],
-        additionalProperties: false,
-      };
+        director: {
+          type: "string",
+          description: "The director of the movie",
+        },
+        release_year: {
+          type: "number",
+          description: "The year the movie was released",
+        },
+      },
+      required: ["name", "director", "release_year"],
+      additionalProperties: false,
+    };
 
-      const response = await datagrid.converse({
-        prompt: "What movie won best picture at the 2001 oscars?",
-        text: { format: exampleJsonSchema },
-      });
+    const response = await datagrid.converse({
+      prompt: "What movie won best picture at the 2001 oscars?",
+      text: { format: exampleJsonSchema },
+    });
 
-      // Example response:
-      "{ "name": "Gladiator", "director": "Ridley Scott", "release_year": 2000 }"
+    // Example response: "{ "name": "Gladiator", "director": "Ridley Scott", "release_year": 2000 }"
+    const parsedResponse = JSON.parse(response.content[0].text);
     ```
     """
