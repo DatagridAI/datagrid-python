@@ -3,8 +3,6 @@
 from typing import Union, Optional
 from typing_extensions import Literal, TypeAlias
 
-
-
 from .._models import BaseModel
 from .row_metadata import RowMetadata
 from .message_metadata import MessageMetadata
