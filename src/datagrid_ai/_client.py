@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import os
-from typing import Any, Union, Mapping, Iterable, Optional, overload
+from typing import Any, List, Union, Mapping, Iterable, Optional, overload
 from typing_extensions import Self, Literal, override
 
 import httpx
@@ -246,11 +246,13 @@ class Datagrid(SyncAPIClient):
         self,
         *,
         prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
-        agent_id: str | NotGiven = NOT_GIVEN,
-        config: client_converse_params.Config | NotGiven = NOT_GIVEN,
-        conversation_id: str | NotGiven = NOT_GIVEN,
-        generate_citations: bool | NotGiven = NOT_GIVEN,
+        agent_id: Optional[str] | NotGiven = NOT_GIVEN,
+        config: Optional[client_converse_params.Config] | NotGiven = NOT_GIVEN,
+        conversation_id: Optional[str] | NotGiven = NOT_GIVEN,
+        generate_citations: Optional[bool] | NotGiven = NOT_GIVEN,
+        secret_ids: Optional[List[str]] | NotGiven = NOT_GIVEN,
         stream: Literal[True],
+        text: Optional[client_converse_params.Text] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -264,11 +266,13 @@ class Datagrid(SyncAPIClient):
         self,
         *,
         prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
-        agent_id: str | NotGiven = NOT_GIVEN,
-        config: client_converse_params.Config | NotGiven = NOT_GIVEN,
-        conversation_id: str | NotGiven = NOT_GIVEN,
-        generate_citations: bool | NotGiven = NOT_GIVEN,
+        agent_id: Optional[str] | NotGiven = NOT_GIVEN,
+        config: Optional[client_converse_params.Config] | NotGiven = NOT_GIVEN,
+        conversation_id: Optional[str] | NotGiven = NOT_GIVEN,
+        generate_citations: Optional[bool] | NotGiven = NOT_GIVEN,
+        secret_ids: Optional[List[str]] | NotGiven = NOT_GIVEN,
         stream: bool,
+        text: Optional[client_converse_params.Text] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -281,11 +285,13 @@ class Datagrid(SyncAPIClient):
         self,
         *,
         prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
-        agent_id: str | NotGiven = NOT_GIVEN,
-        config: client_converse_params.Config | NotGiven = NOT_GIVEN,
-        conversation_id: str | NotGiven = NOT_GIVEN,
-        generate_citations: bool | NotGiven = NOT_GIVEN,
+        agent_id: Optional[str] | NotGiven = NOT_GIVEN,
+        config: Optional[client_converse_params.Config] | NotGiven = NOT_GIVEN,
+        conversation_id: Optional[str] | NotGiven = NOT_GIVEN,
+        generate_citations: Optional[bool] | NotGiven = NOT_GIVEN,
+        secret_ids: Optional[List[str]] | NotGiven = NOT_GIVEN,
         stream: Optional[Literal[False]] | Literal[True] | NotGiven = NOT_GIVEN,
+        text: Optional[client_converse_params.Text] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
