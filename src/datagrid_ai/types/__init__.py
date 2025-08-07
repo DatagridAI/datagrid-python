@@ -10,7 +10,6 @@ from .agent_tools import AgentTools as AgentTools
 from .file_object import FileObject as FileObject
 from .row_metadata import RowMetadata as RowMetadata
 from .table_metadata import TableMetadata as TableMetadata
-from .credits_response import CreditsResponse as CreditsResponse
 from .file_list_params import FileListParams as FileListParams
 from .message_metadata import MessageMetadata as MessageMetadata
 from .converse_response import ConverseResponse as ConverseResponse
@@ -33,8 +32,6 @@ from .knowledge_create_params import KnowledgeCreateParams as KnowledgeCreatePar
 from .knowledge_update_params import KnowledgeUpdateParams as KnowledgeUpdateParams
 from .connection_create_params import ConnectionCreateParams as ConnectionCreateParams
 from .connection_update_params import ConnectionUpdateParams as ConnectionUpdateParams
-from .credits_converse_response import CreditsConverseResponse as CreditsConverseResponse
-from .knowledge_create_response import KnowledgeCreateResponse as KnowledgeCreateResponse
+from .knowledge_connect_params import KnowledgeConnectParams as KnowledgeConnectParams
 from .knowledge_update_response import KnowledgeUpdateResponse as KnowledgeUpdateResponse
-from .credits_knowledge_response import CreditsKnowledgeResponse as CreditsKnowledgeResponse
 from .search_result_resource_type import SearchResultResourceType as SearchResultResourceType

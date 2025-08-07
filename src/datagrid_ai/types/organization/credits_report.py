@@ -1,11 +1,11 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from .._models import BaseModel
+from ..._models import BaseModel
 
-__all__ = ["CreditsResponse"]
+__all__ = ["CreditsReport"]
 
 
-class CreditsResponse(BaseModel):
+class CreditsReport(BaseModel):
     consumed: float
     """The number of credits consumed in the current billing period."""
 

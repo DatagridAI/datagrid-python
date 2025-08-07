@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
-from typing import Any, List, Mapping, Optional, cast
+from typing import List, Mapping, Optional, cast
 
 import httpx
 
-from ..types import knowledge_list_params, knowledge_create_params, knowledge_update_params
+from ..types import knowledge_list_params, knowledge_create_params, knowledge_update_params, knowledge_connect_params
 from .._types import NOT_GIVEN, Body, Query, Headers, NoneType, NotGiven, FileTypes
 from .._utils import is_given, extract_files, maybe_transform, deepcopy_minimal, async_maybe_transform
 from .._compat import cached_property
@@ -21,7 +21,7 @@ from .._constants import DEFAULT_TIMEOUT
 from ..pagination import SyncCursorIDPage, AsyncCursorIDPage
 from .._base_client import AsyncPaginator, make_request_options
 from ..types.knowledge import Knowledge
-from ..types.knowledge_create_response import KnowledgeCreateResponse
+from ..types.redirect_url_response import RedirectURLResponse
 from ..types.knowledge_update_response import KnowledgeUpdateResponse
 
 __all__ = ["KnowledgeResource", "AsyncKnowledgeResource"]
@@ -50,7 +50,6 @@ class KnowledgeResource(SyncAPIResource):
     def create(
         self,
         *,
-        connection_id: Optional[str] | NotGiven = NOT_GIVEN,
         files: Optional[List[FileTypes]] | NotGiven = NOT_GIVEN,
         name: Optional[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -59,13 +58,11 @@ class KnowledgeResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> KnowledgeCreateResponse:
+    ) -> Knowledge:
         """
         Create knowledge which will be learned and leveraged by agents.
 
         Args:
-          connection_id: The id of the connection to be used to create the knowledge.
-
           files: The files to be uploaded and learned. Supported media types are `pdf`, `json`,
               `csv`, `text`, `png`, `jpeg`, `excel`, `google sheets`.
 
@@ -83,7 +80,6 @@ class KnowledgeResource(SyncAPIResource):
             timeout = 120
         body = deepcopy_minimal(
             {
-                "connection_id": connection_id,
                 "files": files,
                 "name": name,
             }
@@ -93,19 +89,14 @@ class KnowledgeResource(SyncAPIResource):
         # sent to the server will contain a `boundary` parameter, e.g.
         # multipart/form-data; boundary=---abc--
         extra_headers = {"Content-Type": "multipart/form-data", **(extra_headers or {})}
-        return cast(
-            KnowledgeCreateResponse,
-            self._post(
-                "/knowledge",
-                body=maybe_transform(body, knowledge_create_params.KnowledgeCreateParams),
-                files=extracted_files,
-                options=make_request_options(
-                    extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-                ),
-                cast_to=cast(
-                    Any, KnowledgeCreateResponse
-                ),  # Union types cannot be passed in as arguments in the type system
+        return self._post(
+            "/knowledge",
+            body=maybe_transform(body, knowledge_create_params.KnowledgeCreateParams),
+            files=extracted_files,
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
+            cast_to=Knowledge,
         )
 
     def retrieve(
@@ -268,6 +259,40 @@ class KnowledgeResource(SyncAPIResource):
             cast_to=NoneType,
         )
 
+    def connect(
+        self,
+        *,
+        connection_id: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> RedirectURLResponse:
+        """
+        Create knowledge from connection which will be learned and leveraged by agents.
+
+        Args:
+          connection_id: The id of the connection to be used to create the knowledge.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return self._post(
+            "/knowledge/connect",
+            body=maybe_transform({"connection_id": connection_id}, knowledge_connect_params.KnowledgeConnectParams),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=RedirectURLResponse,
+        )
+
 
 class AsyncKnowledgeResource(AsyncAPIResource):
     @cached_property
@@ -292,7 +317,6 @@ class AsyncKnowledgeResource(AsyncAPIResource):
     async def create(
         self,
         *,
-        connection_id: Optional[str] | NotGiven = NOT_GIVEN,
         files: Optional[List[FileTypes]] | NotGiven = NOT_GIVEN,
         name: Optional[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -301,13 +325,11 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> KnowledgeCreateResponse:
+    ) -> Knowledge:
         """
         Create knowledge which will be learned and leveraged by agents.
 
         Args:
-          connection_id: The id of the connection to be used to create the knowledge.
-
           files: The files to be uploaded and learned. Supported media types are `pdf`, `json`,
               `csv`, `text`, `png`, `jpeg`, `excel`, `google sheets`.
 
@@ -325,7 +347,6 @@ class AsyncKnowledgeResource(AsyncAPIResource):
             timeout = 120
         body = deepcopy_minimal(
             {
-                "connection_id": connection_id,
                 "files": files,
                 "name": name,
             }
@@ -335,19 +356,14 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         # sent to the server will contain a `boundary` parameter, e.g.
         # multipart/form-data; boundary=---abc--
         extra_headers = {"Content-Type": "multipart/form-data", **(extra_headers or {})}
-        return cast(
-            KnowledgeCreateResponse,
-            await self._post(
-                "/knowledge",
-                body=await async_maybe_transform(body, knowledge_create_params.KnowledgeCreateParams),
-                files=extracted_files,
-                options=make_request_options(
-                    extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-                ),
-                cast_to=cast(
-                    Any, KnowledgeCreateResponse
-                ),  # Union types cannot be passed in as arguments in the type system
+        return await self._post(
+            "/knowledge",
+            body=await async_maybe_transform(body, knowledge_create_params.KnowledgeCreateParams),
+            files=extracted_files,
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
+            cast_to=Knowledge,
         )
 
     async def retrieve(
@@ -510,6 +526,42 @@ class AsyncKnowledgeResource(AsyncAPIResource):
             cast_to=NoneType,
         )
 
+    async def connect(
+        self,
+        *,
+        connection_id: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> RedirectURLResponse:
+        """
+        Create knowledge from connection which will be learned and leveraged by agents.
+
+        Args:
+          connection_id: The id of the connection to be used to create the knowledge.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return await self._post(
+            "/knowledge/connect",
+            body=await async_maybe_transform(
+                {"connection_id": connection_id}, knowledge_connect_params.KnowledgeConnectParams
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=RedirectURLResponse,
+        )
+
 
 class KnowledgeResourceWithRawResponse:
     def __init__(self, knowledge: KnowledgeResource) -> None:
@@ -529,6 +581,9 @@ class KnowledgeResourceWithRawResponse:
         )
         self.delete = to_raw_response_wrapper(
             knowledge.delete,
+        )
+        self.connect = to_raw_response_wrapper(
+            knowledge.connect,
         )
 
 
@@ -551,6 +606,9 @@ class AsyncKnowledgeResourceWithRawResponse:
         self.delete = async_to_raw_response_wrapper(
             knowledge.delete,
         )
+        self.connect = async_to_raw_response_wrapper(
+            knowledge.connect,
+        )
 
 
 class KnowledgeResourceWithStreamingResponse:
@@ -572,6 +630,9 @@ class KnowledgeResourceWithStreamingResponse:
         self.delete = to_streamed_response_wrapper(
             knowledge.delete,
         )
+        self.connect = to_streamed_response_wrapper(
+            knowledge.connect,
+        )
 
 
 class AsyncKnowledgeResourceWithStreamingResponse:
@@ -592,4 +653,7 @@ class AsyncKnowledgeResourceWithStreamingResponse:
         )
         self.delete = async_to_streamed_response_wrapper(
             knowledge.delete,
+        )
+        self.connect = async_to_streamed_response_wrapper(
+            knowledge.connect,
         )
