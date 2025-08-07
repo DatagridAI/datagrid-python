@@ -8,6 +8,14 @@ from .files import (
     FilesResourceWithStreamingResponse,
     AsyncFilesResourceWithStreamingResponse,
 )
+from .memory import (
+    MemoryResource,
+    AsyncMemoryResource,
+    MemoryResourceWithRawResponse,
+    AsyncMemoryResourceWithRawResponse,
+    MemoryResourceWithStreamingResponse,
+    AsyncMemoryResourceWithStreamingResponse,
+)
 from .search import (
     SearchResource,
     AsyncSearchResource,
@@ -15,6 +23,22 @@ from .search import (
     AsyncSearchResourceWithRawResponse,
     SearchResourceWithStreamingResponse,
     AsyncSearchResourceWithStreamingResponse,
+)
+from .credits import (
+    CreditsResource,
+    AsyncCreditsResource,
+    CreditsResourceWithRawResponse,
+    AsyncCreditsResourceWithRawResponse,
+    CreditsResourceWithStreamingResponse,
+    AsyncCreditsResourceWithStreamingResponse,
+)
+from .secrets import (
+    SecretsResource,
+    AsyncSecretsResource,
+    SecretsResourceWithRawResponse,
+    AsyncSecretsResourceWithRawResponse,
+    SecretsResourceWithStreamingResponse,
+    AsyncSecretsResourceWithStreamingResponse,
 )
 from .knowledge import (
     KnowledgeResource,
@@ -24,6 +48,30 @@ from .knowledge import (
     KnowledgeResourceWithStreamingResponse,
     AsyncKnowledgeResourceWithStreamingResponse,
 )
+from .connectors import (
+    ConnectorsResource,
+    AsyncConnectorsResource,
+    ConnectorsResourceWithRawResponse,
+    AsyncConnectorsResourceWithRawResponse,
+    ConnectorsResourceWithStreamingResponse,
+    AsyncConnectorsResourceWithStreamingResponse,
+)
+from .connections import (
+    ConnectionsResource,
+    AsyncConnectionsResource,
+    ConnectionsResourceWithRawResponse,
+    AsyncConnectionsResourceWithRawResponse,
+    ConnectionsResourceWithStreamingResponse,
+    AsyncConnectionsResourceWithStreamingResponse,
+)
+from .organization import (
+    OrganizationResource,
+    AsyncOrganizationResource,
+    OrganizationResourceWithRawResponse,
+    AsyncOrganizationResourceWithRawResponse,
+    OrganizationResourceWithStreamingResponse,
+    AsyncOrganizationResourceWithStreamingResponse,
+)
 
 __all__ = [
     "KnowledgeResource",
@@ -32,16 +80,52 @@ __all__ = [
     "AsyncKnowledgeResourceWithRawResponse",
     "KnowledgeResourceWithStreamingResponse",
     "AsyncKnowledgeResourceWithStreamingResponse",
+    "ConnectionsResource",
+    "AsyncConnectionsResource",
+    "ConnectionsResourceWithRawResponse",
+    "AsyncConnectionsResourceWithRawResponse",
+    "ConnectionsResourceWithStreamingResponse",
+    "AsyncConnectionsResourceWithStreamingResponse",
+    "ConnectorsResource",
+    "AsyncConnectorsResource",
+    "ConnectorsResourceWithRawResponse",
+    "AsyncConnectorsResourceWithRawResponse",
+    "ConnectorsResourceWithStreamingResponse",
+    "AsyncConnectorsResourceWithStreamingResponse",
     "FilesResource",
     "AsyncFilesResource",
     "FilesResourceWithRawResponse",
     "AsyncFilesResourceWithRawResponse",
     "FilesResourceWithStreamingResponse",
     "AsyncFilesResourceWithStreamingResponse",
+    "CreditsResource",
+    "AsyncCreditsResource",
+    "CreditsResourceWithRawResponse",
+    "AsyncCreditsResourceWithRawResponse",
+    "CreditsResourceWithStreamingResponse",
+    "AsyncCreditsResourceWithStreamingResponse",
+    "SecretsResource",
+    "AsyncSecretsResource",
+    "SecretsResourceWithRawResponse",
+    "AsyncSecretsResourceWithRawResponse",
+    "SecretsResourceWithStreamingResponse",
+    "AsyncSecretsResourceWithStreamingResponse",
     "SearchResource",
     "AsyncSearchResource",
     "SearchResourceWithRawResponse",
     "AsyncSearchResourceWithRawResponse",
     "SearchResourceWithStreamingResponse",
     "AsyncSearchResourceWithStreamingResponse",
+    "OrganizationResource",
+    "AsyncOrganizationResource",
+    "OrganizationResourceWithRawResponse",
+    "AsyncOrganizationResourceWithRawResponse",
+    "OrganizationResourceWithStreamingResponse",
+    "AsyncOrganizationResourceWithStreamingResponse",
+    "MemoryResource",
+    "AsyncMemoryResource",
+    "MemoryResourceWithRawResponse",
+    "AsyncMemoryResourceWithRawResponse",
+    "MemoryResourceWithStreamingResponse",
+    "AsyncMemoryResourceWithStreamingResponse",
 ]

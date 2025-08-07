@@ -718,7 +718,7 @@ class TestDatagrid:
         respx_mock.post("/knowledge").mock(side_effect=httpx.TimeoutException("Test timeout error"))
 
         with pytest.raises(APITimeoutError):
-            client.knowledge.with_streaming_response.create(files=[b"raw file contents"]).__enter__()
+            client.knowledge.with_streaming_response.create().__enter__()
 
         assert _get_open_connections(self.client) == 0
 
@@ -729,7 +729,7 @@ class TestDatagrid:
         respx_mock.post("/knowledge").mock(return_value=httpx.Response(500))
 
         with pytest.raises(APIStatusError):
-            client.knowledge.with_streaming_response.create(files=[b"raw file contents"]).__enter__()
+            client.knowledge.with_streaming_response.create().__enter__()
         assert _get_open_connections(self.client) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
@@ -758,7 +758,7 @@ class TestDatagrid:
 
         respx_mock.post("/knowledge").mock(side_effect=retry_handler)
 
-        response = client.knowledge.with_raw_response.create(files=[b"raw file contents"])
+        response = client.knowledge.with_raw_response.create()
 
         assert response.retries_taken == failures_before_success
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
@@ -782,9 +782,7 @@ class TestDatagrid:
 
         respx_mock.post("/knowledge").mock(side_effect=retry_handler)
 
-        response = client.knowledge.with_raw_response.create(
-            files=[b"raw file contents"], extra_headers={"x-stainless-retry-count": Omit()}
-        )
+        response = client.knowledge.with_raw_response.create(extra_headers={"x-stainless-retry-count": Omit()})
 
         assert len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
 
@@ -807,9 +805,7 @@ class TestDatagrid:
 
         respx_mock.post("/knowledge").mock(side_effect=retry_handler)
 
-        response = client.knowledge.with_raw_response.create(
-            files=[b"raw file contents"], extra_headers={"x-stainless-retry-count": "42"}
-        )
+        response = client.knowledge.with_raw_response.create(extra_headers={"x-stainless-retry-count": "42"})
 
         assert response.http_request.headers.get("x-stainless-retry-count") == "42"
 
@@ -1541,7 +1537,7 @@ class TestAsyncDatagrid:
         respx_mock.post("/knowledge").mock(side_effect=httpx.TimeoutException("Test timeout error"))
 
         with pytest.raises(APITimeoutError):
-            await async_client.knowledge.with_streaming_response.create(files=[b"raw file contents"]).__aenter__()
+            await async_client.knowledge.with_streaming_response.create().__aenter__()
 
         assert _get_open_connections(self.client) == 0
 
@@ -1554,7 +1550,7 @@ class TestAsyncDatagrid:
         respx_mock.post("/knowledge").mock(return_value=httpx.Response(500))
 
         with pytest.raises(APIStatusError):
-            await async_client.knowledge.with_streaming_response.create(files=[b"raw file contents"]).__aenter__()
+            await async_client.knowledge.with_streaming_response.create().__aenter__()
         assert _get_open_connections(self.client) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
@@ -1584,7 +1580,7 @@ class TestAsyncDatagrid:
 
         respx_mock.post("/knowledge").mock(side_effect=retry_handler)
 
-        response = await client.knowledge.with_raw_response.create(files=[b"raw file contents"])
+        response = await client.knowledge.with_raw_response.create()
 
         assert response.retries_taken == failures_before_success
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
@@ -1609,9 +1605,7 @@ class TestAsyncDatagrid:
 
         respx_mock.post("/knowledge").mock(side_effect=retry_handler)
 
-        response = await client.knowledge.with_raw_response.create(
-            files=[b"raw file contents"], extra_headers={"x-stainless-retry-count": Omit()}
-        )
+        response = await client.knowledge.with_raw_response.create(extra_headers={"x-stainless-retry-count": Omit()})
 
         assert len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
 
@@ -1635,9 +1629,7 @@ class TestAsyncDatagrid:
 
         respx_mock.post("/knowledge").mock(side_effect=retry_handler)
 
-        response = await client.knowledge.with_raw_response.create(
-            files=[b"raw file contents"], extra_headers={"x-stainless-retry-count": "42"}
-        )
+        response = await client.knowledge.with_raw_response.create(extra_headers={"x-stainless-retry-count": "42"})
 
         assert response.http_request.headers.get("x-stainless-retry-count") == "42"
 

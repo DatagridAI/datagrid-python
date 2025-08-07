@@ -2,149 +2,52 @@
 
 from __future__ import annotations
 
-from typing import Any, List, Mapping, Optional, cast
+from typing_extensions import Literal
 
 import httpx
 
-from ..types import knowledge_list_params, knowledge_create_params, knowledge_update_params
-from .._types import NOT_GIVEN, Body, Query, Headers, NoneType, NotGiven, FileTypes
-from .._utils import is_given, extract_files, maybe_transform, deepcopy_minimal, async_maybe_transform
-from .._compat import cached_property
-from .._resource import SyncAPIResource, AsyncAPIResource
-from .._response import (
+from ..._types import NOT_GIVEN, Body, Query, Headers, NotGiven
+from ..._utils import maybe_transform, async_maybe_transform
+from ..._compat import cached_property
+from ..._resource import SyncAPIResource, AsyncAPIResource
+from ..._response import (
     to_raw_response_wrapper,
     to_streamed_response_wrapper,
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from .._constants import DEFAULT_TIMEOUT
-from ..pagination import SyncCursorIDPage, AsyncCursorIDPage
-from .._base_client import AsyncPaginator, make_request_options
-from ..types.knowledge import Knowledge
-from ..types.knowledge_create_response import KnowledgeCreateResponse
-from ..types.knowledge_update_response import KnowledgeUpdateResponse
+from ...pagination import SyncCursorIDPage, AsyncCursorIDPage
+from ..._base_client import AsyncPaginator, make_request_options
+from ...types.organization import teamspace_list_params, teamspace_patch_params, teamspace_create_params
+from ...types.organization.teamspace import Teamspace
 
-__all__ = ["KnowledgeResource", "AsyncKnowledgeResource"]
+__all__ = ["TeamspacesResource", "AsyncTeamspacesResource"]
 
 
-class KnowledgeResource(SyncAPIResource):
+class TeamspacesResource(SyncAPIResource):
     @cached_property
-    def with_raw_response(self) -> KnowledgeResourceWithRawResponse:
+    def with_raw_response(self) -> TeamspacesResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
         For more information, see https://www.github.com/DatagridAI/datagrid-python#accessing-raw-response-data-eg-headers
         """
-        return KnowledgeResourceWithRawResponse(self)
+        return TeamspacesResourceWithRawResponse(self)
 
     @cached_property
-    def with_streaming_response(self) -> KnowledgeResourceWithStreamingResponse:
+    def with_streaming_response(self) -> TeamspacesResourceWithStreamingResponse:
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
         For more information, see https://www.github.com/DatagridAI/datagrid-python#with_streaming_response
         """
-        return KnowledgeResourceWithStreamingResponse(self)
+        return TeamspacesResourceWithStreamingResponse(self)
 
     def create(
         self,
         *,
-        connection_id: Optional[str] | NotGiven = NOT_GIVEN,
-        files: Optional[List[FileTypes]] | NotGiven = NOT_GIVEN,
-        name: Optional[str] | NotGiven = NOT_GIVEN,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> KnowledgeCreateResponse:
-        """
-        Create knowledge which will be learned and leveraged by agents.
-
-        Args:
-          connection_id: The id of the connection to be used to create the knowledge.
-
-          files: The files to be uploaded and learned. Supported media types are `pdf`, `json`,
-              `csv`, `text`, `png`, `jpeg`, `excel`, `google sheets`.
-
-          name: The name of the knowledge.
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
-            timeout = 120
-        body = deepcopy_minimal(
-            {
-                "connection_id": connection_id,
-                "files": files,
-                "name": name,
-            }
-        )
-        extracted_files = extract_files(cast(Mapping[str, object], body), paths=[["files", "<array>"]])
-        # It should be noted that the actual Content-Type header that will be
-        # sent to the server will contain a `boundary` parameter, e.g.
-        # multipart/form-data; boundary=---abc--
-        extra_headers = {"Content-Type": "multipart/form-data", **(extra_headers or {})}
-        return cast(
-            KnowledgeCreateResponse,
-            self._post(
-                "/knowledge",
-                body=maybe_transform(body, knowledge_create_params.KnowledgeCreateParams),
-                files=extracted_files,
-                options=make_request_options(
-                    extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-                ),
-                cast_to=cast(
-                    Any, KnowledgeCreateResponse
-                ),  # Union types cannot be passed in as arguments in the type system
-            ),
-        )
-
-    def retrieve(
-        self,
-        knowledge_id: str,
-        *,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> Knowledge:
-        """
-        Retrieves a knowledge by id.
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not knowledge_id:
-            raise ValueError(f"Expected a non-empty value for `knowledge_id` but received {knowledge_id!r}")
-        return self._get(
-            f"/knowledge/{knowledge_id}",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=Knowledge,
-        )
-
-    def update(
-        self,
-        knowledge_id: str,
-        *,
+        access: Literal["open", "closed"],
         name: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -152,9 +55,55 @@ class KnowledgeResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> KnowledgeUpdateResponse:
+    ) -> Teamspace:
         """
-        Update a knowledge's attributes.
+        Create a new teamspace within your organization.
+
+        Args:
+          access: Open teamspaces allow all organization members to join without admin approval.
+              Access for users who join this way is limited to conversations with agents in
+              this teamspace.
+
+              Closed teamspaces require admin approval to join.
+
+          name: The name of the teamspace
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return self._post(
+            "/organization/teamspaces",
+            body=maybe_transform(
+                {
+                    "access": access,
+                    "name": name,
+                },
+                teamspace_create_params.TeamspaceCreateParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=Teamspace,
+        )
+
+    def retrieve(
+        self,
+        teamspace_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> Teamspace:
+        """
+        Retrieve a specific teamspace by ID.
 
         Args:
           extra_headers: Send extra headers
@@ -165,15 +114,14 @@ class KnowledgeResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not knowledge_id:
-            raise ValueError(f"Expected a non-empty value for `knowledge_id` but received {knowledge_id!r}")
-        return self._patch(
-            f"/knowledge/{knowledge_id}",
-            body=maybe_transform({"name": name}, knowledge_update_params.KnowledgeUpdateParams),
+        if not teamspace_id:
+            raise ValueError(f"Expected a non-empty value for `teamspace_id` but received {teamspace_id!r}")
+        return self._get(
+            f"/organization/teamspaces/{teamspace_id}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=KnowledgeUpdateResponse,
+            cast_to=Teamspace,
         )
 
     def list(
@@ -188,13 +136,12 @@ class KnowledgeResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> SyncCursorIDPage[Knowledge]:
-        """Returns the list of knowledge.
+    ) -> SyncCursorIDPage[Teamspace]:
+        """
+        Returns the list of teamspaces within your organization.
 
         Args:
-          after: A cursor to use in pagination.
-
-        `after` is an object ID that defines your place
+          after: A cursor to use in pagination. `after` is an object ID that defines your place
               in the list. For example, if you make a list request and receive 100 objects,
               ending with `obj_foo`, your subsequent call can include `after=obj_foo` to fetch
               the next page of the list.
@@ -215,8 +162,8 @@ class KnowledgeResource(SyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         return self._get_api_list(
-            "/knowledge",
-            page=SyncCursorIDPage[Knowledge],
+            "/organization/teamspaces",
+            page=SyncCursorIDPage[Teamspace],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -228,27 +175,37 @@ class KnowledgeResource(SyncAPIResource):
                         "before": before,
                         "limit": limit,
                     },
-                    knowledge_list_params.KnowledgeListParams,
+                    teamspace_list_params.TeamspaceListParams,
                 ),
             ),
-            model=Knowledge,
+            model=Teamspace,
         )
 
-    def delete(
+    def patch(
         self,
-        knowledge_id: str,
+        teamspace_id: str,
         *,
+        access: Literal["open", "closed"] | NotGiven = NOT_GIVEN,
+        name: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> None:
+    ) -> Teamspace:
         """
-        Delete knowledge.
+        Update the name and/or access settings of a teamspace.
 
         Args:
+          access: Open teamspaces allow all organization members to join without admin approval.
+              Access for users who join this way is limited to conversations with agents in
+              this teamspace.
+
+              Closed teamspaces require admin approval to join.
+
+          name: The new name of the teamspace
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -257,136 +214,48 @@ class KnowledgeResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not knowledge_id:
-            raise ValueError(f"Expected a non-empty value for `knowledge_id` but received {knowledge_id!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return self._delete(
-            f"/knowledge/{knowledge_id}",
+        if not teamspace_id:
+            raise ValueError(f"Expected a non-empty value for `teamspace_id` but received {teamspace_id!r}")
+        return self._patch(
+            f"/organization/teamspaces/{teamspace_id}",
+            body=maybe_transform(
+                {
+                    "access": access,
+                    "name": name,
+                },
+                teamspace_patch_params.TeamspacePatchParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=NoneType,
+            cast_to=Teamspace,
         )
 
 
-class AsyncKnowledgeResource(AsyncAPIResource):
+class AsyncTeamspacesResource(AsyncAPIResource):
     @cached_property
-    def with_raw_response(self) -> AsyncKnowledgeResourceWithRawResponse:
+    def with_raw_response(self) -> AsyncTeamspacesResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
         For more information, see https://www.github.com/DatagridAI/datagrid-python#accessing-raw-response-data-eg-headers
         """
-        return AsyncKnowledgeResourceWithRawResponse(self)
+        return AsyncTeamspacesResourceWithRawResponse(self)
 
     @cached_property
-    def with_streaming_response(self) -> AsyncKnowledgeResourceWithStreamingResponse:
+    def with_streaming_response(self) -> AsyncTeamspacesResourceWithStreamingResponse:
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
         For more information, see https://www.github.com/DatagridAI/datagrid-python#with_streaming_response
         """
-        return AsyncKnowledgeResourceWithStreamingResponse(self)
+        return AsyncTeamspacesResourceWithStreamingResponse(self)
 
     async def create(
         self,
         *,
-        connection_id: Optional[str] | NotGiven = NOT_GIVEN,
-        files: Optional[List[FileTypes]] | NotGiven = NOT_GIVEN,
-        name: Optional[str] | NotGiven = NOT_GIVEN,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> KnowledgeCreateResponse:
-        """
-        Create knowledge which will be learned and leveraged by agents.
-
-        Args:
-          connection_id: The id of the connection to be used to create the knowledge.
-
-          files: The files to be uploaded and learned. Supported media types are `pdf`, `json`,
-              `csv`, `text`, `png`, `jpeg`, `excel`, `google sheets`.
-
-          name: The name of the knowledge.
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
-            timeout = 120
-        body = deepcopy_minimal(
-            {
-                "connection_id": connection_id,
-                "files": files,
-                "name": name,
-            }
-        )
-        extracted_files = extract_files(cast(Mapping[str, object], body), paths=[["files", "<array>"]])
-        # It should be noted that the actual Content-Type header that will be
-        # sent to the server will contain a `boundary` parameter, e.g.
-        # multipart/form-data; boundary=---abc--
-        extra_headers = {"Content-Type": "multipart/form-data", **(extra_headers or {})}
-        return cast(
-            KnowledgeCreateResponse,
-            await self._post(
-                "/knowledge",
-                body=await async_maybe_transform(body, knowledge_create_params.KnowledgeCreateParams),
-                files=extracted_files,
-                options=make_request_options(
-                    extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-                ),
-                cast_to=cast(
-                    Any, KnowledgeCreateResponse
-                ),  # Union types cannot be passed in as arguments in the type system
-            ),
-        )
-
-    async def retrieve(
-        self,
-        knowledge_id: str,
-        *,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> Knowledge:
-        """
-        Retrieves a knowledge by id.
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not knowledge_id:
-            raise ValueError(f"Expected a non-empty value for `knowledge_id` but received {knowledge_id!r}")
-        return await self._get(
-            f"/knowledge/{knowledge_id}",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=Knowledge,
-        )
-
-    async def update(
-        self,
-        knowledge_id: str,
-        *,
+        access: Literal["open", "closed"],
         name: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -394,9 +263,55 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> KnowledgeUpdateResponse:
+    ) -> Teamspace:
         """
-        Update a knowledge's attributes.
+        Create a new teamspace within your organization.
+
+        Args:
+          access: Open teamspaces allow all organization members to join without admin approval.
+              Access for users who join this way is limited to conversations with agents in
+              this teamspace.
+
+              Closed teamspaces require admin approval to join.
+
+          name: The name of the teamspace
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return await self._post(
+            "/organization/teamspaces",
+            body=await async_maybe_transform(
+                {
+                    "access": access,
+                    "name": name,
+                },
+                teamspace_create_params.TeamspaceCreateParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=Teamspace,
+        )
+
+    async def retrieve(
+        self,
+        teamspace_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> Teamspace:
+        """
+        Retrieve a specific teamspace by ID.
 
         Args:
           extra_headers: Send extra headers
@@ -407,15 +322,14 @@ class AsyncKnowledgeResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not knowledge_id:
-            raise ValueError(f"Expected a non-empty value for `knowledge_id` but received {knowledge_id!r}")
-        return await self._patch(
-            f"/knowledge/{knowledge_id}",
-            body=await async_maybe_transform({"name": name}, knowledge_update_params.KnowledgeUpdateParams),
+        if not teamspace_id:
+            raise ValueError(f"Expected a non-empty value for `teamspace_id` but received {teamspace_id!r}")
+        return await self._get(
+            f"/organization/teamspaces/{teamspace_id}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=KnowledgeUpdateResponse,
+            cast_to=Teamspace,
         )
 
     def list(
@@ -430,13 +344,12 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> AsyncPaginator[Knowledge, AsyncCursorIDPage[Knowledge]]:
-        """Returns the list of knowledge.
+    ) -> AsyncPaginator[Teamspace, AsyncCursorIDPage[Teamspace]]:
+        """
+        Returns the list of teamspaces within your organization.
 
         Args:
-          after: A cursor to use in pagination.
-
-        `after` is an object ID that defines your place
+          after: A cursor to use in pagination. `after` is an object ID that defines your place
               in the list. For example, if you make a list request and receive 100 objects,
               ending with `obj_foo`, your subsequent call can include `after=obj_foo` to fetch
               the next page of the list.
@@ -457,8 +370,8 @@ class AsyncKnowledgeResource(AsyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         return self._get_api_list(
-            "/knowledge",
-            page=AsyncCursorIDPage[Knowledge],
+            "/organization/teamspaces",
+            page=AsyncCursorIDPage[Teamspace],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -470,27 +383,37 @@ class AsyncKnowledgeResource(AsyncAPIResource):
                         "before": before,
                         "limit": limit,
                     },
-                    knowledge_list_params.KnowledgeListParams,
+                    teamspace_list_params.TeamspaceListParams,
                 ),
             ),
-            model=Knowledge,
+            model=Teamspace,
         )
 
-    async def delete(
+    async def patch(
         self,
-        knowledge_id: str,
+        teamspace_id: str,
         *,
+        access: Literal["open", "closed"] | NotGiven = NOT_GIVEN,
+        name: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> None:
+    ) -> Teamspace:
         """
-        Delete knowledge.
+        Update the name and/or access settings of a teamspace.
 
         Args:
+          access: Open teamspaces allow all organization members to join without admin approval.
+              Access for users who join this way is limited to conversations with agents in
+              this teamspace.
+
+              Closed teamspaces require admin approval to join.
+
+          name: The new name of the teamspace
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -499,97 +422,91 @@ class AsyncKnowledgeResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not knowledge_id:
-            raise ValueError(f"Expected a non-empty value for `knowledge_id` but received {knowledge_id!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return await self._delete(
-            f"/knowledge/{knowledge_id}",
+        if not teamspace_id:
+            raise ValueError(f"Expected a non-empty value for `teamspace_id` but received {teamspace_id!r}")
+        return await self._patch(
+            f"/organization/teamspaces/{teamspace_id}",
+            body=await async_maybe_transform(
+                {
+                    "access": access,
+                    "name": name,
+                },
+                teamspace_patch_params.TeamspacePatchParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=NoneType,
+            cast_to=Teamspace,
         )
 
 
-class KnowledgeResourceWithRawResponse:
-    def __init__(self, knowledge: KnowledgeResource) -> None:
-        self._knowledge = knowledge
+class TeamspacesResourceWithRawResponse:
+    def __init__(self, teamspaces: TeamspacesResource) -> None:
+        self._teamspaces = teamspaces
 
         self.create = to_raw_response_wrapper(
-            knowledge.create,
+            teamspaces.create,
         )
         self.retrieve = to_raw_response_wrapper(
-            knowledge.retrieve,
-        )
-        self.update = to_raw_response_wrapper(
-            knowledge.update,
+            teamspaces.retrieve,
         )
         self.list = to_raw_response_wrapper(
-            knowledge.list,
+            teamspaces.list,
         )
-        self.delete = to_raw_response_wrapper(
-            knowledge.delete,
+        self.patch = to_raw_response_wrapper(
+            teamspaces.patch,
         )
 
 
-class AsyncKnowledgeResourceWithRawResponse:
-    def __init__(self, knowledge: AsyncKnowledgeResource) -> None:
-        self._knowledge = knowledge
+class AsyncTeamspacesResourceWithRawResponse:
+    def __init__(self, teamspaces: AsyncTeamspacesResource) -> None:
+        self._teamspaces = teamspaces
 
         self.create = async_to_raw_response_wrapper(
-            knowledge.create,
+            teamspaces.create,
         )
         self.retrieve = async_to_raw_response_wrapper(
-            knowledge.retrieve,
-        )
-        self.update = async_to_raw_response_wrapper(
-            knowledge.update,
+            teamspaces.retrieve,
         )
         self.list = async_to_raw_response_wrapper(
-            knowledge.list,
+            teamspaces.list,
         )
-        self.delete = async_to_raw_response_wrapper(
-            knowledge.delete,
+        self.patch = async_to_raw_response_wrapper(
+            teamspaces.patch,
         )
 
 
-class KnowledgeResourceWithStreamingResponse:
-    def __init__(self, knowledge: KnowledgeResource) -> None:
-        self._knowledge = knowledge
+class TeamspacesResourceWithStreamingResponse:
+    def __init__(self, teamspaces: TeamspacesResource) -> None:
+        self._teamspaces = teamspaces
 
         self.create = to_streamed_response_wrapper(
-            knowledge.create,
+            teamspaces.create,
         )
         self.retrieve = to_streamed_response_wrapper(
-            knowledge.retrieve,
-        )
-        self.update = to_streamed_response_wrapper(
-            knowledge.update,
+            teamspaces.retrieve,
         )
         self.list = to_streamed_response_wrapper(
-            knowledge.list,
+            teamspaces.list,
         )
-        self.delete = to_streamed_response_wrapper(
-            knowledge.delete,
+        self.patch = to_streamed_response_wrapper(
+            teamspaces.patch,
         )
 
 
-class AsyncKnowledgeResourceWithStreamingResponse:
-    def __init__(self, knowledge: AsyncKnowledgeResource) -> None:
-        self._knowledge = knowledge
+class AsyncTeamspacesResourceWithStreamingResponse:
+    def __init__(self, teamspaces: AsyncTeamspacesResource) -> None:
+        self._teamspaces = teamspaces
 
         self.create = async_to_streamed_response_wrapper(
-            knowledge.create,
+            teamspaces.create,
         )
         self.retrieve = async_to_streamed_response_wrapper(
-            knowledge.retrieve,
-        )
-        self.update = async_to_streamed_response_wrapper(
-            knowledge.update,
+            teamspaces.retrieve,
         )
         self.list = async_to_streamed_response_wrapper(
-            knowledge.list,
+            teamspaces.list,
         )
-        self.delete = async_to_streamed_response_wrapper(
-            knowledge.delete,
+        self.patch = async_to_streamed_response_wrapper(
+            teamspaces.patch,
         )

@@ -56,7 +56,7 @@ class SearchResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> SyncCursorPage[SearchResultItem]:
         """
-        [BETA] Semantic search across your workspace resources.
+        [BETA] Search across knowledge.
 
         Args:
           limit: The limit on the number of objects to return, ranging between 1 and 100.
@@ -127,7 +127,7 @@ class AsyncSearchResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> AsyncPaginator[SearchResultItem, AsyncCursorPage[SearchResultItem]]:
         """
-        [BETA] Semantic search across your workspace resources.
+        [BETA] Search across knowledge.
 
         Args:
           limit: The limit on the number of objects to return, ranging between 1 and 100.

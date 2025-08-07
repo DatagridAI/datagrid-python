@@ -1,9 +1,11 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
+from typing import Optional
 from datetime import datetime
 from typing_extensions import Literal
 
 from .._models import BaseModel
+from .credits_knowledge_response import CreditsKnowledgeResponse
 
 __all__ = ["Knowledge", "RowCounts"]
 
@@ -44,3 +46,8 @@ class Knowledge(BaseModel):
     `ready` indicates that the knowledge is fully learned and will be completely
     utilized in responses.
     """
+
+    credits: Optional[CreditsKnowledgeResponse] = None
+
+    updated_at: Optional[datetime] = None
+    """The ISO string for when the knowledge was last updated."""
