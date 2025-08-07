@@ -4,6 +4,7 @@ from typing import List, Optional
 from typing_extensions import Literal
 
 from .._models import BaseModel
+from .credits_converse_response import CreditsConverseResponse
 
 __all__ = ["ConverseResponse", "Content", "Citation", "CitationKnowledge"]
 
@@ -47,3 +48,5 @@ class ConverseResponse(BaseModel):
     Array of citations that provide knowledges for factual statements in the
     response. Each citation includes the referenced text and its knowledges.
     """
+
+    credits: Optional[CreditsConverseResponse] = None
