@@ -11,9 +11,6 @@ __all__ = ["KnowledgeCreateParams"]
 
 
 class KnowledgeCreateParams(TypedDict, total=False):
-    connection_id: Optional[str]
-    """The id of the connection to be used to create the knowledge."""
-
     files: Optional[List[FileTypes]]
     """The files to be uploaded and learned.
 

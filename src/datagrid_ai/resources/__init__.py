@@ -24,14 +24,6 @@ from .search import (
     SearchResourceWithStreamingResponse,
     AsyncSearchResourceWithStreamingResponse,
 )
-from .credits import (
-    CreditsResource,
-    AsyncCreditsResource,
-    CreditsResourceWithRawResponse,
-    AsyncCreditsResourceWithRawResponse,
-    CreditsResourceWithStreamingResponse,
-    AsyncCreditsResourceWithStreamingResponse,
-)
 from .secrets import (
     SecretsResource,
     AsyncSecretsResource,
@@ -98,12 +90,6 @@ __all__ = [
     "AsyncFilesResourceWithRawResponse",
     "FilesResourceWithStreamingResponse",
     "AsyncFilesResourceWithStreamingResponse",
-    "CreditsResource",
-    "AsyncCreditsResource",
-    "CreditsResourceWithRawResponse",
-    "AsyncCreditsResourceWithRawResponse",
-    "CreditsResourceWithStreamingResponse",
-    "AsyncCreditsResourceWithStreamingResponse",
     "SecretsResource",
     "AsyncSecretsResource",
     "SecretsResourceWithRawResponse",

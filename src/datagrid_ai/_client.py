@@ -36,7 +36,7 @@ from ._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from .resources import files, search, credits, secrets, knowledge, connectors, connections
+from .resources import files, search, secrets, knowledge, connectors, connections
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
 from ._exceptions import DatagridError, APIStatusError
 from ._base_client import (
@@ -66,7 +66,6 @@ class Datagrid(SyncAPIClient):
     connections: connections.ConnectionsResource
     connectors: connectors.ConnectorsResource
     files: files.FilesResource
-    credits: credits.CreditsResource
     secrets: secrets.SecretsResource
     search: search.SearchResource
     organization: organization.OrganizationResource
@@ -140,7 +139,6 @@ class Datagrid(SyncAPIClient):
         self.connections = connections.ConnectionsResource(self)
         self.connectors = connectors.ConnectorsResource(self)
         self.files = files.FilesResource(self)
-        self.credits = credits.CreditsResource(self)
         self.secrets = secrets.SecretsResource(self)
         self.search = search.SearchResource(self)
         self.organization = organization.OrganizationResource(self)
@@ -335,7 +333,6 @@ class AsyncDatagrid(AsyncAPIClient):
     connections: connections.AsyncConnectionsResource
     connectors: connectors.AsyncConnectorsResource
     files: files.AsyncFilesResource
-    credits: credits.AsyncCreditsResource
     secrets: secrets.AsyncSecretsResource
     search: search.AsyncSearchResource
     organization: organization.AsyncOrganizationResource
@@ -409,7 +406,6 @@ class AsyncDatagrid(AsyncAPIClient):
         self.connections = connections.AsyncConnectionsResource(self)
         self.connectors = connectors.AsyncConnectorsResource(self)
         self.files = files.AsyncFilesResource(self)
-        self.credits = credits.AsyncCreditsResource(self)
         self.secrets = secrets.AsyncSecretsResource(self)
         self.search = search.AsyncSearchResource(self)
         self.organization = organization.AsyncOrganizationResource(self)
@@ -605,7 +601,6 @@ class DatagridWithRawResponse:
         self.connections = connections.ConnectionsResourceWithRawResponse(client.connections)
         self.connectors = connectors.ConnectorsResourceWithRawResponse(client.connectors)
         self.files = files.FilesResourceWithRawResponse(client.files)
-        self.credits = credits.CreditsResourceWithRawResponse(client.credits)
         self.secrets = secrets.SecretsResourceWithRawResponse(client.secrets)
         self.search = search.SearchResourceWithRawResponse(client.search)
         self.organization = organization.OrganizationResourceWithRawResponse(client.organization)
@@ -622,7 +617,6 @@ class AsyncDatagridWithRawResponse:
         self.connections = connections.AsyncConnectionsResourceWithRawResponse(client.connections)
         self.connectors = connectors.AsyncConnectorsResourceWithRawResponse(client.connectors)
         self.files = files.AsyncFilesResourceWithRawResponse(client.files)
-        self.credits = credits.AsyncCreditsResourceWithRawResponse(client.credits)
         self.secrets = secrets.AsyncSecretsResourceWithRawResponse(client.secrets)
         self.search = search.AsyncSearchResourceWithRawResponse(client.search)
         self.organization = organization.AsyncOrganizationResourceWithRawResponse(client.organization)
@@ -639,7 +633,6 @@ class DatagridWithStreamedResponse:
         self.connections = connections.ConnectionsResourceWithStreamingResponse(client.connections)
         self.connectors = connectors.ConnectorsResourceWithStreamingResponse(client.connectors)
         self.files = files.FilesResourceWithStreamingResponse(client.files)
-        self.credits = credits.CreditsResourceWithStreamingResponse(client.credits)
         self.secrets = secrets.SecretsResourceWithStreamingResponse(client.secrets)
         self.search = search.SearchResourceWithStreamingResponse(client.search)
         self.organization = organization.OrganizationResourceWithStreamingResponse(client.organization)
@@ -656,7 +649,6 @@ class AsyncDatagridWithStreamedResponse:
         self.connections = connections.AsyncConnectionsResourceWithStreamingResponse(client.connections)
         self.connectors = connectors.AsyncConnectorsResourceWithStreamingResponse(client.connectors)
         self.files = files.AsyncFilesResourceWithStreamingResponse(client.files)
-        self.credits = credits.AsyncCreditsResourceWithStreamingResponse(client.credits)
         self.secrets = secrets.AsyncSecretsResourceWithStreamingResponse(client.secrets)
         self.search = search.AsyncSearchResourceWithStreamingResponse(client.search)
         self.organization = organization.AsyncOrganizationResourceWithStreamingResponse(client.organization)
