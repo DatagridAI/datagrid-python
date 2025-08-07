@@ -18,9 +18,6 @@ class Page(BaseModel):
     page_number: float
     """The page number of the attachment."""
 
-    page_number: float = FieldInfo(alias="pageNumber")
-    """DEPRECATED use page_number instead."""
-
     url: str
     """The url of the blob of the page."""
 
