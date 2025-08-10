@@ -202,6 +202,7 @@ class Config(TypedDict, total=False):
             "gpt-4-turbo",
             "gpt-4o",
             "gpt-4o-mini",
+            "gpt-5",
         ]
     ]
     """The LLM used to generate responses."""
