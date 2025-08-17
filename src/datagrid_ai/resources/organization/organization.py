@@ -2,6 +2,14 @@
 
 from __future__ import annotations
 
+from .users import (
+    UsersResource,
+    AsyncUsersResource,
+    UsersResourceWithRawResponse,
+    AsyncUsersResourceWithRawResponse,
+    UsersResourceWithStreamingResponse,
+    AsyncUsersResourceWithStreamingResponse,
+)
 from .credits import (
     CreditsResource,
     AsyncCreditsResource,
@@ -11,7 +19,8 @@ from .credits import (
     AsyncCreditsResourceWithStreamingResponse,
 )
 from ..._compat import cached_property
-from .teamspaces import (
+from ..._resource import SyncAPIResource, AsyncAPIResource
+from .teamspaces.teamspaces import (
     TeamspacesResource,
     AsyncTeamspacesResource,
     TeamspacesResourceWithRawResponse,
@@ -19,12 +28,15 @@ from .teamspaces import (
     TeamspacesResourceWithStreamingResponse,
     AsyncTeamspacesResourceWithStreamingResponse,
 )
-from ..._resource import SyncAPIResource, AsyncAPIResource
 
 __all__ = ["OrganizationResource", "AsyncOrganizationResource"]
 
 
 class OrganizationResource(SyncAPIResource):
+    @cached_property
+    def users(self) -> UsersResource:
+        return UsersResource(self._client)
+
     @cached_property
     def teamspaces(self) -> TeamspacesResource:
         return TeamspacesResource(self._client)
@@ -54,6 +66,10 @@ class OrganizationResource(SyncAPIResource):
 
 
 class AsyncOrganizationResource(AsyncAPIResource):
+    @cached_property
+    def users(self) -> AsyncUsersResource:
+        return AsyncUsersResource(self._client)
+
     @cached_property
     def teamspaces(self) -> AsyncTeamspacesResource:
         return AsyncTeamspacesResource(self._client)
@@ -87,6 +103,10 @@ class OrganizationResourceWithRawResponse:
         self._organization = organization
 
     @cached_property
+    def users(self) -> UsersResourceWithRawResponse:
+        return UsersResourceWithRawResponse(self._organization.users)
+
+    @cached_property
     def teamspaces(self) -> TeamspacesResourceWithRawResponse:
         return TeamspacesResourceWithRawResponse(self._organization.teamspaces)
 
@@ -98,6 +118,10 @@ class OrganizationResourceWithRawResponse:
 class AsyncOrganizationResourceWithRawResponse:
     def __init__(self, organization: AsyncOrganizationResource) -> None:
         self._organization = organization
+
+    @cached_property
+    def users(self) -> AsyncUsersResourceWithRawResponse:
+        return AsyncUsersResourceWithRawResponse(self._organization.users)
 
     @cached_property
     def teamspaces(self) -> AsyncTeamspacesResourceWithRawResponse:
@@ -113,6 +137,10 @@ class OrganizationResourceWithStreamingResponse:
         self._organization = organization
 
     @cached_property
+    def users(self) -> UsersResourceWithStreamingResponse:
+        return UsersResourceWithStreamingResponse(self._organization.users)
+
+    @cached_property
     def teamspaces(self) -> TeamspacesResourceWithStreamingResponse:
         return TeamspacesResourceWithStreamingResponse(self._organization.teamspaces)
 
@@ -124,6 +152,10 @@ class OrganizationResourceWithStreamingResponse:
 class AsyncOrganizationResourceWithStreamingResponse:
     def __init__(self, organization: AsyncOrganizationResource) -> None:
         self._organization = organization
+
+    @cached_property
+    def users(self) -> AsyncUsersResourceWithStreamingResponse:
+        return AsyncUsersResourceWithStreamingResponse(self._organization.users)
 
     @cached_property
     def teamspaces(self) -> AsyncTeamspacesResourceWithStreamingResponse:

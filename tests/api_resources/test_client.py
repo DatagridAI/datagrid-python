@@ -29,6 +29,7 @@ class TestClient:
         client_ = client.converse(
             prompt="string",
             agent_id="agent_id",
+            auto_approve_actions=True,
             config={
                 "agent_model": "magpie-1",
                 "agent_tools": ["data_analysis"],
@@ -36,6 +37,7 @@ class TestClient:
                 "disabled_agent_tools": ["data_analysis"],
                 "knowledge_ids": ["string"],
                 "llm_model": "gemini-1.5-flash-001",
+                "planning_prompt": "planning_prompt",
                 "system_prompt": "system_prompt",
             },
             conversation_id="conversation_id",
@@ -88,6 +90,7 @@ class TestAsyncClient:
         client = await async_client.converse(
             prompt="string",
             agent_id="agent_id",
+            auto_approve_actions=True,
             config={
                 "agent_model": "magpie-1",
                 "agent_tools": ["data_analysis"],
@@ -95,6 +98,7 @@ class TestAsyncClient:
                 "disabled_agent_tools": ["data_analysis"],
                 "knowledge_ids": ["string"],
                 "llm_model": "gemini-1.5-flash-001",
+                "planning_prompt": "planning_prompt",
                 "system_prompt": "system_prompt",
             },
             conversation_id="conversation_id",
