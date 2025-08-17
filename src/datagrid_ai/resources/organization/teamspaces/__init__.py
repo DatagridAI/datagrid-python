@@ -8,13 +8,13 @@ from .users import (
     UsersResourceWithStreamingResponse,
     AsyncUsersResourceWithStreamingResponse,
 )
-from .credits import (
-    CreditsResource,
-    AsyncCreditsResource,
-    CreditsResourceWithRawResponse,
-    AsyncCreditsResourceWithRawResponse,
-    CreditsResourceWithStreamingResponse,
-    AsyncCreditsResourceWithStreamingResponse,
+from .invites import (
+    InvitesResource,
+    AsyncInvitesResource,
+    InvitesResourceWithRawResponse,
+    AsyncInvitesResourceWithRawResponse,
+    InvitesResourceWithStreamingResponse,
+    AsyncInvitesResourceWithStreamingResponse,
 )
 from .teamspaces import (
     TeamspacesResource,
@@ -24,16 +24,14 @@ from .teamspaces import (
     TeamspacesResourceWithStreamingResponse,
     AsyncTeamspacesResourceWithStreamingResponse,
 )
-from .organization import (
-    OrganizationResource,
-    AsyncOrganizationResource,
-    OrganizationResourceWithRawResponse,
-    AsyncOrganizationResourceWithRawResponse,
-    OrganizationResourceWithStreamingResponse,
-    AsyncOrganizationResourceWithStreamingResponse,
-)
 
 __all__ = [
+    "InvitesResource",
+    "AsyncInvitesResource",
+    "InvitesResourceWithRawResponse",
+    "AsyncInvitesResourceWithRawResponse",
+    "InvitesResourceWithStreamingResponse",
+    "AsyncInvitesResourceWithStreamingResponse",
     "UsersResource",
     "AsyncUsersResource",
     "UsersResourceWithRawResponse",
@@ -46,16 +44,4 @@ __all__ = [
     "AsyncTeamspacesResourceWithRawResponse",
     "TeamspacesResourceWithStreamingResponse",
     "AsyncTeamspacesResourceWithStreamingResponse",
-    "CreditsResource",
-    "AsyncCreditsResource",
-    "CreditsResourceWithRawResponse",
-    "AsyncCreditsResourceWithRawResponse",
-    "CreditsResourceWithStreamingResponse",
-    "AsyncCreditsResourceWithStreamingResponse",
-    "OrganizationResource",
-    "AsyncOrganizationResource",
-    "OrganizationResourceWithRawResponse",
-    "AsyncOrganizationResourceWithRawResponse",
-    "OrganizationResourceWithStreamingResponse",
-    "AsyncOrganizationResourceWithStreamingResponse",
 ]

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import List, Union, Iterable, Optional
+from typing import Dict, List, Union, Iterable, Optional
 from typing_extensions import Literal, Required, TypeAlias, TypedDict
 
 from .agent_tools import AgentTools
@@ -29,6 +29,13 @@ class ClientConverseParams(TypedDict, total=False):
     """The ID of the agent that should be used for the converse.
 
     If both agent_id and conversation_id aren't provided - the new agent is created.
+    """
+
+    auto_approve_actions: Union[Optional[bool], Optional[Dict[str, bool]], None]
+    """Auto-approve actions (skip halting for human approval).
+
+    If boolean true: all tools auto-approve. If object: per-tool toggle by toolId
+    (true to skip halting forhuman approval).
     """
 
     config: Optional[Config]
@@ -206,6 +213,12 @@ class Config(TypedDict, total=False):
         ]
     ]
     """The LLM used to generate responses."""
+
+    planning_prompt: Optional[str]
+    """
+    Define the planning strategy your AI Agent should use when breaking down tasks
+    and solving problems
+    """
 
     system_prompt: Optional[str]
     """Directs your AI Agent's operational behavior."""

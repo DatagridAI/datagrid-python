@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import os
-from typing import Any, List, Union, Mapping, Iterable, Optional
+from typing import Any, Dict, List, Union, Mapping, Iterable, Optional
 from typing_extensions import Self, override
 
 import httpx
@@ -36,7 +36,7 @@ from ._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from .resources import files, search, secrets, knowledge, connectors, connections
+from .resources import files, agents, search, secrets, knowledge, connectors, connections
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
 from ._exceptions import DatagridError, APIStatusError
 from ._base_client import (
@@ -68,8 +68,9 @@ class Datagrid(SyncAPIClient):
     files: files.FilesResource
     secrets: secrets.SecretsResource
     search: search.SearchResource
-    organization: organization.OrganizationResource
+    agents: agents.AgentsResource
     memory: memory.MemoryResource
+    organization: organization.OrganizationResource
     with_raw_response: DatagridWithRawResponse
     with_streaming_response: DatagridWithStreamedResponse
 
@@ -141,8 +142,9 @@ class Datagrid(SyncAPIClient):
         self.files = files.FilesResource(self)
         self.secrets = secrets.SecretsResource(self)
         self.search = search.SearchResource(self)
-        self.organization = organization.OrganizationResource(self)
+        self.agents = agents.AgentsResource(self)
         self.memory = memory.MemoryResource(self)
+        self.organization = organization.OrganizationResource(self)
         self.with_raw_response = DatagridWithRawResponse(self)
         self.with_streaming_response = DatagridWithStreamedResponse(self)
 
@@ -225,6 +227,7 @@ class Datagrid(SyncAPIClient):
         *,
         prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
         agent_id: Optional[str] | NotGiven = NOT_GIVEN,
+        auto_approve_actions: Union[Optional[bool], Optional[Dict[str, bool]], None] | NotGiven = NOT_GIVEN,
         config: Optional[client_converse_params.Config] | NotGiven = NOT_GIVEN,
         conversation_id: Optional[str] | NotGiven = NOT_GIVEN,
         generate_citations: Optional[bool] | NotGiven = NOT_GIVEN,
@@ -246,6 +249,10 @@ class Datagrid(SyncAPIClient):
 
           agent_id: The ID of the agent that should be used for the converse. If both agent_id and
               conversation_id aren't provided - the new agent is created.
+
+          auto_approve_actions: Auto-approve actions (skip halting for human approval). If boolean true: all
+              tools auto-approve. If object: per-tool toggle by toolId (true to skip halting
+              forhuman approval).
 
           config: The config that overrides the default config of the agent for that converse.
 
@@ -279,6 +286,7 @@ class Datagrid(SyncAPIClient):
                 {
                     "prompt": prompt,
                     "agent_id": agent_id,
+                    "auto_approve_actions": auto_approve_actions,
                     "config": config,
                     "conversation_id": conversation_id,
                     "generate_citations": generate_citations,
@@ -335,8 +343,9 @@ class AsyncDatagrid(AsyncAPIClient):
     files: files.AsyncFilesResource
     secrets: secrets.AsyncSecretsResource
     search: search.AsyncSearchResource
-    organization: organization.AsyncOrganizationResource
+    agents: agents.AsyncAgentsResource
     memory: memory.AsyncMemoryResource
+    organization: organization.AsyncOrganizationResource
     with_raw_response: AsyncDatagridWithRawResponse
     with_streaming_response: AsyncDatagridWithStreamedResponse
 
@@ -408,8 +417,9 @@ class AsyncDatagrid(AsyncAPIClient):
         self.files = files.AsyncFilesResource(self)
         self.secrets = secrets.AsyncSecretsResource(self)
         self.search = search.AsyncSearchResource(self)
-        self.organization = organization.AsyncOrganizationResource(self)
+        self.agents = agents.AsyncAgentsResource(self)
         self.memory = memory.AsyncMemoryResource(self)
+        self.organization = organization.AsyncOrganizationResource(self)
         self.with_raw_response = AsyncDatagridWithRawResponse(self)
         self.with_streaming_response = AsyncDatagridWithStreamedResponse(self)
 
@@ -492,6 +502,7 @@ class AsyncDatagrid(AsyncAPIClient):
         *,
         prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
         agent_id: Optional[str] | NotGiven = NOT_GIVEN,
+        auto_approve_actions: Union[Optional[bool], Optional[Dict[str, bool]], None] | NotGiven = NOT_GIVEN,
         config: Optional[client_converse_params.Config] | NotGiven = NOT_GIVEN,
         conversation_id: Optional[str] | NotGiven = NOT_GIVEN,
         generate_citations: Optional[bool] | NotGiven = NOT_GIVEN,
@@ -513,6 +524,10 @@ class AsyncDatagrid(AsyncAPIClient):
 
           agent_id: The ID of the agent that should be used for the converse. If both agent_id and
               conversation_id aren't provided - the new agent is created.
+
+          auto_approve_actions: Auto-approve actions (skip halting for human approval). If boolean true: all
+              tools auto-approve. If object: per-tool toggle by toolId (true to skip halting
+              forhuman approval).
 
           config: The config that overrides the default config of the agent for that converse.
 
@@ -546,6 +561,7 @@ class AsyncDatagrid(AsyncAPIClient):
                 {
                     "prompt": prompt,
                     "agent_id": agent_id,
+                    "auto_approve_actions": auto_approve_actions,
                     "config": config,
                     "conversation_id": conversation_id,
                     "generate_citations": generate_citations,
@@ -603,8 +619,9 @@ class DatagridWithRawResponse:
         self.files = files.FilesResourceWithRawResponse(client.files)
         self.secrets = secrets.SecretsResourceWithRawResponse(client.secrets)
         self.search = search.SearchResourceWithRawResponse(client.search)
-        self.organization = organization.OrganizationResourceWithRawResponse(client.organization)
+        self.agents = agents.AgentsResourceWithRawResponse(client.agents)
         self.memory = memory.MemoryResourceWithRawResponse(client.memory)
+        self.organization = organization.OrganizationResourceWithRawResponse(client.organization)
 
         self.converse = to_raw_response_wrapper(
             client.converse,
@@ -619,8 +636,9 @@ class AsyncDatagridWithRawResponse:
         self.files = files.AsyncFilesResourceWithRawResponse(client.files)
         self.secrets = secrets.AsyncSecretsResourceWithRawResponse(client.secrets)
         self.search = search.AsyncSearchResourceWithRawResponse(client.search)
-        self.organization = organization.AsyncOrganizationResourceWithRawResponse(client.organization)
+        self.agents = agents.AsyncAgentsResourceWithRawResponse(client.agents)
         self.memory = memory.AsyncMemoryResourceWithRawResponse(client.memory)
+        self.organization = organization.AsyncOrganizationResourceWithRawResponse(client.organization)
 
         self.converse = async_to_raw_response_wrapper(
             client.converse,
@@ -635,8 +653,9 @@ class DatagridWithStreamedResponse:
         self.files = files.FilesResourceWithStreamingResponse(client.files)
         self.secrets = secrets.SecretsResourceWithStreamingResponse(client.secrets)
         self.search = search.SearchResourceWithStreamingResponse(client.search)
-        self.organization = organization.OrganizationResourceWithStreamingResponse(client.organization)
+        self.agents = agents.AgentsResourceWithStreamingResponse(client.agents)
         self.memory = memory.MemoryResourceWithStreamingResponse(client.memory)
+        self.organization = organization.OrganizationResourceWithStreamingResponse(client.organization)
 
         self.converse = to_streamed_response_wrapper(
             client.converse,
@@ -651,8 +670,9 @@ class AsyncDatagridWithStreamedResponse:
         self.files = files.AsyncFilesResourceWithStreamingResponse(client.files)
         self.secrets = secrets.AsyncSecretsResourceWithStreamingResponse(client.secrets)
         self.search = search.AsyncSearchResourceWithStreamingResponse(client.search)
-        self.organization = organization.AsyncOrganizationResourceWithStreamingResponse(client.organization)
+        self.agents = agents.AsyncAgentsResourceWithStreamingResponse(client.agents)
         self.memory = memory.AsyncMemoryResourceWithStreamingResponse(client.memory)
+        self.organization = organization.AsyncOrganizationResourceWithStreamingResponse(client.organization)
 
         self.converse = async_to_streamed_response_wrapper(
             client.converse,
