@@ -715,10 +715,10 @@ class TestDatagrid:
     @pytest.mark.respx(base_url=base_url)
     @pytest.mark.skip("Issue with array of files and Prism mock. Needs a rework for other endpoints")
     def test_retrying_timeout_errors_doesnt_leak(self, respx_mock: MockRouter, client: Datagrid) -> None:
-        respx_mock.post("/knowledge").mock(side_effect=httpx.TimeoutException("Test timeout error"))
+        respx_mock.post("/converse").mock(side_effect=httpx.TimeoutException("Test timeout error"))
 
         with pytest.raises(APITimeoutError):
-            client.knowledge.with_streaming_response.create().__enter__()
+            client.with_streaming_response.converse(prompt="string").__enter__()
 
         assert _get_open_connections(self.client) == 0
 
@@ -726,10 +726,10 @@ class TestDatagrid:
     @pytest.mark.respx(base_url=base_url)
     @pytest.mark.skip("Issue with array of files and Prism mock. Needs a rework for other endpoints")
     def test_retrying_status_errors_doesnt_leak(self, respx_mock: MockRouter, client: Datagrid) -> None:
-        respx_mock.post("/knowledge").mock(return_value=httpx.Response(500))
+        respx_mock.post("/converse").mock(return_value=httpx.Response(500))
 
         with pytest.raises(APIStatusError):
-            client.knowledge.with_streaming_response.create().__enter__()
+            client.with_streaming_response.converse(prompt="string").__enter__()
         assert _get_open_connections(self.client) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
@@ -756,9 +756,9 @@ class TestDatagrid:
                 return httpx.Response(500)
             return httpx.Response(200)
 
-        respx_mock.post("/knowledge").mock(side_effect=retry_handler)
+        respx_mock.post("/converse").mock(side_effect=retry_handler)
 
-        response = client.knowledge.with_raw_response.create()
+        response = client.with_raw_response.converse(prompt="string")
 
         assert response.retries_taken == failures_before_success
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
@@ -780,9 +780,9 @@ class TestDatagrid:
                 return httpx.Response(500)
             return httpx.Response(200)
 
-        respx_mock.post("/knowledge").mock(side_effect=retry_handler)
+        respx_mock.post("/converse").mock(side_effect=retry_handler)
 
-        response = client.knowledge.with_raw_response.create(extra_headers={"x-stainless-retry-count": Omit()})
+        response = client.with_raw_response.converse(prompt="string", extra_headers={"x-stainless-retry-count": Omit()})
 
         assert len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
 
@@ -803,9 +803,9 @@ class TestDatagrid:
                 return httpx.Response(500)
             return httpx.Response(200)
 
-        respx_mock.post("/knowledge").mock(side_effect=retry_handler)
+        respx_mock.post("/converse").mock(side_effect=retry_handler)
 
-        response = client.knowledge.with_raw_response.create(extra_headers={"x-stainless-retry-count": "42"})
+        response = client.with_raw_response.converse(prompt="string", extra_headers={"x-stainless-retry-count": "42"})
 
         assert response.http_request.headers.get("x-stainless-retry-count") == "42"
 
@@ -1534,10 +1534,10 @@ class TestAsyncDatagrid:
     async def test_retrying_timeout_errors_doesnt_leak(
         self, respx_mock: MockRouter, async_client: AsyncDatagrid
     ) -> None:
-        respx_mock.post("/knowledge").mock(side_effect=httpx.TimeoutException("Test timeout error"))
+        respx_mock.post("/converse").mock(side_effect=httpx.TimeoutException("Test timeout error"))
 
         with pytest.raises(APITimeoutError):
-            await async_client.knowledge.with_streaming_response.create().__aenter__()
+            await async_client.with_streaming_response.converse(prompt="string").__aenter__()
 
         assert _get_open_connections(self.client) == 0
 
@@ -1547,10 +1547,10 @@ class TestAsyncDatagrid:
     async def test_retrying_status_errors_doesnt_leak(
         self, respx_mock: MockRouter, async_client: AsyncDatagrid
     ) -> None:
-        respx_mock.post("/knowledge").mock(return_value=httpx.Response(500))
+        respx_mock.post("/converse").mock(return_value=httpx.Response(500))
 
         with pytest.raises(APIStatusError):
-            await async_client.knowledge.with_streaming_response.create().__aenter__()
+            await async_client.with_streaming_response.converse(prompt="string").__aenter__()
         assert _get_open_connections(self.client) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
@@ -1578,9 +1578,9 @@ class TestAsyncDatagrid:
                 return httpx.Response(500)
             return httpx.Response(200)
 
-        respx_mock.post("/knowledge").mock(side_effect=retry_handler)
+        respx_mock.post("/converse").mock(side_effect=retry_handler)
 
-        response = await client.knowledge.with_raw_response.create()
+        response = await client.with_raw_response.converse(prompt="string")
 
         assert response.retries_taken == failures_before_success
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
@@ -1603,9 +1603,11 @@ class TestAsyncDatagrid:
                 return httpx.Response(500)
             return httpx.Response(200)
 
-        respx_mock.post("/knowledge").mock(side_effect=retry_handler)
+        respx_mock.post("/converse").mock(side_effect=retry_handler)
 
-        response = await client.knowledge.with_raw_response.create(extra_headers={"x-stainless-retry-count": Omit()})
+        response = await client.with_raw_response.converse(
+            prompt="string", extra_headers={"x-stainless-retry-count": Omit()}
+        )
 
         assert len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
 
@@ -1627,9 +1629,11 @@ class TestAsyncDatagrid:
                 return httpx.Response(500)
             return httpx.Response(200)
 
-        respx_mock.post("/knowledge").mock(side_effect=retry_handler)
+        respx_mock.post("/converse").mock(side_effect=retry_handler)
 
-        response = await client.knowledge.with_raw_response.create(extra_headers={"x-stainless-retry-count": "42"})
+        response = await client.with_raw_response.converse(
+            prompt="string", extra_headers={"x-stainless-retry-count": "42"}
+        )
 
         assert response.http_request.headers.get("x-stainless-retry-count") == "42"
 

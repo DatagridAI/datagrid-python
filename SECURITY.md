@@ -20,7 +20,7 @@ or products provided by Datagrid, please follow the respective company's securit
 
 ### Datagrid Terms and Policies
 
-Please contact dev-feedback@datagrid.com for any questions or concerns regarding the security of our services.
+Please contact william@datagrid.com for any questions or concerns regarding the security of our services.
 
 ---
 

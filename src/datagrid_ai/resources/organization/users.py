@@ -18,82 +18,35 @@ from ..._response import (
 )
 from ...pagination import SyncCursorIDPage, AsyncCursorIDPage
 from ..._base_client import AsyncPaginator, make_request_options
-from ...types.organization import teamspace_list_params, teamspace_patch_params, teamspace_create_params
-from ...types.organization.teamspace import Teamspace
+from ...types.organization import user_list_params, user_update_params
+from ...types.organization.organization_user import OrganizationUser
 
-__all__ = ["TeamspacesResource", "AsyncTeamspacesResource"]
+__all__ = ["UsersResource", "AsyncUsersResource"]
 
 
-class TeamspacesResource(SyncAPIResource):
+class UsersResource(SyncAPIResource):
     @cached_property
-    def with_raw_response(self) -> TeamspacesResourceWithRawResponse:
+    def with_raw_response(self) -> UsersResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
         For more information, see https://www.github.com/DatagridAI/datagrid-python#accessing-raw-response-data-eg-headers
         """
-        return TeamspacesResourceWithRawResponse(self)
+        return UsersResourceWithRawResponse(self)
 
     @cached_property
-    def with_streaming_response(self) -> TeamspacesResourceWithStreamingResponse:
+    def with_streaming_response(self) -> UsersResourceWithStreamingResponse:
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
         For more information, see https://www.github.com/DatagridAI/datagrid-python#with_streaming_response
         """
-        return TeamspacesResourceWithStreamingResponse(self)
-
-    def create(
-        self,
-        *,
-        access: Literal["open", "closed"],
-        name: str,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> Teamspace:
-        """
-        Create a new teamspace within your organization.
-
-        Args:
-          access: Open teamspaces allow all organization members to join without admin approval.
-              Access for users who join this way is limited to conversations with agents in
-              this teamspace.
-
-              Closed teamspaces require admin approval to join.
-
-          name: The name of the teamspace
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        return self._post(
-            "/organization/teamspaces",
-            body=maybe_transform(
-                {
-                    "access": access,
-                    "name": name,
-                },
-                teamspace_create_params.TeamspaceCreateParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=Teamspace,
-        )
+        return UsersResourceWithStreamingResponse(self)
 
     def retrieve(
         self,
-        teamspace_id: str,
+        user_id: str,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -101,9 +54,9 @@ class TeamspacesResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> Teamspace:
+    ) -> OrganizationUser:
         """
-        Retrieve a specific teamspace by ID.
+        Retrieve details of a specific user in the organization.
 
         Args:
           extra_headers: Send extra headers
@@ -114,14 +67,52 @@ class TeamspacesResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not teamspace_id:
-            raise ValueError(f"Expected a non-empty value for `teamspace_id` but received {teamspace_id!r}")
+        if not user_id:
+            raise ValueError(f"Expected a non-empty value for `user_id` but received {user_id!r}")
         return self._get(
-            f"/organization/teamspaces/{teamspace_id}",
+            f"/organization/users/{user_id}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=Teamspace,
+            cast_to=OrganizationUser,
+        )
+
+    def update(
+        self,
+        user_id: str,
+        *,
+        role: Literal["admin", "member"],
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> OrganizationUser:
+        """
+        Update user permissions in the organization.
+
+        Args:
+          role: The role to assign to the user in the organization. Available roles: admin,
+              member
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not user_id:
+            raise ValueError(f"Expected a non-empty value for `user_id` but received {user_id!r}")
+        return self._patch(
+            f"/organization/users/{user_id}",
+            body=maybe_transform({"role": role}, user_update_params.UserUpdateParams),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=OrganizationUser,
         )
 
     def list(
@@ -130,15 +121,16 @@ class TeamspacesResource(SyncAPIResource):
         after: str | NotGiven = NOT_GIVEN,
         before: str | NotGiven = NOT_GIVEN,
         limit: int | NotGiven = NOT_GIVEN,
+        search: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> SyncCursorIDPage[Teamspace]:
+    ) -> SyncCursorIDPage[OrganizationUser]:
         """
-        Returns the list of teamspaces within your organization.
+        Retrieve a list of users in the specified organization.
 
         Args:
           after: A cursor to use in pagination. `after` is an object ID that defines your place
@@ -153,6 +145,8 @@ class TeamspacesResource(SyncAPIResource):
 
           limit: The limit on the number of objects to return, ranging between 1 and 100.
 
+          search: Search term to filter users by name or email
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -162,8 +156,8 @@ class TeamspacesResource(SyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         return self._get_api_list(
-            "/organization/teamspaces",
-            page=SyncCursorIDPage[Teamspace],
+            "/organization/users",
+            page=SyncCursorIDPage[OrganizationUser],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -174,134 +168,38 @@ class TeamspacesResource(SyncAPIResource):
                         "after": after,
                         "before": before,
                         "limit": limit,
+                        "search": search,
                     },
-                    teamspace_list_params.TeamspaceListParams,
+                    user_list_params.UserListParams,
                 ),
             ),
-            model=Teamspace,
-        )
-
-    def patch(
-        self,
-        teamspace_id: str,
-        *,
-        access: Literal["open", "closed"] | NotGiven = NOT_GIVEN,
-        name: str | NotGiven = NOT_GIVEN,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> Teamspace:
-        """
-        Update the name and/or access settings of a teamspace.
-
-        Args:
-          access: Open teamspaces allow all organization members to join without admin approval.
-              Access for users who join this way is limited to conversations with agents in
-              this teamspace.
-
-              Closed teamspaces require admin approval to join.
-
-          name: The new name of the teamspace
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not teamspace_id:
-            raise ValueError(f"Expected a non-empty value for `teamspace_id` but received {teamspace_id!r}")
-        return self._patch(
-            f"/organization/teamspaces/{teamspace_id}",
-            body=maybe_transform(
-                {
-                    "access": access,
-                    "name": name,
-                },
-                teamspace_patch_params.TeamspacePatchParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=Teamspace,
+            model=OrganizationUser,
         )
 
 
-class AsyncTeamspacesResource(AsyncAPIResource):
+class AsyncUsersResource(AsyncAPIResource):
     @cached_property
-    def with_raw_response(self) -> AsyncTeamspacesResourceWithRawResponse:
+    def with_raw_response(self) -> AsyncUsersResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
         For more information, see https://www.github.com/DatagridAI/datagrid-python#accessing-raw-response-data-eg-headers
         """
-        return AsyncTeamspacesResourceWithRawResponse(self)
+        return AsyncUsersResourceWithRawResponse(self)
 
     @cached_property
-    def with_streaming_response(self) -> AsyncTeamspacesResourceWithStreamingResponse:
+    def with_streaming_response(self) -> AsyncUsersResourceWithStreamingResponse:
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
         For more information, see https://www.github.com/DatagridAI/datagrid-python#with_streaming_response
         """
-        return AsyncTeamspacesResourceWithStreamingResponse(self)
-
-    async def create(
-        self,
-        *,
-        access: Literal["open", "closed"],
-        name: str,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> Teamspace:
-        """
-        Create a new teamspace within your organization.
-
-        Args:
-          access: Open teamspaces allow all organization members to join without admin approval.
-              Access for users who join this way is limited to conversations with agents in
-              this teamspace.
-
-              Closed teamspaces require admin approval to join.
-
-          name: The name of the teamspace
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        return await self._post(
-            "/organization/teamspaces",
-            body=await async_maybe_transform(
-                {
-                    "access": access,
-                    "name": name,
-                },
-                teamspace_create_params.TeamspaceCreateParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=Teamspace,
-        )
+        return AsyncUsersResourceWithStreamingResponse(self)
 
     async def retrieve(
         self,
-        teamspace_id: str,
+        user_id: str,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -309,9 +207,9 @@ class AsyncTeamspacesResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> Teamspace:
+    ) -> OrganizationUser:
         """
-        Retrieve a specific teamspace by ID.
+        Retrieve details of a specific user in the organization.
 
         Args:
           extra_headers: Send extra headers
@@ -322,14 +220,52 @@ class AsyncTeamspacesResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not teamspace_id:
-            raise ValueError(f"Expected a non-empty value for `teamspace_id` but received {teamspace_id!r}")
+        if not user_id:
+            raise ValueError(f"Expected a non-empty value for `user_id` but received {user_id!r}")
         return await self._get(
-            f"/organization/teamspaces/{teamspace_id}",
+            f"/organization/users/{user_id}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=Teamspace,
+            cast_to=OrganizationUser,
+        )
+
+    async def update(
+        self,
+        user_id: str,
+        *,
+        role: Literal["admin", "member"],
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> OrganizationUser:
+        """
+        Update user permissions in the organization.
+
+        Args:
+          role: The role to assign to the user in the organization. Available roles: admin,
+              member
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not user_id:
+            raise ValueError(f"Expected a non-empty value for `user_id` but received {user_id!r}")
+        return await self._patch(
+            f"/organization/users/{user_id}",
+            body=await async_maybe_transform({"role": role}, user_update_params.UserUpdateParams),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=OrganizationUser,
         )
 
     def list(
@@ -338,15 +274,16 @@ class AsyncTeamspacesResource(AsyncAPIResource):
         after: str | NotGiven = NOT_GIVEN,
         before: str | NotGiven = NOT_GIVEN,
         limit: int | NotGiven = NOT_GIVEN,
+        search: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> AsyncPaginator[Teamspace, AsyncCursorIDPage[Teamspace]]:
+    ) -> AsyncPaginator[OrganizationUser, AsyncCursorIDPage[OrganizationUser]]:
         """
-        Returns the list of teamspaces within your organization.
+        Retrieve a list of users in the specified organization.
 
         Args:
           after: A cursor to use in pagination. `after` is an object ID that defines your place
@@ -361,6 +298,8 @@ class AsyncTeamspacesResource(AsyncAPIResource):
 
           limit: The limit on the number of objects to return, ranging between 1 and 100.
 
+          search: Search term to filter users by name or email
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -370,8 +309,8 @@ class AsyncTeamspacesResource(AsyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         return self._get_api_list(
-            "/organization/teamspaces",
-            page=AsyncCursorIDPage[Teamspace],
+            "/organization/users",
+            page=AsyncCursorIDPage[OrganizationUser],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -382,131 +321,70 @@ class AsyncTeamspacesResource(AsyncAPIResource):
                         "after": after,
                         "before": before,
                         "limit": limit,
+                        "search": search,
                     },
-                    teamspace_list_params.TeamspaceListParams,
+                    user_list_params.UserListParams,
                 ),
             ),
-            model=Teamspace,
-        )
-
-    async def patch(
-        self,
-        teamspace_id: str,
-        *,
-        access: Literal["open", "closed"] | NotGiven = NOT_GIVEN,
-        name: str | NotGiven = NOT_GIVEN,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> Teamspace:
-        """
-        Update the name and/or access settings of a teamspace.
-
-        Args:
-          access: Open teamspaces allow all organization members to join without admin approval.
-              Access for users who join this way is limited to conversations with agents in
-              this teamspace.
-
-              Closed teamspaces require admin approval to join.
-
-          name: The new name of the teamspace
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not teamspace_id:
-            raise ValueError(f"Expected a non-empty value for `teamspace_id` but received {teamspace_id!r}")
-        return await self._patch(
-            f"/organization/teamspaces/{teamspace_id}",
-            body=await async_maybe_transform(
-                {
-                    "access": access,
-                    "name": name,
-                },
-                teamspace_patch_params.TeamspacePatchParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=Teamspace,
+            model=OrganizationUser,
         )
 
 
-class TeamspacesResourceWithRawResponse:
-    def __init__(self, teamspaces: TeamspacesResource) -> None:
-        self._teamspaces = teamspaces
+class UsersResourceWithRawResponse:
+    def __init__(self, users: UsersResource) -> None:
+        self._users = users
 
-        self.create = to_raw_response_wrapper(
-            teamspaces.create,
-        )
         self.retrieve = to_raw_response_wrapper(
-            teamspaces.retrieve,
+            users.retrieve,
+        )
+        self.update = to_raw_response_wrapper(
+            users.update,
         )
         self.list = to_raw_response_wrapper(
-            teamspaces.list,
-        )
-        self.patch = to_raw_response_wrapper(
-            teamspaces.patch,
+            users.list,
         )
 
 
-class AsyncTeamspacesResourceWithRawResponse:
-    def __init__(self, teamspaces: AsyncTeamspacesResource) -> None:
-        self._teamspaces = teamspaces
+class AsyncUsersResourceWithRawResponse:
+    def __init__(self, users: AsyncUsersResource) -> None:
+        self._users = users
 
-        self.create = async_to_raw_response_wrapper(
-            teamspaces.create,
-        )
         self.retrieve = async_to_raw_response_wrapper(
-            teamspaces.retrieve,
+            users.retrieve,
+        )
+        self.update = async_to_raw_response_wrapper(
+            users.update,
         )
         self.list = async_to_raw_response_wrapper(
-            teamspaces.list,
-        )
-        self.patch = async_to_raw_response_wrapper(
-            teamspaces.patch,
+            users.list,
         )
 
 
-class TeamspacesResourceWithStreamingResponse:
-    def __init__(self, teamspaces: TeamspacesResource) -> None:
-        self._teamspaces = teamspaces
+class UsersResourceWithStreamingResponse:
+    def __init__(self, users: UsersResource) -> None:
+        self._users = users
 
-        self.create = to_streamed_response_wrapper(
-            teamspaces.create,
-        )
         self.retrieve = to_streamed_response_wrapper(
-            teamspaces.retrieve,
+            users.retrieve,
+        )
+        self.update = to_streamed_response_wrapper(
+            users.update,
         )
         self.list = to_streamed_response_wrapper(
-            teamspaces.list,
-        )
-        self.patch = to_streamed_response_wrapper(
-            teamspaces.patch,
+            users.list,
         )
 
 
-class AsyncTeamspacesResourceWithStreamingResponse:
-    def __init__(self, teamspaces: AsyncTeamspacesResource) -> None:
-        self._teamspaces = teamspaces
+class AsyncUsersResourceWithStreamingResponse:
+    def __init__(self, users: AsyncUsersResource) -> None:
+        self._users = users
 
-        self.create = async_to_streamed_response_wrapper(
-            teamspaces.create,
-        )
         self.retrieve = async_to_streamed_response_wrapper(
-            teamspaces.retrieve,
+            users.retrieve,
+        )
+        self.update = async_to_streamed_response_wrapper(
+            users.update,
         )
         self.list = async_to_streamed_response_wrapper(
-            teamspaces.list,
-        )
-        self.patch = async_to_streamed_response_wrapper(
-            teamspaces.patch,
+            users.list,
         )

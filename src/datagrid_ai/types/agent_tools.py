@@ -27,6 +27,7 @@ AgentTools: TypeAlias = Literal[
     "pdf_manipulation",
     "pdf_generator",
     "acc",
+    "acc_forms",
     "docusign",
     "webflow",
     "hubspot",
