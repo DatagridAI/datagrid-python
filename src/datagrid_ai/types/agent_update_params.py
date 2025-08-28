@@ -5,17 +5,78 @@ from __future__ import annotations
 from typing import List, Union, Iterable, Optional
 from typing_extensions import Literal, TypeAlias, TypedDict
 
-from .agent_tools import AgentTools
-from .agent_tool_item_param import AgentToolItemParam
+from .tool_name import ToolName
+from .tool_param import ToolParam
 
-__all__ = ["AgentUpdateParams", "AgentTool"]
+__all__ = ["AgentUpdateParams", "DisabledTool", "Tool"]
 
 
 class AgentUpdateParams(TypedDict, total=False):
-    agent_model: Optional[Literal["magpie-1", "magpie-1.1", "magpie-1.1-flash"]]
-    """The version of Datagrid's agent brain."""
+    agent_model: Optional[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-1"]]
+    """The version of Datagrid's agent brain.
 
-    agent_tools: Optional[Iterable[AgentTool]]
+    - magpie-1.1 is the default and most powerful model.
+    - magpie-1.1-flash is a faster model useful for RAG usecases, it currently only
+      supports semantic_search tool. Structured outputs are not supported with this
+      model.
+    """
+
+    custom_prompt: Optional[str]
+    """Use custom prompt to instruct the style and formatting of the agent's response"""
+
+    disabled_tools: Optional[Iterable[DisabledTool]]
+    """Array of the agent tools to disable.
+
+    Disabling is performed after the 'agent_tools' rules are applied. For example,
+    agent_tools: null and disabled_tools: [data_analysis] will enable everything but
+    the data_analysis tool. If nothing or [] is provided, nothing is disabled and
+    therefore only the agent_tools setting is relevant.
+    """
+
+    knowledge_ids: Optional[List[str]]
+    """Array of Knowledge IDs the agent should use during the converse.
+
+    When ommited, all knowledge is used.
+    """
+
+    llm_model: Union[
+        Literal[
+            "gemini-2.5-pro",
+            "gemini-2.5-pro-preview-05-06",
+            "gemini-2.5-flash",
+            "gemini-2.5-flash-preview-04-17",
+            "gemini-2.5-flash-lite",
+            "gpt-5",
+            "gemini-2.0-flash-001",
+            "gemini-2.0-flash",
+            "gemini-1.5-pro-001",
+            "gemini-1.5-pro-002",
+            "gemini-1.5-flash-002",
+            "gemini-1.5-flash-001",
+            "chatgpt-4o-latest",
+            "gpt-4o",
+            "gpt-4",
+            "gpt-4-turbo",
+            "gpt-4o-mini",
+        ],
+        str,
+        None,
+    ]
+    """The LLM used to generate responses."""
+
+    name: Optional[str]
+    """The name of the agent"""
+
+    planning_prompt: Optional[str]
+    """
+    Define the planning strategy your AI Agent should use when breaking down tasks
+    and solving problems
+    """
+
+    system_prompt: Optional[str]
+    """Directs your AI Agent's operational behavior."""
+
+    tools: Optional[Iterable[Tool]]
     """Array of the agent tools to enable.
 
     If not provided - default tools of the agent are used. If empty list provided -
@@ -64,62 +125,7 @@ class AgentUpdateParams(TypedDict, total=False):
     - people_prospect_researcher: Agents provide information about people
     """
 
-    custom_prompt: Optional[str]
-    """Use custom prompt to instruct the style and formatting of the agent's response"""
 
-    description: Optional[str]
-    """Description of the agent"""
+DisabledTool: TypeAlias = Union[ToolName, ToolParam]
 
-    disabled_agent_tools: Optional[List[AgentTools]]
-    """Array of the agent tools to disable.
-
-    Disabling is performed after the 'agent_tools' rules are applied. For example,
-    agent_tools: null and disabled_agent_tools: [data_analysis] will enable
-    everything but the data_analysis tool. If nothing or [] is provided, nothing is
-    disabled and therefore only the agent_tools setting is relevant.
-    """
-
-    knowledge_ids: Optional[List[str]]
-    """Array of Knowledge IDs the agent should use during the converse.
-
-    If not provided - default settings are used. If null provided - all available
-    knowledge is used.
-    """
-
-    llm_model: Optional[
-        Literal[
-            "gemini-1.5-flash-001",
-            "gemini-1.5-flash-002",
-            "gemini-2.0-flash-001",
-            "gemini-2.0-flash",
-            "gemini-2.5-flash-preview-04-17",
-            "gemini-2.5-flash",
-            "gemini-2.5-flash-lite",
-            "gemini-1.5-pro-001",
-            "gemini-1.5-pro-002",
-            "gemini-2.5-pro-preview-05-06",
-            "gemini-2.5-pro",
-            "chatgpt-4o-latest",
-            "gpt-4",
-            "gpt-4-turbo",
-            "gpt-4o",
-            "gpt-4o-mini",
-            "gpt-5",
-        ]
-    ]
-    """The LLM used to generate responses."""
-
-    name: str
-    """The name of the agent"""
-
-    planning_prompt: Optional[str]
-    """
-    Define the planning strategy your AI Agent should use when breaking down tasks
-    and solving problems
-    """
-
-    system_prompt: Optional[str]
-    """Directs your AI Agent's operational behavior."""
-
-
-AgentTool: TypeAlias = Union[AgentTools, AgentToolItemParam]
+Tool: TypeAlias = Union[ToolName, ToolParam, ToolParam]

@@ -32,10 +32,10 @@ client = Datagrid(
     api_key=os.environ.get("DATAGRID_API_KEY"),  # This is the default and can be omitted
 )
 
-response = client.converse(
+converse_response = client.converse(
     prompt="Hello world!",
 )
-print(response.content)
+print(converse_response.content)
 ```
 
 While you can provide an `api_key` keyword argument,
@@ -58,10 +58,10 @@ client = AsyncDatagrid(
 
 
 async def main() -> None:
-    response = await client.converse(
+    converse_response = await client.converse(
         prompt="Hello world!",
     )
-    print(response.content)
+    print(converse_response.content)
 
 
 asyncio.run(main())
@@ -93,10 +93,10 @@ async def main() -> None:
         api_key="My API Key",
         http_client=DefaultAioHttpClient(),
     ) as client:
-        response = await client.converse(
+        converse_response = await client.converse(
             prompt="Hello world!",
         )
-        print(response.content)
+        print(converse_response.content)
 
 
 asyncio.run(main())
@@ -183,11 +183,11 @@ from datagrid_ai import Datagrid
 
 client = Datagrid()
 
-response = client.converse(
+converse_response = client.converse(
     prompt="string",
     config={},
 )
-print(response.config)
+print(converse_response.config)
 ```
 
 ## File uploads

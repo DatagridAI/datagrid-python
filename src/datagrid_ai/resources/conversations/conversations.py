@@ -2,54 +2,63 @@
 
 from __future__ import annotations
 
-from typing import List, Mapping, Optional, cast
+from typing import Optional
 
 import httpx
 
-from ..types import knowledge_list_params, knowledge_create_params, knowledge_update_params, knowledge_connect_params
-from .._types import NOT_GIVEN, Body, Query, Headers, NoneType, NotGiven, FileTypes
-from .._utils import extract_files, maybe_transform, deepcopy_minimal, async_maybe_transform
-from .._compat import cached_property
-from .._resource import SyncAPIResource, AsyncAPIResource
-from .._response import (
+from ...types import conversation_list_params, conversation_create_params
+from ..._types import NOT_GIVEN, Body, Query, Headers, NoneType, NotGiven
+from ..._utils import maybe_transform, async_maybe_transform
+from .messages import (
+    MessagesResource,
+    AsyncMessagesResource,
+    MessagesResourceWithRawResponse,
+    AsyncMessagesResourceWithRawResponse,
+    MessagesResourceWithStreamingResponse,
+    AsyncMessagesResourceWithStreamingResponse,
+)
+from ..._compat import cached_property
+from ..._resource import SyncAPIResource, AsyncAPIResource
+from ..._response import (
     to_raw_response_wrapper,
     to_streamed_response_wrapper,
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from ..pagination import SyncCursorIDPage, AsyncCursorIDPage
-from .._base_client import AsyncPaginator, make_request_options
-from ..types.knowledge import Knowledge
-from ..types.redirect_url_response import RedirectURLResponse
-from ..types.knowledge_update_response import KnowledgeUpdateResponse
+from ...pagination import SyncCursorIDPage, AsyncCursorIDPage
+from ..._base_client import AsyncPaginator, make_request_options
+from ...types.conversation import Conversation
 
-__all__ = ["KnowledgeResource", "AsyncKnowledgeResource"]
+__all__ = ["ConversationsResource", "AsyncConversationsResource"]
 
 
-class KnowledgeResource(SyncAPIResource):
+class ConversationsResource(SyncAPIResource):
     @cached_property
-    def with_raw_response(self) -> KnowledgeResourceWithRawResponse:
+    def messages(self) -> MessagesResource:
+        return MessagesResource(self._client)
+
+    @cached_property
+    def with_raw_response(self) -> ConversationsResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
         For more information, see https://www.github.com/DatagridAI/datagrid-python#accessing-raw-response-data-eg-headers
         """
-        return KnowledgeResourceWithRawResponse(self)
+        return ConversationsResourceWithRawResponse(self)
 
     @cached_property
-    def with_streaming_response(self) -> KnowledgeResourceWithStreamingResponse:
+    def with_streaming_response(self) -> ConversationsResourceWithStreamingResponse:
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
         For more information, see https://www.github.com/DatagridAI/datagrid-python#with_streaming_response
         """
-        return KnowledgeResourceWithStreamingResponse(self)
+        return ConversationsResourceWithStreamingResponse(self)
 
     def create(
         self,
         *,
-        files: List[FileTypes],
         name: Optional[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -57,15 +66,12 @@ class KnowledgeResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> Knowledge:
+    ) -> Conversation:
         """
-        Create knowledge which will be learned and leveraged by agents.
+        Creates a new conversation.
 
         Args:
-          files: The files to be uploaded and learned. Supported media types are `pdf`, `json`,
-              `csv`, `text`, `png`, `jpeg`, `excel`, `google sheets`.
-
-          name: The name of the knowledge.
+          name: Name for the conversation.
 
           extra_headers: Send extra headers
 
@@ -75,30 +81,18 @@ class KnowledgeResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        body = deepcopy_minimal(
-            {
-                "files": files,
-                "name": name,
-            }
-        )
-        extracted_files = extract_files(cast(Mapping[str, object], body), paths=[["files", "<array>"]])
-        # It should be noted that the actual Content-Type header that will be
-        # sent to the server will contain a `boundary` parameter, e.g.
-        # multipart/form-data; boundary=---abc--
-        extra_headers = {"Content-Type": "multipart/form-data", **(extra_headers or {})}
         return self._post(
-            "/knowledge",
-            body=maybe_transform(body, knowledge_create_params.KnowledgeCreateParams),
-            files=extracted_files,
+            "/conversations",
+            body=maybe_transform({"name": name}, conversation_create_params.ConversationCreateParams),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=Knowledge,
+            cast_to=Conversation,
         )
 
     def retrieve(
         self,
-        knowledge_id: str,
+        conversation_id: str,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -106,9 +100,9 @@ class KnowledgeResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> Knowledge:
+    ) -> Conversation:
         """
-        Retrieves a knowledge by id.
+        Retrieves a conversation by id.
 
         Args:
           extra_headers: Send extra headers
@@ -119,49 +113,14 @@ class KnowledgeResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not knowledge_id:
-            raise ValueError(f"Expected a non-empty value for `knowledge_id` but received {knowledge_id!r}")
+        if not conversation_id:
+            raise ValueError(f"Expected a non-empty value for `conversation_id` but received {conversation_id!r}")
         return self._get(
-            f"/knowledge/{knowledge_id}",
+            f"/conversations/{conversation_id}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=Knowledge,
-        )
-
-    def update(
-        self,
-        knowledge_id: str,
-        *,
-        name: str,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> KnowledgeUpdateResponse:
-        """
-        Update a knowledge's attributes.
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not knowledge_id:
-            raise ValueError(f"Expected a non-empty value for `knowledge_id` but received {knowledge_id!r}")
-        return self._patch(
-            f"/knowledge/{knowledge_id}",
-            body=maybe_transform({"name": name}, knowledge_update_params.KnowledgeUpdateParams),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=KnowledgeUpdateResponse,
+            cast_to=Conversation,
         )
 
     def list(
@@ -176,8 +135,8 @@ class KnowledgeResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> SyncCursorIDPage[Knowledge]:
-        """Returns the list of knowledge.
+    ) -> SyncCursorIDPage[Conversation]:
+        """Returns the list of conversations.
 
         Args:
           after: A cursor to use in pagination.
@@ -203,8 +162,8 @@ class KnowledgeResource(SyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         return self._get_api_list(
-            "/knowledge",
-            page=SyncCursorIDPage[Knowledge],
+            "/conversations",
+            page=SyncCursorIDPage[Conversation],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -216,15 +175,15 @@ class KnowledgeResource(SyncAPIResource):
                         "before": before,
                         "limit": limit,
                     },
-                    knowledge_list_params.KnowledgeListParams,
+                    conversation_list_params.ConversationListParams,
                 ),
             ),
-            model=Knowledge,
+            model=Conversation,
         )
 
     def delete(
         self,
-        knowledge_id: str,
+        conversation_id: str,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -234,7 +193,7 @@ class KnowledgeResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> None:
         """
-        Delete knowledge.
+        Delete conversation.
 
         Args:
           extra_headers: Send extra headers
@@ -245,76 +204,45 @@ class KnowledgeResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not knowledge_id:
-            raise ValueError(f"Expected a non-empty value for `knowledge_id` but received {knowledge_id!r}")
+        if not conversation_id:
+            raise ValueError(f"Expected a non-empty value for `conversation_id` but received {conversation_id!r}")
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return self._delete(
-            f"/knowledge/{knowledge_id}",
+            f"/conversations/{conversation_id}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=NoneType,
         )
 
-    def connect(
-        self,
-        *,
-        connection_id: str,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> RedirectURLResponse:
-        """
-        Create knowledge from connection which will be learned and leveraged by agents.
 
-        Args:
-          connection_id: The id of the connection to be used to create the knowledge.
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        return self._post(
-            "/knowledge/connect",
-            body=maybe_transform({"connection_id": connection_id}, knowledge_connect_params.KnowledgeConnectParams),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=RedirectURLResponse,
-        )
-
-
-class AsyncKnowledgeResource(AsyncAPIResource):
+class AsyncConversationsResource(AsyncAPIResource):
     @cached_property
-    def with_raw_response(self) -> AsyncKnowledgeResourceWithRawResponse:
+    def messages(self) -> AsyncMessagesResource:
+        return AsyncMessagesResource(self._client)
+
+    @cached_property
+    def with_raw_response(self) -> AsyncConversationsResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
         For more information, see https://www.github.com/DatagridAI/datagrid-python#accessing-raw-response-data-eg-headers
         """
-        return AsyncKnowledgeResourceWithRawResponse(self)
+        return AsyncConversationsResourceWithRawResponse(self)
 
     @cached_property
-    def with_streaming_response(self) -> AsyncKnowledgeResourceWithStreamingResponse:
+    def with_streaming_response(self) -> AsyncConversationsResourceWithStreamingResponse:
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
         For more information, see https://www.github.com/DatagridAI/datagrid-python#with_streaming_response
         """
-        return AsyncKnowledgeResourceWithStreamingResponse(self)
+        return AsyncConversationsResourceWithStreamingResponse(self)
 
     async def create(
         self,
         *,
-        files: List[FileTypes],
         name: Optional[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -322,15 +250,12 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> Knowledge:
+    ) -> Conversation:
         """
-        Create knowledge which will be learned and leveraged by agents.
+        Creates a new conversation.
 
         Args:
-          files: The files to be uploaded and learned. Supported media types are `pdf`, `json`,
-              `csv`, `text`, `png`, `jpeg`, `excel`, `google sheets`.
-
-          name: The name of the knowledge.
+          name: Name for the conversation.
 
           extra_headers: Send extra headers
 
@@ -340,30 +265,18 @@ class AsyncKnowledgeResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        body = deepcopy_minimal(
-            {
-                "files": files,
-                "name": name,
-            }
-        )
-        extracted_files = extract_files(cast(Mapping[str, object], body), paths=[["files", "<array>"]])
-        # It should be noted that the actual Content-Type header that will be
-        # sent to the server will contain a `boundary` parameter, e.g.
-        # multipart/form-data; boundary=---abc--
-        extra_headers = {"Content-Type": "multipart/form-data", **(extra_headers or {})}
         return await self._post(
-            "/knowledge",
-            body=await async_maybe_transform(body, knowledge_create_params.KnowledgeCreateParams),
-            files=extracted_files,
+            "/conversations",
+            body=await async_maybe_transform({"name": name}, conversation_create_params.ConversationCreateParams),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=Knowledge,
+            cast_to=Conversation,
         )
 
     async def retrieve(
         self,
-        knowledge_id: str,
+        conversation_id: str,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -371,9 +284,9 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> Knowledge:
+    ) -> Conversation:
         """
-        Retrieves a knowledge by id.
+        Retrieves a conversation by id.
 
         Args:
           extra_headers: Send extra headers
@@ -384,49 +297,14 @@ class AsyncKnowledgeResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not knowledge_id:
-            raise ValueError(f"Expected a non-empty value for `knowledge_id` but received {knowledge_id!r}")
+        if not conversation_id:
+            raise ValueError(f"Expected a non-empty value for `conversation_id` but received {conversation_id!r}")
         return await self._get(
-            f"/knowledge/{knowledge_id}",
+            f"/conversations/{conversation_id}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=Knowledge,
-        )
-
-    async def update(
-        self,
-        knowledge_id: str,
-        *,
-        name: str,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> KnowledgeUpdateResponse:
-        """
-        Update a knowledge's attributes.
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not knowledge_id:
-            raise ValueError(f"Expected a non-empty value for `knowledge_id` but received {knowledge_id!r}")
-        return await self._patch(
-            f"/knowledge/{knowledge_id}",
-            body=await async_maybe_transform({"name": name}, knowledge_update_params.KnowledgeUpdateParams),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=KnowledgeUpdateResponse,
+            cast_to=Conversation,
         )
 
     def list(
@@ -441,8 +319,8 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> AsyncPaginator[Knowledge, AsyncCursorIDPage[Knowledge]]:
-        """Returns the list of knowledge.
+    ) -> AsyncPaginator[Conversation, AsyncCursorIDPage[Conversation]]:
+        """Returns the list of conversations.
 
         Args:
           after: A cursor to use in pagination.
@@ -468,8 +346,8 @@ class AsyncKnowledgeResource(AsyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         return self._get_api_list(
-            "/knowledge",
-            page=AsyncCursorIDPage[Knowledge],
+            "/conversations",
+            page=AsyncCursorIDPage[Conversation],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -481,15 +359,15 @@ class AsyncKnowledgeResource(AsyncAPIResource):
                         "before": before,
                         "limit": limit,
                     },
-                    knowledge_list_params.KnowledgeListParams,
+                    conversation_list_params.ConversationListParams,
                 ),
             ),
-            model=Knowledge,
+            model=Conversation,
         )
 
     async def delete(
         self,
-        knowledge_id: str,
+        conversation_id: str,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -499,7 +377,7 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> None:
         """
-        Delete knowledge.
+        Delete conversation.
 
         Args:
           extra_headers: Send extra headers
@@ -510,145 +388,101 @@ class AsyncKnowledgeResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not knowledge_id:
-            raise ValueError(f"Expected a non-empty value for `knowledge_id` but received {knowledge_id!r}")
+        if not conversation_id:
+            raise ValueError(f"Expected a non-empty value for `conversation_id` but received {conversation_id!r}")
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return await self._delete(
-            f"/knowledge/{knowledge_id}",
+            f"/conversations/{conversation_id}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=NoneType,
         )
 
-    async def connect(
-        self,
-        *,
-        connection_id: str,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> RedirectURLResponse:
-        """
-        Create knowledge from connection which will be learned and leveraged by agents.
 
-        Args:
-          connection_id: The id of the connection to be used to create the knowledge.
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        return await self._post(
-            "/knowledge/connect",
-            body=await async_maybe_transform(
-                {"connection_id": connection_id}, knowledge_connect_params.KnowledgeConnectParams
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=RedirectURLResponse,
-        )
-
-
-class KnowledgeResourceWithRawResponse:
-    def __init__(self, knowledge: KnowledgeResource) -> None:
-        self._knowledge = knowledge
+class ConversationsResourceWithRawResponse:
+    def __init__(self, conversations: ConversationsResource) -> None:
+        self._conversations = conversations
 
         self.create = to_raw_response_wrapper(
-            knowledge.create,
+            conversations.create,
         )
         self.retrieve = to_raw_response_wrapper(
-            knowledge.retrieve,
-        )
-        self.update = to_raw_response_wrapper(
-            knowledge.update,
+            conversations.retrieve,
         )
         self.list = to_raw_response_wrapper(
-            knowledge.list,
+            conversations.list,
         )
         self.delete = to_raw_response_wrapper(
-            knowledge.delete,
-        )
-        self.connect = to_raw_response_wrapper(
-            knowledge.connect,
+            conversations.delete,
         )
 
+    @cached_property
+    def messages(self) -> MessagesResourceWithRawResponse:
+        return MessagesResourceWithRawResponse(self._conversations.messages)
 
-class AsyncKnowledgeResourceWithRawResponse:
-    def __init__(self, knowledge: AsyncKnowledgeResource) -> None:
-        self._knowledge = knowledge
+
+class AsyncConversationsResourceWithRawResponse:
+    def __init__(self, conversations: AsyncConversationsResource) -> None:
+        self._conversations = conversations
 
         self.create = async_to_raw_response_wrapper(
-            knowledge.create,
+            conversations.create,
         )
         self.retrieve = async_to_raw_response_wrapper(
-            knowledge.retrieve,
-        )
-        self.update = async_to_raw_response_wrapper(
-            knowledge.update,
+            conversations.retrieve,
         )
         self.list = async_to_raw_response_wrapper(
-            knowledge.list,
+            conversations.list,
         )
         self.delete = async_to_raw_response_wrapper(
-            knowledge.delete,
-        )
-        self.connect = async_to_raw_response_wrapper(
-            knowledge.connect,
+            conversations.delete,
         )
 
+    @cached_property
+    def messages(self) -> AsyncMessagesResourceWithRawResponse:
+        return AsyncMessagesResourceWithRawResponse(self._conversations.messages)
 
-class KnowledgeResourceWithStreamingResponse:
-    def __init__(self, knowledge: KnowledgeResource) -> None:
-        self._knowledge = knowledge
+
+class ConversationsResourceWithStreamingResponse:
+    def __init__(self, conversations: ConversationsResource) -> None:
+        self._conversations = conversations
 
         self.create = to_streamed_response_wrapper(
-            knowledge.create,
+            conversations.create,
         )
         self.retrieve = to_streamed_response_wrapper(
-            knowledge.retrieve,
-        )
-        self.update = to_streamed_response_wrapper(
-            knowledge.update,
+            conversations.retrieve,
         )
         self.list = to_streamed_response_wrapper(
-            knowledge.list,
+            conversations.list,
         )
         self.delete = to_streamed_response_wrapper(
-            knowledge.delete,
-        )
-        self.connect = to_streamed_response_wrapper(
-            knowledge.connect,
+            conversations.delete,
         )
 
+    @cached_property
+    def messages(self) -> MessagesResourceWithStreamingResponse:
+        return MessagesResourceWithStreamingResponse(self._conversations.messages)
 
-class AsyncKnowledgeResourceWithStreamingResponse:
-    def __init__(self, knowledge: AsyncKnowledgeResource) -> None:
-        self._knowledge = knowledge
+
+class AsyncConversationsResourceWithStreamingResponse:
+    def __init__(self, conversations: AsyncConversationsResource) -> None:
+        self._conversations = conversations
 
         self.create = async_to_streamed_response_wrapper(
-            knowledge.create,
+            conversations.create,
         )
         self.retrieve = async_to_streamed_response_wrapper(
-            knowledge.retrieve,
-        )
-        self.update = async_to_streamed_response_wrapper(
-            knowledge.update,
+            conversations.retrieve,
         )
         self.list = async_to_streamed_response_wrapper(
-            knowledge.list,
+            conversations.list,
         )
         self.delete = async_to_streamed_response_wrapper(
-            knowledge.delete,
+            conversations.delete,
         )
-        self.connect = async_to_streamed_response_wrapper(
-            knowledge.connect,
-        )
+
+    @cached_property
+    def messages(self) -> AsyncMessagesResourceWithStreamingResponse:
+        return AsyncMessagesResourceWithStreamingResponse(self._conversations.messages)

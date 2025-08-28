@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import os
-from typing import Any, Dict, List, Union, Mapping, Iterable, Optional
+from typing import Any, List, Union, Mapping, Iterable, Optional
 from typing_extensions import Self, override
 
 import httpx
@@ -47,6 +47,7 @@ from ._base_client import (
 )
 from .resources.memory import memory
 from .resources.organization import organization
+from .resources.conversations import conversations
 from .types.converse_response import ConverseResponse
 
 __all__ = [
@@ -71,6 +72,7 @@ class Datagrid(SyncAPIClient):
     agents: agents.AgentsResource
     memory: memory.MemoryResource
     organization: organization.OrganizationResource
+    conversations: conversations.ConversationsResource
     with_raw_response: DatagridWithRawResponse
     with_streaming_response: DatagridWithStreamedResponse
 
@@ -145,6 +147,7 @@ class Datagrid(SyncAPIClient):
         self.agents = agents.AgentsResource(self)
         self.memory = memory.MemoryResource(self)
         self.organization = organization.OrganizationResource(self)
+        self.conversations = conversations.ConversationsResource(self)
         self.with_raw_response = DatagridWithRawResponse(self)
         self.with_streaming_response = DatagridWithStreamedResponse(self)
 
@@ -227,7 +230,6 @@ class Datagrid(SyncAPIClient):
         *,
         prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
         agent_id: Optional[str] | NotGiven = NOT_GIVEN,
-        auto_approve_actions: Union[Optional[bool], Optional[Dict[str, bool]], None] | NotGiven = NOT_GIVEN,
         config: Optional[client_converse_params.Config] | NotGiven = NOT_GIVEN,
         conversation_id: Optional[str] | NotGiven = NOT_GIVEN,
         generate_citations: Optional[bool] | NotGiven = NOT_GIVEN,
@@ -247,14 +249,10 @@ class Datagrid(SyncAPIClient):
         Args:
           prompt: A text prompt to send to the agent.
 
-          agent_id: The ID of the agent that should be used for the converse. If both agent_id and
-              conversation_id aren't provided - the new agent is created.
+          agent_id: The ID of the agent that should be used for the converse.
 
-          auto_approve_actions: Auto-approve actions (skip halting for human approval). If boolean true: all
-              tools auto-approve. If object: per-tool toggle by toolId (true to skip halting
-              forhuman approval).
-
-          config: The config that overrides the default config of the agent for that converse.
+          config: Override the agent config for this converse call. This is applied as a partial
+              override.
 
           conversation_id: The ID of the present conversation to use. If it's not provided - a new
               conversation will be created.
@@ -286,7 +284,6 @@ class Datagrid(SyncAPIClient):
                 {
                     "prompt": prompt,
                     "agent_id": agent_id,
-                    "auto_approve_actions": auto_approve_actions,
                     "config": config,
                     "conversation_id": conversation_id,
                     "generate_citations": generate_citations,
@@ -346,6 +343,7 @@ class AsyncDatagrid(AsyncAPIClient):
     agents: agents.AsyncAgentsResource
     memory: memory.AsyncMemoryResource
     organization: organization.AsyncOrganizationResource
+    conversations: conversations.AsyncConversationsResource
     with_raw_response: AsyncDatagridWithRawResponse
     with_streaming_response: AsyncDatagridWithStreamedResponse
 
@@ -420,6 +418,7 @@ class AsyncDatagrid(AsyncAPIClient):
         self.agents = agents.AsyncAgentsResource(self)
         self.memory = memory.AsyncMemoryResource(self)
         self.organization = organization.AsyncOrganizationResource(self)
+        self.conversations = conversations.AsyncConversationsResource(self)
         self.with_raw_response = AsyncDatagridWithRawResponse(self)
         self.with_streaming_response = AsyncDatagridWithStreamedResponse(self)
 
@@ -502,7 +501,6 @@ class AsyncDatagrid(AsyncAPIClient):
         *,
         prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
         agent_id: Optional[str] | NotGiven = NOT_GIVEN,
-        auto_approve_actions: Union[Optional[bool], Optional[Dict[str, bool]], None] | NotGiven = NOT_GIVEN,
         config: Optional[client_converse_params.Config] | NotGiven = NOT_GIVEN,
         conversation_id: Optional[str] | NotGiven = NOT_GIVEN,
         generate_citations: Optional[bool] | NotGiven = NOT_GIVEN,
@@ -522,14 +520,10 @@ class AsyncDatagrid(AsyncAPIClient):
         Args:
           prompt: A text prompt to send to the agent.
 
-          agent_id: The ID of the agent that should be used for the converse. If both agent_id and
-              conversation_id aren't provided - the new agent is created.
+          agent_id: The ID of the agent that should be used for the converse.
 
-          auto_approve_actions: Auto-approve actions (skip halting for human approval). If boolean true: all
-              tools auto-approve. If object: per-tool toggle by toolId (true to skip halting
-              forhuman approval).
-
-          config: The config that overrides the default config of the agent for that converse.
+          config: Override the agent config for this converse call. This is applied as a partial
+              override.
 
           conversation_id: The ID of the present conversation to use. If it's not provided - a new
               conversation will be created.
@@ -561,7 +555,6 @@ class AsyncDatagrid(AsyncAPIClient):
                 {
                     "prompt": prompt,
                     "agent_id": agent_id,
-                    "auto_approve_actions": auto_approve_actions,
                     "config": config,
                     "conversation_id": conversation_id,
                     "generate_citations": generate_citations,
@@ -622,6 +615,7 @@ class DatagridWithRawResponse:
         self.agents = agents.AgentsResourceWithRawResponse(client.agents)
         self.memory = memory.MemoryResourceWithRawResponse(client.memory)
         self.organization = organization.OrganizationResourceWithRawResponse(client.organization)
+        self.conversations = conversations.ConversationsResourceWithRawResponse(client.conversations)
 
         self.converse = to_raw_response_wrapper(
             client.converse,
@@ -639,6 +633,7 @@ class AsyncDatagridWithRawResponse:
         self.agents = agents.AsyncAgentsResourceWithRawResponse(client.agents)
         self.memory = memory.AsyncMemoryResourceWithRawResponse(client.memory)
         self.organization = organization.AsyncOrganizationResourceWithRawResponse(client.organization)
+        self.conversations = conversations.AsyncConversationsResourceWithRawResponse(client.conversations)
 
         self.converse = async_to_raw_response_wrapper(
             client.converse,
@@ -656,6 +651,7 @@ class DatagridWithStreamedResponse:
         self.agents = agents.AgentsResourceWithStreamingResponse(client.agents)
         self.memory = memory.MemoryResourceWithStreamingResponse(client.memory)
         self.organization = organization.OrganizationResourceWithStreamingResponse(client.organization)
+        self.conversations = conversations.ConversationsResourceWithStreamingResponse(client.conversations)
 
         self.converse = to_streamed_response_wrapper(
             client.converse,
@@ -673,6 +669,7 @@ class AsyncDatagridWithStreamedResponse:
         self.agents = agents.AsyncAgentsResourceWithStreamingResponse(client.agents)
         self.memory = memory.AsyncMemoryResourceWithStreamingResponse(client.memory)
         self.organization = organization.AsyncOrganizationResourceWithStreamingResponse(client.organization)
+        self.conversations = conversations.AsyncConversationsResourceWithStreamingResponse(client.conversations)
 
         self.converse = async_to_streamed_response_wrapper(
             client.converse,

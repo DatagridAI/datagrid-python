@@ -20,32 +20,27 @@ class TestAgents:
 
     @parametrize
     def test_method_create(self, client: Datagrid) -> None:
-        agent = client.agents.create(
-            name="name",
-        )
+        agent = client.agents.create()
         assert_matches_type(Agent, agent, path=["response"])
 
     @parametrize
     def test_method_create_with_all_params(self, client: Datagrid) -> None:
         agent = client.agents.create(
-            name="name",
-            agent_model="magpie-1",
-            agent_tools=["data_analysis"],
+            agent_model="magpie-1.1",
             custom_prompt="custom_prompt",
-            description="description",
-            disabled_agent_tools=["data_analysis"],
+            disabled_tools=["data_analysis"],
             knowledge_ids=["string"],
-            llm_model="gemini-1.5-flash-001",
+            llm_model="gemini-2.5-pro",
+            name="name",
             planning_prompt="planning_prompt",
             system_prompt="system_prompt",
+            tools=["data_analysis"],
         )
         assert_matches_type(Agent, agent, path=["response"])
 
     @parametrize
     def test_raw_response_create(self, client: Datagrid) -> None:
-        response = client.agents.with_raw_response.create(
-            name="name",
-        )
+        response = client.agents.with_raw_response.create()
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -54,9 +49,7 @@ class TestAgents:
 
     @parametrize
     def test_streaming_response_create(self, client: Datagrid) -> None:
-        with client.agents.with_streaming_response.create(
-            name="name",
-        ) as response:
+        with client.agents.with_streaming_response.create() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
@@ -114,16 +107,15 @@ class TestAgents:
     def test_method_update_with_all_params(self, client: Datagrid) -> None:
         agent = client.agents.update(
             agent_id="agent_id",
-            agent_model="magpie-1",
-            agent_tools=["data_analysis"],
+            agent_model="magpie-1.1",
             custom_prompt="custom_prompt",
-            description="description",
-            disabled_agent_tools=["data_analysis"],
+            disabled_tools=["data_analysis"],
             knowledge_ids=["string"],
-            llm_model="gemini-1.5-flash-001",
+            llm_model="gemini-2.5-pro",
             name="name",
             planning_prompt="planning_prompt",
             system_prompt="system_prompt",
+            tools=["data_analysis"],
         )
         assert_matches_type(Agent, agent, path=["response"])
 
@@ -238,32 +230,27 @@ class TestAsyncAgents:
 
     @parametrize
     async def test_method_create(self, async_client: AsyncDatagrid) -> None:
-        agent = await async_client.agents.create(
-            name="name",
-        )
+        agent = await async_client.agents.create()
         assert_matches_type(Agent, agent, path=["response"])
 
     @parametrize
     async def test_method_create_with_all_params(self, async_client: AsyncDatagrid) -> None:
         agent = await async_client.agents.create(
-            name="name",
-            agent_model="magpie-1",
-            agent_tools=["data_analysis"],
+            agent_model="magpie-1.1",
             custom_prompt="custom_prompt",
-            description="description",
-            disabled_agent_tools=["data_analysis"],
+            disabled_tools=["data_analysis"],
             knowledge_ids=["string"],
-            llm_model="gemini-1.5-flash-001",
+            llm_model="gemini-2.5-pro",
+            name="name",
             planning_prompt="planning_prompt",
             system_prompt="system_prompt",
+            tools=["data_analysis"],
         )
         assert_matches_type(Agent, agent, path=["response"])
 
     @parametrize
     async def test_raw_response_create(self, async_client: AsyncDatagrid) -> None:
-        response = await async_client.agents.with_raw_response.create(
-            name="name",
-        )
+        response = await async_client.agents.with_raw_response.create()
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -272,9 +259,7 @@ class TestAsyncAgents:
 
     @parametrize
     async def test_streaming_response_create(self, async_client: AsyncDatagrid) -> None:
-        async with async_client.agents.with_streaming_response.create(
-            name="name",
-        ) as response:
+        async with async_client.agents.with_streaming_response.create() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
@@ -332,16 +317,15 @@ class TestAsyncAgents:
     async def test_method_update_with_all_params(self, async_client: AsyncDatagrid) -> None:
         agent = await async_client.agents.update(
             agent_id="agent_id",
-            agent_model="magpie-1",
-            agent_tools=["data_analysis"],
+            agent_model="magpie-1.1",
             custom_prompt="custom_prompt",
-            description="description",
-            disabled_agent_tools=["data_analysis"],
+            disabled_tools=["data_analysis"],
             knowledge_ids=["string"],
-            llm_model="gemini-1.5-flash-001",
+            llm_model="gemini-2.5-pro",
             name="name",
             planning_prompt="planning_prompt",
             system_prompt="system_prompt",
+            tools=["data_analysis"],
         )
         assert_matches_type(Agent, agent, path=["response"])
 
