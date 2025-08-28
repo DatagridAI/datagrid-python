@@ -4,9 +4,9 @@ from typing import List, Optional
 from datetime import datetime
 from typing_extensions import Literal
 
-from .._models import BaseModel
+from ..._models import BaseModel
 
-__all__ = ["ConverseResponse", "Citation", "CitationKnowledge", "Content", "Credits"]
+__all__ = ["Message", "Citation", "CitationKnowledge", "Content", "Credits"]
 
 
 class CitationKnowledge(BaseModel):
@@ -38,7 +38,7 @@ class Credits(BaseModel):
     """The number of credits consumed by the converse call."""
 
 
-class ConverseResponse(BaseModel):
+class Message(BaseModel):
     id: str
     """The message identifier."""
 

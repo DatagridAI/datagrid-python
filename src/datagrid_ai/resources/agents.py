@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import List, Iterable, Optional
+from typing import List, Union, Iterable, Optional
 from typing_extensions import Literal
 
 import httpx
@@ -21,7 +21,6 @@ from .._response import (
 from ..pagination import SyncCursorIDPage, AsyncCursorIDPage
 from ..types.agent import Agent
 from .._base_client import AsyncPaginator, make_request_options
-from ..types.agent_tools import AgentTools
 
 __all__ = ["AgentsResource", "AsyncAgentsResource"]
 
@@ -49,37 +48,38 @@ class AgentsResource(SyncAPIResource):
     def create(
         self,
         *,
-        name: str,
-        agent_model: Optional[Literal["magpie-1", "magpie-1.1", "magpie-1.1-flash"]] | NotGiven = NOT_GIVEN,
-        agent_tools: Optional[Iterable[agent_create_params.AgentTool]] | NotGiven = NOT_GIVEN,
+        agent_model: Optional[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-1"]] | NotGiven = NOT_GIVEN,
         custom_prompt: Optional[str] | NotGiven = NOT_GIVEN,
-        description: Optional[str] | NotGiven = NOT_GIVEN,
-        disabled_agent_tools: Optional[List[AgentTools]] | NotGiven = NOT_GIVEN,
+        disabled_tools: Optional[Iterable[agent_create_params.DisabledTool]] | NotGiven = NOT_GIVEN,
         knowledge_ids: Optional[List[str]] | NotGiven = NOT_GIVEN,
-        llm_model: Optional[
+        llm_model: Union[
             Literal[
-                "gemini-1.5-flash-001",
-                "gemini-1.5-flash-002",
+                "gemini-2.5-pro",
+                "gemini-2.5-pro-preview-05-06",
+                "gemini-2.5-flash",
+                "gemini-2.5-flash-preview-04-17",
+                "gemini-2.5-flash-lite",
+                "gpt-5",
                 "gemini-2.0-flash-001",
                 "gemini-2.0-flash",
-                "gemini-2.5-flash-preview-04-17",
-                "gemini-2.5-flash",
-                "gemini-2.5-flash-lite",
                 "gemini-1.5-pro-001",
                 "gemini-1.5-pro-002",
-                "gemini-2.5-pro-preview-05-06",
-                "gemini-2.5-pro",
+                "gemini-1.5-flash-002",
+                "gemini-1.5-flash-001",
                 "chatgpt-4o-latest",
+                "gpt-4o",
                 "gpt-4",
                 "gpt-4-turbo",
-                "gpt-4o",
                 "gpt-4o-mini",
-                "gpt-5",
-            ]
+            ],
+            str,
+            None,
         ]
         | NotGiven = NOT_GIVEN,
+        name: Optional[str] | NotGiven = NOT_GIVEN,
         planning_prompt: Optional[str] | NotGiven = NOT_GIVEN,
         system_prompt: Optional[str] | NotGiven = NOT_GIVEN,
+        tools: Optional[Iterable[agent_create_params.Tool]] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -91,11 +91,34 @@ class AgentsResource(SyncAPIResource):
         Create a new agent
 
         Args:
-          name: The name of the agent
-
           agent_model: The version of Datagrid's agent brain.
 
-          agent_tools: Array of the agent tools to enable. If not provided - default tools of the agent
+              - magpie-1.1 is the default and most powerful model.
+              - magpie-1.1-flash is a faster model useful for RAG usecases, it currently only
+                supports semantic_search tool. Structured outputs are not supported with this
+                model.
+
+          custom_prompt: Use custom prompt to instruct the style and formatting of the agent's response
+
+          disabled_tools: Array of the agent tools to disable. Disabling is performed after the
+              'agent_tools' rules are applied. For example, agent_tools: null and
+              disabled_tools: [data_analysis] will enable everything but the data_analysis
+              tool. If nothing or [] is provided, nothing is disabled and therefore only the
+              agent_tools setting is relevant.
+
+          knowledge_ids: Array of Knowledge IDs the agent should use during the converse. When ommited,
+              all knowledge is used.
+
+          llm_model: The LLM used to generate responses.
+
+          name: The name of the agent
+
+          planning_prompt: Define the planning strategy your AI Agent should use when breaking down tasks
+              and solving problems
+
+          system_prompt: Directs your AI Agent's operational behavior.
+
+          tools: Array of the agent tools to enable. If not provided - default tools of the agent
               are used. If empty list provided - none of the tools are used. If null
               provided - all tools are used. When connection_id is set for a tool, it will use
               that specific connection instead of the default one.
@@ -140,27 +163,6 @@ class AgentsResource(SyncAPIResource):
               - company_prospect_researcher: Agents provide information about companies
               - people_prospect_researcher: Agents provide information about people
 
-          custom_prompt: Use custom prompt to instruct the style and formatting of the agent's response
-
-          description: Description of the agent
-
-          disabled_agent_tools: Array of the agent tools to disable. Disabling is performed after the
-              'agent_tools' rules are applied. For example, agent_tools: null and
-              disabled_agent_tools: [data_analysis] will enable everything but the
-              data_analysis tool. If nothing or [] is provided, nothing is disabled and
-              therefore only the agent_tools setting is relevant.
-
-          knowledge_ids: Array of Knowledge IDs the agent should use during the converse. If not
-              provided - default settings are used. If null provided - all available knowledge
-              is used.
-
-          llm_model: The LLM used to generate responses.
-
-          planning_prompt: Define the planning strategy your AI Agent should use when breaking down tasks
-              and solving problems
-
-          system_prompt: Directs your AI Agent's operational behavior.
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -173,16 +175,15 @@ class AgentsResource(SyncAPIResource):
             "/agents",
             body=maybe_transform(
                 {
-                    "name": name,
                     "agent_model": agent_model,
-                    "agent_tools": agent_tools,
                     "custom_prompt": custom_prompt,
-                    "description": description,
-                    "disabled_agent_tools": disabled_agent_tools,
+                    "disabled_tools": disabled_tools,
                     "knowledge_ids": knowledge_ids,
                     "llm_model": llm_model,
+                    "name": name,
                     "planning_prompt": planning_prompt,
                     "system_prompt": system_prompt,
+                    "tools": tools,
                 },
                 agent_create_params.AgentCreateParams,
             ),
@@ -229,37 +230,38 @@ class AgentsResource(SyncAPIResource):
         self,
         agent_id: str,
         *,
-        agent_model: Optional[Literal["magpie-1", "magpie-1.1", "magpie-1.1-flash"]] | NotGiven = NOT_GIVEN,
-        agent_tools: Optional[Iterable[agent_update_params.AgentTool]] | NotGiven = NOT_GIVEN,
+        agent_model: Optional[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-1"]] | NotGiven = NOT_GIVEN,
         custom_prompt: Optional[str] | NotGiven = NOT_GIVEN,
-        description: Optional[str] | NotGiven = NOT_GIVEN,
-        disabled_agent_tools: Optional[List[AgentTools]] | NotGiven = NOT_GIVEN,
+        disabled_tools: Optional[Iterable[agent_update_params.DisabledTool]] | NotGiven = NOT_GIVEN,
         knowledge_ids: Optional[List[str]] | NotGiven = NOT_GIVEN,
-        llm_model: Optional[
+        llm_model: Union[
             Literal[
-                "gemini-1.5-flash-001",
-                "gemini-1.5-flash-002",
+                "gemini-2.5-pro",
+                "gemini-2.5-pro-preview-05-06",
+                "gemini-2.5-flash",
+                "gemini-2.5-flash-preview-04-17",
+                "gemini-2.5-flash-lite",
+                "gpt-5",
                 "gemini-2.0-flash-001",
                 "gemini-2.0-flash",
-                "gemini-2.5-flash-preview-04-17",
-                "gemini-2.5-flash",
-                "gemini-2.5-flash-lite",
                 "gemini-1.5-pro-001",
                 "gemini-1.5-pro-002",
-                "gemini-2.5-pro-preview-05-06",
-                "gemini-2.5-pro",
+                "gemini-1.5-flash-002",
+                "gemini-1.5-flash-001",
                 "chatgpt-4o-latest",
+                "gpt-4o",
                 "gpt-4",
                 "gpt-4-turbo",
-                "gpt-4o",
                 "gpt-4o-mini",
-                "gpt-5",
-            ]
+            ],
+            str,
+            None,
         ]
         | NotGiven = NOT_GIVEN,
-        name: str | NotGiven = NOT_GIVEN,
+        name: Optional[str] | NotGiven = NOT_GIVEN,
         planning_prompt: Optional[str] | NotGiven = NOT_GIVEN,
         system_prompt: Optional[str] | NotGiven = NOT_GIVEN,
+        tools: Optional[Iterable[agent_update_params.Tool]] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -273,7 +275,32 @@ class AgentsResource(SyncAPIResource):
         Args:
           agent_model: The version of Datagrid's agent brain.
 
-          agent_tools: Array of the agent tools to enable. If not provided - default tools of the agent
+              - magpie-1.1 is the default and most powerful model.
+              - magpie-1.1-flash is a faster model useful for RAG usecases, it currently only
+                supports semantic_search tool. Structured outputs are not supported with this
+                model.
+
+          custom_prompt: Use custom prompt to instruct the style and formatting of the agent's response
+
+          disabled_tools: Array of the agent tools to disable. Disabling is performed after the
+              'agent_tools' rules are applied. For example, agent_tools: null and
+              disabled_tools: [data_analysis] will enable everything but the data_analysis
+              tool. If nothing or [] is provided, nothing is disabled and therefore only the
+              agent_tools setting is relevant.
+
+          knowledge_ids: Array of Knowledge IDs the agent should use during the converse. When ommited,
+              all knowledge is used.
+
+          llm_model: The LLM used to generate responses.
+
+          name: The name of the agent
+
+          planning_prompt: Define the planning strategy your AI Agent should use when breaking down tasks
+              and solving problems
+
+          system_prompt: Directs your AI Agent's operational behavior.
+
+          tools: Array of the agent tools to enable. If not provided - default tools of the agent
               are used. If empty list provided - none of the tools are used. If null
               provided - all tools are used. When connection_id is set for a tool, it will use
               that specific connection instead of the default one.
@@ -318,29 +345,6 @@ class AgentsResource(SyncAPIResource):
               - company_prospect_researcher: Agents provide information about companies
               - people_prospect_researcher: Agents provide information about people
 
-          custom_prompt: Use custom prompt to instruct the style and formatting of the agent's response
-
-          description: Description of the agent
-
-          disabled_agent_tools: Array of the agent tools to disable. Disabling is performed after the
-              'agent_tools' rules are applied. For example, agent_tools: null and
-              disabled_agent_tools: [data_analysis] will enable everything but the
-              data_analysis tool. If nothing or [] is provided, nothing is disabled and
-              therefore only the agent_tools setting is relevant.
-
-          knowledge_ids: Array of Knowledge IDs the agent should use during the converse. If not
-              provided - default settings are used. If null provided - all available knowledge
-              is used.
-
-          llm_model: The LLM used to generate responses.
-
-          name: The name of the agent
-
-          planning_prompt: Define the planning strategy your AI Agent should use when breaking down tasks
-              and solving problems
-
-          system_prompt: Directs your AI Agent's operational behavior.
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -356,15 +360,14 @@ class AgentsResource(SyncAPIResource):
             body=maybe_transform(
                 {
                     "agent_model": agent_model,
-                    "agent_tools": agent_tools,
                     "custom_prompt": custom_prompt,
-                    "description": description,
-                    "disabled_agent_tools": disabled_agent_tools,
+                    "disabled_tools": disabled_tools,
                     "knowledge_ids": knowledge_ids,
                     "llm_model": llm_model,
                     "name": name,
                     "planning_prompt": planning_prompt,
                     "system_prompt": system_prompt,
+                    "tools": tools,
                 },
                 agent_update_params.AgentUpdateParams,
             ),
@@ -489,37 +492,38 @@ class AsyncAgentsResource(AsyncAPIResource):
     async def create(
         self,
         *,
-        name: str,
-        agent_model: Optional[Literal["magpie-1", "magpie-1.1", "magpie-1.1-flash"]] | NotGiven = NOT_GIVEN,
-        agent_tools: Optional[Iterable[agent_create_params.AgentTool]] | NotGiven = NOT_GIVEN,
+        agent_model: Optional[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-1"]] | NotGiven = NOT_GIVEN,
         custom_prompt: Optional[str] | NotGiven = NOT_GIVEN,
-        description: Optional[str] | NotGiven = NOT_GIVEN,
-        disabled_agent_tools: Optional[List[AgentTools]] | NotGiven = NOT_GIVEN,
+        disabled_tools: Optional[Iterable[agent_create_params.DisabledTool]] | NotGiven = NOT_GIVEN,
         knowledge_ids: Optional[List[str]] | NotGiven = NOT_GIVEN,
-        llm_model: Optional[
+        llm_model: Union[
             Literal[
-                "gemini-1.5-flash-001",
-                "gemini-1.5-flash-002",
+                "gemini-2.5-pro",
+                "gemini-2.5-pro-preview-05-06",
+                "gemini-2.5-flash",
+                "gemini-2.5-flash-preview-04-17",
+                "gemini-2.5-flash-lite",
+                "gpt-5",
                 "gemini-2.0-flash-001",
                 "gemini-2.0-flash",
-                "gemini-2.5-flash-preview-04-17",
-                "gemini-2.5-flash",
-                "gemini-2.5-flash-lite",
                 "gemini-1.5-pro-001",
                 "gemini-1.5-pro-002",
-                "gemini-2.5-pro-preview-05-06",
-                "gemini-2.5-pro",
+                "gemini-1.5-flash-002",
+                "gemini-1.5-flash-001",
                 "chatgpt-4o-latest",
+                "gpt-4o",
                 "gpt-4",
                 "gpt-4-turbo",
-                "gpt-4o",
                 "gpt-4o-mini",
-                "gpt-5",
-            ]
+            ],
+            str,
+            None,
         ]
         | NotGiven = NOT_GIVEN,
+        name: Optional[str] | NotGiven = NOT_GIVEN,
         planning_prompt: Optional[str] | NotGiven = NOT_GIVEN,
         system_prompt: Optional[str] | NotGiven = NOT_GIVEN,
+        tools: Optional[Iterable[agent_create_params.Tool]] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -531,11 +535,34 @@ class AsyncAgentsResource(AsyncAPIResource):
         Create a new agent
 
         Args:
-          name: The name of the agent
-
           agent_model: The version of Datagrid's agent brain.
 
-          agent_tools: Array of the agent tools to enable. If not provided - default tools of the agent
+              - magpie-1.1 is the default and most powerful model.
+              - magpie-1.1-flash is a faster model useful for RAG usecases, it currently only
+                supports semantic_search tool. Structured outputs are not supported with this
+                model.
+
+          custom_prompt: Use custom prompt to instruct the style and formatting of the agent's response
+
+          disabled_tools: Array of the agent tools to disable. Disabling is performed after the
+              'agent_tools' rules are applied. For example, agent_tools: null and
+              disabled_tools: [data_analysis] will enable everything but the data_analysis
+              tool. If nothing or [] is provided, nothing is disabled and therefore only the
+              agent_tools setting is relevant.
+
+          knowledge_ids: Array of Knowledge IDs the agent should use during the converse. When ommited,
+              all knowledge is used.
+
+          llm_model: The LLM used to generate responses.
+
+          name: The name of the agent
+
+          planning_prompt: Define the planning strategy your AI Agent should use when breaking down tasks
+              and solving problems
+
+          system_prompt: Directs your AI Agent's operational behavior.
+
+          tools: Array of the agent tools to enable. If not provided - default tools of the agent
               are used. If empty list provided - none of the tools are used. If null
               provided - all tools are used. When connection_id is set for a tool, it will use
               that specific connection instead of the default one.
@@ -580,27 +607,6 @@ class AsyncAgentsResource(AsyncAPIResource):
               - company_prospect_researcher: Agents provide information about companies
               - people_prospect_researcher: Agents provide information about people
 
-          custom_prompt: Use custom prompt to instruct the style and formatting of the agent's response
-
-          description: Description of the agent
-
-          disabled_agent_tools: Array of the agent tools to disable. Disabling is performed after the
-              'agent_tools' rules are applied. For example, agent_tools: null and
-              disabled_agent_tools: [data_analysis] will enable everything but the
-              data_analysis tool. If nothing or [] is provided, nothing is disabled and
-              therefore only the agent_tools setting is relevant.
-
-          knowledge_ids: Array of Knowledge IDs the agent should use during the converse. If not
-              provided - default settings are used. If null provided - all available knowledge
-              is used.
-
-          llm_model: The LLM used to generate responses.
-
-          planning_prompt: Define the planning strategy your AI Agent should use when breaking down tasks
-              and solving problems
-
-          system_prompt: Directs your AI Agent's operational behavior.
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -613,16 +619,15 @@ class AsyncAgentsResource(AsyncAPIResource):
             "/agents",
             body=await async_maybe_transform(
                 {
-                    "name": name,
                     "agent_model": agent_model,
-                    "agent_tools": agent_tools,
                     "custom_prompt": custom_prompt,
-                    "description": description,
-                    "disabled_agent_tools": disabled_agent_tools,
+                    "disabled_tools": disabled_tools,
                     "knowledge_ids": knowledge_ids,
                     "llm_model": llm_model,
+                    "name": name,
                     "planning_prompt": planning_prompt,
                     "system_prompt": system_prompt,
+                    "tools": tools,
                 },
                 agent_create_params.AgentCreateParams,
             ),
@@ -669,37 +674,38 @@ class AsyncAgentsResource(AsyncAPIResource):
         self,
         agent_id: str,
         *,
-        agent_model: Optional[Literal["magpie-1", "magpie-1.1", "magpie-1.1-flash"]] | NotGiven = NOT_GIVEN,
-        agent_tools: Optional[Iterable[agent_update_params.AgentTool]] | NotGiven = NOT_GIVEN,
+        agent_model: Optional[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-1"]] | NotGiven = NOT_GIVEN,
         custom_prompt: Optional[str] | NotGiven = NOT_GIVEN,
-        description: Optional[str] | NotGiven = NOT_GIVEN,
-        disabled_agent_tools: Optional[List[AgentTools]] | NotGiven = NOT_GIVEN,
+        disabled_tools: Optional[Iterable[agent_update_params.DisabledTool]] | NotGiven = NOT_GIVEN,
         knowledge_ids: Optional[List[str]] | NotGiven = NOT_GIVEN,
-        llm_model: Optional[
+        llm_model: Union[
             Literal[
-                "gemini-1.5-flash-001",
-                "gemini-1.5-flash-002",
+                "gemini-2.5-pro",
+                "gemini-2.5-pro-preview-05-06",
+                "gemini-2.5-flash",
+                "gemini-2.5-flash-preview-04-17",
+                "gemini-2.5-flash-lite",
+                "gpt-5",
                 "gemini-2.0-flash-001",
                 "gemini-2.0-flash",
-                "gemini-2.5-flash-preview-04-17",
-                "gemini-2.5-flash",
-                "gemini-2.5-flash-lite",
                 "gemini-1.5-pro-001",
                 "gemini-1.5-pro-002",
-                "gemini-2.5-pro-preview-05-06",
-                "gemini-2.5-pro",
+                "gemini-1.5-flash-002",
+                "gemini-1.5-flash-001",
                 "chatgpt-4o-latest",
+                "gpt-4o",
                 "gpt-4",
                 "gpt-4-turbo",
-                "gpt-4o",
                 "gpt-4o-mini",
-                "gpt-5",
-            ]
+            ],
+            str,
+            None,
         ]
         | NotGiven = NOT_GIVEN,
-        name: str | NotGiven = NOT_GIVEN,
+        name: Optional[str] | NotGiven = NOT_GIVEN,
         planning_prompt: Optional[str] | NotGiven = NOT_GIVEN,
         system_prompt: Optional[str] | NotGiven = NOT_GIVEN,
+        tools: Optional[Iterable[agent_update_params.Tool]] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -713,7 +719,32 @@ class AsyncAgentsResource(AsyncAPIResource):
         Args:
           agent_model: The version of Datagrid's agent brain.
 
-          agent_tools: Array of the agent tools to enable. If not provided - default tools of the agent
+              - magpie-1.1 is the default and most powerful model.
+              - magpie-1.1-flash is a faster model useful for RAG usecases, it currently only
+                supports semantic_search tool. Structured outputs are not supported with this
+                model.
+
+          custom_prompt: Use custom prompt to instruct the style and formatting of the agent's response
+
+          disabled_tools: Array of the agent tools to disable. Disabling is performed after the
+              'agent_tools' rules are applied. For example, agent_tools: null and
+              disabled_tools: [data_analysis] will enable everything but the data_analysis
+              tool. If nothing or [] is provided, nothing is disabled and therefore only the
+              agent_tools setting is relevant.
+
+          knowledge_ids: Array of Knowledge IDs the agent should use during the converse. When ommited,
+              all knowledge is used.
+
+          llm_model: The LLM used to generate responses.
+
+          name: The name of the agent
+
+          planning_prompt: Define the planning strategy your AI Agent should use when breaking down tasks
+              and solving problems
+
+          system_prompt: Directs your AI Agent's operational behavior.
+
+          tools: Array of the agent tools to enable. If not provided - default tools of the agent
               are used. If empty list provided - none of the tools are used. If null
               provided - all tools are used. When connection_id is set for a tool, it will use
               that specific connection instead of the default one.
@@ -758,29 +789,6 @@ class AsyncAgentsResource(AsyncAPIResource):
               - company_prospect_researcher: Agents provide information about companies
               - people_prospect_researcher: Agents provide information about people
 
-          custom_prompt: Use custom prompt to instruct the style and formatting of the agent's response
-
-          description: Description of the agent
-
-          disabled_agent_tools: Array of the agent tools to disable. Disabling is performed after the
-              'agent_tools' rules are applied. For example, agent_tools: null and
-              disabled_agent_tools: [data_analysis] will enable everything but the
-              data_analysis tool. If nothing or [] is provided, nothing is disabled and
-              therefore only the agent_tools setting is relevant.
-
-          knowledge_ids: Array of Knowledge IDs the agent should use during the converse. If not
-              provided - default settings are used. If null provided - all available knowledge
-              is used.
-
-          llm_model: The LLM used to generate responses.
-
-          name: The name of the agent
-
-          planning_prompt: Define the planning strategy your AI Agent should use when breaking down tasks
-              and solving problems
-
-          system_prompt: Directs your AI Agent's operational behavior.
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -796,15 +804,14 @@ class AsyncAgentsResource(AsyncAPIResource):
             body=await async_maybe_transform(
                 {
                     "agent_model": agent_model,
-                    "agent_tools": agent_tools,
                     "custom_prompt": custom_prompt,
-                    "description": description,
-                    "disabled_agent_tools": disabled_agent_tools,
+                    "disabled_tools": disabled_tools,
                     "knowledge_ids": knowledge_ids,
                     "llm_model": llm_model,
                     "name": name,
                     "planning_prompt": planning_prompt,
                     "system_prompt": system_prompt,
+                    "tools": tools,
                 },
                 agent_update_params.AgentUpdateParams,
             ),

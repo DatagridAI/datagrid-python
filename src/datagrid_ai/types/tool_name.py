@@ -2,9 +2,9 @@
 
 from typing_extensions import Literal, TypeAlias
 
-__all__ = ["AgentTools"]
+__all__ = ["ToolName"]
 
-AgentTools: TypeAlias = Literal[
+ToolName: TypeAlias = Literal[
     "data_analysis",
     "semantic_search",
     "agent_memory",
@@ -27,7 +27,6 @@ AgentTools: TypeAlias = Literal[
     "pdf_manipulation",
     "pdf_generator",
     "acc",
-    "acc_forms",
     "docusign",
     "webflow",
     "hubspot",

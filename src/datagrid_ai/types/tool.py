@@ -3,13 +3,13 @@
 from typing import Optional
 
 from .._models import BaseModel
-from .agent_tools import AgentTools
+from .tool_name import ToolName
 
-__all__ = ["AgentToolItem"]
+__all__ = ["Tool"]
 
 
-class AgentToolItem(BaseModel):
-    name: AgentTools
+class Tool(BaseModel):
+    name: ToolName
 
     connection_id: Optional[str] = None
     """The ID of the connection to use for the tool."""

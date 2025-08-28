@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from typing import List, Optional
-from typing_extensions import TypedDict
+from typing_extensions import Required, TypedDict
 
 from .._types import FileTypes
 
@@ -11,7 +11,7 @@ __all__ = ["KnowledgeCreateParams"]
 
 
 class KnowledgeCreateParams(TypedDict, total=False):
-    files: Optional[List[FileTypes]]
+    files: Required[List[FileTypes]]
     """The files to be uploaded and learned.
 
     Supported media types are `pdf`, `json`, `csv`, `text`, `png`, `jpeg`, `excel`,
