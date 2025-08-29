@@ -17,7 +17,7 @@ The REST API documentation can be found on [developers.datagrid.com](https://dev
 
 ```sh
 # install from PyPI
-pip install --pre datagrid_ai
+pip install datagrid_ai
 ```
 
 ## Usage
@@ -77,7 +77,7 @@ You can enable this by installing `aiohttp`:
 
 ```sh
 # install from PyPI
-pip install --pre datagrid_ai[aiohttp]
+pip install datagrid_ai[aiohttp]
 ```
 
 Then you can enable it by instantiating the client with `http_client=DefaultAioHttpClient()`:
