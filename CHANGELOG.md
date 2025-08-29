@@ -1,5 +1,31 @@
 # Changelog
 
+## 0.1.0 (2025-08-29)
+
+Full Changelog: [v0.1.0-alpha.20...v0.1.0](https://github.com/DatagridAI/datagrid-python/compare/v0.1.0-alpha.20...v0.1.0)
+
+### Features
+
+* **api:** api update ([9830c85](https://github.com/DatagridAI/datagrid-python/commit/9830c85d05913c0899d49a8a6c0fd44ae0948ef9))
+* **api:** api update ([81db996](https://github.com/DatagridAI/datagrid-python/commit/81db996156d4bc8bd5783ee341de7d2bee808b4e))
+* **api:** api update ([1985dde](https://github.com/DatagridAI/datagrid-python/commit/1985dde9bb3b50bc2fdc88fb0f56835240be5734))
+* **api:** api update ([48c997c](https://github.com/DatagridAI/datagrid-python/commit/48c997c3cd8dd16cf6c950661a6ea2d5890ee13f))
+* **api:** manual updates ([6a44a7e](https://github.com/DatagridAI/datagrid-python/commit/6a44a7e1018e9f853a3b8e333c8ec4a7da4a8427))
+
+
+### Bug Fixes
+
+* avoid newer type syntax ([5021142](https://github.com/DatagridAI/datagrid-python/commit/502114289f2cc7e297a48a4d614152e3db2507e4))
+
+
+### Chores
+
+* **internal:** change ci workflow machines ([c4ae7e9](https://github.com/DatagridAI/datagrid-python/commit/c4ae7e9a443a9418472b28be67fe463c31f13c7d))
+* **internal:** update comment in script ([9883ad4](https://github.com/DatagridAI/datagrid-python/commit/9883ad402d2051934ca94a89dccfa0f449c2b58e))
+* **internal:** update pyright exclude list ([8d826f0](https://github.com/DatagridAI/datagrid-python/commit/8d826f0081c04b4fba88f8085f4b6623600e70e4))
+* update @stainless-api/prism-cli to v5.15.0 ([02a5780](https://github.com/DatagridAI/datagrid-python/commit/02a578058bc73d6fa93c4b594d7b2697a5721550))
+* update github action ([7c53335](https://github.com/DatagridAI/datagrid-python/commit/7c5333514d05ca6c79c2aa84046df4b2259e0314))
+
 ## 0.1.0-alpha.20 (2025-08-07)
 
 Full Changelog: [v0.1.0-alpha.19...v0.1.0-alpha.20](https://github.com/DatagridAI/datagrid-python/compare/v0.1.0-alpha.19...v0.1.0-alpha.20)
