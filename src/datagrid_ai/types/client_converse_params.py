@@ -17,6 +17,7 @@ __all__ = [
     "PromptInputItemListContentInputMessageContentListInputSecret",
     "Config",
     "ConfigAgentTool",
+    "ConfigDisabledAgentTool",
     "ConfigDisabledTool",
     "ConfigTool",
     "Text",
@@ -113,6 +114,8 @@ class PromptInputItemList(TypedDict, total=False):
 
 ConfigAgentTool: TypeAlias = Union[ToolName, ToolParam]
 
+ConfigDisabledAgentTool: TypeAlias = Union[ToolName, ToolParam]
+
 ConfigDisabledTool: TypeAlias = Union[ToolName, ToolParam]
 
 ConfigTool: TypeAlias = Union[ToolName, ToolParam, ToolParam]
@@ -134,7 +137,7 @@ class Config(TypedDict, total=False):
     custom_prompt: Optional[str]
     """Use custom prompt to instruct the style and formatting of the agent's response"""
 
-    disabled_agent_tools: Optional[Iterable[object]]
+    disabled_agent_tools: Optional[Iterable[Optional[Iterable[ConfigDisabledAgentTool]]]]
     """Deprecated, use disabled_tools instead"""
 
     disabled_tools: Optional[Iterable[ConfigDisabledTool]]
