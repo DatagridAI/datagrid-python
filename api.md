@@ -3,7 +3,7 @@
 Types:
 
 ```python
-from datagrid_ai.types import AgentToolItem, AgentTools, Properties, ConverseResponse
+from datagrid_ai.types import ConverseResponse, Properties
 ```
 
 Methods:
@@ -106,34 +106,29 @@ Methods:
 
 - <code title="get /search">client.search.<a href="./src/datagrid_ai/resources/search.py">search</a>(\*\*<a href="src/datagrid_ai/types/search_search_params.py">params</a>) -> <a href="./src/datagrid_ai/types/search_result_item.py">SyncCursorPage[SearchResultItem]</a></code>
 
-# Organization
-
-## Teamspaces
+# Agents
 
 Types:
 
 ```python
-from datagrid_ai.types.organization import Teamspace
+from datagrid_ai.types import Agent
 ```
 
 Methods:
 
-- <code title="post /organization/teamspaces">client.organization.teamspaces.<a href="./src/datagrid_ai/resources/organization/teamspaces.py">create</a>(\*\*<a href="src/datagrid_ai/types/organization/teamspace_create_params.py">params</a>) -> <a href="./src/datagrid_ai/types/organization/teamspace.py">Teamspace</a></code>
-- <code title="get /organization/teamspaces/{teamspace_id}">client.organization.teamspaces.<a href="./src/datagrid_ai/resources/organization/teamspaces.py">retrieve</a>(teamspace_id) -> <a href="./src/datagrid_ai/types/organization/teamspace.py">Teamspace</a></code>
-- <code title="get /organization/teamspaces">client.organization.teamspaces.<a href="./src/datagrid_ai/resources/organization/teamspaces.py">list</a>(\*\*<a href="src/datagrid_ai/types/organization/teamspace_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/organization/teamspace.py">SyncCursorIDPage[Teamspace]</a></code>
-- <code title="patch /organization/teamspaces/{teamspace_id}">client.organization.teamspaces.<a href="./src/datagrid_ai/resources/organization/teamspaces.py">patch</a>(teamspace_id, \*\*<a href="src/datagrid_ai/types/organization/teamspace_patch_params.py">params</a>) -> <a href="./src/datagrid_ai/types/organization/teamspace.py">Teamspace</a></code>
+- <code title="post /agents">client.agents.<a href="./src/datagrid_ai/resources/agents.py">create</a>(\*\*<a href="src/datagrid_ai/types/agent_create_params.py">params</a>) -> <a href="./src/datagrid_ai/types/agent.py">Agent</a></code>
+- <code title="get /agents/{agent_id}">client.agents.<a href="./src/datagrid_ai/resources/agents.py">retrieve</a>(agent_id) -> <a href="./src/datagrid_ai/types/agent.py">Agent</a></code>
+- <code title="patch /agents/{agent_id}">client.agents.<a href="./src/datagrid_ai/resources/agents.py">update</a>(agent_id, \*\*<a href="src/datagrid_ai/types/agent_update_params.py">params</a>) -> <a href="./src/datagrid_ai/types/agent.py">Agent</a></code>
+- <code title="get /agents">client.agents.<a href="./src/datagrid_ai/resources/agents.py">list</a>(\*\*<a href="src/datagrid_ai/types/agent_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/agent.py">SyncCursorIDPage[Agent]</a></code>
+- <code title="delete /agents/{agent_id}">client.agents.<a href="./src/datagrid_ai/resources/agents.py">delete</a>(agent_id) -> None</code>
 
-## Credits
+# Tools
 
 Types:
 
 ```python
-from datagrid_ai.types.organization import CreditsReport
+from datagrid_ai.types import Tool, ToolName
 ```
-
-Methods:
-
-- <code title="get /organization/credits">client.organization.credits.<a href="./src/datagrid_ai/resources/organization/credits.py">get</a>() -> <a href="./src/datagrid_ai/types/organization/credits_report.py">CreditsReport</a></code>
 
 # Memory
 
@@ -165,3 +160,104 @@ from datagrid_ai.types import (
     ResizePayload,
 )
 ```
+
+# Organization
+
+## Users
+
+Types:
+
+```python
+from datagrid_ai.types.organization import OrganizationUser
+```
+
+Methods:
+
+- <code title="get /organization/users/{user_id}">client.organization.users.<a href="./src/datagrid_ai/resources/organization/users.py">retrieve</a>(user_id) -> <a href="./src/datagrid_ai/types/organization/organization_user.py">OrganizationUser</a></code>
+- <code title="patch /organization/users/{user_id}">client.organization.users.<a href="./src/datagrid_ai/resources/organization/users.py">update</a>(user_id, \*\*<a href="src/datagrid_ai/types/organization/user_update_params.py">params</a>) -> <a href="./src/datagrid_ai/types/organization/organization_user.py">OrganizationUser</a></code>
+- <code title="get /organization/users">client.organization.users.<a href="./src/datagrid_ai/resources/organization/users.py">list</a>(\*\*<a href="src/datagrid_ai/types/organization/user_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/organization/organization_user.py">SyncCursorIDPage[OrganizationUser]</a></code>
+
+## Teamspaces
+
+Types:
+
+```python
+from datagrid_ai.types.organization import Teamspace
+```
+
+Methods:
+
+- <code title="post /organization/teamspaces">client.organization.teamspaces.<a href="./src/datagrid_ai/resources/organization/teamspaces/teamspaces.py">create</a>(\*\*<a href="src/datagrid_ai/types/organization/teamspace_create_params.py">params</a>) -> <a href="./src/datagrid_ai/types/organization/teamspace.py">Teamspace</a></code>
+- <code title="get /organization/teamspaces/{teamspace_id}">client.organization.teamspaces.<a href="./src/datagrid_ai/resources/organization/teamspaces/teamspaces.py">retrieve</a>(teamspace_id) -> <a href="./src/datagrid_ai/types/organization/teamspace.py">Teamspace</a></code>
+- <code title="get /organization/teamspaces">client.organization.teamspaces.<a href="./src/datagrid_ai/resources/organization/teamspaces/teamspaces.py">list</a>(\*\*<a href="src/datagrid_ai/types/organization/teamspace_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/organization/teamspace.py">SyncCursorIDPage[Teamspace]</a></code>
+- <code title="patch /organization/teamspaces/{teamspace_id}">client.organization.teamspaces.<a href="./src/datagrid_ai/resources/organization/teamspaces/teamspaces.py">patch</a>(teamspace_id, \*\*<a href="src/datagrid_ai/types/organization/teamspace_patch_params.py">params</a>) -> <a href="./src/datagrid_ai/types/organization/teamspace.py">Teamspace</a></code>
+
+### Invites
+
+Types:
+
+```python
+from datagrid_ai.types.organization.teamspaces import TeamspaceInvite
+```
+
+Methods:
+
+- <code title="post /organization/teamspaces/{teamspace_id}/invites">client.organization.teamspaces.invites.<a href="./src/datagrid_ai/resources/organization/teamspaces/invites.py">create</a>(teamspace_id, \*\*<a href="src/datagrid_ai/types/organization/teamspaces/invite_create_params.py">params</a>) -> <a href="./src/datagrid_ai/types/organization/teamspaces/teamspace_invite.py">TeamspaceInvite</a></code>
+- <code title="get /organization/teamspaces/{teamspace_id}/invites/{invite_id}">client.organization.teamspaces.invites.<a href="./src/datagrid_ai/resources/organization/teamspaces/invites.py">retrieve</a>(invite_id, \*, teamspace_id) -> <a href="./src/datagrid_ai/types/organization/teamspaces/teamspace_invite.py">TeamspaceInvite</a></code>
+- <code title="get /organization/teamspaces/{teamspace_id}/invites">client.organization.teamspaces.invites.<a href="./src/datagrid_ai/resources/organization/teamspaces/invites.py">list</a>(teamspace_id, \*\*<a href="src/datagrid_ai/types/organization/teamspaces/invite_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/organization/teamspaces/teamspace_invite.py">SyncCursorIDPage[TeamspaceInvite]</a></code>
+- <code title="delete /organization/teamspaces/{teamspace_id}/invites/{invite_id}">client.organization.teamspaces.invites.<a href="./src/datagrid_ai/resources/organization/teamspaces/invites.py">delete</a>(invite_id, \*, teamspace_id) -> None</code>
+
+### Users
+
+Types:
+
+```python
+from datagrid_ai.types.organization.teamspaces import TeamspaceUser
+```
+
+Methods:
+
+- <code title="get /organization/teamspaces/{teamspace_id}/users/{user_id}">client.organization.teamspaces.users.<a href="./src/datagrid_ai/resources/organization/teamspaces/users.py">retrieve</a>(user_id, \*, teamspace_id) -> <a href="./src/datagrid_ai/types/organization/teamspaces/teamspace_user.py">TeamspaceUser</a></code>
+- <code title="patch /organization/teamspaces/{teamspace_id}/users/{user_id}">client.organization.teamspaces.users.<a href="./src/datagrid_ai/resources/organization/teamspaces/users.py">update</a>(user_id, \*, teamspace_id, \*\*<a href="src/datagrid_ai/types/organization/teamspaces/user_update_params.py">params</a>) -> <a href="./src/datagrid_ai/types/organization/teamspaces/teamspace_user.py">TeamspaceUser</a></code>
+- <code title="get /organization/teamspaces/{teamspace_id}/users">client.organization.teamspaces.users.<a href="./src/datagrid_ai/resources/organization/teamspaces/users.py">list</a>(teamspace_id, \*\*<a href="src/datagrid_ai/types/organization/teamspaces/user_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/organization/teamspaces/teamspace_user.py">SyncCursorIDPage[TeamspaceUser]</a></code>
+- <code title="delete /organization/teamspaces/{teamspace_id}/users/{user_id}">client.organization.teamspaces.users.<a href="./src/datagrid_ai/resources/organization/teamspaces/users.py">delete</a>(user_id, \*, teamspace_id) -> None</code>
+
+## Credits
+
+Types:
+
+```python
+from datagrid_ai.types.organization import CreditsReport
+```
+
+Methods:
+
+- <code title="get /organization/credits">client.organization.credits.<a href="./src/datagrid_ai/resources/organization/credits.py">get</a>() -> <a href="./src/datagrid_ai/types/organization/credits_report.py">CreditsReport</a></code>
+
+# Conversations
+
+Types:
+
+```python
+from datagrid_ai.types import Conversation
+```
+
+Methods:
+
+- <code title="post /conversations">client.conversations.<a href="./src/datagrid_ai/resources/conversations/conversations.py">create</a>(\*\*<a href="src/datagrid_ai/types/conversation_create_params.py">params</a>) -> <a href="./src/datagrid_ai/types/conversation.py">Conversation</a></code>
+- <code title="get /conversations/{conversation_id}">client.conversations.<a href="./src/datagrid_ai/resources/conversations/conversations.py">retrieve</a>(conversation_id) -> <a href="./src/datagrid_ai/types/conversation.py">Conversation</a></code>
+- <code title="get /conversations">client.conversations.<a href="./src/datagrid_ai/resources/conversations/conversations.py">list</a>(\*\*<a href="src/datagrid_ai/types/conversation_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/conversation.py">SyncCursorIDPage[Conversation]</a></code>
+- <code title="delete /conversations/{conversation_id}">client.conversations.<a href="./src/datagrid_ai/resources/conversations/conversations.py">delete</a>(conversation_id) -> None</code>
+
+## Messages
+
+Types:
+
+```python
+from datagrid_ai.types.conversations import Message
+```
+
+Methods:
+
+- <code title="get /conversations/{conversation_id}/messages/{message_id}">client.conversations.messages.<a href="./src/datagrid_ai/resources/conversations/messages.py">retrieve</a>(message_id, \*, conversation_id) -> <a href="./src/datagrid_ai/types/conversations/message.py">Message</a></code>
+- <code title="get /conversations/{conversation_id}/messages">client.conversations.messages.<a href="./src/datagrid_ai/resources/conversations/messages.py">list</a>(conversation_id, \*\*<a href="src/datagrid_ai/types/conversations/message_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/conversations/message.py">SyncCursorIDPage[Message]</a></code>

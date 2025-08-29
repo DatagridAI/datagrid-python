@@ -26,7 +26,9 @@ class TestKnowledge:
     @parametrize
     @skip
     def test_method_create(self, client: Datagrid) -> None:
-        knowledge = client.knowledge.create()
+        knowledge = client.knowledge.create(
+            files=[b"raw file contents"],
+        )
         assert_matches_type(Knowledge, knowledge, path=["response"])
 
     @parametrize
@@ -41,7 +43,9 @@ class TestKnowledge:
     @parametrize
     @skip
     def test_raw_response_create(self, client: Datagrid) -> None:
-        response = client.knowledge.with_raw_response.create()
+        response = client.knowledge.with_raw_response.create(
+            files=[b"raw file contents"],
+        )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -51,7 +55,9 @@ class TestKnowledge:
     @parametrize
     @skip
     def test_streaming_response_create(self, client: Datagrid) -> None:
-        with client.knowledge.with_streaming_response.create() as response:
+        with client.knowledge.with_streaming_response.create(
+            files=[b"raw file contents"],
+        ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
@@ -253,7 +259,9 @@ class TestAsyncKnowledge:
     @parametrize
     @skip
     async def test_method_create(self, async_client: AsyncDatagrid) -> None:
-        knowledge = await async_client.knowledge.create()
+        knowledge = await async_client.knowledge.create(
+            files=[b"raw file contents"],
+        )
         assert_matches_type(Knowledge, knowledge, path=["response"])
 
     @parametrize
@@ -268,7 +276,9 @@ class TestAsyncKnowledge:
     @parametrize
     @skip
     async def test_raw_response_create(self, async_client: AsyncDatagrid) -> None:
-        response = await async_client.knowledge.with_raw_response.create()
+        response = await async_client.knowledge.with_raw_response.create(
+            files=[b"raw file contents"],
+        )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -278,7 +288,9 @@ class TestAsyncKnowledge:
     @parametrize
     @skip
     async def test_streaming_response_create(self, async_client: AsyncDatagrid) -> None:
-        async with async_client.knowledge.with_streaming_response.create() as response:
+        async with async_client.knowledge.with_streaming_response.create(
+            files=[b"raw file contents"],
+        ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 

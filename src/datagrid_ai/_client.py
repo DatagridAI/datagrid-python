@@ -37,7 +37,7 @@ from ._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from .resources import files, search, secrets, knowledge, connectors, connections
+from .resources import files, agents, search, secrets, knowledge, connectors, connections
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
 from ._exceptions import DatagridError, APIStatusError
 from ._base_client import (
@@ -48,6 +48,7 @@ from ._base_client import (
 )
 from .resources.memory import memory
 from .resources.organization import organization
+from .resources.conversations import conversations
 from .types.converse_response import ConverseResponse
 
 __all__ = [
@@ -69,8 +70,10 @@ class Datagrid(SyncAPIClient):
     files: files.FilesResource
     secrets: secrets.SecretsResource
     search: search.SearchResource
-    organization: organization.OrganizationResource
+    agents: agents.AgentsResource
     memory: memory.MemoryResource
+    organization: organization.OrganizationResource
+    conversations: conversations.ConversationsResource
     with_raw_response: DatagridWithRawResponse
     with_streaming_response: DatagridWithStreamedResponse
 
@@ -142,8 +145,10 @@ class Datagrid(SyncAPIClient):
         self.files = files.FilesResource(self)
         self.secrets = secrets.SecretsResource(self)
         self.search = search.SearchResource(self)
-        self.organization = organization.OrganizationResource(self)
+        self.agents = agents.AgentsResource(self)
         self.memory = memory.MemoryResource(self)
+        self.organization = organization.OrganizationResource(self)
+        self.conversations = conversations.ConversationsResource(self)
         self.with_raw_response = DatagridWithRawResponse(self)
         self.with_streaming_response = DatagridWithStreamedResponse(self)
 
@@ -305,10 +310,10 @@ class Datagrid(SyncAPIClient):
         Args:
           prompt: A text prompt to send to the agent.
 
-          agent_id: The ID of the agent that should be used for the converse. If both agent_id and
-              conversation_id aren't provided - the new agent is created.
+          agent_id: The ID of the agent that should be used for the converse.
 
-          config: The config that overrides the default config of the agent for that converse.
+          config: Override the agent config for this converse call. This is applied as a partial
+              override.
 
           conversation_id: The ID of the present conversation to use. If it's not provided - a new
               conversation will be created.
@@ -398,8 +403,10 @@ class AsyncDatagrid(AsyncAPIClient):
     files: files.AsyncFilesResource
     secrets: secrets.AsyncSecretsResource
     search: search.AsyncSearchResource
-    organization: organization.AsyncOrganizationResource
+    agents: agents.AsyncAgentsResource
     memory: memory.AsyncMemoryResource
+    organization: organization.AsyncOrganizationResource
+    conversations: conversations.AsyncConversationsResource
     with_raw_response: AsyncDatagridWithRawResponse
     with_streaming_response: AsyncDatagridWithStreamedResponse
 
@@ -471,8 +478,10 @@ class AsyncDatagrid(AsyncAPIClient):
         self.files = files.AsyncFilesResource(self)
         self.secrets = secrets.AsyncSecretsResource(self)
         self.search = search.AsyncSearchResource(self)
-        self.organization = organization.AsyncOrganizationResource(self)
+        self.agents = agents.AsyncAgentsResource(self)
         self.memory = memory.AsyncMemoryResource(self)
+        self.organization = organization.AsyncOrganizationResource(self)
+        self.conversations = conversations.AsyncConversationsResource(self)
         self.with_raw_response = AsyncDatagridWithRawResponse(self)
         self.with_streaming_response = AsyncDatagridWithStreamedResponse(self)
 
@@ -634,10 +643,10 @@ class AsyncDatagrid(AsyncAPIClient):
         Args:
           prompt: A text prompt to send to the agent.
 
-          agent_id: The ID of the agent that should be used for the converse. If both agent_id and
-              conversation_id aren't provided - the new agent is created.
+          agent_id: The ID of the agent that should be used for the converse.
 
-          config: The config that overrides the default config of the agent for that converse.
+          config: Override the agent config for this converse call. This is applied as a partial
+              override.
 
           conversation_id: The ID of the present conversation to use. If it's not provided - a new
               conversation will be created.
@@ -728,8 +737,10 @@ class DatagridWithRawResponse:
         self.files = files.FilesResourceWithRawResponse(client.files)
         self.secrets = secrets.SecretsResourceWithRawResponse(client.secrets)
         self.search = search.SearchResourceWithRawResponse(client.search)
-        self.organization = organization.OrganizationResourceWithRawResponse(client.organization)
+        self.agents = agents.AgentsResourceWithRawResponse(client.agents)
         self.memory = memory.MemoryResourceWithRawResponse(client.memory)
+        self.organization = organization.OrganizationResourceWithRawResponse(client.organization)
+        self.conversations = conversations.ConversationsResourceWithRawResponse(client.conversations)
 
         self.converse = to_raw_response_wrapper(
             client.converse,
@@ -744,8 +755,10 @@ class AsyncDatagridWithRawResponse:
         self.files = files.AsyncFilesResourceWithRawResponse(client.files)
         self.secrets = secrets.AsyncSecretsResourceWithRawResponse(client.secrets)
         self.search = search.AsyncSearchResourceWithRawResponse(client.search)
-        self.organization = organization.AsyncOrganizationResourceWithRawResponse(client.organization)
+        self.agents = agents.AsyncAgentsResourceWithRawResponse(client.agents)
         self.memory = memory.AsyncMemoryResourceWithRawResponse(client.memory)
+        self.organization = organization.AsyncOrganizationResourceWithRawResponse(client.organization)
+        self.conversations = conversations.AsyncConversationsResourceWithRawResponse(client.conversations)
 
         self.converse = async_to_raw_response_wrapper(
             client.converse,
@@ -760,8 +773,10 @@ class DatagridWithStreamedResponse:
         self.files = files.FilesResourceWithStreamingResponse(client.files)
         self.secrets = secrets.SecretsResourceWithStreamingResponse(client.secrets)
         self.search = search.SearchResourceWithStreamingResponse(client.search)
-        self.organization = organization.OrganizationResourceWithStreamingResponse(client.organization)
+        self.agents = agents.AgentsResourceWithStreamingResponse(client.agents)
         self.memory = memory.MemoryResourceWithStreamingResponse(client.memory)
+        self.organization = organization.OrganizationResourceWithStreamingResponse(client.organization)
+        self.conversations = conversations.ConversationsResourceWithStreamingResponse(client.conversations)
 
         self.converse = to_streamed_response_wrapper(
             client.converse,
@@ -776,8 +791,10 @@ class AsyncDatagridWithStreamedResponse:
         self.files = files.AsyncFilesResourceWithStreamingResponse(client.files)
         self.secrets = secrets.AsyncSecretsResourceWithStreamingResponse(client.secrets)
         self.search = search.AsyncSearchResourceWithStreamingResponse(client.search)
-        self.organization = organization.AsyncOrganizationResourceWithStreamingResponse(client.organization)
+        self.agents = agents.AsyncAgentsResourceWithStreamingResponse(client.agents)
         self.memory = memory.AsyncMemoryResourceWithStreamingResponse(client.memory)
+        self.organization = organization.AsyncOrganizationResourceWithStreamingResponse(client.organization)
+        self.conversations = conversations.AsyncConversationsResourceWithStreamingResponse(client.conversations)
 
         self.converse = async_to_streamed_response_wrapper(
             client.converse,
