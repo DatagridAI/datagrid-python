@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import os
-from typing import Any, List, Union, Mapping, Iterable, Optional, overload
+from typing import Any, Union, Mapping, Iterable, Optional, overload
 from typing_extensions import Self, Literal, override
 
 import httpx
@@ -23,6 +23,7 @@ from ._types import (
     Transport,
     ProxiesTypes,
     RequestOptions,
+    SequenceNotStr,
 )
 from ._utils import (
     is_given,
@@ -235,7 +236,7 @@ class Datagrid(SyncAPIClient):
         config: Optional[client_converse_params.Config] | NotGiven = NOT_GIVEN,
         conversation_id: Optional[str] | NotGiven = NOT_GIVEN,
         generate_citations: Optional[bool] | NotGiven = NOT_GIVEN,
-        secret_ids: Optional[List[str]] | NotGiven = NOT_GIVEN,
+        secret_ids: Optional[SequenceNotStr[str]] | NotGiven = NOT_GIVEN,
         stream: Optional[Literal[False]] | NotGiven = NOT_GIVEN,
         text: Optional[client_converse_params.Text] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -568,7 +569,7 @@ class AsyncDatagrid(AsyncAPIClient):
         config: Optional[client_converse_params.Config] | NotGiven = NOT_GIVEN,
         conversation_id: Optional[str] | NotGiven = NOT_GIVEN,
         generate_citations: Optional[bool] | NotGiven = NOT_GIVEN,
-        secret_ids: Optional[List[str]] | NotGiven = NOT_GIVEN,
+        secret_ids: Optional[SequenceNotStr[str]] | NotGiven = NOT_GIVEN,
         stream: Literal[False] | NotGiven = NOT_GIVEN,
         text: Optional[client_converse_params.Text] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.

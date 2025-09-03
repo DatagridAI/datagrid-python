@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
-from typing import List, Union, Iterable, Optional
+from typing import Union, Iterable, Optional
 from typing_extensions import Literal, TypeAlias, TypedDict
 
+from .._types import SequenceNotStr
 from .tool_name import ToolName
 from .tool_param import ToolParam
 
@@ -33,7 +34,7 @@ class AgentCreateParams(TypedDict, total=False):
     therefore only the agent_tools setting is relevant.
     """
 
-    knowledge_ids: Optional[List[str]]
+    knowledge_ids: Optional[SequenceNotStr[str]]
     """Array of Knowledge IDs the agent should use during the converse.
 
     When ommited, all knowledge is used.

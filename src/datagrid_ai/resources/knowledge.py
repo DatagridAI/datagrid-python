@@ -2,12 +2,12 @@
 
 from __future__ import annotations
 
-from typing import List, Mapping, Optional, cast
+from typing import Mapping, Optional, cast
 
 import httpx
 
 from ..types import knowledge_list_params, knowledge_create_params, knowledge_update_params, knowledge_connect_params
-from .._types import NOT_GIVEN, Body, Query, Headers, NoneType, NotGiven, FileTypes
+from .._types import NOT_GIVEN, Body, Query, Headers, NoneType, NotGiven, FileTypes, SequenceNotStr
 from .._utils import extract_files, maybe_transform, deepcopy_minimal, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
@@ -49,7 +49,7 @@ class KnowledgeResource(SyncAPIResource):
     def create(
         self,
         *,
-        files: List[FileTypes],
+        files: SequenceNotStr[FileTypes],
         name: Optional[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -314,7 +314,7 @@ class AsyncKnowledgeResource(AsyncAPIResource):
     async def create(
         self,
         *,
-        files: List[FileTypes],
+        files: SequenceNotStr[FileTypes],
         name: Optional[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
