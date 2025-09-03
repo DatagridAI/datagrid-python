@@ -2,8 +2,10 @@
 
 from __future__ import annotations
 
-from typing import List, Optional
+from typing import Optional
 from typing_extensions import Literal, Required, TypedDict
+
+from ...._types import SequenceNotStr
 
 __all__ = ["InviteCreateParams", "Permissions"]
 
@@ -23,7 +25,7 @@ class Permissions(TypedDict, total=False):
     Available roles: admin, member, agents-only, agent-specific
     """
 
-    agent_ids: Optional[List[str]]
+    agent_ids: Optional[SequenceNotStr[str]]
     """
     The IDs of the agents that the user has access to, if the role is agent-specific
     """

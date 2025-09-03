@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
-from typing import List, Union, Iterable, Optional
+from typing import Union, Iterable, Optional
 from typing_extensions import Literal
 
 import httpx
 
 from ..types import agent_list_params, agent_create_params, agent_update_params
-from .._types import NOT_GIVEN, Body, Query, Headers, NoneType, NotGiven
+from .._types import NOT_GIVEN, Body, Query, Headers, NoneType, NotGiven, SequenceNotStr
 from .._utils import maybe_transform, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
@@ -51,7 +51,7 @@ class AgentsResource(SyncAPIResource):
         agent_model: Optional[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-1"]] | NotGiven = NOT_GIVEN,
         custom_prompt: Optional[str] | NotGiven = NOT_GIVEN,
         disabled_tools: Optional[Iterable[agent_create_params.DisabledTool]] | NotGiven = NOT_GIVEN,
-        knowledge_ids: Optional[List[str]] | NotGiven = NOT_GIVEN,
+        knowledge_ids: Optional[SequenceNotStr[str]] | NotGiven = NOT_GIVEN,
         llm_model: Union[
             Literal[
                 "gemini-2.5-pro",
@@ -233,7 +233,7 @@ class AgentsResource(SyncAPIResource):
         agent_model: Optional[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-1"]] | NotGiven = NOT_GIVEN,
         custom_prompt: Optional[str] | NotGiven = NOT_GIVEN,
         disabled_tools: Optional[Iterable[agent_update_params.DisabledTool]] | NotGiven = NOT_GIVEN,
-        knowledge_ids: Optional[List[str]] | NotGiven = NOT_GIVEN,
+        knowledge_ids: Optional[SequenceNotStr[str]] | NotGiven = NOT_GIVEN,
         llm_model: Union[
             Literal[
                 "gemini-2.5-pro",
@@ -495,7 +495,7 @@ class AsyncAgentsResource(AsyncAPIResource):
         agent_model: Optional[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-1"]] | NotGiven = NOT_GIVEN,
         custom_prompt: Optional[str] | NotGiven = NOT_GIVEN,
         disabled_tools: Optional[Iterable[agent_create_params.DisabledTool]] | NotGiven = NOT_GIVEN,
-        knowledge_ids: Optional[List[str]] | NotGiven = NOT_GIVEN,
+        knowledge_ids: Optional[SequenceNotStr[str]] | NotGiven = NOT_GIVEN,
         llm_model: Union[
             Literal[
                 "gemini-2.5-pro",
@@ -677,7 +677,7 @@ class AsyncAgentsResource(AsyncAPIResource):
         agent_model: Optional[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-1"]] | NotGiven = NOT_GIVEN,
         custom_prompt: Optional[str] | NotGiven = NOT_GIVEN,
         disabled_tools: Optional[Iterable[agent_update_params.DisabledTool]] | NotGiven = NOT_GIVEN,
-        knowledge_ids: Optional[List[str]] | NotGiven = NOT_GIVEN,
+        knowledge_ids: Optional[SequenceNotStr[str]] | NotGiven = NOT_GIVEN,
         llm_model: Union[
             Literal[
                 "gemini-2.5-pro",

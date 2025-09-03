@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
-from typing import List, Union, Iterable, Optional
+from typing import Union, Iterable, Optional
 from typing_extensions import Literal, Required, TypeAlias, TypedDict
 
+from .._types import SequenceNotStr
 from .tool_name import ToolName
 from .tool_param import ToolParam
 
@@ -49,7 +50,7 @@ class ClientConverseParams(TypedDict, total=False):
     When enabled, the agent will generate citations for factual statements.
     """
 
-    secret_ids: Optional[List[str]]
+    secret_ids: Optional[SequenceNotStr[str]]
     """Array of secret ID's to be included in the context.
 
     The secret value will be appended to the prompt but not stored in conversation
@@ -149,7 +150,7 @@ class Config(TypedDict, total=False):
     therefore only the agent_tools setting is relevant.
     """
 
-    knowledge_ids: Optional[List[str]]
+    knowledge_ids: Optional[SequenceNotStr[str]]
     """Array of Knowledge IDs the agent should use during the converse.
 
     When ommited, all knowledge is used.
