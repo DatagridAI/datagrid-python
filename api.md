@@ -127,8 +127,13 @@ Methods:
 Types:
 
 ```python
-from datagrid_ai.types import Tool, ToolName
+from datagrid_ai.types import Tool, ToolDef, ToolName
 ```
+
+Methods:
+
+- <code title="get /tools/{tool_name}">client.tools.<a href="./src/datagrid_ai/resources/tools.py">retrieve</a>(tool_name) -> <a href="./src/datagrid_ai/types/tool_def.py">ToolDef</a></code>
+- <code title="get /tools">client.tools.<a href="./src/datagrid_ai/resources/tools.py">list</a>(\*\*<a href="src/datagrid_ai/types/tool_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/tool_def.py">SyncCursorNamePage[ToolDef]</a></code>
 
 # Memory
 

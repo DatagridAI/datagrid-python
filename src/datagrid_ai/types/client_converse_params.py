@@ -138,7 +138,7 @@ class Config(TypedDict, total=False):
     custom_prompt: Optional[str]
     """Use custom prompt to instruct the style and formatting of the agent's response"""
 
-    disabled_agent_tools: Optional[Iterable[Optional[Iterable[ConfigDisabledAgentTool]]]]
+    disabled_agent_tools: Optional[Iterable[ConfigDisabledAgentTool]]
     """Deprecated, use disabled_tools instead"""
 
     disabled_tools: Optional[Iterable[ConfigDisabledTool]]

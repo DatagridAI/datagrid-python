@@ -16,7 +16,7 @@ class CitationKnowledge(BaseModel):
     knowledge_id: str
     """Id of the knowledge."""
 
-    type: Literal["image", "pdf_page", "record", "web_search", "sql_query_result"]
+    type: Literal["image", "pdf_page", "record", "web_search", "sql_query_result", "action"]
 
 
 class Citation(BaseModel):
