@@ -32,6 +32,8 @@ ToolName: TypeAlias = Literal[
     "hubspot",
     "nec",
     "github",
+    "trimble_project_site",
+    "linkedin_posts",
     "data_classification",
     "data_extraction",
     "image_detection",

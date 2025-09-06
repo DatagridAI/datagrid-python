@@ -37,7 +37,7 @@ from ._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from .resources import files, agents, search, secrets, knowledge, connectors, connections
+from .resources import files, tools, agents, search, secrets, knowledge, connectors, connections
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
 from ._exceptions import DatagridError, APIStatusError
 from ._base_client import (
@@ -71,6 +71,7 @@ class Datagrid(SyncAPIClient):
     secrets: secrets.SecretsResource
     search: search.SearchResource
     agents: agents.AgentsResource
+    tools: tools.ToolsResource
     memory: memory.MemoryResource
     organization: organization.OrganizationResource
     conversations: conversations.ConversationsResource
@@ -146,6 +147,7 @@ class Datagrid(SyncAPIClient):
         self.secrets = secrets.SecretsResource(self)
         self.search = search.SearchResource(self)
         self.agents = agents.AgentsResource(self)
+        self.tools = tools.ToolsResource(self)
         self.memory = memory.MemoryResource(self)
         self.organization = organization.OrganizationResource(self)
         self.conversations = conversations.ConversationsResource(self)
@@ -342,6 +344,7 @@ class AsyncDatagrid(AsyncAPIClient):
     secrets: secrets.AsyncSecretsResource
     search: search.AsyncSearchResource
     agents: agents.AsyncAgentsResource
+    tools: tools.AsyncToolsResource
     memory: memory.AsyncMemoryResource
     organization: organization.AsyncOrganizationResource
     conversations: conversations.AsyncConversationsResource
@@ -417,6 +420,7 @@ class AsyncDatagrid(AsyncAPIClient):
         self.secrets = secrets.AsyncSecretsResource(self)
         self.search = search.AsyncSearchResource(self)
         self.agents = agents.AsyncAgentsResource(self)
+        self.tools = tools.AsyncToolsResource(self)
         self.memory = memory.AsyncMemoryResource(self)
         self.organization = organization.AsyncOrganizationResource(self)
         self.conversations = conversations.AsyncConversationsResource(self)
@@ -614,6 +618,7 @@ class DatagridWithRawResponse:
         self.secrets = secrets.SecretsResourceWithRawResponse(client.secrets)
         self.search = search.SearchResourceWithRawResponse(client.search)
         self.agents = agents.AgentsResourceWithRawResponse(client.agents)
+        self.tools = tools.ToolsResourceWithRawResponse(client.tools)
         self.memory = memory.MemoryResourceWithRawResponse(client.memory)
         self.organization = organization.OrganizationResourceWithRawResponse(client.organization)
         self.conversations = conversations.ConversationsResourceWithRawResponse(client.conversations)
@@ -632,6 +637,7 @@ class AsyncDatagridWithRawResponse:
         self.secrets = secrets.AsyncSecretsResourceWithRawResponse(client.secrets)
         self.search = search.AsyncSearchResourceWithRawResponse(client.search)
         self.agents = agents.AsyncAgentsResourceWithRawResponse(client.agents)
+        self.tools = tools.AsyncToolsResourceWithRawResponse(client.tools)
         self.memory = memory.AsyncMemoryResourceWithRawResponse(client.memory)
         self.organization = organization.AsyncOrganizationResourceWithRawResponse(client.organization)
         self.conversations = conversations.AsyncConversationsResourceWithRawResponse(client.conversations)
@@ -650,6 +656,7 @@ class DatagridWithStreamedResponse:
         self.secrets = secrets.SecretsResourceWithStreamingResponse(client.secrets)
         self.search = search.SearchResourceWithStreamingResponse(client.search)
         self.agents = agents.AgentsResourceWithStreamingResponse(client.agents)
+        self.tools = tools.ToolsResourceWithStreamingResponse(client.tools)
         self.memory = memory.MemoryResourceWithStreamingResponse(client.memory)
         self.organization = organization.OrganizationResourceWithStreamingResponse(client.organization)
         self.conversations = conversations.ConversationsResourceWithStreamingResponse(client.conversations)
@@ -668,6 +675,7 @@ class AsyncDatagridWithStreamedResponse:
         self.secrets = secrets.AsyncSecretsResourceWithStreamingResponse(client.secrets)
         self.search = search.AsyncSearchResourceWithStreamingResponse(client.search)
         self.agents = agents.AsyncAgentsResourceWithStreamingResponse(client.agents)
+        self.tools = tools.AsyncToolsResourceWithStreamingResponse(client.tools)
         self.memory = memory.AsyncMemoryResourceWithStreamingResponse(client.memory)
         self.organization = organization.AsyncOrganizationResourceWithStreamingResponse(client.organization)
         self.conversations = conversations.AsyncConversationsResourceWithStreamingResponse(client.conversations)

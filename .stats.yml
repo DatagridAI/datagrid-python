@@ -1,4 +1,4 @@
-configured_endpoints: 53
-openapi_spec_url: https://storage.googleapis.com/stainless-sdk-openapi-specs/datagrid%2Fdatagrid-52db9b9792c9f9a2205ae278ee812ee1c88d4fb2175241a0dc577dd2c0f2e8df.yml
-openapi_spec_hash: 88bdc7ed406823b1c94516c32ba52f2a
-config_hash: 0aface6ba90368f82b850caa83bf8d9d
+configured_endpoints: 55
+openapi_spec_url: https://storage.googleapis.com/stainless-sdk-openapi-specs/datagrid%2Fdatagrid-159bf3fba46abb51d7b1bbf8f121998090cd6b92d2d780b717b61ce121379462.yml
+openapi_spec_hash: 210544817d677a85bdf90b0f591401bb
+config_hash: bcacac895c088871794d0939793c8d46

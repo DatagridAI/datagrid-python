@@ -5,6 +5,7 @@ from __future__ import annotations
 from .tool import Tool as Tool
 from .agent import Agent as Agent
 from .secret import Secret as Secret
+from .tool_def import ToolDef as ToolDef
 from .connector import Connector as Connector
 from .knowledge import Knowledge as Knowledge
 from .tool_name import ToolName as ToolName
@@ -16,6 +17,7 @@ from .row_metadata import RowMetadata as RowMetadata
 from .table_metadata import TableMetadata as TableMetadata
 from .file_list_params import FileListParams as FileListParams
 from .message_metadata import MessageMetadata as MessageMetadata
+from .tool_list_params import ToolListParams as ToolListParams
 from .agent_list_params import AgentListParams as AgentListParams
 from .converse_response import ConverseResponse as ConverseResponse
 from .file_create_params import FileCreateParams as FileCreateParams
