@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Union, Iterable, Optional
+from typing import List, Union, Optional
 from typing_extensions import Literal
 
 import httpx
@@ -48,9 +48,11 @@ class AgentsResource(SyncAPIResource):
     def create(
         self,
         *,
-        agent_model: Optional[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-1"]] | Omit = omit,
+        agent_model: Union[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-1", "magpie-2.0"], str, None]
+        | Omit = omit,
         custom_prompt: Optional[str] | Omit = omit,
-        disabled_tools: Optional[Iterable[agent_create_params.DisabledTool]] | Omit = omit,
+        description: Optional[str] | Omit = omit,
+        disabled_tools: Optional[List[agent_create_params.DisabledTool]] | Omit = omit,
         knowledge_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         llm_model: Union[
             Literal[
@@ -79,7 +81,7 @@ class AgentsResource(SyncAPIResource):
         name: Optional[str] | Omit = omit,
         planning_prompt: Optional[str] | Omit = omit,
         system_prompt: Optional[str] | Omit = omit,
-        tools: Optional[Iterable[agent_create_params.Tool]] | Omit = omit,
+        tools: Optional[List[agent_create_params.Tool]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -97,8 +99,13 @@ class AgentsResource(SyncAPIResource):
               - magpie-1.1-flash is a faster model useful for RAG usecases, it currently only
                 supports semantic_search tool. Structured outputs are not supported with this
                 model.
+              - Can also accept any custom string value for future model versions.
+              - Magpie-2.0 our latest agentic model with more proactive planning and reasoning
+                capabilities.
 
           custom_prompt: Use custom prompt to instruct the style and formatting of the agent's response
+
+          description: The description of the agent
 
           disabled_tools: Array of the agent tools to disable. Disabling is performed after the
               'agent_tools' rules are applied. For example, agent_tools: null and
@@ -177,6 +184,7 @@ class AgentsResource(SyncAPIResource):
                 {
                     "agent_model": agent_model,
                     "custom_prompt": custom_prompt,
+                    "description": description,
                     "disabled_tools": disabled_tools,
                     "knowledge_ids": knowledge_ids,
                     "llm_model": llm_model,
@@ -230,9 +238,11 @@ class AgentsResource(SyncAPIResource):
         self,
         agent_id: str,
         *,
-        agent_model: Optional[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-1"]] | Omit = omit,
+        agent_model: Union[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-1", "magpie-2.0"], str, None]
+        | Omit = omit,
         custom_prompt: Optional[str] | Omit = omit,
-        disabled_tools: Optional[Iterable[agent_update_params.DisabledTool]] | Omit = omit,
+        description: Optional[str] | Omit = omit,
+        disabled_tools: Optional[List[agent_update_params.DisabledTool]] | Omit = omit,
         knowledge_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         llm_model: Union[
             Literal[
@@ -261,7 +271,7 @@ class AgentsResource(SyncAPIResource):
         name: Optional[str] | Omit = omit,
         planning_prompt: Optional[str] | Omit = omit,
         system_prompt: Optional[str] | Omit = omit,
-        tools: Optional[Iterable[agent_update_params.Tool]] | Omit = omit,
+        tools: Optional[List[agent_update_params.Tool]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -279,8 +289,13 @@ class AgentsResource(SyncAPIResource):
               - magpie-1.1-flash is a faster model useful for RAG usecases, it currently only
                 supports semantic_search tool. Structured outputs are not supported with this
                 model.
+              - Can also accept any custom string value for future model versions.
+              - Magpie-2.0 our latest agentic model with more proactive planning and reasoning
+                capabilities.
 
           custom_prompt: Use custom prompt to instruct the style and formatting of the agent's response
+
+          description: The description of the agent
 
           disabled_tools: Array of the agent tools to disable. Disabling is performed after the
               'agent_tools' rules are applied. For example, agent_tools: null and
@@ -361,6 +376,7 @@ class AgentsResource(SyncAPIResource):
                 {
                     "agent_model": agent_model,
                     "custom_prompt": custom_prompt,
+                    "description": description,
                     "disabled_tools": disabled_tools,
                     "knowledge_ids": knowledge_ids,
                     "llm_model": llm_model,
@@ -492,9 +508,11 @@ class AsyncAgentsResource(AsyncAPIResource):
     async def create(
         self,
         *,
-        agent_model: Optional[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-1"]] | Omit = omit,
+        agent_model: Union[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-1", "magpie-2.0"], str, None]
+        | Omit = omit,
         custom_prompt: Optional[str] | Omit = omit,
-        disabled_tools: Optional[Iterable[agent_create_params.DisabledTool]] | Omit = omit,
+        description: Optional[str] | Omit = omit,
+        disabled_tools: Optional[List[agent_create_params.DisabledTool]] | Omit = omit,
         knowledge_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         llm_model: Union[
             Literal[
@@ -523,7 +541,7 @@ class AsyncAgentsResource(AsyncAPIResource):
         name: Optional[str] | Omit = omit,
         planning_prompt: Optional[str] | Omit = omit,
         system_prompt: Optional[str] | Omit = omit,
-        tools: Optional[Iterable[agent_create_params.Tool]] | Omit = omit,
+        tools: Optional[List[agent_create_params.Tool]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -541,8 +559,13 @@ class AsyncAgentsResource(AsyncAPIResource):
               - magpie-1.1-flash is a faster model useful for RAG usecases, it currently only
                 supports semantic_search tool. Structured outputs are not supported with this
                 model.
+              - Can also accept any custom string value for future model versions.
+              - Magpie-2.0 our latest agentic model with more proactive planning and reasoning
+                capabilities.
 
           custom_prompt: Use custom prompt to instruct the style and formatting of the agent's response
+
+          description: The description of the agent
 
           disabled_tools: Array of the agent tools to disable. Disabling is performed after the
               'agent_tools' rules are applied. For example, agent_tools: null and
@@ -621,6 +644,7 @@ class AsyncAgentsResource(AsyncAPIResource):
                 {
                     "agent_model": agent_model,
                     "custom_prompt": custom_prompt,
+                    "description": description,
                     "disabled_tools": disabled_tools,
                     "knowledge_ids": knowledge_ids,
                     "llm_model": llm_model,
@@ -674,9 +698,11 @@ class AsyncAgentsResource(AsyncAPIResource):
         self,
         agent_id: str,
         *,
-        agent_model: Optional[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-1"]] | Omit = omit,
+        agent_model: Union[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-1", "magpie-2.0"], str, None]
+        | Omit = omit,
         custom_prompt: Optional[str] | Omit = omit,
-        disabled_tools: Optional[Iterable[agent_update_params.DisabledTool]] | Omit = omit,
+        description: Optional[str] | Omit = omit,
+        disabled_tools: Optional[List[agent_update_params.DisabledTool]] | Omit = omit,
         knowledge_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         llm_model: Union[
             Literal[
@@ -705,7 +731,7 @@ class AsyncAgentsResource(AsyncAPIResource):
         name: Optional[str] | Omit = omit,
         planning_prompt: Optional[str] | Omit = omit,
         system_prompt: Optional[str] | Omit = omit,
-        tools: Optional[Iterable[agent_update_params.Tool]] | Omit = omit,
+        tools: Optional[List[agent_update_params.Tool]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -723,8 +749,13 @@ class AsyncAgentsResource(AsyncAPIResource):
               - magpie-1.1-flash is a faster model useful for RAG usecases, it currently only
                 supports semantic_search tool. Structured outputs are not supported with this
                 model.
+              - Can also accept any custom string value for future model versions.
+              - Magpie-2.0 our latest agentic model with more proactive planning and reasoning
+                capabilities.
 
           custom_prompt: Use custom prompt to instruct the style and formatting of the agent's response
+
+          description: The description of the agent
 
           disabled_tools: Array of the agent tools to disable. Disabling is performed after the
               'agent_tools' rules are applied. For example, agent_tools: null and
@@ -805,6 +836,7 @@ class AsyncAgentsResource(AsyncAPIResource):
                 {
                     "agent_model": agent_model,
                     "custom_prompt": custom_prompt,
+                    "description": description,
                     "disabled_tools": disabled_tools,
                     "knowledge_ids": knowledge_ids,
                     "llm_model": llm_model,

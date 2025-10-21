@@ -2,30 +2,35 @@
 
 from __future__ import annotations
 
-from typing import Union, Iterable, Optional
+from typing import List, Union, Optional
 from typing_extensions import Literal, TypeAlias, TypedDict
 
 from .._types import SequenceNotStr
-from .tool_name import ToolName
 from .tool_param import ToolParam
 
 __all__ = ["AgentCreateParams", "DisabledTool", "Tool"]
 
 
 class AgentCreateParams(TypedDict, total=False):
-    agent_model: Optional[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-1"]]
+    agent_model: Union[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-1", "magpie-2.0"], str, None]
     """The version of Datagrid's agent brain.
 
     - magpie-1.1 is the default and most powerful model.
     - magpie-1.1-flash is a faster model useful for RAG usecases, it currently only
       supports semantic_search tool. Structured outputs are not supported with this
       model.
+    - Can also accept any custom string value for future model versions.
+    - Magpie-2.0 our latest agentic model with more proactive planning and reasoning
+      capabilities.
     """
 
     custom_prompt: Optional[str]
     """Use custom prompt to instruct the style and formatting of the agent's response"""
 
-    disabled_tools: Optional[Iterable[DisabledTool]]
+    description: Optional[str]
+    """The description of the agent"""
+
+    disabled_tools: Optional[List[DisabledTool]]
     """Array of the agent tools to disable.
 
     Disabling is performed after the 'agent_tools' rules are applied. For example,
@@ -77,7 +82,7 @@ class AgentCreateParams(TypedDict, total=False):
     system_prompt: Optional[str]
     """Directs your AI Agent's operational behavior."""
 
-    tools: Optional[Iterable[Tool]]
+    tools: Optional[List[Tool]]
     """Array of the agent tools to enable.
 
     If not provided - default tools of the agent are used. If empty list provided -
@@ -127,6 +132,117 @@ class AgentCreateParams(TypedDict, total=False):
     """
 
 
-DisabledTool: TypeAlias = Union[ToolName, ToolParam]
+DisabledTool: TypeAlias = Union[
+    Literal[
+        "data_analysis",
+        "semantic_search",
+        "agent_memory",
+        "schema_info",
+        "table_info",
+        "create_dataset",
+        "find_files",
+        "read_file_contents",
+        "calendar",
+        "email",
+        "schedule_recurring_message_tool",
+        "procore",
+        "egnyte",
+        "notion",
+        "google_sheets",
+        "slack",
+        "microsoft_teams",
+        "sharepoint",
+        "drive",
+        "fieldwire",
+        "webbrowser",
+        "pdf_manipulation",
+        "pdf_generator",
+        "acc",
+        "docusign",
+        "webflow",
+        "hubspot",
+        "nec",
+        "github",
+        "trimble_project_site",
+        "linkedin",
+        "google_docs",
+        "google_slides",
+        "code_tool",
+        "data_classification",
+        "data_extraction",
+        "image_detection",
+        "attachment_extraction",
+        "pdf_extraction",
+        "youtube_video_analysis",
+        "calculate",
+        "pdf_form_filling",
+        "image_generator",
+        "video_generator",
+        "connect_data",
+        "download_data",
+        "web_search",
+        "fetch_url",
+        "company_prospect_researcher",
+        "people_prospect_researcher",
+    ],
+    str,
+    ToolParam,
+]
 
-Tool: TypeAlias = Union[ToolName, ToolParam, ToolParam]
+Tool: TypeAlias = Union[
+    Literal[
+        "data_analysis",
+        "semantic_search",
+        "agent_memory",
+        "schema_info",
+        "table_info",
+        "create_dataset",
+        "find_files",
+        "read_file_contents",
+        "calendar",
+        "email",
+        "schedule_recurring_message_tool",
+        "procore",
+        "egnyte",
+        "notion",
+        "google_sheets",
+        "slack",
+        "microsoft_teams",
+        "sharepoint",
+        "drive",
+        "fieldwire",
+        "webbrowser",
+        "pdf_manipulation",
+        "pdf_generator",
+        "acc",
+        "docusign",
+        "webflow",
+        "hubspot",
+        "nec",
+        "github",
+        "trimble_project_site",
+        "linkedin",
+        "google_docs",
+        "google_slides",
+        "code_tool",
+        "data_classification",
+        "data_extraction",
+        "image_detection",
+        "attachment_extraction",
+        "pdf_extraction",
+        "youtube_video_analysis",
+        "calculate",
+        "pdf_form_filling",
+        "image_generator",
+        "video_generator",
+        "connect_data",
+        "download_data",
+        "web_search",
+        "fetch_url",
+        "company_prospect_researcher",
+        "people_prospect_researcher",
+    ],
+    str,
+    ToolParam,
+    ToolParam,
+]

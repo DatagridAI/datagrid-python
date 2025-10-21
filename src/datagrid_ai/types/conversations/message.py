@@ -13,10 +13,13 @@ class CitationKnowledge(BaseModel):
     confirmations: List[str]
     """An array of text snippets from the knowledge that confirm the citation."""
 
-    knowledge_id: str
-    """Id of the knowledge."""
+    knowledge_name: str
+    """Name of the knowledge."""
 
     type: Literal["image", "pdf_page", "record", "web_search", "sql_query_result", "action"]
+
+    knowledge_id: Optional[str] = None
+    """Id of the knowledge."""
 
 
 class Citation(BaseModel):

@@ -28,6 +28,7 @@ class TestAgents:
         agent = client.agents.create(
             agent_model="magpie-1.1",
             custom_prompt="custom_prompt",
+            description="description",
             disabled_tools=["data_analysis"],
             knowledge_ids=["string"],
             llm_model="gemini-2.5-pro",
@@ -109,6 +110,7 @@ class TestAgents:
             agent_id="agent_id",
             agent_model="magpie-1.1",
             custom_prompt="custom_prompt",
+            description="description",
             disabled_tools=["data_analysis"],
             knowledge_ids=["string"],
             llm_model="gemini-2.5-pro",
@@ -238,6 +240,7 @@ class TestAsyncAgents:
         agent = await async_client.agents.create(
             agent_model="magpie-1.1",
             custom_prompt="custom_prompt",
+            description="description",
             disabled_tools=["data_analysis"],
             knowledge_ids=["string"],
             llm_model="gemini-2.5-pro",
@@ -319,6 +322,7 @@ class TestAsyncAgents:
             agent_id="agent_id",
             agent_model="magpie-1.1",
             custom_prompt="custom_prompt",
+            description="description",
             disabled_tools=["data_analysis"],
             knowledge_ids=["string"],
             llm_model="gemini-2.5-pro",

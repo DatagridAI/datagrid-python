@@ -8,7 +8,7 @@ import httpx
 
 from ..types import file_list_params, file_create_params
 from .._types import Body, Omit, Query, Headers, NoneType, NotGiven, FileTypes, omit, not_given
-from .._utils import extract_files, maybe_transform, deepcopy_minimal, async_maybe_transform
+from .._utils import is_given, extract_files, maybe_transform, deepcopy_minimal, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
 from .._response import (
@@ -25,6 +25,7 @@ from .._response import (
     async_to_custom_raw_response_wrapper,
     async_to_custom_streamed_response_wrapper,
 )
+from .._constants import DEFAULT_TIMEOUT
 from ..pagination import SyncCursorIDPage, AsyncCursorIDPage
 from .._base_client import AsyncPaginator, make_request_options
 from ..types.file_object import FileObject
@@ -75,6 +76,8 @@ class FilesResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
+        if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
+            timeout = 300
         body = deepcopy_minimal({"file": file})
         files = extract_files(cast(Mapping[str, object], body), paths=[["file"]])
         # It should be noted that the actual Content-Type header that will be
@@ -294,6 +297,8 @@ class AsyncFilesResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
+        if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
+            timeout = 300
         body = deepcopy_minimal({"file": file})
         files = extract_files(cast(Mapping[str, object], body), paths=[["file"]])
         # It should be noted that the actual Content-Type header that will be
