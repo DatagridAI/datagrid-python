@@ -15,6 +15,7 @@ from .file_object import FileObject as FileObject
 from .conversation import Conversation as Conversation
 from .row_metadata import RowMetadata as RowMetadata
 from .table_metadata import TableMetadata as TableMetadata
+from .tool_name_param import ToolNameParam as ToolNameParam
 from .file_list_params import FileListParams as FileListParams
 from .message_metadata import MessageMetadata as MessageMetadata
 from .tool_list_params import ToolListParams as ToolListParams
