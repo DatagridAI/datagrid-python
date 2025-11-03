@@ -12,7 +12,6 @@ from tests.utils import assert_matches_type
 from datagrid_ai.types import (
     Knowledge,
     RedirectURLResponse,
-    KnowledgeUpdateResponse,
 )
 from datagrid_ai.pagination import SyncCursorIDPage, AsyncCursorIDPage
 
@@ -108,33 +107,39 @@ class TestKnowledge:
     def test_method_update(self, client: Datagrid) -> None:
         knowledge = client.knowledge.update(
             knowledge_id="knowledge_id",
+        )
+        assert_matches_type(Knowledge, knowledge, path=["response"])
+
+    @parametrize
+    def test_method_update_with_all_params(self, client: Datagrid) -> None:
+        knowledge = client.knowledge.update(
+            knowledge_id="knowledge_id",
+            files=[b"raw file contents"],
             name="name",
         )
-        assert_matches_type(KnowledgeUpdateResponse, knowledge, path=["response"])
+        assert_matches_type(Knowledge, knowledge, path=["response"])
 
     @parametrize
     def test_raw_response_update(self, client: Datagrid) -> None:
         response = client.knowledge.with_raw_response.update(
             knowledge_id="knowledge_id",
-            name="name",
         )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         knowledge = response.parse()
-        assert_matches_type(KnowledgeUpdateResponse, knowledge, path=["response"])
+        assert_matches_type(Knowledge, knowledge, path=["response"])
 
     @parametrize
     def test_streaming_response_update(self, client: Datagrid) -> None:
         with client.knowledge.with_streaming_response.update(
             knowledge_id="knowledge_id",
-            name="name",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             knowledge = response.parse()
-            assert_matches_type(KnowledgeUpdateResponse, knowledge, path=["response"])
+            assert_matches_type(Knowledge, knowledge, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -143,7 +148,6 @@ class TestKnowledge:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `knowledge_id` but received ''"):
             client.knowledge.with_raw_response.update(
                 knowledge_id="",
-                name="name",
             )
 
     @parametrize
@@ -341,33 +345,39 @@ class TestAsyncKnowledge:
     async def test_method_update(self, async_client: AsyncDatagrid) -> None:
         knowledge = await async_client.knowledge.update(
             knowledge_id="knowledge_id",
+        )
+        assert_matches_type(Knowledge, knowledge, path=["response"])
+
+    @parametrize
+    async def test_method_update_with_all_params(self, async_client: AsyncDatagrid) -> None:
+        knowledge = await async_client.knowledge.update(
+            knowledge_id="knowledge_id",
+            files=[b"raw file contents"],
             name="name",
         )
-        assert_matches_type(KnowledgeUpdateResponse, knowledge, path=["response"])
+        assert_matches_type(Knowledge, knowledge, path=["response"])
 
     @parametrize
     async def test_raw_response_update(self, async_client: AsyncDatagrid) -> None:
         response = await async_client.knowledge.with_raw_response.update(
             knowledge_id="knowledge_id",
-            name="name",
         )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         knowledge = await response.parse()
-        assert_matches_type(KnowledgeUpdateResponse, knowledge, path=["response"])
+        assert_matches_type(Knowledge, knowledge, path=["response"])
 
     @parametrize
     async def test_streaming_response_update(self, async_client: AsyncDatagrid) -> None:
         async with async_client.knowledge.with_streaming_response.update(
             knowledge_id="knowledge_id",
-            name="name",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             knowledge = await response.parse()
-            assert_matches_type(KnowledgeUpdateResponse, knowledge, path=["response"])
+            assert_matches_type(Knowledge, knowledge, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -376,7 +386,6 @@ class TestAsyncKnowledge:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `knowledge_id` but received ''"):
             await async_client.knowledge.with_raw_response.update(
                 knowledge_id="",
-                name="name",
             )
 
     @parametrize

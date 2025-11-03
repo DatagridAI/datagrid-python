@@ -43,6 +43,5 @@ from .connection_create_params import ConnectionCreateParams as ConnectionCreate
 from .connection_update_params import ConnectionUpdateParams as ConnectionUpdateParams
 from .conversation_list_params import ConversationListParams as ConversationListParams
 from .knowledge_connect_params import KnowledgeConnectParams as KnowledgeConnectParams
-from .knowledge_update_response import KnowledgeUpdateResponse as KnowledgeUpdateResponse
 from .conversation_create_params import ConversationCreateParams as ConversationCreateParams
 from .search_result_resource_type import SearchResultResourceType as SearchResultResourceType
