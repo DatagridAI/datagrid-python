@@ -15,7 +15,7 @@ class KnowledgeCreateParams(TypedDict, total=False):
     """The files to be uploaded and learned.
 
     Supported media types are `pdf`, `json`, `csv`, `text`, `png`, `jpeg`, `excel`,
-    `google sheets`.
+    `google sheets`, `docx`, `pptx`.
     """
 
     name: Optional[str]

@@ -22,7 +22,6 @@ from ..pagination import SyncCursorIDPage, AsyncCursorIDPage
 from .._base_client import AsyncPaginator, make_request_options
 from ..types.knowledge import Knowledge
 from ..types.redirect_url_response import RedirectURLResponse
-from ..types.knowledge_update_response import KnowledgeUpdateResponse
 
 __all__ = ["KnowledgeResource", "AsyncKnowledgeResource"]
 
@@ -64,7 +63,7 @@ class KnowledgeResource(SyncAPIResource):
 
         Args:
           files: The files to be uploaded and learned. Supported media types are `pdf`, `json`,
-              `csv`, `text`, `png`, `jpeg`, `excel`, `google sheets`.
+              `csv`, `text`, `png`, `jpeg`, `excel`, `google sheets`, `docx`, `pptx`.
 
           name: The name of the knowledge.
 
@@ -136,18 +135,26 @@ class KnowledgeResource(SyncAPIResource):
         self,
         knowledge_id: str,
         *,
-        name: str,
+        files: Optional[SequenceNotStr[FileTypes]] | Omit = omit,
+        name: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> KnowledgeUpdateResponse:
+    ) -> Knowledge:
         """
         Update a knowledge's attributes.
 
         Args:
+          files: The files to replace existing knowledge. When provided, all existing data will
+              be removed from the knowledge and replaced with these files. Supported media
+              types are `pdf`, `json`, `csv`, `text`, `png`, `jpeg`, `excel`, `google sheets`,
+              `docx`, `pptx`.
+
+          name: The new name for the `knowledge`.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -158,13 +165,25 @@ class KnowledgeResource(SyncAPIResource):
         """
         if not knowledge_id:
             raise ValueError(f"Expected a non-empty value for `knowledge_id` but received {knowledge_id!r}")
+        body = deepcopy_minimal(
+            {
+                "files": files,
+                "name": name,
+            }
+        )
+        extracted_files = extract_files(cast(Mapping[str, object], body), paths=[["files", "<array>"]])
+        # It should be noted that the actual Content-Type header that will be
+        # sent to the server will contain a `boundary` parameter, e.g.
+        # multipart/form-data; boundary=---abc--
+        extra_headers = {"Content-Type": "multipart/form-data", **(extra_headers or {})}
         return self._patch(
             f"/knowledge/{knowledge_id}",
-            body=maybe_transform({"name": name}, knowledge_update_params.KnowledgeUpdateParams),
+            body=maybe_transform(body, knowledge_update_params.KnowledgeUpdateParams),
+            files=extracted_files,
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=KnowledgeUpdateResponse,
+            cast_to=Knowledge,
         )
 
     def list(
@@ -331,7 +350,7 @@ class AsyncKnowledgeResource(AsyncAPIResource):
 
         Args:
           files: The files to be uploaded and learned. Supported media types are `pdf`, `json`,
-              `csv`, `text`, `png`, `jpeg`, `excel`, `google sheets`.
+              `csv`, `text`, `png`, `jpeg`, `excel`, `google sheets`, `docx`, `pptx`.
 
           name: The name of the knowledge.
 
@@ -403,18 +422,26 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         self,
         knowledge_id: str,
         *,
-        name: str,
+        files: Optional[SequenceNotStr[FileTypes]] | Omit = omit,
+        name: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> KnowledgeUpdateResponse:
+    ) -> Knowledge:
         """
         Update a knowledge's attributes.
 
         Args:
+          files: The files to replace existing knowledge. When provided, all existing data will
+              be removed from the knowledge and replaced with these files. Supported media
+              types are `pdf`, `json`, `csv`, `text`, `png`, `jpeg`, `excel`, `google sheets`,
+              `docx`, `pptx`.
+
+          name: The new name for the `knowledge`.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -425,13 +452,25 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         """
         if not knowledge_id:
             raise ValueError(f"Expected a non-empty value for `knowledge_id` but received {knowledge_id!r}")
+        body = deepcopy_minimal(
+            {
+                "files": files,
+                "name": name,
+            }
+        )
+        extracted_files = extract_files(cast(Mapping[str, object], body), paths=[["files", "<array>"]])
+        # It should be noted that the actual Content-Type header that will be
+        # sent to the server will contain a `boundary` parameter, e.g.
+        # multipart/form-data; boundary=---abc--
+        extra_headers = {"Content-Type": "multipart/form-data", **(extra_headers or {})}
         return await self._patch(
             f"/knowledge/{knowledge_id}",
-            body=await async_maybe_transform({"name": name}, knowledge_update_params.KnowledgeUpdateParams),
+            body=await async_maybe_transform(body, knowledge_update_params.KnowledgeUpdateParams),
+            files=extracted_files,
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=KnowledgeUpdateResponse,
+            cast_to=Knowledge,
         )
 
     def list(
