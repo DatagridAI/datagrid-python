@@ -345,7 +345,7 @@ class Datagrid(SyncAPIClient):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
+        if not is_given(timeout) and self.timeout == DEFAULT_TIMEOUT:
             timeout = 1800
         return self.post(
             "/converse",
@@ -682,7 +682,7 @@ class AsyncDatagrid(AsyncAPIClient):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
+        if not is_given(timeout) and self.timeout == DEFAULT_TIMEOUT:
             timeout = 1800
         return await self.post(
             "/converse",
