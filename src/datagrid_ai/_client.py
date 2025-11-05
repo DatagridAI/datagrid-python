@@ -237,19 +237,19 @@ class Datagrid(SyncAPIClient):
         self,
         *,
         prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
-        agent_id: Optional[str] | NotGiven = NOT_GIVEN,
-        config: Optional[client_converse_params.Config] | NotGiven = NOT_GIVEN,
-        conversation_id: Optional[str] | NotGiven = NOT_GIVEN,
-        generate_citations: Optional[bool] | NotGiven = NOT_GIVEN,
-        secret_ids: Optional[SequenceNotStr[str]] | NotGiven = NOT_GIVEN,
-        stream: Optional[Literal[False]] | NotGiven = NOT_GIVEN,
-        text: Optional[client_converse_params.Text] | NotGiven = NOT_GIVEN,
+        agent_id: Optional[str] | NotGiven = not_given,
+        config: Optional[client_converse_params.Config] | NotGiven = not_given,
+        conversation_id: Optional[str] | NotGiven = not_given,
+        generate_citations: Optional[bool] | NotGiven = not_given,
+        secret_ids: Optional[SequenceNotStr[str]] | NotGiven = not_given,
+        stream: Optional[Literal[False]] | NotGiven = not_given,
+        text: Optional[client_converse_params.Text] | NotGiven = not_given,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> ConverseResponse: ...
 
     @overload
@@ -257,19 +257,19 @@ class Datagrid(SyncAPIClient):
         self,
         *,
         prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
-        agent_id: Optional[str] | NotGiven = NOT_GIVEN,
-        config: Optional[client_converse_params.Config] | NotGiven = NOT_GIVEN,
-        conversation_id: Optional[str] | NotGiven = NOT_GIVEN,
-        generate_citations: Optional[bool] | NotGiven = NOT_GIVEN,
-        secret_ids: Optional[List[str]] | NotGiven = NOT_GIVEN,
+        agent_id: Optional[str] | NotGiven = not_given,
+        config: Optional[client_converse_params.Config] | NotGiven = not_given,
+        conversation_id: Optional[str] | NotGiven = not_given,
+        generate_citations: Optional[bool] | NotGiven = not_given,
+        secret_ids: Optional[SequenceNotStr[str]] | NotGiven = not_given,
         stream: Literal[True],
-        text: Optional[client_converse_params.Text] | NotGiven = NOT_GIVEN,
+        text: Optional[client_converse_params.Text] | NotGiven = not_given,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> Stream[sse_converse.AgentStreamEvent]: ...
 
     @overload
@@ -277,38 +277,38 @@ class Datagrid(SyncAPIClient):
         self,
         *,
         prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
-        agent_id: Optional[str] | NotGiven = NOT_GIVEN,
-        config: Optional[client_converse_params.Config] | NotGiven = NOT_GIVEN,
-        conversation_id: Optional[str] | NotGiven = NOT_GIVEN,
-        generate_citations: Optional[bool] | NotGiven = NOT_GIVEN,
-        secret_ids: Optional[List[str]] | NotGiven = NOT_GIVEN,
+        agent_id: Optional[str] | NotGiven = not_given,
+        config: Optional[client_converse_params.Config] | NotGiven = not_given,
+        conversation_id: Optional[str] | NotGiven = not_given,
+        generate_citations: Optional[bool] | NotGiven = not_given,
+        secret_ids: Optional[SequenceNotStr[str]] | NotGiven = not_given,
         stream: bool,
-        text: Optional[client_converse_params.Text] | NotGiven = NOT_GIVEN,
+        text: Optional[client_converse_params.Text] | NotGiven = not_given,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> ConverseResponse | Stream[sse_converse.AgentStreamEvent]: ...
 
     def converse(
         self,
         *,
         prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
-        agent_id: Optional[str] | NotGiven = NOT_GIVEN,
-        config: Optional[client_converse_params.Config] | NotGiven = NOT_GIVEN,
-        conversation_id: Optional[str] | NotGiven = NOT_GIVEN,
-        generate_citations: Optional[bool] | NotGiven = NOT_GIVEN,
-        secret_ids: Optional[List[str]] | NotGiven = NOT_GIVEN,
-        stream: Optional[Literal[False]] | Literal[True] | NotGiven = NOT_GIVEN,
-        text: Optional[client_converse_params.Text] | NotGiven = NOT_GIVEN,
+        agent_id: Optional[str] | NotGiven = not_given,
+        config: Optional[client_converse_params.Config] | NotGiven = not_given,
+        conversation_id: Optional[str] | NotGiven = not_given,
+        generate_citations: Optional[bool] | NotGiven = not_given,
+        secret_ids: Optional[SequenceNotStr[str]] | NotGiven = not_given,
+        stream: Optional[Literal[False]] | Literal[True] | NotGiven = not_given,
+        text: Optional[client_converse_params.Text] | NotGiven = not_given,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> ConverseResponse | Stream[sse_converse.AgentStreamEvent]:
         """
         Converse with an AI Agent
@@ -574,19 +574,19 @@ class AsyncDatagrid(AsyncAPIClient):
         self,
         *,
         prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
-        agent_id: Optional[str] | NotGiven = NOT_GIVEN,
-        config: Optional[client_converse_params.Config] | NotGiven = NOT_GIVEN,
-        conversation_id: Optional[str] | NotGiven = NOT_GIVEN,
-        generate_citations: Optional[bool] | NotGiven = NOT_GIVEN,
-        secret_ids: Optional[SequenceNotStr[str]] | NotGiven = NOT_GIVEN,
-        stream: Literal[False] | NotGiven = NOT_GIVEN,
-        text: Optional[client_converse_params.Text] | NotGiven = NOT_GIVEN,
+        agent_id: Optional[str] | NotGiven = not_given,
+        config: Optional[client_converse_params.Config] | NotGiven = not_given,
+        conversation_id: Optional[str] | NotGiven = not_given,
+        generate_citations: Optional[bool] | NotGiven = not_given,
+        secret_ids: Optional[SequenceNotStr[str]] | NotGiven = not_given,
+        stream: Literal[False] | NotGiven = not_given,
+        text: Optional[client_converse_params.Text] | NotGiven = not_given,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> ConverseResponse: ...
 
     @overload
@@ -594,19 +594,19 @@ class AsyncDatagrid(AsyncAPIClient):
         self,
         *,
         prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
-        agent_id: Optional[str] | NotGiven = NOT_GIVEN,
-        config: Optional[client_converse_params.Config] | NotGiven = NOT_GIVEN,
-        conversation_id: Optional[str] | NotGiven = NOT_GIVEN,
-        generate_citations: Optional[bool] | NotGiven = NOT_GIVEN,
-        secret_ids: Optional[List[str]] | NotGiven = NOT_GIVEN,
+        agent_id: Optional[str] | NotGiven = not_given,
+        config: Optional[client_converse_params.Config] | NotGiven = not_given,
+        conversation_id: Optional[str] | NotGiven = not_given,
+        generate_citations: Optional[bool] | NotGiven = not_given,
+        secret_ids: Optional[SequenceNotStr[str]] | NotGiven = not_given,
         stream: Literal[True],
-        text: Optional[client_converse_params.Text] | NotGiven = NOT_GIVEN,
+        text: Optional[client_converse_params.Text] | NotGiven = not_given,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> AsyncStream[sse_converse.AgentStreamEvent]: ...
 
     @overload
@@ -614,38 +614,38 @@ class AsyncDatagrid(AsyncAPIClient):
         self,
         *,
         prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
-        agent_id: Optional[str] | NotGiven = NOT_GIVEN,
-        config: Optional[client_converse_params.Config] | NotGiven = NOT_GIVEN,
-        conversation_id: Optional[str] | NotGiven = NOT_GIVEN,
-        generate_citations: Optional[bool] | NotGiven = NOT_GIVEN,
-        secret_ids: Optional[List[str]] | NotGiven = NOT_GIVEN,
+        agent_id: Optional[str] | NotGiven = not_given,
+        config: Optional[client_converse_params.Config] | NotGiven = not_given,
+        conversation_id: Optional[str] | NotGiven = not_given,
+        generate_citations: Optional[bool] | NotGiven = not_given,
+        secret_ids: Optional[SequenceNotStr[str]] | NotGiven = not_given,
         stream: bool,
-        text: Optional[client_converse_params.Text] | NotGiven = NOT_GIVEN,
+        text: Optional[client_converse_params.Text] | NotGiven = not_given,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> ConverseResponse | AsyncStream[sse_converse.AgentStreamEvent]: ...
 
     async def converse(
         self,
         *,
         prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
-        agent_id: Optional[str] | NotGiven = NOT_GIVEN,
-        config: Optional[client_converse_params.Config] | NotGiven = NOT_GIVEN,
-        conversation_id: Optional[str] | NotGiven = NOT_GIVEN,
-        generate_citations: Optional[bool] | NotGiven = NOT_GIVEN,
-        secret_ids: Optional[List[str]] | NotGiven = NOT_GIVEN,
-        stream: Optional[Literal[False]] | Literal[True] | NotGiven = NOT_GIVEN,
-        text: Optional[client_converse_params.Text] | NotGiven = NOT_GIVEN,
+        agent_id: Optional[str] | NotGiven = not_given,
+        config: Optional[client_converse_params.Config] | NotGiven = not_given,
+        conversation_id: Optional[str] | NotGiven = not_given,
+        generate_citations: Optional[bool] | NotGiven = not_given,
+        secret_ids: Optional[SequenceNotStr[str]] | NotGiven = not_given,
+        stream: Optional[Literal[False]] | Literal[True] | NotGiven = not_given,
+        text: Optional[client_converse_params.Text] | NotGiven = not_given,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> ConverseResponse | AsyncStream[sse_converse.AgentStreamEvent]:
         """
         Converse with an AI Agent
