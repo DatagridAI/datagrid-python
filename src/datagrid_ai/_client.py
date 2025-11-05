@@ -13,7 +13,6 @@ from ._qs import Querystring
 from .lib import sse_converse
 from .types import client_converse_params
 from ._types import (
-    NOT_GIVEN,
     Body,
     Omit,
     Query,
@@ -24,6 +23,8 @@ from ._types import (
     ProxiesTypes,
     RequestOptions,
     SequenceNotStr,
+    omit,
+    not_given,
 )
 from ._utils import (
     is_given,
@@ -89,7 +90,7 @@ class Datagrid(SyncAPIClient):
         api_key: str | None = None,
         teamspace: str | None = None,
         base_url: str | httpx.URL | None = None,
-        timeout: Union[float, Timeout, None, NotGiven] = NOT_GIVEN,
+        timeout: float | Timeout | None | NotGiven = not_given,
         max_retries: int = DEFAULT_MAX_RETRIES,
         default_headers: Mapping[str, str] | None = None,
         default_query: Mapping[str, object] | None = None,
@@ -182,9 +183,9 @@ class Datagrid(SyncAPIClient):
         api_key: str | None = None,
         teamspace: str | None = None,
         base_url: str | httpx.URL | None = None,
-        timeout: float | Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | Timeout | None | NotGiven = not_given,
         http_client: httpx.Client | None = None,
-        max_retries: int | NotGiven = NOT_GIVEN,
+        max_retries: int | NotGiven = not_given,
         default_headers: Mapping[str, str] | None = None,
         set_default_headers: Mapping[str, str] | None = None,
         default_query: Mapping[str, object] | None = None,
@@ -424,7 +425,7 @@ class AsyncDatagrid(AsyncAPIClient):
         api_key: str | None = None,
         teamspace: str | None = None,
         base_url: str | httpx.URL | None = None,
-        timeout: Union[float, Timeout, None, NotGiven] = NOT_GIVEN,
+        timeout: float | Timeout | None | NotGiven = not_given,
         max_retries: int = DEFAULT_MAX_RETRIES,
         default_headers: Mapping[str, str] | None = None,
         default_query: Mapping[str, object] | None = None,
@@ -517,9 +518,9 @@ class AsyncDatagrid(AsyncAPIClient):
         api_key: str | None = None,
         teamspace: str | None = None,
         base_url: str | httpx.URL | None = None,
-        timeout: float | Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | Timeout | None | NotGiven = not_given,
         http_client: httpx.AsyncClient | None = None,
-        max_retries: int | NotGiven = NOT_GIVEN,
+        max_retries: int | NotGiven = not_given,
         default_headers: Mapping[str, str] | None = None,
         set_default_headers: Mapping[str, str] | None = None,
         default_query: Mapping[str, object] | None = None,

@@ -7,7 +7,7 @@ from typing import Union
 import httpx
 
 from ..types import tool_list_params
-from .._types import NOT_GIVEN, Body, Query, Headers, NotGiven
+from .._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from .._utils import maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
@@ -54,7 +54,7 @@ class ToolsResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> ToolDef:
         """
         Retrieves a specific tool by its identifier.
@@ -79,15 +79,15 @@ class ToolsResource(SyncAPIResource):
     def list(
         self,
         *,
-        after: str | NotGiven = NOT_GIVEN,
-        before: str | NotGiven = NOT_GIVEN,
-        limit: int | NotGiven = NOT_GIVEN,
+        after: str | Omit = omit,
+        before: str | Omit = omit,
+        limit: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SyncCursorNamePage[ToolDef]:
         """
         Returns the list of available tools that can be used by agents.
@@ -163,7 +163,7 @@ class AsyncToolsResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> ToolDef:
         """
         Retrieves a specific tool by its identifier.
@@ -188,15 +188,15 @@ class AsyncToolsResource(AsyncAPIResource):
     def list(
         self,
         *,
-        after: str | NotGiven = NOT_GIVEN,
-        before: str | NotGiven = NOT_GIVEN,
-        limit: int | NotGiven = NOT_GIVEN,
+        after: str | Omit = omit,
+        before: str | Omit = omit,
+        limit: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> AsyncPaginator[ToolDef, AsyncCursorNamePage[ToolDef]]:
         """
         Returns the list of available tools that can be used by agents.

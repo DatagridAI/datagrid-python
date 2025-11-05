@@ -7,7 +7,7 @@ from typing_extensions import Literal
 
 import httpx
 
-from ...._types import NOT_GIVEN, Body, Query, Headers, NoneType, NotGiven, SequenceNotStr
+from ...._types import Body, Omit, Query, Headers, NoneType, NotGiven, SequenceNotStr, omit, not_given
 from ...._utils import maybe_transform, async_maybe_transform
 from ...._compat import cached_property
 from ...._resource import SyncAPIResource, AsyncAPIResource
@@ -55,7 +55,7 @@ class UsersResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> TeamspaceUser:
         """
         Retrieve details of a specific user in the teamspace.
@@ -87,13 +87,13 @@ class UsersResource(SyncAPIResource):
         *,
         teamspace_id: str,
         role: Literal["admin", "member", "agents-only", "agent-specific"],
-        agent_ids: Optional[SequenceNotStr[str]] | NotGiven = NOT_GIVEN,
+        agent_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> TeamspaceUser:
         """
         Update user permissions in the teamspace.
@@ -132,16 +132,16 @@ class UsersResource(SyncAPIResource):
         self,
         teamspace_id: str,
         *,
-        after: str | NotGiven = NOT_GIVEN,
-        before: str | NotGiven = NOT_GIVEN,
-        limit: int | NotGiven = NOT_GIVEN,
-        search: str | NotGiven = NOT_GIVEN,
+        after: str | Omit = omit,
+        before: str | Omit = omit,
+        limit: int | Omit = omit,
+        search: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SyncCursorIDPage[TeamspaceUser]:
         """
         Retrieve a list of users in the specified teamspace.
@@ -202,7 +202,7 @@ class UsersResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> None:
         """
         Revoke a user's permissions from the teamspace.
@@ -260,7 +260,7 @@ class AsyncUsersResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> TeamspaceUser:
         """
         Retrieve details of a specific user in the teamspace.
@@ -292,13 +292,13 @@ class AsyncUsersResource(AsyncAPIResource):
         *,
         teamspace_id: str,
         role: Literal["admin", "member", "agents-only", "agent-specific"],
-        agent_ids: Optional[SequenceNotStr[str]] | NotGiven = NOT_GIVEN,
+        agent_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> TeamspaceUser:
         """
         Update user permissions in the teamspace.
@@ -337,16 +337,16 @@ class AsyncUsersResource(AsyncAPIResource):
         self,
         teamspace_id: str,
         *,
-        after: str | NotGiven = NOT_GIVEN,
-        before: str | NotGiven = NOT_GIVEN,
-        limit: int | NotGiven = NOT_GIVEN,
-        search: str | NotGiven = NOT_GIVEN,
+        after: str | Omit = omit,
+        before: str | Omit = omit,
+        limit: int | Omit = omit,
+        search: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> AsyncPaginator[TeamspaceUser, AsyncCursorIDPage[TeamspaceUser]]:
         """
         Retrieve a list of users in the specified teamspace.
@@ -407,7 +407,7 @@ class AsyncUsersResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> None:
         """
         Revoke a user's permissions from the teamspace.
