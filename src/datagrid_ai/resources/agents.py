@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
-from typing import List, Union, Iterable, Optional
+from typing import List, Union, Optional
 from typing_extensions import Literal
 
 import httpx
 
 from ..types import agent_list_params, agent_create_params, agent_update_params
-from .._types import NOT_GIVEN, Body, Query, Headers, NoneType, NotGiven
+from .._types import Body, Omit, Query, Headers, NoneType, NotGiven, SequenceNotStr, omit, not_given
 from .._utils import maybe_transform, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
@@ -48,10 +48,12 @@ class AgentsResource(SyncAPIResource):
     def create(
         self,
         *,
-        agent_model: Optional[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-1"]] | NotGiven = NOT_GIVEN,
-        custom_prompt: Optional[str] | NotGiven = NOT_GIVEN,
-        disabled_tools: Optional[Iterable[agent_create_params.DisabledTool]] | NotGiven = NOT_GIVEN,
-        knowledge_ids: Optional[List[str]] | NotGiven = NOT_GIVEN,
+        agent_model: Union[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-1", "magpie-2.0"], str, None]
+        | Omit = omit,
+        custom_prompt: Optional[str] | Omit = omit,
+        description: Optional[str] | Omit = omit,
+        disabled_tools: Optional[List[agent_create_params.DisabledTool]] | Omit = omit,
+        knowledge_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         llm_model: Union[
             Literal[
                 "gemini-2.5-pro",
@@ -75,17 +77,17 @@ class AgentsResource(SyncAPIResource):
             str,
             None,
         ]
-        | NotGiven = NOT_GIVEN,
-        name: Optional[str] | NotGiven = NOT_GIVEN,
-        planning_prompt: Optional[str] | NotGiven = NOT_GIVEN,
-        system_prompt: Optional[str] | NotGiven = NOT_GIVEN,
-        tools: Optional[Iterable[agent_create_params.Tool]] | NotGiven = NOT_GIVEN,
+        | Omit = omit,
+        name: Optional[str] | Omit = omit,
+        planning_prompt: Optional[str] | Omit = omit,
+        system_prompt: Optional[str] | Omit = omit,
+        tools: Optional[List[agent_create_params.Tool]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> Agent:
         """
         Create a new agent
@@ -97,8 +99,13 @@ class AgentsResource(SyncAPIResource):
               - magpie-1.1-flash is a faster model useful for RAG usecases, it currently only
                 supports semantic_search tool. Structured outputs are not supported with this
                 model.
+              - Can also accept any custom string value for future model versions.
+              - Magpie-2.0 our latest agentic model with more proactive planning and reasoning
+                capabilities.
 
           custom_prompt: Use custom prompt to instruct the style and formatting of the agent's response
+
+          description: The description of the agent
 
           disabled_tools: Array of the agent tools to disable. Disabling is performed after the
               'agent_tools' rules are applied. For example, agent_tools: null and
@@ -177,6 +184,7 @@ class AgentsResource(SyncAPIResource):
                 {
                     "agent_model": agent_model,
                     "custom_prompt": custom_prompt,
+                    "description": description,
                     "disabled_tools": disabled_tools,
                     "knowledge_ids": knowledge_ids,
                     "llm_model": llm_model,
@@ -202,7 +210,7 @@ class AgentsResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> Agent:
         """
         Get details of a specific agent
@@ -230,10 +238,12 @@ class AgentsResource(SyncAPIResource):
         self,
         agent_id: str,
         *,
-        agent_model: Optional[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-1"]] | NotGiven = NOT_GIVEN,
-        custom_prompt: Optional[str] | NotGiven = NOT_GIVEN,
-        disabled_tools: Optional[Iterable[agent_update_params.DisabledTool]] | NotGiven = NOT_GIVEN,
-        knowledge_ids: Optional[List[str]] | NotGiven = NOT_GIVEN,
+        agent_model: Union[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-1", "magpie-2.0"], str, None]
+        | Omit = omit,
+        custom_prompt: Optional[str] | Omit = omit,
+        description: Optional[str] | Omit = omit,
+        disabled_tools: Optional[List[agent_update_params.DisabledTool]] | Omit = omit,
+        knowledge_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         llm_model: Union[
             Literal[
                 "gemini-2.5-pro",
@@ -257,17 +267,17 @@ class AgentsResource(SyncAPIResource):
             str,
             None,
         ]
-        | NotGiven = NOT_GIVEN,
-        name: Optional[str] | NotGiven = NOT_GIVEN,
-        planning_prompt: Optional[str] | NotGiven = NOT_GIVEN,
-        system_prompt: Optional[str] | NotGiven = NOT_GIVEN,
-        tools: Optional[Iterable[agent_update_params.Tool]] | NotGiven = NOT_GIVEN,
+        | Omit = omit,
+        name: Optional[str] | Omit = omit,
+        planning_prompt: Optional[str] | Omit = omit,
+        system_prompt: Optional[str] | Omit = omit,
+        tools: Optional[List[agent_update_params.Tool]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> Agent:
         """
         Update an agent configuration
@@ -279,8 +289,13 @@ class AgentsResource(SyncAPIResource):
               - magpie-1.1-flash is a faster model useful for RAG usecases, it currently only
                 supports semantic_search tool. Structured outputs are not supported with this
                 model.
+              - Can also accept any custom string value for future model versions.
+              - Magpie-2.0 our latest agentic model with more proactive planning and reasoning
+                capabilities.
 
           custom_prompt: Use custom prompt to instruct the style and formatting of the agent's response
+
+          description: The description of the agent
 
           disabled_tools: Array of the agent tools to disable. Disabling is performed after the
               'agent_tools' rules are applied. For example, agent_tools: null and
@@ -361,6 +376,7 @@ class AgentsResource(SyncAPIResource):
                 {
                     "agent_model": agent_model,
                     "custom_prompt": custom_prompt,
+                    "description": description,
                     "disabled_tools": disabled_tools,
                     "knowledge_ids": knowledge_ids,
                     "llm_model": llm_model,
@@ -380,15 +396,15 @@ class AgentsResource(SyncAPIResource):
     def list(
         self,
         *,
-        after: str | NotGiven = NOT_GIVEN,
-        before: str | NotGiven = NOT_GIVEN,
-        limit: int | NotGiven = NOT_GIVEN,
+        after: str | Omit = omit,
+        before: str | Omit = omit,
+        limit: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SyncCursorIDPage[Agent]:
         """
         List all agents for the authenticated organization
@@ -443,7 +459,7 @@ class AgentsResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> None:
         """
         Delete an agent
@@ -492,10 +508,12 @@ class AsyncAgentsResource(AsyncAPIResource):
     async def create(
         self,
         *,
-        agent_model: Optional[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-1"]] | NotGiven = NOT_GIVEN,
-        custom_prompt: Optional[str] | NotGiven = NOT_GIVEN,
-        disabled_tools: Optional[Iterable[agent_create_params.DisabledTool]] | NotGiven = NOT_GIVEN,
-        knowledge_ids: Optional[List[str]] | NotGiven = NOT_GIVEN,
+        agent_model: Union[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-1", "magpie-2.0"], str, None]
+        | Omit = omit,
+        custom_prompt: Optional[str] | Omit = omit,
+        description: Optional[str] | Omit = omit,
+        disabled_tools: Optional[List[agent_create_params.DisabledTool]] | Omit = omit,
+        knowledge_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         llm_model: Union[
             Literal[
                 "gemini-2.5-pro",
@@ -519,17 +537,17 @@ class AsyncAgentsResource(AsyncAPIResource):
             str,
             None,
         ]
-        | NotGiven = NOT_GIVEN,
-        name: Optional[str] | NotGiven = NOT_GIVEN,
-        planning_prompt: Optional[str] | NotGiven = NOT_GIVEN,
-        system_prompt: Optional[str] | NotGiven = NOT_GIVEN,
-        tools: Optional[Iterable[agent_create_params.Tool]] | NotGiven = NOT_GIVEN,
+        | Omit = omit,
+        name: Optional[str] | Omit = omit,
+        planning_prompt: Optional[str] | Omit = omit,
+        system_prompt: Optional[str] | Omit = omit,
+        tools: Optional[List[agent_create_params.Tool]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> Agent:
         """
         Create a new agent
@@ -541,8 +559,13 @@ class AsyncAgentsResource(AsyncAPIResource):
               - magpie-1.1-flash is a faster model useful for RAG usecases, it currently only
                 supports semantic_search tool. Structured outputs are not supported with this
                 model.
+              - Can also accept any custom string value for future model versions.
+              - Magpie-2.0 our latest agentic model with more proactive planning and reasoning
+                capabilities.
 
           custom_prompt: Use custom prompt to instruct the style and formatting of the agent's response
+
+          description: The description of the agent
 
           disabled_tools: Array of the agent tools to disable. Disabling is performed after the
               'agent_tools' rules are applied. For example, agent_tools: null and
@@ -621,6 +644,7 @@ class AsyncAgentsResource(AsyncAPIResource):
                 {
                     "agent_model": agent_model,
                     "custom_prompt": custom_prompt,
+                    "description": description,
                     "disabled_tools": disabled_tools,
                     "knowledge_ids": knowledge_ids,
                     "llm_model": llm_model,
@@ -646,7 +670,7 @@ class AsyncAgentsResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> Agent:
         """
         Get details of a specific agent
@@ -674,10 +698,12 @@ class AsyncAgentsResource(AsyncAPIResource):
         self,
         agent_id: str,
         *,
-        agent_model: Optional[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-1"]] | NotGiven = NOT_GIVEN,
-        custom_prompt: Optional[str] | NotGiven = NOT_GIVEN,
-        disabled_tools: Optional[Iterable[agent_update_params.DisabledTool]] | NotGiven = NOT_GIVEN,
-        knowledge_ids: Optional[List[str]] | NotGiven = NOT_GIVEN,
+        agent_model: Union[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-1", "magpie-2.0"], str, None]
+        | Omit = omit,
+        custom_prompt: Optional[str] | Omit = omit,
+        description: Optional[str] | Omit = omit,
+        disabled_tools: Optional[List[agent_update_params.DisabledTool]] | Omit = omit,
+        knowledge_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         llm_model: Union[
             Literal[
                 "gemini-2.5-pro",
@@ -701,17 +727,17 @@ class AsyncAgentsResource(AsyncAPIResource):
             str,
             None,
         ]
-        | NotGiven = NOT_GIVEN,
-        name: Optional[str] | NotGiven = NOT_GIVEN,
-        planning_prompt: Optional[str] | NotGiven = NOT_GIVEN,
-        system_prompt: Optional[str] | NotGiven = NOT_GIVEN,
-        tools: Optional[Iterable[agent_update_params.Tool]] | NotGiven = NOT_GIVEN,
+        | Omit = omit,
+        name: Optional[str] | Omit = omit,
+        planning_prompt: Optional[str] | Omit = omit,
+        system_prompt: Optional[str] | Omit = omit,
+        tools: Optional[List[agent_update_params.Tool]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> Agent:
         """
         Update an agent configuration
@@ -723,8 +749,13 @@ class AsyncAgentsResource(AsyncAPIResource):
               - magpie-1.1-flash is a faster model useful for RAG usecases, it currently only
                 supports semantic_search tool. Structured outputs are not supported with this
                 model.
+              - Can also accept any custom string value for future model versions.
+              - Magpie-2.0 our latest agentic model with more proactive planning and reasoning
+                capabilities.
 
           custom_prompt: Use custom prompt to instruct the style and formatting of the agent's response
+
+          description: The description of the agent
 
           disabled_tools: Array of the agent tools to disable. Disabling is performed after the
               'agent_tools' rules are applied. For example, agent_tools: null and
@@ -805,6 +836,7 @@ class AsyncAgentsResource(AsyncAPIResource):
                 {
                     "agent_model": agent_model,
                     "custom_prompt": custom_prompt,
+                    "description": description,
                     "disabled_tools": disabled_tools,
                     "knowledge_ids": knowledge_ids,
                     "llm_model": llm_model,
@@ -824,15 +856,15 @@ class AsyncAgentsResource(AsyncAPIResource):
     def list(
         self,
         *,
-        after: str | NotGiven = NOT_GIVEN,
-        before: str | NotGiven = NOT_GIVEN,
-        limit: int | NotGiven = NOT_GIVEN,
+        after: str | Omit = omit,
+        before: str | Omit = omit,
+        limit: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> AsyncPaginator[Agent, AsyncCursorIDPage[Agent]]:
         """
         List all agents for the authenticated organization
@@ -887,7 +919,7 @@ class AsyncAgentsResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> None:
         """
         Delete an agent

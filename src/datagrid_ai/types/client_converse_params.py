@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import List, Union, Iterable, Optional
 from typing_extensions import Literal, Required, TypeAlias, TypedDict
 
-from .tool_name import ToolName
+from .._types import SequenceNotStr
 from .tool_param import ToolParam
 
 __all__ = [
@@ -49,7 +49,7 @@ class ClientConverseParams(TypedDict, total=False):
     When enabled, the agent will generate citations for factual statements.
     """
 
-    secret_ids: Optional[List[str]]
+    secret_ids: Optional[SequenceNotStr[str]]
     """Array of secret ID's to be included in the context.
 
     The secret value will be appended to the prompt but not stored in conversation
@@ -112,35 +112,259 @@ class PromptInputItemList(TypedDict, total=False):
     """The type of the message input. Always `message`."""
 
 
-ConfigAgentTool: TypeAlias = Union[ToolName, ToolParam]
+ConfigAgentTool: TypeAlias = Union[
+    Literal[
+        "data_analysis",
+        "semantic_search",
+        "agent_memory",
+        "schema_info",
+        "table_info",
+        "create_dataset",
+        "find_files",
+        "read_file_contents",
+        "calendar",
+        "email",
+        "schedule_recurring_message_tool",
+        "procore",
+        "egnyte",
+        "notion",
+        "google_sheets",
+        "slack",
+        "microsoft_teams",
+        "sharepoint",
+        "drive",
+        "fieldwire",
+        "webbrowser",
+        "pdf_manipulation",
+        "pdf_generator",
+        "acc",
+        "docusign",
+        "webflow",
+        "hubspot",
+        "nec",
+        "github",
+        "trimble_project_site",
+        "linkedin",
+        "google_docs",
+        "google_slides",
+        "code_tool",
+        "data_classification",
+        "data_extraction",
+        "image_detection",
+        "attachment_extraction",
+        "pdf_extraction",
+        "youtube_video_analysis",
+        "calculate",
+        "pdf_form_filling",
+        "image_generator",
+        "video_generator",
+        "connect_data",
+        "download_data",
+        "web_search",
+        "fetch_url",
+        "company_prospect_researcher",
+        "people_prospect_researcher",
+    ],
+    str,
+    ToolParam,
+]
 
-ConfigDisabledAgentTool: TypeAlias = Union[ToolName, ToolParam]
+ConfigDisabledAgentTool: TypeAlias = Union[
+    Literal[
+        "data_analysis",
+        "semantic_search",
+        "agent_memory",
+        "schema_info",
+        "table_info",
+        "create_dataset",
+        "find_files",
+        "read_file_contents",
+        "calendar",
+        "email",
+        "schedule_recurring_message_tool",
+        "procore",
+        "egnyte",
+        "notion",
+        "google_sheets",
+        "slack",
+        "microsoft_teams",
+        "sharepoint",
+        "drive",
+        "fieldwire",
+        "webbrowser",
+        "pdf_manipulation",
+        "pdf_generator",
+        "acc",
+        "docusign",
+        "webflow",
+        "hubspot",
+        "nec",
+        "github",
+        "trimble_project_site",
+        "linkedin",
+        "google_docs",
+        "google_slides",
+        "code_tool",
+        "data_classification",
+        "data_extraction",
+        "image_detection",
+        "attachment_extraction",
+        "pdf_extraction",
+        "youtube_video_analysis",
+        "calculate",
+        "pdf_form_filling",
+        "image_generator",
+        "video_generator",
+        "connect_data",
+        "download_data",
+        "web_search",
+        "fetch_url",
+        "company_prospect_researcher",
+        "people_prospect_researcher",
+    ],
+    str,
+    ToolParam,
+]
 
-ConfigDisabledTool: TypeAlias = Union[ToolName, ToolParam]
+ConfigDisabledTool: TypeAlias = Union[
+    Literal[
+        "data_analysis",
+        "semantic_search",
+        "agent_memory",
+        "schema_info",
+        "table_info",
+        "create_dataset",
+        "find_files",
+        "read_file_contents",
+        "calendar",
+        "email",
+        "schedule_recurring_message_tool",
+        "procore",
+        "egnyte",
+        "notion",
+        "google_sheets",
+        "slack",
+        "microsoft_teams",
+        "sharepoint",
+        "drive",
+        "fieldwire",
+        "webbrowser",
+        "pdf_manipulation",
+        "pdf_generator",
+        "acc",
+        "docusign",
+        "webflow",
+        "hubspot",
+        "nec",
+        "github",
+        "trimble_project_site",
+        "linkedin",
+        "google_docs",
+        "google_slides",
+        "code_tool",
+        "data_classification",
+        "data_extraction",
+        "image_detection",
+        "attachment_extraction",
+        "pdf_extraction",
+        "youtube_video_analysis",
+        "calculate",
+        "pdf_form_filling",
+        "image_generator",
+        "video_generator",
+        "connect_data",
+        "download_data",
+        "web_search",
+        "fetch_url",
+        "company_prospect_researcher",
+        "people_prospect_researcher",
+    ],
+    str,
+    ToolParam,
+]
 
-ConfigTool: TypeAlias = Union[ToolName, ToolParam, ToolParam]
+ConfigTool: TypeAlias = Union[
+    Literal[
+        "data_analysis",
+        "semantic_search",
+        "agent_memory",
+        "schema_info",
+        "table_info",
+        "create_dataset",
+        "find_files",
+        "read_file_contents",
+        "calendar",
+        "email",
+        "schedule_recurring_message_tool",
+        "procore",
+        "egnyte",
+        "notion",
+        "google_sheets",
+        "slack",
+        "microsoft_teams",
+        "sharepoint",
+        "drive",
+        "fieldwire",
+        "webbrowser",
+        "pdf_manipulation",
+        "pdf_generator",
+        "acc",
+        "docusign",
+        "webflow",
+        "hubspot",
+        "nec",
+        "github",
+        "trimble_project_site",
+        "linkedin",
+        "google_docs",
+        "google_slides",
+        "code_tool",
+        "data_classification",
+        "data_extraction",
+        "image_detection",
+        "attachment_extraction",
+        "pdf_extraction",
+        "youtube_video_analysis",
+        "calculate",
+        "pdf_form_filling",
+        "image_generator",
+        "video_generator",
+        "connect_data",
+        "download_data",
+        "web_search",
+        "fetch_url",
+        "company_prospect_researcher",
+        "people_prospect_researcher",
+    ],
+    str,
+    ToolParam,
+    ToolParam,
+]
 
 
 class Config(TypedDict, total=False):
-    agent_model: Optional[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-1"]]
+    agent_model: Union[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-1", "magpie-2.0"], str, None]
     """The version of Datagrid's agent brain.
 
     - magpie-1.1 is the default and most powerful model.
     - magpie-1.1-flash is a faster model useful for RAG usecases, it currently only
       supports semantic_search tool. Structured outputs are not supported with this
       model.
+    - Can also accept any custom string value for future model versions.
+    - Magpie-2.0 our latest agentic model with more proactive planning and reasoning
+      capabilities.
     """
 
-    agent_tools: Optional[Iterable[ConfigAgentTool]]
+    agent_tools: Optional[List[ConfigAgentTool]]
     """Deprecated, use tools instead"""
 
     custom_prompt: Optional[str]
     """Use custom prompt to instruct the style and formatting of the agent's response"""
 
-    disabled_agent_tools: Optional[Iterable[Optional[Iterable[ConfigDisabledAgentTool]]]]
+    disabled_agent_tools: Optional[List[ConfigDisabledAgentTool]]
     """Deprecated, use disabled_tools instead"""
 
-    disabled_tools: Optional[Iterable[ConfigDisabledTool]]
+    disabled_tools: Optional[List[ConfigDisabledTool]]
     """Array of the agent tools to disable.
 
     Disabling is performed after the 'agent_tools' rules are applied. For example,
@@ -149,7 +373,7 @@ class Config(TypedDict, total=False):
     therefore only the agent_tools setting is relevant.
     """
 
-    knowledge_ids: Optional[List[str]]
+    knowledge_ids: Optional[SequenceNotStr[str]]
     """Array of Knowledge IDs the agent should use during the converse.
 
     When ommited, all knowledge is used.
@@ -189,7 +413,7 @@ class Config(TypedDict, total=False):
     system_prompt: Optional[str]
     """Directs your AI Agent's operational behavior."""
 
-    tools: Optional[Iterable[ConfigTool]]
+    tools: Optional[List[ConfigTool]]
     """Array of the agent tools to enable.
 
     If not provided - default tools of the agent are used. If empty list provided -

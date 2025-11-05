@@ -2,60 +2,116 @@
 
 from __future__ import annotations
 
+from typing import Union
+from typing_extensions import Literal
+
 import httpx
 
-from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
-from ..._utils import maybe_transform
-from ..._compat import cached_property
-from ..._resource import SyncAPIResource, AsyncAPIResource
-from ..._response import (
+from ..types import tool_list_params
+from .._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
+from .._utils import maybe_transform
+from .._compat import cached_property
+from .._resource import SyncAPIResource, AsyncAPIResource
+from .._response import (
     to_raw_response_wrapper,
     to_streamed_response_wrapper,
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from ...pagination import SyncCursorIDPage, AsyncCursorIDPage
-from ..._base_client import AsyncPaginator, make_request_options
-from ...types.conversations import message_list_params
-from ...types.conversations.message import Message
+from ..pagination import SyncCursorNamePage, AsyncCursorNamePage
+from .._base_client import AsyncPaginator, make_request_options
+from ..types.tool_def import ToolDef
 
-__all__ = ["MessagesResource", "AsyncMessagesResource"]
+__all__ = ["ToolsResource", "AsyncToolsResource"]
 
 
-class MessagesResource(SyncAPIResource):
+class ToolsResource(SyncAPIResource):
     @cached_property
-    def with_raw_response(self) -> MessagesResourceWithRawResponse:
+    def with_raw_response(self) -> ToolsResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
         For more information, see https://www.github.com/DatagridAI/datagrid-python#accessing-raw-response-data-eg-headers
         """
-        return MessagesResourceWithRawResponse(self)
+        return ToolsResourceWithRawResponse(self)
 
     @cached_property
-    def with_streaming_response(self) -> MessagesResourceWithStreamingResponse:
+    def with_streaming_response(self) -> ToolsResourceWithStreamingResponse:
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
         For more information, see https://www.github.com/DatagridAI/datagrid-python#with_streaming_response
         """
-        return MessagesResourceWithStreamingResponse(self)
+        return ToolsResourceWithStreamingResponse(self)
 
     def retrieve(
         self,
-        message_id: str,
+        tool_name: Union[
+            Literal[
+                "data_analysis",
+                "semantic_search",
+                "agent_memory",
+                "schema_info",
+                "table_info",
+                "create_dataset",
+                "find_files",
+                "read_file_contents",
+                "calendar",
+                "email",
+                "schedule_recurring_message_tool",
+                "procore",
+                "egnyte",
+                "notion",
+                "google_sheets",
+                "slack",
+                "microsoft_teams",
+                "sharepoint",
+                "drive",
+                "fieldwire",
+                "webbrowser",
+                "pdf_manipulation",
+                "pdf_generator",
+                "acc",
+                "docusign",
+                "webflow",
+                "hubspot",
+                "nec",
+                "github",
+                "trimble_project_site",
+                "linkedin",
+                "google_docs",
+                "google_slides",
+                "code_tool",
+                "data_classification",
+                "data_extraction",
+                "image_detection",
+                "attachment_extraction",
+                "pdf_extraction",
+                "youtube_video_analysis",
+                "calculate",
+                "pdf_form_filling",
+                "image_generator",
+                "video_generator",
+                "connect_data",
+                "download_data",
+                "web_search",
+                "fetch_url",
+                "company_prospect_researcher",
+                "people_prospect_researcher",
+            ],
+            str,
+        ],
         *,
-        conversation_id: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> Message:
+    ) -> ToolDef:
         """
-        Retrieves a message by id.
+        Retrieves a specific tool by its identifier.
 
         Args:
           extra_headers: Send extra headers
@@ -66,21 +122,16 @@ class MessagesResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not conversation_id:
-            raise ValueError(f"Expected a non-empty value for `conversation_id` but received {conversation_id!r}")
-        if not message_id:
-            raise ValueError(f"Expected a non-empty value for `message_id` but received {message_id!r}")
         return self._get(
-            f"/conversations/{conversation_id}/messages/{message_id}",
+            f"/tools/{tool_name}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=Message,
+            cast_to=ToolDef,
         )
 
     def list(
         self,
-        conversation_id: str,
         *,
         after: str | Omit = omit,
         before: str | Omit = omit,
@@ -91,9 +142,9 @@ class MessagesResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> SyncCursorIDPage[Message]:
+    ) -> SyncCursorNamePage[ToolDef]:
         """
-        Returns the list of messages in a conversation.
+        Returns the list of available tools that can be used by agents.
 
         Args:
           after: A cursor to use in pagination. `after` is an object ID that defines your place
@@ -116,11 +167,9 @@ class MessagesResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not conversation_id:
-            raise ValueError(f"Expected a non-empty value for `conversation_id` but received {conversation_id!r}")
         return self._get_api_list(
-            f"/conversations/{conversation_id}/messages",
-            page=SyncCursorIDPage[Message],
+            "/tools",
+            page=SyncCursorNamePage[ToolDef],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -132,47 +181,100 @@ class MessagesResource(SyncAPIResource):
                         "before": before,
                         "limit": limit,
                     },
-                    message_list_params.MessageListParams,
+                    tool_list_params.ToolListParams,
                 ),
             ),
-            model=Message,
+            model=ToolDef,
         )
 
 
-class AsyncMessagesResource(AsyncAPIResource):
+class AsyncToolsResource(AsyncAPIResource):
     @cached_property
-    def with_raw_response(self) -> AsyncMessagesResourceWithRawResponse:
+    def with_raw_response(self) -> AsyncToolsResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
         For more information, see https://www.github.com/DatagridAI/datagrid-python#accessing-raw-response-data-eg-headers
         """
-        return AsyncMessagesResourceWithRawResponse(self)
+        return AsyncToolsResourceWithRawResponse(self)
 
     @cached_property
-    def with_streaming_response(self) -> AsyncMessagesResourceWithStreamingResponse:
+    def with_streaming_response(self) -> AsyncToolsResourceWithStreamingResponse:
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
         For more information, see https://www.github.com/DatagridAI/datagrid-python#with_streaming_response
         """
-        return AsyncMessagesResourceWithStreamingResponse(self)
+        return AsyncToolsResourceWithStreamingResponse(self)
 
     async def retrieve(
         self,
-        message_id: str,
+        tool_name: Union[
+            Literal[
+                "data_analysis",
+                "semantic_search",
+                "agent_memory",
+                "schema_info",
+                "table_info",
+                "create_dataset",
+                "find_files",
+                "read_file_contents",
+                "calendar",
+                "email",
+                "schedule_recurring_message_tool",
+                "procore",
+                "egnyte",
+                "notion",
+                "google_sheets",
+                "slack",
+                "microsoft_teams",
+                "sharepoint",
+                "drive",
+                "fieldwire",
+                "webbrowser",
+                "pdf_manipulation",
+                "pdf_generator",
+                "acc",
+                "docusign",
+                "webflow",
+                "hubspot",
+                "nec",
+                "github",
+                "trimble_project_site",
+                "linkedin",
+                "google_docs",
+                "google_slides",
+                "code_tool",
+                "data_classification",
+                "data_extraction",
+                "image_detection",
+                "attachment_extraction",
+                "pdf_extraction",
+                "youtube_video_analysis",
+                "calculate",
+                "pdf_form_filling",
+                "image_generator",
+                "video_generator",
+                "connect_data",
+                "download_data",
+                "web_search",
+                "fetch_url",
+                "company_prospect_researcher",
+                "people_prospect_researcher",
+            ],
+            str,
+        ],
         *,
-        conversation_id: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> Message:
+    ) -> ToolDef:
         """
-        Retrieves a message by id.
+        Retrieves a specific tool by its identifier.
 
         Args:
           extra_headers: Send extra headers
@@ -183,21 +285,16 @@ class AsyncMessagesResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not conversation_id:
-            raise ValueError(f"Expected a non-empty value for `conversation_id` but received {conversation_id!r}")
-        if not message_id:
-            raise ValueError(f"Expected a non-empty value for `message_id` but received {message_id!r}")
         return await self._get(
-            f"/conversations/{conversation_id}/messages/{message_id}",
+            f"/tools/{tool_name}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=Message,
+            cast_to=ToolDef,
         )
 
     def list(
         self,
-        conversation_id: str,
         *,
         after: str | Omit = omit,
         before: str | Omit = omit,
@@ -208,9 +305,9 @@ class AsyncMessagesResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> AsyncPaginator[Message, AsyncCursorIDPage[Message]]:
+    ) -> AsyncPaginator[ToolDef, AsyncCursorNamePage[ToolDef]]:
         """
-        Returns the list of messages in a conversation.
+        Returns the list of available tools that can be used by agents.
 
         Args:
           after: A cursor to use in pagination. `after` is an object ID that defines your place
@@ -233,11 +330,9 @@ class AsyncMessagesResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not conversation_id:
-            raise ValueError(f"Expected a non-empty value for `conversation_id` but received {conversation_id!r}")
         return self._get_api_list(
-            f"/conversations/{conversation_id}/messages",
-            page=AsyncCursorIDPage[Message],
+            "/tools",
+            page=AsyncCursorNamePage[ToolDef],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -249,56 +344,56 @@ class AsyncMessagesResource(AsyncAPIResource):
                         "before": before,
                         "limit": limit,
                     },
-                    message_list_params.MessageListParams,
+                    tool_list_params.ToolListParams,
                 ),
             ),
-            model=Message,
+            model=ToolDef,
         )
 
 
-class MessagesResourceWithRawResponse:
-    def __init__(self, messages: MessagesResource) -> None:
-        self._messages = messages
+class ToolsResourceWithRawResponse:
+    def __init__(self, tools: ToolsResource) -> None:
+        self._tools = tools
 
         self.retrieve = to_raw_response_wrapper(
-            messages.retrieve,
+            tools.retrieve,
         )
         self.list = to_raw_response_wrapper(
-            messages.list,
+            tools.list,
         )
 
 
-class AsyncMessagesResourceWithRawResponse:
-    def __init__(self, messages: AsyncMessagesResource) -> None:
-        self._messages = messages
+class AsyncToolsResourceWithRawResponse:
+    def __init__(self, tools: AsyncToolsResource) -> None:
+        self._tools = tools
 
         self.retrieve = async_to_raw_response_wrapper(
-            messages.retrieve,
+            tools.retrieve,
         )
         self.list = async_to_raw_response_wrapper(
-            messages.list,
+            tools.list,
         )
 
 
-class MessagesResourceWithStreamingResponse:
-    def __init__(self, messages: MessagesResource) -> None:
-        self._messages = messages
+class ToolsResourceWithStreamingResponse:
+    def __init__(self, tools: ToolsResource) -> None:
+        self._tools = tools
 
         self.retrieve = to_streamed_response_wrapper(
-            messages.retrieve,
+            tools.retrieve,
         )
         self.list = to_streamed_response_wrapper(
-            messages.list,
+            tools.list,
         )
 
 
-class AsyncMessagesResourceWithStreamingResponse:
-    def __init__(self, messages: AsyncMessagesResource) -> None:
-        self._messages = messages
+class AsyncToolsResourceWithStreamingResponse:
+    def __init__(self, tools: AsyncToolsResource) -> None:
+        self._tools = tools
 
         self.retrieve = async_to_streamed_response_wrapper(
-            messages.retrieve,
+            tools.retrieve,
         )
         self.list = async_to_streamed_response_wrapper(
-            messages.list,
+            tools.list,
         )

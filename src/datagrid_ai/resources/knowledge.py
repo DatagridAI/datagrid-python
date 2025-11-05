@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
-from typing import List, Mapping, Optional, cast
+from typing import Mapping, Optional, cast
 
 import httpx
 
 from ..types import knowledge_list_params, knowledge_create_params, knowledge_update_params, knowledge_connect_params
-from .._types import NOT_GIVEN, Body, Query, Headers, NoneType, NotGiven, FileTypes
-from .._utils import extract_files, maybe_transform, deepcopy_minimal, async_maybe_transform
+from .._types import Body, Omit, Query, Headers, NoneType, NotGiven, FileTypes, SequenceNotStr, omit, not_given
+from .._utils import is_given, extract_files, maybe_transform, deepcopy_minimal, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
 from .._response import (
@@ -17,11 +17,11 @@ from .._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
+from .._constants import DEFAULT_TIMEOUT
 from ..pagination import SyncCursorIDPage, AsyncCursorIDPage
 from .._base_client import AsyncPaginator, make_request_options
 from ..types.knowledge import Knowledge
 from ..types.redirect_url_response import RedirectURLResponse
-from ..types.knowledge_update_response import KnowledgeUpdateResponse
 
 __all__ = ["KnowledgeResource", "AsyncKnowledgeResource"]
 
@@ -49,21 +49,21 @@ class KnowledgeResource(SyncAPIResource):
     def create(
         self,
         *,
-        files: List[FileTypes],
-        name: Optional[str] | NotGiven = NOT_GIVEN,
+        files: SequenceNotStr[FileTypes],
+        name: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> Knowledge:
         """
         Create knowledge which will be learned and leveraged by agents.
 
         Args:
           files: The files to be uploaded and learned. Supported media types are `pdf`, `json`,
-              `csv`, `text`, `png`, `jpeg`, `excel`, `google sheets`.
+              `csv`, `text`, `png`, `jpeg`, `excel`, `google sheets`, `docx`, `pptx`.
 
           name: The name of the knowledge.
 
@@ -75,6 +75,8 @@ class KnowledgeResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
+        if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
+            timeout = 300
         body = deepcopy_minimal(
             {
                 "files": files,
@@ -105,7 +107,7 @@ class KnowledgeResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> Knowledge:
         """
         Retrieves a knowledge by id.
@@ -133,18 +135,26 @@ class KnowledgeResource(SyncAPIResource):
         self,
         knowledge_id: str,
         *,
-        name: str,
+        files: Optional[SequenceNotStr[FileTypes]] | Omit = omit,
+        name: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> KnowledgeUpdateResponse:
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> Knowledge:
         """
         Update a knowledge's attributes.
 
         Args:
+          files: The files to replace existing knowledge. When provided, all existing data will
+              be removed from the knowledge and replaced with these files. Supported media
+              types are `pdf`, `json`, `csv`, `text`, `png`, `jpeg`, `excel`, `google sheets`,
+              `docx`, `pptx`.
+
+          name: The new name for the `knowledge`.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -155,27 +165,39 @@ class KnowledgeResource(SyncAPIResource):
         """
         if not knowledge_id:
             raise ValueError(f"Expected a non-empty value for `knowledge_id` but received {knowledge_id!r}")
+        body = deepcopy_minimal(
+            {
+                "files": files,
+                "name": name,
+            }
+        )
+        extracted_files = extract_files(cast(Mapping[str, object], body), paths=[["files", "<array>"]])
+        # It should be noted that the actual Content-Type header that will be
+        # sent to the server will contain a `boundary` parameter, e.g.
+        # multipart/form-data; boundary=---abc--
+        extra_headers = {"Content-Type": "multipart/form-data", **(extra_headers or {})}
         return self._patch(
             f"/knowledge/{knowledge_id}",
-            body=maybe_transform({"name": name}, knowledge_update_params.KnowledgeUpdateParams),
+            body=maybe_transform(body, knowledge_update_params.KnowledgeUpdateParams),
+            files=extracted_files,
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=KnowledgeUpdateResponse,
+            cast_to=Knowledge,
         )
 
     def list(
         self,
         *,
-        after: str | NotGiven = NOT_GIVEN,
-        before: str | NotGiven = NOT_GIVEN,
-        limit: int | NotGiven = NOT_GIVEN,
+        after: str | Omit = omit,
+        before: str | Omit = omit,
+        limit: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SyncCursorIDPage[Knowledge]:
         """Returns the list of knowledge.
 
@@ -231,7 +253,7 @@ class KnowledgeResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> None:
         """
         Delete knowledge.
@@ -265,7 +287,7 @@ class KnowledgeResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> RedirectURLResponse:
         """
         Create knowledge from connection which will be learned and leveraged by agents.
@@ -314,21 +336,21 @@ class AsyncKnowledgeResource(AsyncAPIResource):
     async def create(
         self,
         *,
-        files: List[FileTypes],
-        name: Optional[str] | NotGiven = NOT_GIVEN,
+        files: SequenceNotStr[FileTypes],
+        name: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> Knowledge:
         """
         Create knowledge which will be learned and leveraged by agents.
 
         Args:
           files: The files to be uploaded and learned. Supported media types are `pdf`, `json`,
-              `csv`, `text`, `png`, `jpeg`, `excel`, `google sheets`.
+              `csv`, `text`, `png`, `jpeg`, `excel`, `google sheets`, `docx`, `pptx`.
 
           name: The name of the knowledge.
 
@@ -340,6 +362,8 @@ class AsyncKnowledgeResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
+        if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
+            timeout = 300
         body = deepcopy_minimal(
             {
                 "files": files,
@@ -370,7 +394,7 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> Knowledge:
         """
         Retrieves a knowledge by id.
@@ -398,18 +422,26 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         self,
         knowledge_id: str,
         *,
-        name: str,
+        files: Optional[SequenceNotStr[FileTypes]] | Omit = omit,
+        name: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> KnowledgeUpdateResponse:
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> Knowledge:
         """
         Update a knowledge's attributes.
 
         Args:
+          files: The files to replace existing knowledge. When provided, all existing data will
+              be removed from the knowledge and replaced with these files. Supported media
+              types are `pdf`, `json`, `csv`, `text`, `png`, `jpeg`, `excel`, `google sheets`,
+              `docx`, `pptx`.
+
+          name: The new name for the `knowledge`.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -420,27 +452,39 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         """
         if not knowledge_id:
             raise ValueError(f"Expected a non-empty value for `knowledge_id` but received {knowledge_id!r}")
+        body = deepcopy_minimal(
+            {
+                "files": files,
+                "name": name,
+            }
+        )
+        extracted_files = extract_files(cast(Mapping[str, object], body), paths=[["files", "<array>"]])
+        # It should be noted that the actual Content-Type header that will be
+        # sent to the server will contain a `boundary` parameter, e.g.
+        # multipart/form-data; boundary=---abc--
+        extra_headers = {"Content-Type": "multipart/form-data", **(extra_headers or {})}
         return await self._patch(
             f"/knowledge/{knowledge_id}",
-            body=await async_maybe_transform({"name": name}, knowledge_update_params.KnowledgeUpdateParams),
+            body=await async_maybe_transform(body, knowledge_update_params.KnowledgeUpdateParams),
+            files=extracted_files,
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=KnowledgeUpdateResponse,
+            cast_to=Knowledge,
         )
 
     def list(
         self,
         *,
-        after: str | NotGiven = NOT_GIVEN,
-        before: str | NotGiven = NOT_GIVEN,
-        limit: int | NotGiven = NOT_GIVEN,
+        after: str | Omit = omit,
+        before: str | Omit = omit,
+        limit: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> AsyncPaginator[Knowledge, AsyncCursorIDPage[Knowledge]]:
         """Returns the list of knowledge.
 
@@ -496,7 +540,7 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> None:
         """
         Delete knowledge.
@@ -530,7 +574,7 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> RedirectURLResponse:
         """
         Create knowledge from connection which will be learned and leveraged by agents.
