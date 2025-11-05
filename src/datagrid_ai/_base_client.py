@@ -1251,7 +1251,7 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
         files: RequestFiles | None = None,
     ) -> ResponseT:
         opts = FinalRequestOptions.construct(
-            method="post", url=path, json_data=body, files=to_httpx_files(files), **options
+            method="patch", url=path, json_data=body, files=to_httpx_files(files), **options
         )
         return self.request(cast_to, opts)
 
