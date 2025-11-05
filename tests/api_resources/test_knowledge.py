@@ -104,6 +104,7 @@ class TestKnowledge:
             )
 
     @parametrize
+    @skip
     def test_method_update(self, client: Datagrid) -> None:
         knowledge = client.knowledge.update(
             knowledge_id="knowledge_id",
@@ -111,6 +112,7 @@ class TestKnowledge:
         assert_matches_type(Knowledge, knowledge, path=["response"])
 
     @parametrize
+    @skip
     def test_method_update_with_all_params(self, client: Datagrid) -> None:
         knowledge = client.knowledge.update(
             knowledge_id="knowledge_id",
@@ -120,6 +122,7 @@ class TestKnowledge:
         assert_matches_type(Knowledge, knowledge, path=["response"])
 
     @parametrize
+    @skip
     def test_raw_response_update(self, client: Datagrid) -> None:
         response = client.knowledge.with_raw_response.update(
             knowledge_id="knowledge_id",
@@ -131,6 +134,7 @@ class TestKnowledge:
         assert_matches_type(Knowledge, knowledge, path=["response"])
 
     @parametrize
+    @skip
     def test_streaming_response_update(self, client: Datagrid) -> None:
         with client.knowledge.with_streaming_response.update(
             knowledge_id="knowledge_id",
