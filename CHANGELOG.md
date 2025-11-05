@@ -1,5 +1,36 @@
 # Changelog
 
+## 0.2.0 (2025-11-05)
+
+Full Changelog: [v0.1.0...v0.2.0](https://github.com/DatagridAI/datagrid-python/compare/v0.1.0...v0.2.0)
+
+### Features
+
+* **api:** api update ([6ede68b](https://github.com/DatagridAI/datagrid-python/commit/6ede68b81e37cad531ac631709abece0ce0872fd))
+* **api:** api update ([7c8be49](https://github.com/DatagridAI/datagrid-python/commit/7c8be49b0fec7052b0c06af1ab6bb9da999ef12f))
+* **api:** api update ([e4a06d0](https://github.com/DatagridAI/datagrid-python/commit/e4a06d0f883234bb14673b0a53bdd6b3bacf07a1))
+* improve future compat with pydantic v3 ([cdb8dd9](https://github.com/DatagridAI/datagrid-python/commit/cdb8dd9167fa01929a2af154d55ff6f8df425629))
+* **types:** replace List[str] with SequenceNotStr in params ([15d4934](https://github.com/DatagridAI/datagrid-python/commit/15d49343220460e26b870937b05b631cf4600248))
+
+
+### Bug Fixes
+
+* **client:** close streams without requiring full consumption ([e75dde0](https://github.com/DatagridAI/datagrid-python/commit/e75dde007f1d908ba0aa5c3d18d65d69e21e47fc))
+
+
+### Chores
+
+* bump `httpx-aiohttp` version to 0.1.9 ([7b03a3b](https://github.com/DatagridAI/datagrid-python/commit/7b03a3bc0679e1f6062c7763729c0bf42fbd8d92))
+* do not install brew dependencies in ./scripts/bootstrap by default ([94702df](https://github.com/DatagridAI/datagrid-python/commit/94702dfb2ab0cc048b264db739953ee6a97ec50d))
+* **internal/tests:** avoid race condition with implicit client cleanup ([5fb1464](https://github.com/DatagridAI/datagrid-python/commit/5fb14647bc6b6f623f5836196c07da938eac165a))
+* **internal:** add Sequence related utils ([8cb0b1a](https://github.com/DatagridAI/datagrid-python/commit/8cb0b1ae289a108827152b7109f707db708811d6))
+* **internal:** codegen related update ([9ef1787](https://github.com/DatagridAI/datagrid-python/commit/9ef1787bdae68916408f6b5ce8c65c6198340d2b))
+* **internal:** detect missing future annotations with ruff ([309dc5f](https://github.com/DatagridAI/datagrid-python/commit/309dc5f688058139cbc98c2cd303f39b586d2613))
+* **internal:** grammar fix (it's -&gt; its) ([2064aa5](https://github.com/DatagridAI/datagrid-python/commit/2064aa5c75b47733e332b9945596517694b7fde9))
+* **internal:** move mypy configurations to `pyproject.toml` file ([6c3f2e0](https://github.com/DatagridAI/datagrid-python/commit/6c3f2e03e30fd6fbd9bf8f8c7e3fc7f4c32aad80))
+* **internal:** update pydantic dependency ([2e9ee91](https://github.com/DatagridAI/datagrid-python/commit/2e9ee91860ef9dc17df3d632d882f81af33f674f))
+* **types:** change optional parameter type from NotGiven to Omit ([85128e9](https://github.com/DatagridAI/datagrid-python/commit/85128e9158c663f120ff853935a238cfe909fcb4))
+
 ## 0.1.0 (2025-08-29)
 
 Full Changelog: [v0.1.0-alpha.20...v0.1.0](https://github.com/DatagridAI/datagrid-python/compare/v0.1.0-alpha.20...v0.1.0)
