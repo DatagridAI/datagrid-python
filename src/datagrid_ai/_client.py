@@ -50,6 +50,7 @@ from ._base_client import (
     AsyncAPIClient,
     make_request_options,
 )
+from .resources.beta import beta
 from .resources.memory import memory
 from .resources.organization import organization
 from .resources.conversations import conversations
@@ -79,6 +80,7 @@ class Datagrid(SyncAPIClient):
     memory: memory.MemoryResource
     organization: organization.OrganizationResource
     conversations: conversations.ConversationsResource
+    beta: beta.BetaResource
     with_raw_response: DatagridWithRawResponse
     with_streaming_response: DatagridWithStreamedResponse
 
@@ -155,6 +157,7 @@ class Datagrid(SyncAPIClient):
         self.memory = memory.MemoryResource(self)
         self.organization = organization.OrganizationResource(self)
         self.conversations = conversations.ConversationsResource(self)
+        self.beta = beta.BetaResource(self)
         self.with_raw_response = DatagridWithRawResponse(self)
         self.with_streaming_response = DatagridWithStreamedResponse(self)
 
@@ -334,8 +337,8 @@ class Datagrid(SyncAPIClient):
               if stream is set to true.
 
           text: Contains the format property used to specify the structured output schema.
-              Structured output is currently only supported by the default agent model,
-              magpie-1.1.
+              Structured output is not supported only supported by the default agent model,
+              magpie-1.1 and magpie-2.0.
 
           extra_headers: Send extra headers
 
@@ -416,6 +419,7 @@ class AsyncDatagrid(AsyncAPIClient):
     memory: memory.AsyncMemoryResource
     organization: organization.AsyncOrganizationResource
     conversations: conversations.AsyncConversationsResource
+    beta: beta.AsyncBetaResource
     with_raw_response: AsyncDatagridWithRawResponse
     with_streaming_response: AsyncDatagridWithStreamedResponse
 
@@ -492,6 +496,7 @@ class AsyncDatagrid(AsyncAPIClient):
         self.memory = memory.AsyncMemoryResource(self)
         self.organization = organization.AsyncOrganizationResource(self)
         self.conversations = conversations.AsyncConversationsResource(self)
+        self.beta = beta.AsyncBetaResource(self)
         self.with_raw_response = AsyncDatagridWithRawResponse(self)
         self.with_streaming_response = AsyncDatagridWithStreamedResponse(self)
 
@@ -671,8 +676,8 @@ class AsyncDatagrid(AsyncAPIClient):
               if stream is set to true.
 
           text: Contains the format property used to specify the structured output schema.
-              Structured output is currently only supported by the default agent model,
-              magpie-1.1.
+              Structured output is not supported only supported by the default agent model,
+              magpie-1.1 and magpie-2.0.
 
           extra_headers: Send extra headers
 
@@ -754,6 +759,7 @@ class DatagridWithRawResponse:
         self.memory = memory.MemoryResourceWithRawResponse(client.memory)
         self.organization = organization.OrganizationResourceWithRawResponse(client.organization)
         self.conversations = conversations.ConversationsResourceWithRawResponse(client.conversations)
+        self.beta = beta.BetaResourceWithRawResponse(client.beta)
 
         self.converse = to_raw_response_wrapper(
             client.converse,
@@ -773,6 +779,7 @@ class AsyncDatagridWithRawResponse:
         self.memory = memory.AsyncMemoryResourceWithRawResponse(client.memory)
         self.organization = organization.AsyncOrganizationResourceWithRawResponse(client.organization)
         self.conversations = conversations.AsyncConversationsResourceWithRawResponse(client.conversations)
+        self.beta = beta.AsyncBetaResourceWithRawResponse(client.beta)
 
         self.converse = async_to_raw_response_wrapper(
             client.converse,
@@ -792,6 +799,7 @@ class DatagridWithStreamedResponse:
         self.memory = memory.MemoryResourceWithStreamingResponse(client.memory)
         self.organization = organization.OrganizationResourceWithStreamingResponse(client.organization)
         self.conversations = conversations.ConversationsResourceWithStreamingResponse(client.conversations)
+        self.beta = beta.BetaResourceWithStreamingResponse(client.beta)
 
         self.converse = to_streamed_response_wrapper(
             client.converse,
@@ -811,6 +819,7 @@ class AsyncDatagridWithStreamedResponse:
         self.memory = memory.AsyncMemoryResourceWithStreamingResponse(client.memory)
         self.organization = organization.AsyncOrganizationResourceWithStreamingResponse(client.organization)
         self.conversations = conversations.AsyncConversationsResourceWithStreamingResponse(client.conversations)
+        self.beta = beta.AsyncBetaResourceWithStreamingResponse(client.beta)
 
         self.converse = async_to_streamed_response_wrapper(
             client.converse,

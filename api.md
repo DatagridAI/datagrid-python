@@ -33,6 +33,7 @@ Methods:
 - <code title="get /knowledge">client.knowledge.<a href="./src/datagrid_ai/resources/knowledge.py">list</a>(\*\*<a href="src/datagrid_ai/types/knowledge_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/knowledge.py">SyncCursorIDPage[Knowledge]</a></code>
 - <code title="delete /knowledge/{knowledge_id}">client.knowledge.<a href="./src/datagrid_ai/resources/knowledge.py">delete</a>(knowledge_id) -> None</code>
 - <code title="post /knowledge/connect">client.knowledge.<a href="./src/datagrid_ai/resources/knowledge.py">connect</a>(\*\*<a href="src/datagrid_ai/types/knowledge_connect_params.py">params</a>) -> <a href="./src/datagrid_ai/types/redirect_url_response.py">RedirectURLResponse</a></code>
+- <code title="post /knowledge/{knowledge_id}/reindex">client.knowledge.<a href="./src/datagrid_ai/resources/knowledge.py">reindex</a>(knowledge_id) -> None</code>
 
 # Connections
 
@@ -265,3 +266,17 @@ Methods:
 
 - <code title="get /conversations/{conversation_id}/messages/{message_id}">client.conversations.messages.<a href="./src/datagrid_ai/resources/conversations/messages.py">retrieve</a>(message_id, \*, conversation_id) -> <a href="./src/datagrid_ai/types/conversations/message.py">Message</a></code>
 - <code title="get /conversations/{conversation_id}/messages">client.conversations.messages.<a href="./src/datagrid_ai/resources/conversations/messages.py">list</a>(conversation_id, \*\*<a href="src/datagrid_ai/types/conversations/message_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/conversations/message.py">SyncCursorIDPage[Message]</a></code>
+
+# Beta
+
+## Rewrite
+
+Types:
+
+```python
+from datagrid_ai.types.beta import RewriteRequest, RewriteResponse
+```
+
+Methods:
+
+- <code title="post /beta/rewrite">client.beta.rewrite.<a href="./src/datagrid_ai/resources/beta/rewrite.py">rewrite_text</a>(\*\*<a href="src/datagrid_ai/types/beta/rewrite_rewrite_text_params.py">params</a>) -> <a href="./src/datagrid_ai/types/beta/rewrite_response.py">RewriteResponse</a></code>
