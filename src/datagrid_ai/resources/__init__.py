@@ -1,5 +1,13 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
+from .beta import (
+    BetaResource,
+    AsyncBetaResource,
+    BetaResourceWithRawResponse,
+    AsyncBetaResourceWithRawResponse,
+    BetaResourceWithStreamingResponse,
+    AsyncBetaResourceWithStreamingResponse,
+)
 from .files import (
     FilesResource,
     AsyncFilesResource,
@@ -156,4 +164,10 @@ __all__ = [
     "AsyncConversationsResourceWithRawResponse",
     "ConversationsResourceWithStreamingResponse",
     "AsyncConversationsResourceWithStreamingResponse",
+    "BetaResource",
+    "AsyncBetaResource",
+    "BetaResourceWithRawResponse",
+    "AsyncBetaResourceWithRawResponse",
+    "BetaResourceWithStreamingResponse",
+    "AsyncBetaResourceWithStreamingResponse",
 ]
