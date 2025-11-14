@@ -248,6 +248,44 @@ class TestKnowledge:
 
         assert cast(Any, response.is_closed) is True
 
+    @parametrize
+    def test_method_reindex(self, client: Datagrid) -> None:
+        knowledge = client.knowledge.reindex(
+            "knowledge_id",
+        )
+        assert knowledge is None
+
+    @parametrize
+    def test_raw_response_reindex(self, client: Datagrid) -> None:
+        response = client.knowledge.with_raw_response.reindex(
+            "knowledge_id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        knowledge = response.parse()
+        assert knowledge is None
+
+    @parametrize
+    def test_streaming_response_reindex(self, client: Datagrid) -> None:
+        with client.knowledge.with_streaming_response.reindex(
+            "knowledge_id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            knowledge = response.parse()
+            assert knowledge is None
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    def test_path_params_reindex(self, client: Datagrid) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `knowledge_id` but received ''"):
+            client.knowledge.with_raw_response.reindex(
+                "",
+            )
+
 
 class TestAsyncKnowledge:
     parametrize = pytest.mark.parametrize(
@@ -480,3 +518,41 @@ class TestAsyncKnowledge:
             assert_matches_type(RedirectURLResponse, knowledge, path=["response"])
 
         assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    async def test_method_reindex(self, async_client: AsyncDatagrid) -> None:
+        knowledge = await async_client.knowledge.reindex(
+            "knowledge_id",
+        )
+        assert knowledge is None
+
+    @parametrize
+    async def test_raw_response_reindex(self, async_client: AsyncDatagrid) -> None:
+        response = await async_client.knowledge.with_raw_response.reindex(
+            "knowledge_id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        knowledge = await response.parse()
+        assert knowledge is None
+
+    @parametrize
+    async def test_streaming_response_reindex(self, async_client: AsyncDatagrid) -> None:
+        async with async_client.knowledge.with_streaming_response.reindex(
+            "knowledge_id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            knowledge = await response.parse()
+            assert knowledge is None
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    async def test_path_params_reindex(self, async_client: AsyncDatagrid) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `knowledge_id` but received ''"):
+            await async_client.knowledge.with_raw_response.reindex(
+                "",
+            )
