@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.3.0 (2025-11-16)
+
+Full Changelog: [v0.2.0...v0.3.0](https://github.com/DatagridAI/datagrid-python/compare/v0.2.0...v0.3.0)
+
+### Features
+
+* **api:** api update ([e8c0f44](https://github.com/DatagridAI/datagrid-python/commit/e8c0f44805ce05b4b05399b31705b7fbbf1d7538))
+* **api:** api update ([c2bf822](https://github.com/DatagridAI/datagrid-python/commit/c2bf822f7a7cf11b42c57b5108357f7bfaf8830c))
+
+
+### Bug Fixes
+
+* compat with Python 3.14 ([1c2d09f](https://github.com/DatagridAI/datagrid-python/commit/1c2d09f61941976a53b2e7091a7d124eabb353a9))
+* **compat:** update signatures of `model_dump` and `model_dump_json` for Pydantic v1 ([2e9c86d](https://github.com/DatagridAI/datagrid-python/commit/2e9c86d4e86695be6450a51ec57fe713642dc8df))
+
+
+### Chores
+
+* **package:** drop Python 3.8 support ([bd5e411](https://github.com/DatagridAI/datagrid-python/commit/bd5e41114551933f8ae047e439882bdee52f7a25))
+
 ## 0.2.0 (2025-11-05)
 
 Full Changelog: [v0.1.0...v0.2.0](https://github.com/DatagridAI/datagrid-python/compare/v0.1.0...v0.2.0)
