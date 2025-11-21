@@ -49,6 +49,7 @@ class Agent(BaseModel):
             "gemini-2.5-flash-preview-04-17",
             "gemini-2.5-flash-lite",
             "gpt-5",
+            "gpt-5.1",
             "gemini-2.0-flash-001",
             "gemini-2.0-flash",
             "gemini-1.5-pro-001",
