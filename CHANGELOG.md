@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.1 (2025-11-22)
+
+Full Changelog: [v0.3.0...v0.3.1](https://github.com/DatagridAI/datagrid-python/compare/v0.3.0...v0.3.1)
+
+### Chores
+
+* add Python 3.14 classifier and testing ([640200d](https://github.com/DatagridAI/datagrid-python/commit/640200d010e3d96238699dcffc1d4999cf47174a))
+
 ## 0.3.0 (2025-11-16)
 
 Full Changelog: [v0.2.0...v0.3.0](https://github.com/DatagridAI/datagrid-python/compare/v0.2.0...v0.3.0)
