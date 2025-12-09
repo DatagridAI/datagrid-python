@@ -9,6 +9,8 @@ __all__ = ["TeamspaceUser", "Permissions"]
 
 
 class Permissions(BaseModel):
+    """The permissions assigned to the user in the teamspace"""
+
     role: Literal["owner", "admin", "member", "collaborator", "agents-only", "agent-specific"]
     """The role assigned to the user. Available roles:
 
@@ -30,6 +32,8 @@ class Permissions(BaseModel):
 
 
 class TeamspaceUser(BaseModel):
+    """Represents a user in a teamspace"""
+
     id: str
     """The unique identifier of the user"""
 

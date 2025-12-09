@@ -8,6 +8,8 @@ __all__ = ["ToolDef"]
 
 
 class ToolDef(BaseModel):
+    """The `Tool` object represents a tool that can be used by agents."""
+
     description: str
     """A detailed description of what the tool does."""
 
