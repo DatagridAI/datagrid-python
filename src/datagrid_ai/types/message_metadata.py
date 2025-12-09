@@ -9,6 +9,8 @@ __all__ = ["MessageMetadata", "Conversation", "ConversationNavigationItem"]
 
 
 class ConversationNavigationItem(BaseModel):
+    """The navigation item of the conversation."""
+
     id: str
     """The id of the navigation item."""
 
@@ -32,6 +34,8 @@ class ConversationNavigationItem(BaseModel):
 
 
 class Conversation(BaseModel):
+    """The conversation that the message belongs to."""
+
     id: str
     """The id of the conversation."""
 
@@ -49,6 +53,8 @@ class Conversation(BaseModel):
 
 
 class MessageMetadata(BaseModel):
+    """Metadata of a conversation message object"""
+
     id: str
     """The id of the message."""
 

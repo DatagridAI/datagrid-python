@@ -9,6 +9,8 @@ __all__ = ["KnowledgeMetadata", "NavigationItem"]
 
 
 class NavigationItem(BaseModel):
+    """The navigation item of the knowledge."""
+
     id: str
     """The id of the navigation item."""
 
@@ -32,6 +34,8 @@ class NavigationItem(BaseModel):
 
 
 class KnowledgeMetadata(BaseModel):
+    """Represents metadata for a knowledge object"""
+
     id: str
     """The unique identifier of the knowledge."""
 

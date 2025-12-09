@@ -26,6 +26,8 @@ class Page(BaseModel):
 
 
 class AttachmentMetadata(BaseModel):
+    """Metadata of an attachment object"""
+
     media_type: str
     """The media type of the attachment."""
 

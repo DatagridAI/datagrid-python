@@ -9,6 +9,8 @@ __all__ = ["TableMetadata"]
 
 
 class TableMetadata(BaseModel):
+    """Represents metadata for a table in a knowledge object"""
+
     id: str
     """The unique identifier for the table."""
 

@@ -9,6 +9,8 @@ __all__ = ["FileObject"]
 
 
 class FileObject(BaseModel):
+    """The `File` object represents a document that has been uploaded to Datagrid."""
+
     id: str
     """The file identifier, which can be referenced in the API endpoints."""
 

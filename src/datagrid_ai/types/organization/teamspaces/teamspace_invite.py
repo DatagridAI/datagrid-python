@@ -10,6 +10,8 @@ __all__ = ["TeamspaceInvite", "Permissions"]
 
 
 class Permissions(BaseModel):
+    """Represents the permissions assigned to a user in a teamspace"""
+
     role: Literal["admin", "member", "agents-only", "agent-specific"]
     """The role to assign to the user in the teamspace.
 
@@ -23,6 +25,8 @@ class Permissions(BaseModel):
 
 
 class TeamspaceInvite(BaseModel):
+    """Represents a invite for a user in a teamspace"""
+
     id: str
     """The ID of the invite. Only present if the invite is pending."""
 

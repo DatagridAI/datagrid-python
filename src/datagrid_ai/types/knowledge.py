@@ -10,6 +10,8 @@ __all__ = ["Knowledge", "RowCounts", "Credits"]
 
 
 class RowCounts(BaseModel):
+    """Row count statistics for the knowledge."""
+
     completed: float
     """The number of rows successfully learned."""
 
@@ -26,6 +28,10 @@ class Credits(BaseModel):
 
 
 class Knowledge(BaseModel):
+    """
+    The `knowledge` object represents knowledge that an agent may leverage to respond.
+    """
+
     id: str
     """The knowledge identifier, which can be referenced in the API endpoints."""
 

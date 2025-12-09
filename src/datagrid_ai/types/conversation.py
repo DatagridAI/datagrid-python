@@ -10,6 +10,8 @@ __all__ = ["Conversation"]
 
 
 class Conversation(BaseModel):
+    """The `conversation` object represents a conversation with an AI agent."""
+
     id: str
     """The conversation identifier, which can be referenced in the API endpoints."""
 
