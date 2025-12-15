@@ -111,6 +111,15 @@ class TestKnowledge:
             knowledge_id="knowledge_id",
             files=[b"raw file contents"],
             name="name",
+            sync={
+                "enabled": True,
+                "trigger": {
+                    "cron_expression": "0 0 * * *",
+                    "type": "cron",
+                    "description": "description",
+                    "timezone": "America/New_York",
+                },
+            },
         )
         assert_matches_type(Knowledge, knowledge, path=["response"])
 
@@ -382,6 +391,15 @@ class TestAsyncKnowledge:
             knowledge_id="knowledge_id",
             files=[b"raw file contents"],
             name="name",
+            sync={
+                "enabled": True,
+                "trigger": {
+                    "cron_expression": "0 0 * * *",
+                    "type": "cron",
+                    "description": "description",
+                    "timezone": "America/New_York",
+                },
+            },
         )
         assert_matches_type(Knowledge, knowledge, path=["response"])
 

@@ -27,6 +27,7 @@ ToolName: TypeAlias = Union[
         "sharepoint",
         "drive",
         "fieldwire",
+        "planner",
         "webbrowser",
         "pdf_manipulation",
         "pdf_generator",

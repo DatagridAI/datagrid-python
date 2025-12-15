@@ -110,7 +110,7 @@ class KnowledgeResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> Knowledge:
         """
-        Retrieves a knowledge by id.
+        Retrieves knowledge by id.
 
         Args:
           extra_headers: Send extra headers
@@ -137,6 +137,7 @@ class KnowledgeResource(SyncAPIResource):
         *,
         files: Optional[SequenceNotStr[FileTypes]] | Omit = omit,
         name: Optional[str] | Omit = omit,
+        sync: Optional[knowledge_update_params.Sync] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -155,6 +156,9 @@ class KnowledgeResource(SyncAPIResource):
 
           name: The new name for the `knowledge`.
 
+          sync: Sync configuration updates. Note: For multipart/form-data, this should be sent
+              as a JSON string.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -169,6 +173,7 @@ class KnowledgeResource(SyncAPIResource):
             {
                 "files": files,
                 "name": name,
+                "sync": sync,
             }
         )
         extracted_files = extract_files(cast(Mapping[str, object], body), paths=[["files", "<array>"]])
@@ -199,7 +204,7 @@ class KnowledgeResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SyncCursorIDPage[Knowledge]:
-        """Returns the list of knowledge.
+        """Returns a list of knowledge.
 
         Args:
           after: A cursor to use in pagination.
@@ -431,7 +436,7 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> Knowledge:
         """
-        Retrieves a knowledge by id.
+        Retrieves knowledge by id.
 
         Args:
           extra_headers: Send extra headers
@@ -458,6 +463,7 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         *,
         files: Optional[SequenceNotStr[FileTypes]] | Omit = omit,
         name: Optional[str] | Omit = omit,
+        sync: Optional[knowledge_update_params.Sync] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -476,6 +482,9 @@ class AsyncKnowledgeResource(AsyncAPIResource):
 
           name: The new name for the `knowledge`.
 
+          sync: Sync configuration updates. Note: For multipart/form-data, this should be sent
+              as a JSON string.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -490,6 +499,7 @@ class AsyncKnowledgeResource(AsyncAPIResource):
             {
                 "files": files,
                 "name": name,
+                "sync": sync,
             }
         )
         extracted_files = extract_files(cast(Mapping[str, object], body), paths=[["files", "<array>"]])
@@ -520,7 +530,7 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> AsyncPaginator[Knowledge, AsyncCursorIDPage[Knowledge]]:
-        """Returns the list of knowledge.
+        """Returns a list of knowledge.
 
         Args:
           after: A cursor to use in pagination.
