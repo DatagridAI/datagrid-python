@@ -72,6 +72,14 @@ from .connectors import (
     ConnectorsResourceWithStreamingResponse,
     AsyncConnectorsResourceWithStreamingResponse,
 )
+from .data_views import (
+    DataViewsResource,
+    AsyncDataViewsResource,
+    DataViewsResourceWithRawResponse,
+    AsyncDataViewsResourceWithRawResponse,
+    DataViewsResourceWithStreamingResponse,
+    AsyncDataViewsResourceWithStreamingResponse,
+)
 from .connections import (
     ConnectionsResource,
     AsyncConnectionsResource,
@@ -164,6 +172,12 @@ __all__ = [
     "AsyncConversationsResourceWithRawResponse",
     "ConversationsResourceWithStreamingResponse",
     "AsyncConversationsResourceWithStreamingResponse",
+    "DataViewsResource",
+    "AsyncDataViewsResource",
+    "DataViewsResourceWithRawResponse",
+    "AsyncDataViewsResourceWithRawResponse",
+    "DataViewsResourceWithStreamingResponse",
+    "AsyncDataViewsResourceWithStreamingResponse",
     "BetaResource",
     "AsyncBetaResource",
     "BetaResourceWithRawResponse",

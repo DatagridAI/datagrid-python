@@ -7,6 +7,7 @@ from .agent import Agent as Agent
 from .secret import Secret as Secret
 from .tool_def import ToolDef as ToolDef
 from .connector import Connector as Connector
+from .data_view import DataView as DataView
 from .knowledge import Knowledge as Knowledge
 from .tool_name import ToolName as ToolName
 from .connection import Connection as Connection
@@ -32,11 +33,14 @@ from .attachment_metadata import AttachmentMetadata as AttachmentMetadata
 from .search_search_params import SearchSearchParams as SearchSearchParams
 from .secret_create_params import SecretCreateParams as SecretCreateParams
 from .connector_list_params import ConnectorListParams as ConnectorListParams
+from .data_view_list_params import DataViewListParams as DataViewListParams
 from .knowledge_list_params import KnowledgeListParams as KnowledgeListParams
 from .redirect_url_response import RedirectURLResponse as RedirectURLResponse
 from .client_converse_params import ClientConverseParams as ClientConverseParams
 from .connection_list_params import ConnectionListParams as ConnectionListParams
 from .search_result_resource import SearchResultResource as SearchResultResource
+from .data_view_create_params import DataViewCreateParams as DataViewCreateParams
+from .data_view_list_response import DataViewListResponse as DataViewListResponse
 from .knowledge_create_params import KnowledgeCreateParams as KnowledgeCreateParams
 from .knowledge_update_params import KnowledgeUpdateParams as KnowledgeUpdateParams
 from .connection_create_params import ConnectionCreateParams as ConnectionCreateParams
