@@ -1247,8 +1247,8 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
         *,
         cast_to: Type[ResponseT],
         body: Body | None = None,
-        options: RequestOptions = {},
         files: RequestFiles | None = None,
+        options: RequestOptions = {},
     ) -> ResponseT:
         opts = FinalRequestOptions.construct(
             method="patch", url=path, json_data=body, files=to_httpx_files(files), **options
