@@ -8,6 +8,8 @@ __all__ = ["OrganizationUser", "Permissions"]
 
 
 class Permissions(BaseModel):
+    """The roles assigned to the user in the organization"""
+
     role: Literal["owner", "admin", "member", "contributor", "collaborator"]
     """The role to assign to the user in the organization. Available roles:
 
@@ -24,6 +26,8 @@ class Permissions(BaseModel):
 
 
 class OrganizationUser(BaseModel):
+    """Represents a user in an organization"""
+
     id: str
     """The unique identifier of the user"""
 

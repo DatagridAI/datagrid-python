@@ -9,6 +9,8 @@ __all__ = ["RowMetadata"]
 
 
 class RowMetadata(BaseModel):
+    """Metadata of a row in a table"""
+
     id: str
     """The id of the row (**datagrid**uuid), unique within the table."""
 

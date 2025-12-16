@@ -6,10 +6,12 @@ from typing_extensions import Literal
 
 from .._models import BaseModel
 
-__all__ = ["Knowledge", "RowCounts", "Credits"]
+__all__ = ["Knowledge", "RowCounts", "Sync", "SyncTrigger", "Credits"]
 
 
 class RowCounts(BaseModel):
+    """Row count statistics for the knowledge."""
+
     completed: float
     """The number of rows successfully learned."""
 
@@ -20,12 +22,45 @@ class RowCounts(BaseModel):
     """The total number of rows in the knowledge."""
 
 
+class SyncTrigger(BaseModel):
+    """The cron schedule configuration for syncing data from the connection."""
+
+    cron_expression: str
+    """Cron expression (e.g., '0 0 \\** \\** \\**' for daily at midnight)"""
+
+    type: Literal["cron"]
+    """The trigger type, which is always `cron`."""
+
+    description: Optional[str] = None
+    """Human-readable description of the schedule"""
+
+    timezone: Optional[str] = None
+    """IANA timezone (e.g., 'America/New_York'). Defaults to 'UTC' if not provided."""
+
+
+class Sync(BaseModel):
+    """Sync information for knowledge that syncs data from a connection"""
+
+    connection_id: str
+    """The ID of the connection used for syncing data to this knowledge"""
+
+    enabled: bool
+    """Whether data syncing from the connection is enabled"""
+
+    trigger: Optional[SyncTrigger] = None
+    """The cron schedule configuration for syncing data from the connection."""
+
+
 class Credits(BaseModel):
     consumed: float
     """The number of credits consumed by the knowledge."""
 
 
 class Knowledge(BaseModel):
+    """
+    The `knowledge` object represents knowledge that an agent may leverage to respond.
+    """
+
     id: str
     """The knowledge identifier, which can be referenced in the API endpoints."""
 
@@ -50,6 +85,9 @@ class Knowledge(BaseModel):
     `ready` indicates that the knowledge is fully learned and will be completely
     utilized in responses.
     """
+
+    sync: Optional[Sync] = None
+    """Sync information for knowledge that syncs data from a connection"""
 
     credits: Optional[Credits] = None
 

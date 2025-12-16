@@ -19,6 +19,8 @@ class InviteCreateParams(TypedDict, total=False):
 
 
 class Permissions(TypedDict, total=False):
+    """The permissions to assign to the user in the teamspace"""
+
     role: Required[Literal["admin", "member", "agents-only", "agent-specific"]]
     """The role to assign to the user in the teamspace.
 

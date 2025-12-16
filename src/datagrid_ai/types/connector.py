@@ -8,6 +8,10 @@ __all__ = ["Connector"]
 
 
 class Connector(BaseModel):
+    """
+    The `connector` object represents an available connector that can be used to connect to a third-party service.
+    """
+
     id: str
     """The unique identifier for the connector."""
 

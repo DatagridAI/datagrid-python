@@ -8,6 +8,10 @@ __all__ = ["Secret"]
 
 
 class Secret(BaseModel):
+    """
+    The `Secret` object represents a securely stored secret that can be referenced in converse API calls.
+    """
+
     id: str
     """The secret identifier, which can be referenced in the converse API."""
 

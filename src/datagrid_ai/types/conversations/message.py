@@ -42,6 +42,8 @@ class Credits(BaseModel):
 
 
 class Message(BaseModel):
+    """The `conversation.message` object represents a message in a conversation."""
+
     id: str
     """The message identifier."""
 

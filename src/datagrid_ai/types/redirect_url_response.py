@@ -8,6 +8,8 @@ __all__ = ["RedirectURLResponse"]
 
 
 class RedirectURLResponse(BaseModel):
+    """The `redirect_url` object represents a redirect url for a connection."""
+
     object: Literal["redirect_url"]
 
     redirect_url: str

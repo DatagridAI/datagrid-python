@@ -10,6 +10,10 @@ __all__ = ["Connection"]
 
 
 class Connection(BaseModel):
+    """
+    The `connection` object represents an authenticated connection to a third-party service (like Google Drive, Hubspot, Dropbox, etc.) that can be managed through the API.
+    """
+
     id: str
     """The connection identifier, which can be referenced in the API endpoints."""
 

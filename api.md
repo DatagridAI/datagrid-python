@@ -267,6 +267,39 @@ Methods:
 - <code title="get /conversations/{conversation_id}/messages/{message_id}">client.conversations.messages.<a href="./src/datagrid_ai/resources/conversations/messages.py">retrieve</a>(message_id, \*, conversation_id) -> <a href="./src/datagrid_ai/types/conversations/message.py">Message</a></code>
 - <code title="get /conversations/{conversation_id}/messages">client.conversations.messages.<a href="./src/datagrid_ai/resources/conversations/messages.py">list</a>(conversation_id, \*\*<a href="src/datagrid_ai/types/conversations/message_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/conversations/message.py">SyncCursorIDPage[Message]</a></code>
 
+# DataViews
+
+Types:
+
+```python
+from datagrid_ai.types import DataView, DataViewListResponse
+```
+
+Methods:
+
+- <code title="post /data-views">client.data_views.<a href="./src/datagrid_ai/resources/data_views/data_views.py">create</a>(\*\*<a href="src/datagrid_ai/types/data_view_create_params.py">params</a>) -> <a href="./src/datagrid_ai/types/data_view.py">DataView</a></code>
+- <code title="get /data-views">client.data_views.<a href="./src/datagrid_ai/resources/data_views/data_views.py">list</a>(\*\*<a href="src/datagrid_ai/types/data_view_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/data_view_list_response.py">DataViewListResponse</a></code>
+- <code title="delete /data-views/{data_view_id}">client.data_views.<a href="./src/datagrid_ai/resources/data_views/data_views.py">delete</a>(data_view_id) -> None</code>
+
+## ServiceAccounts
+
+Types:
+
+```python
+from datagrid_ai.types.data_views import (
+    ServiceAccount,
+    ServiceAccountCredentials,
+    ServiceAccountListResponse,
+)
+```
+
+Methods:
+
+- <code title="post /data-views/service-accounts">client.data_views.service_accounts.<a href="./src/datagrid_ai/resources/data_views/service_accounts.py">create</a>(\*\*<a href="src/datagrid_ai/types/data_views/service_account_create_params.py">params</a>) -> <a href="./src/datagrid_ai/types/data_views/service_account.py">ServiceAccount</a></code>
+- <code title="get /data-views/service-accounts">client.data_views.service_accounts.<a href="./src/datagrid_ai/resources/data_views/service_accounts.py">list</a>(\*\*<a href="src/datagrid_ai/types/data_views/service_account_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/data_views/service_account_list_response.py">ServiceAccountListResponse</a></code>
+- <code title="delete /data-views/service-accounts/{service_account_id}">client.data_views.service_accounts.<a href="./src/datagrid_ai/resources/data_views/service_accounts.py">delete</a>(service_account_id) -> None</code>
+- <code title="get /data-views/service-accounts/{service_account_id}/credentials">client.data_views.service_accounts.<a href="./src/datagrid_ai/resources/data_views/service_accounts.py">credentials</a>(service_account_id) -> <a href="./src/datagrid_ai/types/data_views/service_account_credentials.py">ServiceAccountCredentials</a></code>
+
 # Beta
 
 ## Rewrite
