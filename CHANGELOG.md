@@ -1,5 +1,30 @@
 # Changelog
 
+## 0.4.0 (2025-12-16)
+
+Full Changelog: [v0.3.0...v0.4.0](https://github.com/DatagridAI/datagrid-python/compare/v0.3.0...v0.4.0)
+
+### Features
+
+* **api:** api update ([c1f41a6](https://github.com/DatagridAI/datagrid-python/commit/c1f41a63c849bc603bfeff4db15f24cef64c5c34))
+* **api:** api update ([cc28e60](https://github.com/DatagridAI/datagrid-python/commit/cc28e60c3fe0be5862463008d8dc2c38daae9e20))
+
+
+### Bug Fixes
+
+* ensure streams are always closed ([32ac012](https://github.com/DatagridAI/datagrid-python/commit/32ac0121c0fab91cd59f3a688633910c245b7758))
+* **types:** allow pyright to infer TypedDict types within SequenceNotStr ([997476f](https://github.com/DatagridAI/datagrid-python/commit/997476f77e754e3d91960b2252164e05569bc1e4))
+
+
+### Chores
+
+* add missing docstrings ([2b5cc82](https://github.com/DatagridAI/datagrid-python/commit/2b5cc82deb6ce5fb992c756933674da53c8d0ad7))
+* add Python 3.14 classifier and testing ([640200d](https://github.com/DatagridAI/datagrid-python/commit/640200d010e3d96238699dcffc1d4999cf47174a))
+* **deps:** mypy 1.18.1 has a regression, pin to 1.17 ([c6f5782](https://github.com/DatagridAI/datagrid-python/commit/c6f5782b32645dc41a06731572175ecbf2f545bf))
+* **docs:** use environment variables for authentication in code snippets ([6edcba1](https://github.com/DatagridAI/datagrid-python/commit/6edcba1fe872dfe00bb0417a8ad9dbe385fc06c9))
+* **internal:** add missing files argument to base client ([2e6d189](https://github.com/DatagridAI/datagrid-python/commit/2e6d189f8d3323fc6e63c93dc02d5bf18ffbb224))
+* update lockfile ([484feab](https://github.com/DatagridAI/datagrid-python/commit/484feabff028d85ff9bff739889400f31041876f))
+
 ## 0.3.0 (2025-11-16)
 
 Full Changelog: [v0.2.0...v0.3.0](https://github.com/DatagridAI/datagrid-python/compare/v0.2.0...v0.3.0)
