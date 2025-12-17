@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import os
-from typing import Any, Union, Mapping, Iterable, Optional, overload
+from typing import TYPE_CHECKING, Any, Union, Mapping, Iterable, Optional, overload
 from typing_extensions import Self, Literal, override
 
 import httpx
@@ -32,6 +32,7 @@ from ._utils import (
     get_async_library,
     async_maybe_transform,
 )
+from ._compat import cached_property
 from ._version import __version__
 from ._response import (
     to_raw_response_wrapper,
@@ -39,7 +40,6 @@ from ._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from .resources import files, tools, agents, search, secrets, knowledge, connectors, connections
 from ._constants import DEFAULT_TIMEOUT
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
 from ._exceptions import DatagridError, APIStatusError
@@ -50,12 +50,37 @@ from ._base_client import (
     AsyncAPIClient,
     make_request_options,
 )
-from .resources.beta import beta
-from .resources.memory import memory
-from .resources.data_views import data_views
-from .resources.organization import organization
-from .resources.conversations import conversations
 from .types.converse_response import ConverseResponse
+
+if TYPE_CHECKING:
+    from .resources import (
+        beta,
+        files,
+        tools,
+        agents,
+        memory,
+        search,
+        secrets,
+        knowledge,
+        connectors,
+        data_views,
+        connections,
+        organization,
+        conversations,
+    )
+    from .resources.files import FilesResource, AsyncFilesResource
+    from .resources.tools import ToolsResource, AsyncToolsResource
+    from .resources.agents import AgentsResource, AsyncAgentsResource
+    from .resources.search import SearchResource, AsyncSearchResource
+    from .resources.secrets import SecretsResource, AsyncSecretsResource
+    from .resources.beta.beta import BetaResource, AsyncBetaResource
+    from .resources.knowledge import KnowledgeResource, AsyncKnowledgeResource
+    from .resources.connectors import ConnectorsResource, AsyncConnectorsResource
+    from .resources.connections import ConnectionsResource, AsyncConnectionsResource
+    from .resources.memory.memory import MemoryResource, AsyncMemoryResource
+    from .resources.data_views.data_views import DataViewsResource, AsyncDataViewsResource
+    from .resources.organization.organization import OrganizationResource, AsyncOrganizationResource
+    from .resources.conversations.conversations import ConversationsResource, AsyncConversationsResource
 
 __all__ = [
     "Timeout",
@@ -70,22 +95,6 @@ __all__ = [
 
 
 class Datagrid(SyncAPIClient):
-    knowledge: knowledge.KnowledgeResource
-    connections: connections.ConnectionsResource
-    connectors: connectors.ConnectorsResource
-    files: files.FilesResource
-    secrets: secrets.SecretsResource
-    search: search.SearchResource
-    agents: agents.AgentsResource
-    tools: tools.ToolsResource
-    memory: memory.MemoryResource
-    organization: organization.OrganizationResource
-    conversations: conversations.ConversationsResource
-    data_views: data_views.DataViewsResource
-    beta: beta.BetaResource
-    with_raw_response: DatagridWithRawResponse
-    with_streaming_response: DatagridWithStreamedResponse
-
     # client options
     api_key: str
     teamspace: str | None
@@ -148,21 +157,91 @@ class Datagrid(SyncAPIClient):
             _strict_response_validation=_strict_response_validation,
         )
 
-        self.knowledge = knowledge.KnowledgeResource(self)
-        self.connections = connections.ConnectionsResource(self)
-        self.connectors = connectors.ConnectorsResource(self)
-        self.files = files.FilesResource(self)
-        self.secrets = secrets.SecretsResource(self)
-        self.search = search.SearchResource(self)
-        self.agents = agents.AgentsResource(self)
-        self.tools = tools.ToolsResource(self)
-        self.memory = memory.MemoryResource(self)
-        self.organization = organization.OrganizationResource(self)
-        self.conversations = conversations.ConversationsResource(self)
-        self.data_views = data_views.DataViewsResource(self)
-        self.beta = beta.BetaResource(self)
-        self.with_raw_response = DatagridWithRawResponse(self)
-        self.with_streaming_response = DatagridWithStreamedResponse(self)
+    @cached_property
+    def knowledge(self) -> KnowledgeResource:
+        from .resources.knowledge import KnowledgeResource
+
+        return KnowledgeResource(self)
+
+    @cached_property
+    def connections(self) -> ConnectionsResource:
+        from .resources.connections import ConnectionsResource
+
+        return ConnectionsResource(self)
+
+    @cached_property
+    def connectors(self) -> ConnectorsResource:
+        from .resources.connectors import ConnectorsResource
+
+        return ConnectorsResource(self)
+
+    @cached_property
+    def files(self) -> FilesResource:
+        from .resources.files import FilesResource
+
+        return FilesResource(self)
+
+    @cached_property
+    def secrets(self) -> SecretsResource:
+        from .resources.secrets import SecretsResource
+
+        return SecretsResource(self)
+
+    @cached_property
+    def search(self) -> SearchResource:
+        from .resources.search import SearchResource
+
+        return SearchResource(self)
+
+    @cached_property
+    def agents(self) -> AgentsResource:
+        from .resources.agents import AgentsResource
+
+        return AgentsResource(self)
+
+    @cached_property
+    def tools(self) -> ToolsResource:
+        from .resources.tools import ToolsResource
+
+        return ToolsResource(self)
+
+    @cached_property
+    def memory(self) -> MemoryResource:
+        from .resources.memory import MemoryResource
+
+        return MemoryResource(self)
+
+    @cached_property
+    def organization(self) -> OrganizationResource:
+        from .resources.organization import OrganizationResource
+
+        return OrganizationResource(self)
+
+    @cached_property
+    def conversations(self) -> ConversationsResource:
+        from .resources.conversations import ConversationsResource
+
+        return ConversationsResource(self)
+
+    @cached_property
+    def data_views(self) -> DataViewsResource:
+        from .resources.data_views import DataViewsResource
+
+        return DataViewsResource(self)
+
+    @cached_property
+    def beta(self) -> BetaResource:
+        from .resources.beta import BetaResource
+
+        return BetaResource(self)
+
+    @cached_property
+    def with_raw_response(self) -> DatagridWithRawResponse:
+        return DatagridWithRawResponse(self)
+
+    @cached_property
+    def with_streaming_response(self) -> DatagridWithStreamedResponse:
+        return DatagridWithStreamedResponse(self)
 
     @property
     @override
@@ -411,22 +490,6 @@ class Datagrid(SyncAPIClient):
 
 
 class AsyncDatagrid(AsyncAPIClient):
-    knowledge: knowledge.AsyncKnowledgeResource
-    connections: connections.AsyncConnectionsResource
-    connectors: connectors.AsyncConnectorsResource
-    files: files.AsyncFilesResource
-    secrets: secrets.AsyncSecretsResource
-    search: search.AsyncSearchResource
-    agents: agents.AsyncAgentsResource
-    tools: tools.AsyncToolsResource
-    memory: memory.AsyncMemoryResource
-    organization: organization.AsyncOrganizationResource
-    conversations: conversations.AsyncConversationsResource
-    data_views: data_views.AsyncDataViewsResource
-    beta: beta.AsyncBetaResource
-    with_raw_response: AsyncDatagridWithRawResponse
-    with_streaming_response: AsyncDatagridWithStreamedResponse
-
     # client options
     api_key: str
     teamspace: str | None
@@ -489,21 +552,91 @@ class AsyncDatagrid(AsyncAPIClient):
             _strict_response_validation=_strict_response_validation,
         )
 
-        self.knowledge = knowledge.AsyncKnowledgeResource(self)
-        self.connections = connections.AsyncConnectionsResource(self)
-        self.connectors = connectors.AsyncConnectorsResource(self)
-        self.files = files.AsyncFilesResource(self)
-        self.secrets = secrets.AsyncSecretsResource(self)
-        self.search = search.AsyncSearchResource(self)
-        self.agents = agents.AsyncAgentsResource(self)
-        self.tools = tools.AsyncToolsResource(self)
-        self.memory = memory.AsyncMemoryResource(self)
-        self.organization = organization.AsyncOrganizationResource(self)
-        self.conversations = conversations.AsyncConversationsResource(self)
-        self.data_views = data_views.AsyncDataViewsResource(self)
-        self.beta = beta.AsyncBetaResource(self)
-        self.with_raw_response = AsyncDatagridWithRawResponse(self)
-        self.with_streaming_response = AsyncDatagridWithStreamedResponse(self)
+    @cached_property
+    def knowledge(self) -> AsyncKnowledgeResource:
+        from .resources.knowledge import AsyncKnowledgeResource
+
+        return AsyncKnowledgeResource(self)
+
+    @cached_property
+    def connections(self) -> AsyncConnectionsResource:
+        from .resources.connections import AsyncConnectionsResource
+
+        return AsyncConnectionsResource(self)
+
+    @cached_property
+    def connectors(self) -> AsyncConnectorsResource:
+        from .resources.connectors import AsyncConnectorsResource
+
+        return AsyncConnectorsResource(self)
+
+    @cached_property
+    def files(self) -> AsyncFilesResource:
+        from .resources.files import AsyncFilesResource
+
+        return AsyncFilesResource(self)
+
+    @cached_property
+    def secrets(self) -> AsyncSecretsResource:
+        from .resources.secrets import AsyncSecretsResource
+
+        return AsyncSecretsResource(self)
+
+    @cached_property
+    def search(self) -> AsyncSearchResource:
+        from .resources.search import AsyncSearchResource
+
+        return AsyncSearchResource(self)
+
+    @cached_property
+    def agents(self) -> AsyncAgentsResource:
+        from .resources.agents import AsyncAgentsResource
+
+        return AsyncAgentsResource(self)
+
+    @cached_property
+    def tools(self) -> AsyncToolsResource:
+        from .resources.tools import AsyncToolsResource
+
+        return AsyncToolsResource(self)
+
+    @cached_property
+    def memory(self) -> AsyncMemoryResource:
+        from .resources.memory import AsyncMemoryResource
+
+        return AsyncMemoryResource(self)
+
+    @cached_property
+    def organization(self) -> AsyncOrganizationResource:
+        from .resources.organization import AsyncOrganizationResource
+
+        return AsyncOrganizationResource(self)
+
+    @cached_property
+    def conversations(self) -> AsyncConversationsResource:
+        from .resources.conversations import AsyncConversationsResource
+
+        return AsyncConversationsResource(self)
+
+    @cached_property
+    def data_views(self) -> AsyncDataViewsResource:
+        from .resources.data_views import AsyncDataViewsResource
+
+        return AsyncDataViewsResource(self)
+
+    @cached_property
+    def beta(self) -> AsyncBetaResource:
+        from .resources.beta import AsyncBetaResource
+
+        return AsyncBetaResource(self)
+
+    @cached_property
+    def with_raw_response(self) -> AsyncDatagridWithRawResponse:
+        return AsyncDatagridWithRawResponse(self)
+
+    @cached_property
+    def with_streaming_response(self) -> AsyncDatagridWithStreamedResponse:
+        return AsyncDatagridWithStreamedResponse(self)
 
     @property
     @override
@@ -752,87 +885,359 @@ class AsyncDatagrid(AsyncAPIClient):
 
 
 class DatagridWithRawResponse:
+    _client: Datagrid
+
     def __init__(self, client: Datagrid) -> None:
-        self.knowledge = knowledge.KnowledgeResourceWithRawResponse(client.knowledge)
-        self.connections = connections.ConnectionsResourceWithRawResponse(client.connections)
-        self.connectors = connectors.ConnectorsResourceWithRawResponse(client.connectors)
-        self.files = files.FilesResourceWithRawResponse(client.files)
-        self.secrets = secrets.SecretsResourceWithRawResponse(client.secrets)
-        self.search = search.SearchResourceWithRawResponse(client.search)
-        self.agents = agents.AgentsResourceWithRawResponse(client.agents)
-        self.tools = tools.ToolsResourceWithRawResponse(client.tools)
-        self.memory = memory.MemoryResourceWithRawResponse(client.memory)
-        self.organization = organization.OrganizationResourceWithRawResponse(client.organization)
-        self.conversations = conversations.ConversationsResourceWithRawResponse(client.conversations)
-        self.data_views = data_views.DataViewsResourceWithRawResponse(client.data_views)
-        self.beta = beta.BetaResourceWithRawResponse(client.beta)
+        self._client = client
 
         self.converse = to_raw_response_wrapper(
             client.converse,
         )
 
+    @cached_property
+    def knowledge(self) -> knowledge.KnowledgeResourceWithRawResponse:
+        from .resources.knowledge import KnowledgeResourceWithRawResponse
+
+        return KnowledgeResourceWithRawResponse(self._client.knowledge)
+
+    @cached_property
+    def connections(self) -> connections.ConnectionsResourceWithRawResponse:
+        from .resources.connections import ConnectionsResourceWithRawResponse
+
+        return ConnectionsResourceWithRawResponse(self._client.connections)
+
+    @cached_property
+    def connectors(self) -> connectors.ConnectorsResourceWithRawResponse:
+        from .resources.connectors import ConnectorsResourceWithRawResponse
+
+        return ConnectorsResourceWithRawResponse(self._client.connectors)
+
+    @cached_property
+    def files(self) -> files.FilesResourceWithRawResponse:
+        from .resources.files import FilesResourceWithRawResponse
+
+        return FilesResourceWithRawResponse(self._client.files)
+
+    @cached_property
+    def secrets(self) -> secrets.SecretsResourceWithRawResponse:
+        from .resources.secrets import SecretsResourceWithRawResponse
+
+        return SecretsResourceWithRawResponse(self._client.secrets)
+
+    @cached_property
+    def search(self) -> search.SearchResourceWithRawResponse:
+        from .resources.search import SearchResourceWithRawResponse
+
+        return SearchResourceWithRawResponse(self._client.search)
+
+    @cached_property
+    def agents(self) -> agents.AgentsResourceWithRawResponse:
+        from .resources.agents import AgentsResourceWithRawResponse
+
+        return AgentsResourceWithRawResponse(self._client.agents)
+
+    @cached_property
+    def tools(self) -> tools.ToolsResourceWithRawResponse:
+        from .resources.tools import ToolsResourceWithRawResponse
+
+        return ToolsResourceWithRawResponse(self._client.tools)
+
+    @cached_property
+    def memory(self) -> memory.MemoryResourceWithRawResponse:
+        from .resources.memory import MemoryResourceWithRawResponse
+
+        return MemoryResourceWithRawResponse(self._client.memory)
+
+    @cached_property
+    def organization(self) -> organization.OrganizationResourceWithRawResponse:
+        from .resources.organization import OrganizationResourceWithRawResponse
+
+        return OrganizationResourceWithRawResponse(self._client.organization)
+
+    @cached_property
+    def conversations(self) -> conversations.ConversationsResourceWithRawResponse:
+        from .resources.conversations import ConversationsResourceWithRawResponse
+
+        return ConversationsResourceWithRawResponse(self._client.conversations)
+
+    @cached_property
+    def data_views(self) -> data_views.DataViewsResourceWithRawResponse:
+        from .resources.data_views import DataViewsResourceWithRawResponse
+
+        return DataViewsResourceWithRawResponse(self._client.data_views)
+
+    @cached_property
+    def beta(self) -> beta.BetaResourceWithRawResponse:
+        from .resources.beta import BetaResourceWithRawResponse
+
+        return BetaResourceWithRawResponse(self._client.beta)
+
 
 class AsyncDatagridWithRawResponse:
+    _client: AsyncDatagrid
+
     def __init__(self, client: AsyncDatagrid) -> None:
-        self.knowledge = knowledge.AsyncKnowledgeResourceWithRawResponse(client.knowledge)
-        self.connections = connections.AsyncConnectionsResourceWithRawResponse(client.connections)
-        self.connectors = connectors.AsyncConnectorsResourceWithRawResponse(client.connectors)
-        self.files = files.AsyncFilesResourceWithRawResponse(client.files)
-        self.secrets = secrets.AsyncSecretsResourceWithRawResponse(client.secrets)
-        self.search = search.AsyncSearchResourceWithRawResponse(client.search)
-        self.agents = agents.AsyncAgentsResourceWithRawResponse(client.agents)
-        self.tools = tools.AsyncToolsResourceWithRawResponse(client.tools)
-        self.memory = memory.AsyncMemoryResourceWithRawResponse(client.memory)
-        self.organization = organization.AsyncOrganizationResourceWithRawResponse(client.organization)
-        self.conversations = conversations.AsyncConversationsResourceWithRawResponse(client.conversations)
-        self.data_views = data_views.AsyncDataViewsResourceWithRawResponse(client.data_views)
-        self.beta = beta.AsyncBetaResourceWithRawResponse(client.beta)
+        self._client = client
 
         self.converse = async_to_raw_response_wrapper(
             client.converse,
         )
 
+    @cached_property
+    def knowledge(self) -> knowledge.AsyncKnowledgeResourceWithRawResponse:
+        from .resources.knowledge import AsyncKnowledgeResourceWithRawResponse
+
+        return AsyncKnowledgeResourceWithRawResponse(self._client.knowledge)
+
+    @cached_property
+    def connections(self) -> connections.AsyncConnectionsResourceWithRawResponse:
+        from .resources.connections import AsyncConnectionsResourceWithRawResponse
+
+        return AsyncConnectionsResourceWithRawResponse(self._client.connections)
+
+    @cached_property
+    def connectors(self) -> connectors.AsyncConnectorsResourceWithRawResponse:
+        from .resources.connectors import AsyncConnectorsResourceWithRawResponse
+
+        return AsyncConnectorsResourceWithRawResponse(self._client.connectors)
+
+    @cached_property
+    def files(self) -> files.AsyncFilesResourceWithRawResponse:
+        from .resources.files import AsyncFilesResourceWithRawResponse
+
+        return AsyncFilesResourceWithRawResponse(self._client.files)
+
+    @cached_property
+    def secrets(self) -> secrets.AsyncSecretsResourceWithRawResponse:
+        from .resources.secrets import AsyncSecretsResourceWithRawResponse
+
+        return AsyncSecretsResourceWithRawResponse(self._client.secrets)
+
+    @cached_property
+    def search(self) -> search.AsyncSearchResourceWithRawResponse:
+        from .resources.search import AsyncSearchResourceWithRawResponse
+
+        return AsyncSearchResourceWithRawResponse(self._client.search)
+
+    @cached_property
+    def agents(self) -> agents.AsyncAgentsResourceWithRawResponse:
+        from .resources.agents import AsyncAgentsResourceWithRawResponse
+
+        return AsyncAgentsResourceWithRawResponse(self._client.agents)
+
+    @cached_property
+    def tools(self) -> tools.AsyncToolsResourceWithRawResponse:
+        from .resources.tools import AsyncToolsResourceWithRawResponse
+
+        return AsyncToolsResourceWithRawResponse(self._client.tools)
+
+    @cached_property
+    def memory(self) -> memory.AsyncMemoryResourceWithRawResponse:
+        from .resources.memory import AsyncMemoryResourceWithRawResponse
+
+        return AsyncMemoryResourceWithRawResponse(self._client.memory)
+
+    @cached_property
+    def organization(self) -> organization.AsyncOrganizationResourceWithRawResponse:
+        from .resources.organization import AsyncOrganizationResourceWithRawResponse
+
+        return AsyncOrganizationResourceWithRawResponse(self._client.organization)
+
+    @cached_property
+    def conversations(self) -> conversations.AsyncConversationsResourceWithRawResponse:
+        from .resources.conversations import AsyncConversationsResourceWithRawResponse
+
+        return AsyncConversationsResourceWithRawResponse(self._client.conversations)
+
+    @cached_property
+    def data_views(self) -> data_views.AsyncDataViewsResourceWithRawResponse:
+        from .resources.data_views import AsyncDataViewsResourceWithRawResponse
+
+        return AsyncDataViewsResourceWithRawResponse(self._client.data_views)
+
+    @cached_property
+    def beta(self) -> beta.AsyncBetaResourceWithRawResponse:
+        from .resources.beta import AsyncBetaResourceWithRawResponse
+
+        return AsyncBetaResourceWithRawResponse(self._client.beta)
+
 
 class DatagridWithStreamedResponse:
+    _client: Datagrid
+
     def __init__(self, client: Datagrid) -> None:
-        self.knowledge = knowledge.KnowledgeResourceWithStreamingResponse(client.knowledge)
-        self.connections = connections.ConnectionsResourceWithStreamingResponse(client.connections)
-        self.connectors = connectors.ConnectorsResourceWithStreamingResponse(client.connectors)
-        self.files = files.FilesResourceWithStreamingResponse(client.files)
-        self.secrets = secrets.SecretsResourceWithStreamingResponse(client.secrets)
-        self.search = search.SearchResourceWithStreamingResponse(client.search)
-        self.agents = agents.AgentsResourceWithStreamingResponse(client.agents)
-        self.tools = tools.ToolsResourceWithStreamingResponse(client.tools)
-        self.memory = memory.MemoryResourceWithStreamingResponse(client.memory)
-        self.organization = organization.OrganizationResourceWithStreamingResponse(client.organization)
-        self.conversations = conversations.ConversationsResourceWithStreamingResponse(client.conversations)
-        self.data_views = data_views.DataViewsResourceWithStreamingResponse(client.data_views)
-        self.beta = beta.BetaResourceWithStreamingResponse(client.beta)
+        self._client = client
 
         self.converse = to_streamed_response_wrapper(
             client.converse,
         )
 
+    @cached_property
+    def knowledge(self) -> knowledge.KnowledgeResourceWithStreamingResponse:
+        from .resources.knowledge import KnowledgeResourceWithStreamingResponse
+
+        return KnowledgeResourceWithStreamingResponse(self._client.knowledge)
+
+    @cached_property
+    def connections(self) -> connections.ConnectionsResourceWithStreamingResponse:
+        from .resources.connections import ConnectionsResourceWithStreamingResponse
+
+        return ConnectionsResourceWithStreamingResponse(self._client.connections)
+
+    @cached_property
+    def connectors(self) -> connectors.ConnectorsResourceWithStreamingResponse:
+        from .resources.connectors import ConnectorsResourceWithStreamingResponse
+
+        return ConnectorsResourceWithStreamingResponse(self._client.connectors)
+
+    @cached_property
+    def files(self) -> files.FilesResourceWithStreamingResponse:
+        from .resources.files import FilesResourceWithStreamingResponse
+
+        return FilesResourceWithStreamingResponse(self._client.files)
+
+    @cached_property
+    def secrets(self) -> secrets.SecretsResourceWithStreamingResponse:
+        from .resources.secrets import SecretsResourceWithStreamingResponse
+
+        return SecretsResourceWithStreamingResponse(self._client.secrets)
+
+    @cached_property
+    def search(self) -> search.SearchResourceWithStreamingResponse:
+        from .resources.search import SearchResourceWithStreamingResponse
+
+        return SearchResourceWithStreamingResponse(self._client.search)
+
+    @cached_property
+    def agents(self) -> agents.AgentsResourceWithStreamingResponse:
+        from .resources.agents import AgentsResourceWithStreamingResponse
+
+        return AgentsResourceWithStreamingResponse(self._client.agents)
+
+    @cached_property
+    def tools(self) -> tools.ToolsResourceWithStreamingResponse:
+        from .resources.tools import ToolsResourceWithStreamingResponse
+
+        return ToolsResourceWithStreamingResponse(self._client.tools)
+
+    @cached_property
+    def memory(self) -> memory.MemoryResourceWithStreamingResponse:
+        from .resources.memory import MemoryResourceWithStreamingResponse
+
+        return MemoryResourceWithStreamingResponse(self._client.memory)
+
+    @cached_property
+    def organization(self) -> organization.OrganizationResourceWithStreamingResponse:
+        from .resources.organization import OrganizationResourceWithStreamingResponse
+
+        return OrganizationResourceWithStreamingResponse(self._client.organization)
+
+    @cached_property
+    def conversations(self) -> conversations.ConversationsResourceWithStreamingResponse:
+        from .resources.conversations import ConversationsResourceWithStreamingResponse
+
+        return ConversationsResourceWithStreamingResponse(self._client.conversations)
+
+    @cached_property
+    def data_views(self) -> data_views.DataViewsResourceWithStreamingResponse:
+        from .resources.data_views import DataViewsResourceWithStreamingResponse
+
+        return DataViewsResourceWithStreamingResponse(self._client.data_views)
+
+    @cached_property
+    def beta(self) -> beta.BetaResourceWithStreamingResponse:
+        from .resources.beta import BetaResourceWithStreamingResponse
+
+        return BetaResourceWithStreamingResponse(self._client.beta)
+
 
 class AsyncDatagridWithStreamedResponse:
+    _client: AsyncDatagrid
+
     def __init__(self, client: AsyncDatagrid) -> None:
-        self.knowledge = knowledge.AsyncKnowledgeResourceWithStreamingResponse(client.knowledge)
-        self.connections = connections.AsyncConnectionsResourceWithStreamingResponse(client.connections)
-        self.connectors = connectors.AsyncConnectorsResourceWithStreamingResponse(client.connectors)
-        self.files = files.AsyncFilesResourceWithStreamingResponse(client.files)
-        self.secrets = secrets.AsyncSecretsResourceWithStreamingResponse(client.secrets)
-        self.search = search.AsyncSearchResourceWithStreamingResponse(client.search)
-        self.agents = agents.AsyncAgentsResourceWithStreamingResponse(client.agents)
-        self.tools = tools.AsyncToolsResourceWithStreamingResponse(client.tools)
-        self.memory = memory.AsyncMemoryResourceWithStreamingResponse(client.memory)
-        self.organization = organization.AsyncOrganizationResourceWithStreamingResponse(client.organization)
-        self.conversations = conversations.AsyncConversationsResourceWithStreamingResponse(client.conversations)
-        self.data_views = data_views.AsyncDataViewsResourceWithStreamingResponse(client.data_views)
-        self.beta = beta.AsyncBetaResourceWithStreamingResponse(client.beta)
+        self._client = client
 
         self.converse = async_to_streamed_response_wrapper(
             client.converse,
         )
+
+    @cached_property
+    def knowledge(self) -> knowledge.AsyncKnowledgeResourceWithStreamingResponse:
+        from .resources.knowledge import AsyncKnowledgeResourceWithStreamingResponse
+
+        return AsyncKnowledgeResourceWithStreamingResponse(self._client.knowledge)
+
+    @cached_property
+    def connections(self) -> connections.AsyncConnectionsResourceWithStreamingResponse:
+        from .resources.connections import AsyncConnectionsResourceWithStreamingResponse
+
+        return AsyncConnectionsResourceWithStreamingResponse(self._client.connections)
+
+    @cached_property
+    def connectors(self) -> connectors.AsyncConnectorsResourceWithStreamingResponse:
+        from .resources.connectors import AsyncConnectorsResourceWithStreamingResponse
+
+        return AsyncConnectorsResourceWithStreamingResponse(self._client.connectors)
+
+    @cached_property
+    def files(self) -> files.AsyncFilesResourceWithStreamingResponse:
+        from .resources.files import AsyncFilesResourceWithStreamingResponse
+
+        return AsyncFilesResourceWithStreamingResponse(self._client.files)
+
+    @cached_property
+    def secrets(self) -> secrets.AsyncSecretsResourceWithStreamingResponse:
+        from .resources.secrets import AsyncSecretsResourceWithStreamingResponse
+
+        return AsyncSecretsResourceWithStreamingResponse(self._client.secrets)
+
+    @cached_property
+    def search(self) -> search.AsyncSearchResourceWithStreamingResponse:
+        from .resources.search import AsyncSearchResourceWithStreamingResponse
+
+        return AsyncSearchResourceWithStreamingResponse(self._client.search)
+
+    @cached_property
+    def agents(self) -> agents.AsyncAgentsResourceWithStreamingResponse:
+        from .resources.agents import AsyncAgentsResourceWithStreamingResponse
+
+        return AsyncAgentsResourceWithStreamingResponse(self._client.agents)
+
+    @cached_property
+    def tools(self) -> tools.AsyncToolsResourceWithStreamingResponse:
+        from .resources.tools import AsyncToolsResourceWithStreamingResponse
+
+        return AsyncToolsResourceWithStreamingResponse(self._client.tools)
+
+    @cached_property
+    def memory(self) -> memory.AsyncMemoryResourceWithStreamingResponse:
+        from .resources.memory import AsyncMemoryResourceWithStreamingResponse
+
+        return AsyncMemoryResourceWithStreamingResponse(self._client.memory)
+
+    @cached_property
+    def organization(self) -> organization.AsyncOrganizationResourceWithStreamingResponse:
+        from .resources.organization import AsyncOrganizationResourceWithStreamingResponse
+
+        return AsyncOrganizationResourceWithStreamingResponse(self._client.organization)
+
+    @cached_property
+    def conversations(self) -> conversations.AsyncConversationsResourceWithStreamingResponse:
+        from .resources.conversations import AsyncConversationsResourceWithStreamingResponse
+
+        return AsyncConversationsResourceWithStreamingResponse(self._client.conversations)
+
+    @cached_property
+    def data_views(self) -> data_views.AsyncDataViewsResourceWithStreamingResponse:
+        from .resources.data_views import AsyncDataViewsResourceWithStreamingResponse
+
+        return AsyncDataViewsResourceWithStreamingResponse(self._client.data_views)
+
+    @cached_property
+    def beta(self) -> beta.AsyncBetaResourceWithStreamingResponse:
+        from .resources.beta import AsyncBetaResourceWithStreamingResponse
+
+        return AsyncBetaResourceWithStreamingResponse(self._client.beta)
 
 
 Client = Datagrid
