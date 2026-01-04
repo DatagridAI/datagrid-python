@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.5.0 (2026-01-04)
+
+Full Changelog: [v0.4.0...v0.5.0](https://github.com/DatagridAI/datagrid-python/compare/v0.4.0...v0.5.0)
+
+### Features
+
+* **api:** api update ([81f4827](https://github.com/DatagridAI/datagrid-python/commit/81f4827898b4da9b9f181c16f25e273d8a6479f8))
+
+
+### Chores
+
+* **internal:** add `--fix` argument to lint script ([ab1f498](https://github.com/DatagridAI/datagrid-python/commit/ab1f498ef915e2d056e82d3253989aff8930012e))
+* speedup initial import ([50e1fb9](https://github.com/DatagridAI/datagrid-python/commit/50e1fb97929db6825381a3247aa1d514cad3bfed))
+
 ## 0.4.0 (2025-12-16)
 
 Full Changelog: [v0.3.0...v0.4.0](https://github.com/DatagridAI/datagrid-python/compare/v0.3.0...v0.4.0)

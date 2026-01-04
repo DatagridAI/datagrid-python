@@ -46,6 +46,11 @@ class TestClient:
             secret_ids=["string"],
             stream=False,
             text={"format": {}},
+            user={
+                "email": "email",
+                "first_name": "first_name",
+                "last_name": "last_name",
+            },
         )
         assert_matches_type(ConverseResponse, client_, path=["response"])
 
@@ -108,6 +113,11 @@ class TestAsyncClient:
             secret_ids=["string"],
             stream=False,
             text={"format": {}},
+            user={
+                "email": "email",
+                "first_name": "first_name",
+                "last_name": "last_name",
+            },
         )
         assert_matches_type(ConverseResponse, client, path=["response"])
 
