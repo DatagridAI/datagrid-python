@@ -327,6 +327,7 @@ class Datagrid(SyncAPIClient):
         secret_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         stream: Optional[bool] | Omit = omit,
         text: Optional[client_converse_params.Text] | Omit = omit,
+        user: Optional[client_converse_params.User] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -361,6 +362,9 @@ class Datagrid(SyncAPIClient):
               Structured output is not supported only supported by the default agent model,
               magpie-1.1 and magpie-2.0.
 
+          user: User information override for converse calls. All fields are optional - only
+              provided fields will override the default user information.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -383,6 +387,7 @@ class Datagrid(SyncAPIClient):
                     "secret_ids": secret_ids,
                     "stream": stream,
                     "text": text,
+                    "user": user,
                 },
                 client_converse_params.ClientConverseParams,
             ),
@@ -660,6 +665,7 @@ class AsyncDatagrid(AsyncAPIClient):
         secret_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         stream: Optional[bool] | Omit = omit,
         text: Optional[client_converse_params.Text] | Omit = omit,
+        user: Optional[client_converse_params.User] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -694,6 +700,9 @@ class AsyncDatagrid(AsyncAPIClient):
               Structured output is not supported only supported by the default agent model,
               magpie-1.1 and magpie-2.0.
 
+          user: User information override for converse calls. All fields are optional - only
+              provided fields will override the default user information.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -716,6 +725,7 @@ class AsyncDatagrid(AsyncAPIClient):
                     "secret_ids": secret_ids,
                     "stream": stream,
                     "text": text,
+                    "user": user,
                 },
                 client_converse_params.ClientConverseParams,
             ),
