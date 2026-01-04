@@ -21,6 +21,7 @@ __all__ = [
     "ConfigDisabledTool",
     "ConfigTool",
     "Text",
+    "User",
 ]
 
 
@@ -67,6 +68,13 @@ class ClientConverseParams(TypedDict, total=False):
     Contains the format property used to specify the structured output schema.
     Structured output is not supported only supported by the default agent model,
     magpie-1.1 and magpie-2.0.
+    """
+
+    user: Optional[User]
+    """User information override for converse calls.
+
+    All fields are optional - only provided fields will override the default user
+    information.
     """
 
 
@@ -550,3 +558,19 @@ class Text(TypedDict, total=False):
     const parsedResponse = JSON.parse(response.content[0].text);
     ```
     """
+
+
+class User(TypedDict, total=False):
+    """User information override for converse calls.
+
+    All fields are optional - only provided fields will override the default user information.
+    """
+
+    email: Optional[str]
+    """Override the user's email for this converse call."""
+
+    first_name: Optional[str]
+    """Override the user's first name for this converse call."""
+
+    last_name: Optional[str]
+    """Override the user's last name for this converse call."""

@@ -322,13 +322,14 @@ class Datagrid(SyncAPIClient):
         self,
         *,
         prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
-        agent_id: Optional[str] | NotGiven = not_given,
-        config: Optional[client_converse_params.Config] | NotGiven = not_given,
-        conversation_id: Optional[str] | NotGiven = not_given,
-        generate_citations: Optional[bool] | NotGiven = not_given,
-        secret_ids: Optional[SequenceNotStr[str]] | NotGiven = not_given,
-        stream: Optional[Literal[False]] | NotGiven = not_given,
-        text: Optional[client_converse_params.Text] | NotGiven = not_given,
+        agent_id: Optional[str] | Omit = omit,
+        config: Optional[client_converse_params.Config] | Omit = omit,
+        conversation_id: Optional[str] | Omit = omit,
+        generate_citations: Optional[bool] | Omit = omit,
+        secret_ids: Optional[SequenceNotStr[str]] | Omit = omit,
+        stream: Optional[bool] | Omit = omit,
+        text: Optional[client_converse_params.Text] | Omit = omit,
+        user: Optional[client_converse_params.User] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -422,6 +423,9 @@ class Datagrid(SyncAPIClient):
               Structured output is not supported only supported by the default agent model,
               magpie-1.1 and magpie-2.0.
 
+          user: User information override for converse calls. All fields are optional - only
+              provided fields will override the default user information.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -444,6 +448,7 @@ class Datagrid(SyncAPIClient):
                     "secret_ids": secret_ids,
                     "stream": stream,
                     "text": text,
+                    "user": user,
                 },
                 client_converse_params.ClientConverseParams,
             ),
@@ -776,13 +781,14 @@ class AsyncDatagrid(AsyncAPIClient):
         self,
         *,
         prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
-        agent_id: Optional[str] | NotGiven = not_given,
-        config: Optional[client_converse_params.Config] | NotGiven = not_given,
-        conversation_id: Optional[str] | NotGiven = not_given,
-        generate_citations: Optional[bool] | NotGiven = not_given,
-        secret_ids: Optional[SequenceNotStr[str]] | NotGiven = not_given,
-        stream: Optional[Literal[False]] | Literal[True] | NotGiven = not_given,
-        text: Optional[client_converse_params.Text] | NotGiven = not_given,
+        agent_id: Optional[str] | Omit = omit,
+        config: Optional[client_converse_params.Config] | Omit = omit,
+        conversation_id: Optional[str] | Omit = omit,
+        generate_citations: Optional[bool] | Omit = omit,
+        secret_ids: Optional[SequenceNotStr[str]] | Omit = omit,
+        stream: Optional[bool] | Omit = omit,
+        text: Optional[client_converse_params.Text] | Omit = omit,
+        user: Optional[client_converse_params.User] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -817,6 +823,9 @@ class AsyncDatagrid(AsyncAPIClient):
               Structured output is not supported only supported by the default agent model,
               magpie-1.1 and magpie-2.0.
 
+          user: User information override for converse calls. All fields are optional - only
+              provided fields will override the default user information.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -839,6 +848,7 @@ class AsyncDatagrid(AsyncAPIClient):
                     "secret_ids": secret_ids,
                     "stream": stream,
                     "text": text,
+                    "user": user,
                 },
                 client_converse_params.ClientConverseParams,
             ),
