@@ -350,6 +350,7 @@ class Datagrid(SyncAPIClient):
         secret_ids: Optional[SequenceNotStr[str]] | NotGiven = not_given,
         stream: Literal[True],
         text: Optional[client_converse_params.Text] | NotGiven = not_given,
+        user: Optional[client_converse_params.User] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -370,6 +371,7 @@ class Datagrid(SyncAPIClient):
         secret_ids: Optional[SequenceNotStr[str]] | NotGiven = not_given,
         stream: bool,
         text: Optional[client_converse_params.Text] | NotGiven = not_given,
+        user: Optional[client_converse_params.User] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -389,6 +391,7 @@ class Datagrid(SyncAPIClient):
         secret_ids: Optional[SequenceNotStr[str]] | NotGiven = not_given,
         stream: Optional[Literal[False]] | Literal[True] | NotGiven = not_given,
         text: Optional[client_converse_params.Text] | NotGiven = not_given,
+        user: Optional[client_converse_params.User] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -729,6 +732,7 @@ class AsyncDatagrid(AsyncAPIClient):
         secret_ids: Optional[SequenceNotStr[str]] | NotGiven = not_given,
         stream: Literal[False] | NotGiven = not_given,
         text: Optional[client_converse_params.Text] | NotGiven = not_given,
+        user: Optional[client_converse_params.User] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -749,6 +753,7 @@ class AsyncDatagrid(AsyncAPIClient):
         secret_ids: Optional[SequenceNotStr[str]] | NotGiven = not_given,
         stream: Literal[True],
         text: Optional[client_converse_params.Text] | NotGiven = not_given,
+        user: Optional[client_converse_params.User] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -769,6 +774,7 @@ class AsyncDatagrid(AsyncAPIClient):
         secret_ids: Optional[SequenceNotStr[str]] | NotGiven = not_given,
         stream: bool,
         text: Optional[client_converse_params.Text] | NotGiven = not_given,
+        user: Optional[client_converse_params.User] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
