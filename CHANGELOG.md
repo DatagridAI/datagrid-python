@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.5.1 (2026-01-07)
+
+Full Changelog: [v0.5.0...v0.5.1](https://github.com/DatagridAI/datagrid-python/compare/v0.5.0...v0.5.1)
+
+### Bug Fixes
+
+* add missing user parameter to sync converse signature ([cba1d21](https://github.com/DatagridAI/datagrid-python/commit/cba1d216dd7e8150d72cea5349dd62887609f8fb))
+
 ## 0.5.0 (2026-01-04)
 
 Full Changelog: [v0.4.0...v0.5.0](https://github.com/DatagridAI/datagrid-python/compare/v0.4.0...v0.5.0)

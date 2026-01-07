@@ -1,6 +1,6 @@
 [project]
 name = "datagrid_ai"
-version = "0.5.0"
+version = "0.5.1"
 description = "The official Python library for the datagrid API"
 dynamic = ["readme"]
 license = "Apache-2.0"
