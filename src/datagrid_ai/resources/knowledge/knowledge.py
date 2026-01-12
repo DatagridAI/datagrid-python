@@ -6,27 +6,50 @@ from typing import Mapping, Optional, cast
 
 import httpx
 
-from ..types import knowledge_list_params, knowledge_create_params, knowledge_update_params, knowledge_connect_params
-from .._types import Body, Omit, Query, Headers, NoneType, NotGiven, FileTypes, SequenceNotStr, omit, not_given
-from .._utils import is_given, extract_files, maybe_transform, deepcopy_minimal, async_maybe_transform
-from .._compat import cached_property
-from .._resource import SyncAPIResource, AsyncAPIResource
-from .._response import (
+from ...types import knowledge_list_params, knowledge_create_params, knowledge_update_params, knowledge_connect_params
+from ..._types import (
+    Body,
+    Omit,
+    Query,
+    Headers,
+    NoneType,
+    NotGiven,
+    FileTypes,
+    SequenceNotStr,
+    omit,
+    not_given,
+)
+from ..._utils import is_given, extract_files, maybe_transform, deepcopy_minimal, async_maybe_transform
+from ..._compat import cached_property
+from ..._resource import SyncAPIResource, AsyncAPIResource
+from ..._response import (
     to_raw_response_wrapper,
     to_streamed_response_wrapper,
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from .._constants import DEFAULT_TIMEOUT
-from ..pagination import SyncCursorIDPage, AsyncCursorIDPage
-from .._base_client import AsyncPaginator, make_request_options
-from ..types.knowledge import Knowledge
-from ..types.redirect_url_response import RedirectURLResponse
+from ..._constants import DEFAULT_TIMEOUT
+from ...pagination import SyncCursorIDPage, AsyncCursorIDPage
+from .tables.tables import (
+    TablesResource,
+    AsyncTablesResource,
+    TablesResourceWithRawResponse,
+    AsyncTablesResourceWithRawResponse,
+    TablesResourceWithStreamingResponse,
+    AsyncTablesResourceWithStreamingResponse,
+)
+from ..._base_client import AsyncPaginator, make_request_options
+from ...types.knowledge.knowledge import Knowledge
+from ...types.redirect_url_response import RedirectURLResponse
 
 __all__ = ["KnowledgeResource", "AsyncKnowledgeResource"]
 
 
 class KnowledgeResource(SyncAPIResource):
+    @cached_property
+    def tables(self) -> TablesResource:
+        return TablesResource(self._client)
+
     @cached_property
     def with_raw_response(self) -> KnowledgeResourceWithRawResponse:
         """
@@ -353,6 +376,10 @@ class KnowledgeResource(SyncAPIResource):
 
 
 class AsyncKnowledgeResource(AsyncAPIResource):
+    @cached_property
+    def tables(self) -> AsyncTablesResource:
+        return AsyncTablesResource(self._client)
+
     @cached_property
     def with_raw_response(self) -> AsyncKnowledgeResourceWithRawResponse:
         """
@@ -706,6 +733,10 @@ class KnowledgeResourceWithRawResponse:
             knowledge.reindex,
         )
 
+    @cached_property
+    def tables(self) -> TablesResourceWithRawResponse:
+        return TablesResourceWithRawResponse(self._knowledge.tables)
+
 
 class AsyncKnowledgeResourceWithRawResponse:
     def __init__(self, knowledge: AsyncKnowledgeResource) -> None:
@@ -732,6 +763,10 @@ class AsyncKnowledgeResourceWithRawResponse:
         self.reindex = async_to_raw_response_wrapper(
             knowledge.reindex,
         )
+
+    @cached_property
+    def tables(self) -> AsyncTablesResourceWithRawResponse:
+        return AsyncTablesResourceWithRawResponse(self._knowledge.tables)
 
 
 class KnowledgeResourceWithStreamingResponse:
@@ -760,6 +795,10 @@ class KnowledgeResourceWithStreamingResponse:
             knowledge.reindex,
         )
 
+    @cached_property
+    def tables(self) -> TablesResourceWithStreamingResponse:
+        return TablesResourceWithStreamingResponse(self._knowledge.tables)
+
 
 class AsyncKnowledgeResourceWithStreamingResponse:
     def __init__(self, knowledge: AsyncKnowledgeResource) -> None:
@@ -786,3 +825,7 @@ class AsyncKnowledgeResourceWithStreamingResponse:
         self.reindex = async_to_streamed_response_wrapper(
             knowledge.reindex,
         )
+
+    @cached_property
+    def tables(self) -> AsyncTablesResourceWithStreamingResponse:
+        return AsyncTablesResourceWithStreamingResponse(self._knowledge.tables)

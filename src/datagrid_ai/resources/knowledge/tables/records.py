@@ -4,47 +4,48 @@ from __future__ import annotations
 
 import httpx
 
-from ..types import search_search_params
-from .._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
-from .._utils import maybe_transform, async_maybe_transform
-from .._compat import cached_property
-from .._resource import SyncAPIResource, AsyncAPIResource
-from .._response import (
+from ...._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
+from ...._utils import maybe_transform
+from ...._compat import cached_property
+from ...._resource import SyncAPIResource, AsyncAPIResource
+from ...._response import (
     to_raw_response_wrapper,
     to_streamed_response_wrapper,
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from .._base_client import make_request_options
-from ..types.search_search_response import SearchSearchResponse
+from ....pagination import SyncCursorPage, AsyncCursorPage
+from ...._base_client import AsyncPaginator, make_request_options
+from ....types.knowledge.tables import record_list_params
+from ....types.knowledge.tables.record import Record
 
-__all__ = ["SearchResource", "AsyncSearchResource"]
+__all__ = ["RecordsResource", "AsyncRecordsResource"]
 
 
-class SearchResource(SyncAPIResource):
+class RecordsResource(SyncAPIResource):
     @cached_property
-    def with_raw_response(self) -> SearchResourceWithRawResponse:
+    def with_raw_response(self) -> RecordsResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
         For more information, see https://www.github.com/DatagridAI/datagrid-python#accessing-raw-response-data-eg-headers
         """
-        return SearchResourceWithRawResponse(self)
+        return RecordsResourceWithRawResponse(self)
 
     @cached_property
-    def with_streaming_response(self) -> SearchResourceWithStreamingResponse:
+    def with_streaming_response(self) -> RecordsResourceWithStreamingResponse:
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
         For more information, see https://www.github.com/DatagridAI/datagrid-python#with_streaming_response
         """
-        return SearchResourceWithStreamingResponse(self)
+        return RecordsResourceWithStreamingResponse(self)
 
-    def search(
+    def list(
         self,
+        table_id: str,
         *,
-        query: str,
         limit: int | Omit = omit,
         next: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -53,12 +54,12 @@ class SearchResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> SearchSearchResponse:
+    ) -> SyncCursorPage[Record]:
         """
-        [BETA] Search across knowledge.
+        Returns a list of records for a table.
 
         Args:
-          limit: The limit on the number of objects to return, ranging between 1 and 100.
+          limit: The limit on the number of objects to return, ranging between 1 and 1000.
 
           next: A cursor to use in pagination to continue a query from the previous request.
               This is automatically added when the request has more results to fetch.
@@ -71,8 +72,11 @@ class SearchResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        return self._get(
-            "/search",
+        if not table_id:
+            raise ValueError(f"Expected a non-empty value for `table_id` but received {table_id!r}")
+        return self._get_api_list(
+            f"/tables/{table_id}/records",
+            page=SyncCursorPage[Record],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -80,41 +84,40 @@ class SearchResource(SyncAPIResource):
                 timeout=timeout,
                 query=maybe_transform(
                     {
-                        "query": query,
                         "limit": limit,
                         "next": next,
                     },
-                    search_search_params.SearchSearchParams,
+                    record_list_params.RecordListParams,
                 ),
             ),
-            cast_to=SearchSearchResponse,
+            model=Record,
         )
 
 
-class AsyncSearchResource(AsyncAPIResource):
+class AsyncRecordsResource(AsyncAPIResource):
     @cached_property
-    def with_raw_response(self) -> AsyncSearchResourceWithRawResponse:
+    def with_raw_response(self) -> AsyncRecordsResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
         For more information, see https://www.github.com/DatagridAI/datagrid-python#accessing-raw-response-data-eg-headers
         """
-        return AsyncSearchResourceWithRawResponse(self)
+        return AsyncRecordsResourceWithRawResponse(self)
 
     @cached_property
-    def with_streaming_response(self) -> AsyncSearchResourceWithStreamingResponse:
+    def with_streaming_response(self) -> AsyncRecordsResourceWithStreamingResponse:
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
         For more information, see https://www.github.com/DatagridAI/datagrid-python#with_streaming_response
         """
-        return AsyncSearchResourceWithStreamingResponse(self)
+        return AsyncRecordsResourceWithStreamingResponse(self)
 
-    async def search(
+    def list(
         self,
+        table_id: str,
         *,
-        query: str,
         limit: int | Omit = omit,
         next: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -123,12 +126,12 @@ class AsyncSearchResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> SearchSearchResponse:
+    ) -> AsyncPaginator[Record, AsyncCursorPage[Record]]:
         """
-        [BETA] Search across knowledge.
+        Returns a list of records for a table.
 
         Args:
-          limit: The limit on the number of objects to return, ranging between 1 and 100.
+          limit: The limit on the number of objects to return, ranging between 1 and 1000.
 
           next: A cursor to use in pagination to continue a query from the previous request.
               This is automatically added when the request has more results to fetch.
@@ -141,57 +144,59 @@ class AsyncSearchResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        return await self._get(
-            "/search",
+        if not table_id:
+            raise ValueError(f"Expected a non-empty value for `table_id` but received {table_id!r}")
+        return self._get_api_list(
+            f"/tables/{table_id}/records",
+            page=AsyncCursorPage[Record],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
                 extra_body=extra_body,
                 timeout=timeout,
-                query=await async_maybe_transform(
+                query=maybe_transform(
                     {
-                        "query": query,
                         "limit": limit,
                         "next": next,
                     },
-                    search_search_params.SearchSearchParams,
+                    record_list_params.RecordListParams,
                 ),
             ),
-            cast_to=SearchSearchResponse,
+            model=Record,
         )
 
 
-class SearchResourceWithRawResponse:
-    def __init__(self, search: SearchResource) -> None:
-        self._search = search
+class RecordsResourceWithRawResponse:
+    def __init__(self, records: RecordsResource) -> None:
+        self._records = records
 
-        self.search = to_raw_response_wrapper(
-            search.search,
+        self.list = to_raw_response_wrapper(
+            records.list,
         )
 
 
-class AsyncSearchResourceWithRawResponse:
-    def __init__(self, search: AsyncSearchResource) -> None:
-        self._search = search
+class AsyncRecordsResourceWithRawResponse:
+    def __init__(self, records: AsyncRecordsResource) -> None:
+        self._records = records
 
-        self.search = async_to_raw_response_wrapper(
-            search.search,
+        self.list = async_to_raw_response_wrapper(
+            records.list,
         )
 
 
-class SearchResourceWithStreamingResponse:
-    def __init__(self, search: SearchResource) -> None:
-        self._search = search
+class RecordsResourceWithStreamingResponse:
+    def __init__(self, records: RecordsResource) -> None:
+        self._records = records
 
-        self.search = to_streamed_response_wrapper(
-            search.search,
+        self.list = to_streamed_response_wrapper(
+            records.list,
         )
 
 
-class AsyncSearchResourceWithStreamingResponse:
-    def __init__(self, search: AsyncSearchResource) -> None:
-        self._search = search
+class AsyncRecordsResourceWithStreamingResponse:
+    def __init__(self, records: AsyncRecordsResource) -> None:
+        self._records = records
 
-        self.search = async_to_streamed_response_wrapper(
-            search.search,
+        self.list = async_to_streamed_response_wrapper(
+            records.list,
         )

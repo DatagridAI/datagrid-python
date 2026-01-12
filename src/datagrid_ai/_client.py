@@ -74,10 +74,10 @@ if TYPE_CHECKING:
     from .resources.search import SearchResource, AsyncSearchResource
     from .resources.secrets import SecretsResource, AsyncSecretsResource
     from .resources.beta.beta import BetaResource, AsyncBetaResource
-    from .resources.knowledge import KnowledgeResource, AsyncKnowledgeResource
     from .resources.connectors import ConnectorsResource, AsyncConnectorsResource
     from .resources.connections import ConnectionsResource, AsyncConnectionsResource
     from .resources.memory.memory import MemoryResource, AsyncMemoryResource
+    from .resources.knowledge.knowledge import KnowledgeResource, AsyncKnowledgeResource
     from .resources.data_views.data_views import DataViewsResource, AsyncDataViewsResource
     from .resources.organization.organization import OrganizationResource, AsyncOrganizationResource
     from .resources.conversations.conversations import ConversationsResource, AsyncConversationsResource
