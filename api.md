@@ -27,13 +27,38 @@ from datagrid_ai.types import (
 
 Methods:
 
-- <code title="post /knowledge">client.knowledge.<a href="./src/datagrid_ai/resources/knowledge.py">create</a>(\*\*<a href="src/datagrid_ai/types/knowledge_create_params.py">params</a>) -> <a href="./src/datagrid_ai/types/knowledge.py">Knowledge</a></code>
-- <code title="get /knowledge/{knowledge_id}">client.knowledge.<a href="./src/datagrid_ai/resources/knowledge.py">retrieve</a>(knowledge_id) -> <a href="./src/datagrid_ai/types/knowledge.py">Knowledge</a></code>
-- <code title="patch /knowledge/{knowledge_id}">client.knowledge.<a href="./src/datagrid_ai/resources/knowledge.py">update</a>(knowledge_id, \*\*<a href="src/datagrid_ai/types/knowledge_update_params.py">params</a>) -> <a href="./src/datagrid_ai/types/knowledge.py">Knowledge</a></code>
-- <code title="get /knowledge">client.knowledge.<a href="./src/datagrid_ai/resources/knowledge.py">list</a>(\*\*<a href="src/datagrid_ai/types/knowledge_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/knowledge.py">SyncCursorIDPage[Knowledge]</a></code>
-- <code title="delete /knowledge/{knowledge_id}">client.knowledge.<a href="./src/datagrid_ai/resources/knowledge.py">delete</a>(knowledge_id) -> None</code>
-- <code title="post /knowledge/connect">client.knowledge.<a href="./src/datagrid_ai/resources/knowledge.py">connect</a>(\*\*<a href="src/datagrid_ai/types/knowledge_connect_params.py">params</a>) -> <a href="./src/datagrid_ai/types/redirect_url_response.py">RedirectURLResponse</a></code>
-- <code title="post /knowledge/{knowledge_id}/reindex">client.knowledge.<a href="./src/datagrid_ai/resources/knowledge.py">reindex</a>(knowledge_id) -> None</code>
+- <code title="post /knowledge">client.knowledge.<a href="./src/datagrid_ai/resources/knowledge/knowledge.py">create</a>(\*\*<a href="src/datagrid_ai/types/knowledge_create_params.py">params</a>) -> <a href="./src/datagrid_ai/types/knowledge/knowledge.py">Knowledge</a></code>
+- <code title="get /knowledge/{knowledge_id}">client.knowledge.<a href="./src/datagrid_ai/resources/knowledge/knowledge.py">retrieve</a>(knowledge_id) -> <a href="./src/datagrid_ai/types/knowledge/knowledge.py">Knowledge</a></code>
+- <code title="patch /knowledge/{knowledge_id}">client.knowledge.<a href="./src/datagrid_ai/resources/knowledge/knowledge.py">update</a>(knowledge_id, \*\*<a href="src/datagrid_ai/types/knowledge_update_params.py">params</a>) -> <a href="./src/datagrid_ai/types/knowledge/knowledge.py">Knowledge</a></code>
+- <code title="get /knowledge">client.knowledge.<a href="./src/datagrid_ai/resources/knowledge/knowledge.py">list</a>(\*\*<a href="src/datagrid_ai/types/knowledge_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/knowledge/knowledge.py">SyncCursorIDPage[Knowledge]</a></code>
+- <code title="delete /knowledge/{knowledge_id}">client.knowledge.<a href="./src/datagrid_ai/resources/knowledge/knowledge.py">delete</a>(knowledge_id) -> None</code>
+- <code title="post /knowledge/connect">client.knowledge.<a href="./src/datagrid_ai/resources/knowledge/knowledge.py">connect</a>(\*\*<a href="src/datagrid_ai/types/knowledge_connect_params.py">params</a>) -> <a href="./src/datagrid_ai/types/redirect_url_response.py">RedirectURLResponse</a></code>
+- <code title="post /knowledge/{knowledge_id}/reindex">client.knowledge.<a href="./src/datagrid_ai/resources/knowledge/knowledge.py">reindex</a>(knowledge_id) -> None</code>
+
+## Tables
+
+Types:
+
+```python
+from datagrid_ai.types.knowledge import Table
+```
+
+Methods:
+
+- <code title="get /tables/{table_id}">client.knowledge.tables.<a href="./src/datagrid_ai/resources/knowledge/tables/tables.py">retrieve</a>(table_id) -> <a href="./src/datagrid_ai/types/knowledge/table.py">Table</a></code>
+- <code title="get /tables">client.knowledge.tables.<a href="./src/datagrid_ai/resources/knowledge/tables/tables.py">list</a>(\*\*<a href="src/datagrid_ai/types/knowledge/table_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/knowledge/table.py">SyncCursorIDPage[Table]</a></code>
+
+### Records
+
+Types:
+
+```python
+from datagrid_ai.types.knowledge.tables import Record
+```
+
+Methods:
+
+- <code title="get /tables/{table_id}/records">client.knowledge.tables.records.<a href="./src/datagrid_ai/resources/knowledge/tables/records.py">list</a>(table_id, \*\*<a href="src/datagrid_ai/types/knowledge/tables/record_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/knowledge/tables/record.py">SyncCursorPage[Record]</a></code>
 
 # Connections
 
@@ -99,12 +124,17 @@ Methods:
 Types:
 
 ```python
-from datagrid_ai.types import SearchResultItem, SearchResultResource, SearchResultResourceType
+from datagrid_ai.types import (
+    SearchResultItem,
+    SearchResultResource,
+    SearchResultResourceType,
+    SearchSearchResponse,
+)
 ```
 
 Methods:
 
-- <code title="get /search">client.search.<a href="./src/datagrid_ai/resources/search.py">search</a>(\*\*<a href="src/datagrid_ai/types/search_search_params.py">params</a>) -> <a href="./src/datagrid_ai/types/search_result_item.py">SyncCursorPage[SearchResultItem]</a></code>
+- <code title="get /search">client.search.<a href="./src/datagrid_ai/resources/search.py">search</a>(\*\*<a href="src/datagrid_ai/types/search_search_params.py">params</a>) -> <a href="./src/datagrid_ai/types/search_search_response.py">SearchSearchResponse</a></code>
 
 # Agents
 

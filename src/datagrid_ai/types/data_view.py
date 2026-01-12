@@ -16,6 +16,9 @@ class DataView(BaseModel):
     id: str
     """The data view identifier."""
 
+    bigquery_dataset_name: str
+    """The name of the BigQuery dataset containing views to the data."""
+
     created_at: datetime
     """The ISO string for when the data view was created."""
 

@@ -10,10 +10,10 @@ import pytest
 from datagrid_ai import Datagrid, AsyncDatagrid
 from tests.utils import assert_matches_type
 from datagrid_ai.types import (
-    Knowledge,
     RedirectURLResponse,
 )
 from datagrid_ai.pagination import SyncCursorIDPage, AsyncCursorIDPage
+from datagrid_ai.types.knowledge import Knowledge
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
