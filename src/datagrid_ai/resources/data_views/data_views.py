@@ -57,8 +57,8 @@ class DataViewsResource(SyncAPIResource):
     def create(
         self,
         *,
+        bigquery_dataset_name: str,
         knowledge_id: str,
-        name: str,
         service_account_id: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -72,9 +72,10 @@ class DataViewsResource(SyncAPIResource):
         through a service account.
 
         Args:
-          knowledge_id: The id of the knowledge to create a data view for.
+          bigquery_dataset_name: The name of the BigQuery dataset containing views to the data. Your
+              organization's domain will be automatically prepended to the name.
 
-          name: The name of the data view.
+          knowledge_id: The id of the knowledge to create a data view for.
 
           service_account_id: The id of the service account that will access this data view.
 
@@ -90,8 +91,8 @@ class DataViewsResource(SyncAPIResource):
             "/data-views",
             body=maybe_transform(
                 {
+                    "bigquery_dataset_name": bigquery_dataset_name,
                     "knowledge_id": knowledge_id,
-                    "name": name,
                     "service_account_id": service_account_id,
                 },
                 data_view_create_params.DataViewCreateParams,
@@ -221,8 +222,8 @@ class AsyncDataViewsResource(AsyncAPIResource):
     async def create(
         self,
         *,
+        bigquery_dataset_name: str,
         knowledge_id: str,
-        name: str,
         service_account_id: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -236,9 +237,10 @@ class AsyncDataViewsResource(AsyncAPIResource):
         through a service account.
 
         Args:
-          knowledge_id: The id of the knowledge to create a data view for.
+          bigquery_dataset_name: The name of the BigQuery dataset containing views to the data. Your
+              organization's domain will be automatically prepended to the name.
 
-          name: The name of the data view.
+          knowledge_id: The id of the knowledge to create a data view for.
 
           service_account_id: The id of the service account that will access this data view.
 
@@ -254,8 +256,8 @@ class AsyncDataViewsResource(AsyncAPIResource):
             "/data-views",
             body=await async_maybe_transform(
                 {
+                    "bigquery_dataset_name": bigquery_dataset_name,
                     "knowledge_id": knowledge_id,
-                    "name": name,
                     "service_account_id": service_account_id,
                 },
                 data_view_create_params.DataViewCreateParams,

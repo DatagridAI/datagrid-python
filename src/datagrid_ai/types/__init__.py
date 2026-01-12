@@ -39,6 +39,7 @@ from .redirect_url_response import RedirectURLResponse as RedirectURLResponse
 from .client_converse_params import ClientConverseParams as ClientConverseParams
 from .connection_list_params import ConnectionListParams as ConnectionListParams
 from .search_result_resource import SearchResultResource as SearchResultResource
+from .search_search_response import SearchSearchResponse as SearchSearchResponse
 from .data_view_create_params import DataViewCreateParams as DataViewCreateParams
 from .data_view_list_response import DataViewListResponse as DataViewListResponse
 from .knowledge_create_params import KnowledgeCreateParams as KnowledgeCreateParams

@@ -20,8 +20,8 @@ class TestDataViews:
     @parametrize
     def test_method_create(self, client: Datagrid) -> None:
         data_view = client.data_views.create(
+            bigquery_dataset_name="bigquery_dataset_name",
             knowledge_id="knowledge_id",
-            name="name",
             service_account_id="service_account_id",
         )
         assert_matches_type(DataView, data_view, path=["response"])
@@ -29,8 +29,8 @@ class TestDataViews:
     @parametrize
     def test_raw_response_create(self, client: Datagrid) -> None:
         response = client.data_views.with_raw_response.create(
+            bigquery_dataset_name="bigquery_dataset_name",
             knowledge_id="knowledge_id",
-            name="name",
             service_account_id="service_account_id",
         )
 
@@ -42,8 +42,8 @@ class TestDataViews:
     @parametrize
     def test_streaming_response_create(self, client: Datagrid) -> None:
         with client.data_views.with_streaming_response.create(
+            bigquery_dataset_name="bigquery_dataset_name",
             knowledge_id="knowledge_id",
-            name="name",
             service_account_id="service_account_id",
         ) as response:
             assert not response.is_closed
@@ -142,8 +142,8 @@ class TestAsyncDataViews:
     @parametrize
     async def test_method_create(self, async_client: AsyncDatagrid) -> None:
         data_view = await async_client.data_views.create(
+            bigquery_dataset_name="bigquery_dataset_name",
             knowledge_id="knowledge_id",
-            name="name",
             service_account_id="service_account_id",
         )
         assert_matches_type(DataView, data_view, path=["response"])
@@ -151,8 +151,8 @@ class TestAsyncDataViews:
     @parametrize
     async def test_raw_response_create(self, async_client: AsyncDatagrid) -> None:
         response = await async_client.data_views.with_raw_response.create(
+            bigquery_dataset_name="bigquery_dataset_name",
             knowledge_id="knowledge_id",
-            name="name",
             service_account_id="service_account_id",
         )
 
@@ -164,8 +164,8 @@ class TestAsyncDataViews:
     @parametrize
     async def test_streaming_response_create(self, async_client: AsyncDatagrid) -> None:
         async with async_client.data_views.with_streaming_response.create(
+            bigquery_dataset_name="bigquery_dataset_name",
             knowledge_id="knowledge_id",
-            name="name",
             service_account_id="service_account_id",
         ) as response:
             assert not response.is_closed

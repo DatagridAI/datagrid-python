@@ -9,8 +9,7 @@ import pytest
 
 from datagrid_ai import Datagrid, AsyncDatagrid
 from tests.utils import assert_matches_type
-from datagrid_ai.types import SearchResultItem
-from datagrid_ai.pagination import SyncCursorPage, AsyncCursorPage
+from datagrid_ai.types import SearchSearchResponse
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -23,7 +22,7 @@ class TestSearch:
         search = client.search.search(
             query="query",
         )
-        assert_matches_type(SyncCursorPage[SearchResultItem], search, path=["response"])
+        assert_matches_type(SearchSearchResponse, search, path=["response"])
 
     @parametrize
     def test_method_search_with_all_params(self, client: Datagrid) -> None:
@@ -32,7 +31,7 @@ class TestSearch:
             limit=1,
             next="next",
         )
-        assert_matches_type(SyncCursorPage[SearchResultItem], search, path=["response"])
+        assert_matches_type(SearchSearchResponse, search, path=["response"])
 
     @parametrize
     def test_raw_response_search(self, client: Datagrid) -> None:
@@ -43,7 +42,7 @@ class TestSearch:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         search = response.parse()
-        assert_matches_type(SyncCursorPage[SearchResultItem], search, path=["response"])
+        assert_matches_type(SearchSearchResponse, search, path=["response"])
 
     @parametrize
     def test_streaming_response_search(self, client: Datagrid) -> None:
@@ -54,7 +53,7 @@ class TestSearch:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             search = response.parse()
-            assert_matches_type(SyncCursorPage[SearchResultItem], search, path=["response"])
+            assert_matches_type(SearchSearchResponse, search, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -69,7 +68,7 @@ class TestAsyncSearch:
         search = await async_client.search.search(
             query="query",
         )
-        assert_matches_type(AsyncCursorPage[SearchResultItem], search, path=["response"])
+        assert_matches_type(SearchSearchResponse, search, path=["response"])
 
     @parametrize
     async def test_method_search_with_all_params(self, async_client: AsyncDatagrid) -> None:
@@ -78,7 +77,7 @@ class TestAsyncSearch:
             limit=1,
             next="next",
         )
-        assert_matches_type(AsyncCursorPage[SearchResultItem], search, path=["response"])
+        assert_matches_type(SearchSearchResponse, search, path=["response"])
 
     @parametrize
     async def test_raw_response_search(self, async_client: AsyncDatagrid) -> None:
@@ -89,7 +88,7 @@ class TestAsyncSearch:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         search = await response.parse()
-        assert_matches_type(AsyncCursorPage[SearchResultItem], search, path=["response"])
+        assert_matches_type(SearchSearchResponse, search, path=["response"])
 
     @parametrize
     async def test_streaming_response_search(self, async_client: AsyncDatagrid) -> None:
@@ -100,6 +99,6 @@ class TestAsyncSearch:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             search = await response.parse()
-            assert_matches_type(AsyncCursorPage[SearchResultItem], search, path=["response"])
+            assert_matches_type(SearchSearchResponse, search, path=["response"])
 
         assert cast(Any, response.is_closed) is True

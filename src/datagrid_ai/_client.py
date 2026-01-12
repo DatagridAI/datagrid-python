@@ -74,10 +74,10 @@ if TYPE_CHECKING:
     from .resources.search import SearchResource, AsyncSearchResource
     from .resources.secrets import SecretsResource, AsyncSecretsResource
     from .resources.beta.beta import BetaResource, AsyncBetaResource
-    from .resources.knowledge import KnowledgeResource, AsyncKnowledgeResource
     from .resources.connectors import ConnectorsResource, AsyncConnectorsResource
     from .resources.connections import ConnectionsResource, AsyncConnectionsResource
     from .resources.memory.memory import MemoryResource, AsyncMemoryResource
+    from .resources.knowledge.knowledge import KnowledgeResource, AsyncKnowledgeResource
     from .resources.data_views.data_views import DataViewsResource, AsyncDataViewsResource
     from .resources.organization.organization import OrganizationResource, AsyncOrganizationResource
     from .resources.conversations.conversations import ConversationsResource, AsyncConversationsResource
@@ -322,13 +322,13 @@ class Datagrid(SyncAPIClient):
         self,
         *,
         prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
-        agent_id: Optional[str] | Omit = omit,
-        config: Optional[client_converse_params.Config] | Omit = omit,
-        conversation_id: Optional[str] | Omit = omit,
-        generate_citations: Optional[bool] | Omit = omit,
-        secret_ids: Optional[SequenceNotStr[str]] | Omit = omit,
-        stream: Optional[bool] | Omit = omit,
-        text: Optional[client_converse_params.Text] | Omit = omit,
+        agent_id: Optional[str] | NotGiven = not_given,
+        config: Optional[client_converse_params.Config] | NotGiven = not_given,
+        conversation_id: Optional[str] | NotGiven = not_given,
+        generate_citations: Optional[bool] | NotGiven = not_given,
+        secret_ids: Optional[SequenceNotStr[str]] | NotGiven = not_given,
+        stream: Optional[bool] | NotGiven = not_given,
+        text: Optional[client_converse_params.Text] | NotGiven = not_given,
         user: Optional[client_converse_params.User] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -787,13 +787,13 @@ class AsyncDatagrid(AsyncAPIClient):
         self,
         *,
         prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
-        agent_id: Optional[str] | Omit = omit,
-        config: Optional[client_converse_params.Config] | Omit = omit,
-        conversation_id: Optional[str] | Omit = omit,
-        generate_citations: Optional[bool] | Omit = omit,
-        secret_ids: Optional[SequenceNotStr[str]] | Omit = omit,
-        stream: Optional[bool] | Omit = omit,
-        text: Optional[client_converse_params.Text] | Omit = omit,
+        agent_id: Optional[str] | NotGiven = not_given,
+        config: Optional[client_converse_params.Config] | NotGiven = not_given,
+        conversation_id: Optional[str] | NotGiven = not_given,
+        generate_citations: Optional[bool] | NotGiven = not_given,
+        secret_ids: Optional[SequenceNotStr[str]] | NotGiven = not_given,
+        stream: Optional[Literal[False]] | Literal[True] | NotGiven = not_given,
+        text: Optional[client_converse_params.Text] | NotGiven = not_given,
         user: Optional[client_converse_params.User] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
