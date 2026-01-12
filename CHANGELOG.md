@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.6.0 (2026-01-12)
+
+Full Changelog: [v0.5.1...v0.6.0](https://github.com/DatagridAI/datagrid-python/compare/v0.5.1...v0.6.0)
+
+### Features
+
+* **api:** api update ([280eedb](https://github.com/DatagridAI/datagrid-python/commit/280eedb31fd91fbd4311c6c9afb69113c082205d))
+
 ## 0.5.1 (2026-01-07)
 
 Full Changelog: [v0.5.0...v0.5.1](https://github.com/DatagridAI/datagrid-python/compare/v0.5.0...v0.5.1)
