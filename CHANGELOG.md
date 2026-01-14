@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.7.0 (2026-01-14)
+
+Full Changelog: [v0.6.0...v0.7.0](https://github.com/DatagridAI/datagrid-python/compare/v0.6.0...v0.7.0)
+
+### Features
+
+* **client:** add support for binary request streaming ([da73956](https://github.com/DatagridAI/datagrid-python/commit/da73956b8ac20f9a97a6c653ec9936181a133466))
+
 ## 0.6.0 (2026-01-12)
 
 Full Changelog: [v0.5.1...v0.6.0](https://github.com/DatagridAI/datagrid-python/compare/v0.5.1...v0.6.0)
