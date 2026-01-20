@@ -2,12 +2,31 @@
 
 from typing import List, Union, Optional
 from datetime import datetime
-from typing_extensions import Literal
+from typing_extensions import Literal, TypeAlias
 
 from .tool import Tool
 from .._models import BaseModel
 
-__all__ = ["Agent"]
+__all__ = ["Agent", "Corpus", "CorpusCorpusKnowledgeItem", "CorpusCorpusPageItem"]
+
+
+class CorpusCorpusKnowledgeItem(BaseModel):
+    knowledge_id: str
+    """The ID of the knowledge to include in the corpus."""
+
+    type: Literal["knowledge"]
+    """The type of the corpus item. Always 'knowledge' for knowledge items."""
+
+
+class CorpusCorpusPageItem(BaseModel):
+    page_id: str
+    """The ID of the page to include in the corpus."""
+
+    type: Literal["page"]
+    """The type of the corpus item. Always 'page' for page items."""
+
+
+Corpus: TypeAlias = Union[CorpusCorpusKnowledgeItem, CorpusCorpusPageItem]
 
 
 class Agent(BaseModel):
@@ -26,6 +45,12 @@ class Agent(BaseModel):
       capabilities.
     """
 
+    corpus: Optional[List[Corpus]] = None
+    """Array of corpus items the agent should use during the converse.
+
+    When omitted, all knowledge is used.
+    """
+
     created_at: datetime
     """The ISO string for when the agent was created"""
 
@@ -36,9 +61,10 @@ class Agent(BaseModel):
     """The description of the agent"""
 
     knowledge_ids: Optional[List[str]] = None
-    """Array of Knowledge IDs the agent should use during the converse.
+    """Deprecated, use corpus instead.
 
-    When ommited, all knowledge is used.
+    Array of Knowledge IDs the agent should use during the converse. When omitted,
+    all knowledge is used.
     """
 
     llm_model: Union[

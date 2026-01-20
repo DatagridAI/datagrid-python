@@ -5,10 +5,10 @@ from __future__ import annotations
 from typing import Union
 from typing_extensions import Literal, Required, TypeAlias, TypedDict
 
-__all__ = ["KnowledgeListParams", "Parent", "ParentParentPage", "ParentRootPage"]
+__all__ = ["PageListParams", "Parent", "ParentParentPage", "ParentRootPage"]
 
 
-class KnowledgeListParams(TypedDict, total=False):
+class PageListParams(TypedDict, total=False):
     after: str
     """A cursor to use in pagination.
 
@@ -30,11 +30,11 @@ class KnowledgeListParams(TypedDict, total=False):
     """The limit on the number of objects to return, ranging between 1 and 100."""
 
     parent: Parent
-    """Filter knowledge by parent.
+    """Filter pages by parent.
 
-    Pass `{"type":"root"}` to get root-level knowledge, or
-    `{"type":"page","page_id":"page_123"}` to get knowledge nested under a specific
-    page. If not specified, returns all knowledge.
+    Pass `{"type":"root"}` to get root-level pages, or
+    `{"type":"page","page_id":"page_123"}` to get pages nested under a specific
+    page. If not specified, returns all pages.
     """
 
 

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from .page import Page as Page
 from .tool import Tool as Tool
 from .agent import Agent as Agent
 from .secret import Secret as Secret
@@ -19,12 +20,15 @@ from .table_metadata import TableMetadata as TableMetadata
 from .tool_name_param import ToolNameParam as ToolNameParam
 from .file_list_params import FileListParams as FileListParams
 from .message_metadata import MessageMetadata as MessageMetadata
+from .page_list_params import PageListParams as PageListParams
 from .tool_list_params import ToolListParams as ToolListParams
 from .agent_list_params import AgentListParams as AgentListParams
 from .converse_response import ConverseResponse as ConverseResponse
 from .file_create_params import FileCreateParams as FileCreateParams
 from .i_frame_event_type import IFrameEventType as IFrameEventType
 from .knowledge_metadata import KnowledgeMetadata as KnowledgeMetadata
+from .page_create_params import PageCreateParams as PageCreateParams
+from .page_update_params import PageUpdateParams as PageUpdateParams
 from .search_result_item import SearchResultItem as SearchResultItem
 from .secret_list_params import SecretListParams as SecretListParams
 from .agent_create_params import AgentCreateParams as AgentCreateParams

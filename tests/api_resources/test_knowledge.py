@@ -36,6 +36,10 @@ class TestKnowledge:
         knowledge = client.knowledge.create(
             files=[b"raw file contents"],
             name="name",
+            parent={
+                "page_id": "page_id",
+                "type": "page",
+            },
         )
         assert_matches_type(Knowledge, knowledge, path=["response"])
 
@@ -118,6 +122,10 @@ class TestKnowledge:
             knowledge_id="knowledge_id",
             files=[b"raw file contents"],
             name="name",
+            parent={
+                "page_id": "page_id",
+                "type": "page",
+            },
             sync={
                 "enabled": True,
                 "trigger": {
@@ -174,6 +182,10 @@ class TestKnowledge:
             after="after",
             before="before",
             limit=1,
+            parent={
+                "page_id": "page_id",
+                "type": "page",
+            },
         )
         assert_matches_type(SyncCursorIDPage[Knowledge], knowledge, path=["response"])
 
@@ -325,6 +337,10 @@ class TestAsyncKnowledge:
         knowledge = await async_client.knowledge.create(
             files=[b"raw file contents"],
             name="name",
+            parent={
+                "page_id": "page_id",
+                "type": "page",
+            },
         )
         assert_matches_type(Knowledge, knowledge, path=["response"])
 
@@ -405,6 +421,10 @@ class TestAsyncKnowledge:
             knowledge_id="knowledge_id",
             files=[b"raw file contents"],
             name="name",
+            parent={
+                "page_id": "page_id",
+                "type": "page",
+            },
             sync={
                 "enabled": True,
                 "trigger": {
@@ -459,6 +479,10 @@ class TestAsyncKnowledge:
             after="after",
             before="before",
             limit=1,
+            parent={
+                "page_id": "page_id",
+                "type": "page",
+            },
         )
         assert_matches_type(AsyncCursorIDPage[Knowledge], knowledge, path=["response"])
 

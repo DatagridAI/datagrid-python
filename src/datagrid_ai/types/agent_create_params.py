@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
-from typing import List, Union, Optional
-from typing_extensions import Literal, TypeAlias, TypedDict
+from typing import List, Union, Iterable, Optional
+from typing_extensions import Literal, Required, TypeAlias, TypedDict
 
 from .._types import SequenceNotStr
 from .tool_param import ToolParam
 
-__all__ = ["AgentCreateParams", "DisabledTool", "Tool"]
+__all__ = ["AgentCreateParams", "Corpus", "CorpusCorpusKnowledgeItem", "CorpusCorpusPageItem", "DisabledTool", "Tool"]
 
 
 class AgentCreateParams(TypedDict, total=False):
@@ -22,6 +22,12 @@ class AgentCreateParams(TypedDict, total=False):
     - Can also accept any custom string value for future model versions.
     - Magpie-2.0 our latest agentic model with more proactive planning and reasoning
       capabilities.
+    """
+
+    corpus: Optional[Iterable[Corpus]]
+    """Array of corpus items the agent should use during the converse.
+
+    When omitted, all knowledge is used.
     """
 
     custom_prompt: Optional[str]
@@ -40,9 +46,10 @@ class AgentCreateParams(TypedDict, total=False):
     """
 
     knowledge_ids: Optional[SequenceNotStr[str]]
-    """Array of Knowledge IDs the agent should use during the converse.
+    """Deprecated, use corpus instead.
 
-    When ommited, all knowledge is used.
+    Array of Knowledge IDs the agent should use during the converse. When omitted,
+    all knowledge is used.
     """
 
     llm_model: Union[
@@ -133,6 +140,24 @@ class AgentCreateParams(TypedDict, total=False):
     - people_prospect_researcher: Agents provide information about people
     """
 
+
+class CorpusCorpusKnowledgeItem(TypedDict, total=False):
+    knowledge_id: Required[str]
+    """The ID of the knowledge to include in the corpus."""
+
+    type: Required[Literal["knowledge"]]
+    """The type of the corpus item. Always 'knowledge' for knowledge items."""
+
+
+class CorpusCorpusPageItem(TypedDict, total=False):
+    page_id: Required[str]
+    """The ID of the page to include in the corpus."""
+
+    type: Required[Literal["page"]]
+    """The type of the corpus item. Always 'page' for page items."""
+
+
+Corpus: TypeAlias = Union[CorpusCorpusKnowledgeItem, CorpusCorpusPageItem]
 
 DisabledTool: TypeAlias = Union[
     Literal[

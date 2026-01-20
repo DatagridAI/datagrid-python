@@ -27,6 +27,12 @@ class TestAgents:
     def test_method_create_with_all_params(self, client: Datagrid) -> None:
         agent = client.agents.create(
             agent_model="magpie-1.1",
+            corpus=[
+                {
+                    "knowledge_id": "knowledge_id",
+                    "type": "knowledge",
+                }
+            ],
             custom_prompt="custom_prompt",
             description="description",
             disabled_tools=["data_analysis"],
@@ -109,6 +115,12 @@ class TestAgents:
         agent = client.agents.update(
             agent_id="agent_id",
             agent_model="magpie-1.1",
+            corpus=[
+                {
+                    "knowledge_id": "knowledge_id",
+                    "type": "knowledge",
+                }
+            ],
             custom_prompt="custom_prompt",
             description="description",
             disabled_tools=["data_analysis"],
@@ -239,6 +251,12 @@ class TestAsyncAgents:
     async def test_method_create_with_all_params(self, async_client: AsyncDatagrid) -> None:
         agent = await async_client.agents.create(
             agent_model="magpie-1.1",
+            corpus=[
+                {
+                    "knowledge_id": "knowledge_id",
+                    "type": "knowledge",
+                }
+            ],
             custom_prompt="custom_prompt",
             description="description",
             disabled_tools=["data_analysis"],
@@ -321,6 +339,12 @@ class TestAsyncAgents:
         agent = await async_client.agents.update(
             agent_id="agent_id",
             agent_model="magpie-1.1",
+            corpus=[
+                {
+                    "knowledge_id": "knowledge_id",
+                    "type": "knowledge",
+                }
+            ],
             custom_prompt="custom_prompt",
             description="description",
             disabled_tools=["data_analysis"],
