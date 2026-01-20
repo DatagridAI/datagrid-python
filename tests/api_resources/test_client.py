@@ -32,6 +32,12 @@ class TestClient:
             config={
                 "agent_model": "magpie-1.1",
                 "agent_tools": ["data_analysis"],
+                "corpus": [
+                    {
+                        "knowledge_id": "knowledge_id",
+                        "type": "knowledge",
+                    }
+                ],
                 "custom_prompt": "custom_prompt",
                 "disabled_agent_tools": ["data_analysis"],
                 "disabled_tools": ["data_analysis"],
@@ -99,6 +105,12 @@ class TestAsyncClient:
             config={
                 "agent_model": "magpie-1.1",
                 "agent_tools": ["data_analysis"],
+                "corpus": [
+                    {
+                        "knowledge_id": "knowledge_id",
+                        "type": "knowledge",
+                    }
+                ],
                 "custom_prompt": "custom_prompt",
                 "disabled_agent_tools": ["data_analysis"],
                 "disabled_tools": ["data_analysis"],

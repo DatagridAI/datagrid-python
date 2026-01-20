@@ -2,12 +2,12 @@
 
 from __future__ import annotations
 
-from typing import Optional
-from typing_extensions import Literal, Required, TypedDict
+from typing import Union, Optional
+from typing_extensions import Literal, Required, TypeAlias, TypedDict
 
 from .._types import FileTypes, SequenceNotStr
 
-__all__ = ["KnowledgeUpdateParams", "Sync", "SyncTrigger"]
+__all__ = ["KnowledgeUpdateParams", "Parent", "ParentParentPage", "ParentRootPage", "Sync", "SyncTrigger"]
 
 
 class KnowledgeUpdateParams(TypedDict, total=False):
@@ -22,11 +22,34 @@ class KnowledgeUpdateParams(TypedDict, total=False):
     name: Optional[str]
     """The new name for the `knowledge`."""
 
+    parent: Optional[Parent]
+    """Move the knowledge to a different parent page."""
+
     sync: Optional[Sync]
     """Sync configuration updates.
 
     Note: For multipart/form-data, this should be sent as a JSON string.
     """
+
+
+class ParentParentPage(TypedDict, total=False):
+    """The parent page reference, indicating where this page is nested"""
+
+    page_id: Required[str]
+    """The ID of the parent page. Required when type is 'page'"""
+
+    type: Required[Literal["page"]]
+    """The type of parent. 'page' indicates nested under a specific page"""
+
+
+class ParentRootPage(TypedDict, total=False):
+    """The root level object"""
+
+    type: Required[Literal["root"]]
+    """The type of parent. 'root' indicates at the root level"""
+
+
+Parent: TypeAlias = Union[ParentParentPage, ParentRootPage]
 
 
 class SyncTrigger(TypedDict, total=False):

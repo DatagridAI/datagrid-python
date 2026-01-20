@@ -152,6 +152,22 @@ Methods:
 - <code title="get /agents">client.agents.<a href="./src/datagrid_ai/resources/agents.py">list</a>(\*\*<a href="src/datagrid_ai/types/agent_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/agent.py">SyncCursorIDPage[Agent]</a></code>
 - <code title="delete /agents/{agent_id}">client.agents.<a href="./src/datagrid_ai/resources/agents.py">delete</a>(agent_id) -> None</code>
 
+# Pages
+
+Types:
+
+```python
+from datagrid_ai.types import Page
+```
+
+Methods:
+
+- <code title="post /pages">client.pages.<a href="./src/datagrid_ai/resources/pages.py">create</a>(\*\*<a href="src/datagrid_ai/types/page_create_params.py">params</a>) -> <a href="./src/datagrid_ai/types/page.py">Page</a></code>
+- <code title="get /pages/{page_id}">client.pages.<a href="./src/datagrid_ai/resources/pages.py">retrieve</a>(page_id) -> <a href="./src/datagrid_ai/types/page.py">Page</a></code>
+- <code title="patch /pages/{page_id}">client.pages.<a href="./src/datagrid_ai/resources/pages.py">update</a>(page_id, \*\*<a href="src/datagrid_ai/types/page_update_params.py">params</a>) -> <a href="./src/datagrid_ai/types/page.py">Page</a></code>
+- <code title="get /pages">client.pages.<a href="./src/datagrid_ai/resources/pages.py">list</a>(\*\*<a href="src/datagrid_ai/types/page_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/page.py">SyncCursorIDPage[Page]</a></code>
+- <code title="delete /pages/{page_id}">client.pages.<a href="./src/datagrid_ai/resources/pages.py">delete</a>(page_id) -> None</code>
+
 # Tools
 
 Types:

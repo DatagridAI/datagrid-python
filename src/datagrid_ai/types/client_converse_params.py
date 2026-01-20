@@ -15,8 +15,13 @@ __all__ = [
     "PromptInputItemListContentInputMessageContentListInputText",
     "PromptInputItemListContentInputMessageContentListInputFile",
     "PromptInputItemListContentInputMessageContentListInputSecret",
+    "PromptInputItemListContentInputMessageContentListInputKnowledge",
+    "PromptInputItemListContentInputMessageContentListInputPage",
     "Config",
     "ConfigAgentTool",
+    "ConfigCorpus",
+    "ConfigCorpusCorpusKnowledgeItem",
+    "ConfigCorpusCorpusPageItem",
     "ConfigDisabledAgentTool",
     "ConfigDisabledTool",
     "ConfigTool",
@@ -108,10 +113,38 @@ class PromptInputItemListContentInputMessageContentListInputSecret(TypedDict, to
     """The type of the input item. Always `input_secret`."""
 
 
+class PromptInputItemListContentInputMessageContentListInputKnowledge(TypedDict, total=False):
+    """A knowledge reference input to the model.
+
+    This references knowledge by ID. The knowledge will be made accessible to the agent, and will be included in the prompt provided to the agent. The position of this reference relative to other text of the input impact the agent's interpretation.
+    """
+
+    knowledge_id: Required[str]
+    """The ID of the knowledge to be referenced."""
+
+    type: Required[Literal["input_knowledge"]]
+    """The type of the input item. Always `input_knowledge`."""
+
+
+class PromptInputItemListContentInputMessageContentListInputPage(TypedDict, total=False):
+    """A page reference input to the model.
+
+    This references a page by ID. The page, and all knowledge under it, will be made accessible to the agent, and a reference to the page will be included in the prompt provided to the agent. The position of this reference relative to other text of the input will impact the agent's interpretation.
+    """
+
+    page_id: Required[str]
+    """The ID of the page to be referenced."""
+
+    type: Required[Literal["input_page"]]
+    """The type of the input item. Always `input_page`."""
+
+
 PromptInputItemListContentInputMessageContentList: TypeAlias = Union[
     PromptInputItemListContentInputMessageContentListInputText,
     PromptInputItemListContentInputMessageContentListInputFile,
     PromptInputItemListContentInputMessageContentListInputSecret,
+    PromptInputItemListContentInputMessageContentListInputKnowledge,
+    PromptInputItemListContentInputMessageContentListInputPage,
 ]
 
 
@@ -192,6 +225,25 @@ ConfigAgentTool: TypeAlias = Union[
     str,
     ToolParam,
 ]
+
+
+class ConfigCorpusCorpusKnowledgeItem(TypedDict, total=False):
+    knowledge_id: Required[str]
+    """The ID of the knowledge to include in the corpus."""
+
+    type: Required[Literal["knowledge"]]
+    """The type of the corpus item. Always 'knowledge' for knowledge items."""
+
+
+class ConfigCorpusCorpusPageItem(TypedDict, total=False):
+    page_id: Required[str]
+    """The ID of the page to include in the corpus."""
+
+    type: Required[Literal["page"]]
+    """The type of the corpus item. Always 'page' for page items."""
+
+
+ConfigCorpus: TypeAlias = Union[ConfigCorpusCorpusKnowledgeItem, ConfigCorpusCorpusPageItem]
 
 ConfigDisabledAgentTool: TypeAlias = Union[
     Literal[
@@ -405,6 +457,12 @@ class Config(TypedDict, total=False):
     agent_tools: Optional[List[ConfigAgentTool]]
     """Deprecated, use tools instead"""
 
+    corpus: Optional[Iterable[ConfigCorpus]]
+    """Array of corpus items the agent should use during the converse.
+
+    When omitted, all knowledge is used.
+    """
+
     custom_prompt: Optional[str]
     """Use custom prompt to instruct the style and formatting of the agent's response"""
 
@@ -424,9 +482,10 @@ class Config(TypedDict, total=False):
     """
 
     knowledge_ids: Optional[SequenceNotStr[str]]
-    """Array of Knowledge IDs the agent should use during the converse.
+    """Deprecated, use corpus instead.
 
-    When ommited, all knowledge is used.
+    Array of Knowledge IDs the agent should use during the converse. When omitted,
+    all knowledge is used.
     """
 
     llm_model: Union[

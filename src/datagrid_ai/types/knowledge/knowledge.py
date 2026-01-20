@@ -1,12 +1,32 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import Optional
+from typing import Union, Optional
 from datetime import datetime
-from typing_extensions import Literal
+from typing_extensions import Literal, TypeAlias
 
 from ..._models import BaseModel
 
-__all__ = ["Knowledge", "RowCounts", "Sync", "SyncTrigger", "Credits"]
+__all__ = ["Knowledge", "Parent", "ParentParentPage", "ParentRootPage", "RowCounts", "Sync", "SyncTrigger", "Credits"]
+
+
+class ParentParentPage(BaseModel):
+    """The parent page reference, indicating where this page is nested"""
+
+    page_id: str
+    """The ID of the parent page. Required when type is 'page'"""
+
+    type: Literal["page"]
+    """The type of parent. 'page' indicates nested under a specific page"""
+
+
+class ParentRootPage(BaseModel):
+    """The root level object"""
+
+    type: Literal["root"]
+    """The type of parent. 'root' indicates at the root level"""
+
+
+Parent: TypeAlias = Union[ParentParentPage, ParentRootPage]
 
 
 class RowCounts(BaseModel):
@@ -72,6 +92,9 @@ class Knowledge(BaseModel):
 
     object: Literal["knowledge"]
     """The object type, which is always `knowledge`."""
+
+    parent: Parent
+    """The parent object, indicating where the object is located in the hierarchy"""
 
     row_counts: RowCounts
     """Row count statistics for the knowledge."""

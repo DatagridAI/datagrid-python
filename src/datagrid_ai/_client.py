@@ -55,6 +55,7 @@ if TYPE_CHECKING:
     from .resources import (
         beta,
         files,
+        pages,
         tools,
         agents,
         memory,
@@ -68,6 +69,7 @@ if TYPE_CHECKING:
         conversations,
     )
     from .resources.files import FilesResource, AsyncFilesResource
+    from .resources.pages import PagesResource, AsyncPagesResource
     from .resources.tools import ToolsResource, AsyncToolsResource
     from .resources.agents import AgentsResource, AsyncAgentsResource
     from .resources.search import SearchResource, AsyncSearchResource
@@ -197,6 +199,12 @@ class Datagrid(SyncAPIClient):
         from .resources.agents import AgentsResource
 
         return AgentsResource(self)
+
+    @cached_property
+    def pages(self) -> PagesResource:
+        from .resources.pages import PagesResource
+
+        return PagesResource(self)
 
     @cached_property
     def tools(self) -> ToolsResource:
@@ -537,6 +545,12 @@ class AsyncDatagrid(AsyncAPIClient):
         return AsyncAgentsResource(self)
 
     @cached_property
+    def pages(self) -> AsyncPagesResource:
+        from .resources.pages import AsyncPagesResource
+
+        return AsyncPagesResource(self)
+
+    @cached_property
     def tools(self) -> AsyncToolsResource:
         from .resources.tools import AsyncToolsResource
 
@@ -822,6 +836,12 @@ class DatagridWithRawResponse:
         return AgentsResourceWithRawResponse(self._client.agents)
 
     @cached_property
+    def pages(self) -> pages.PagesResourceWithRawResponse:
+        from .resources.pages import PagesResourceWithRawResponse
+
+        return PagesResourceWithRawResponse(self._client.pages)
+
+    @cached_property
     def tools(self) -> tools.ToolsResourceWithRawResponse:
         from .resources.tools import ToolsResourceWithRawResponse
 
@@ -909,6 +929,12 @@ class AsyncDatagridWithRawResponse:
         from .resources.agents import AsyncAgentsResourceWithRawResponse
 
         return AsyncAgentsResourceWithRawResponse(self._client.agents)
+
+    @cached_property
+    def pages(self) -> pages.AsyncPagesResourceWithRawResponse:
+        from .resources.pages import AsyncPagesResourceWithRawResponse
+
+        return AsyncPagesResourceWithRawResponse(self._client.pages)
 
     @cached_property
     def tools(self) -> tools.AsyncToolsResourceWithRawResponse:
@@ -1000,6 +1026,12 @@ class DatagridWithStreamedResponse:
         return AgentsResourceWithStreamingResponse(self._client.agents)
 
     @cached_property
+    def pages(self) -> pages.PagesResourceWithStreamingResponse:
+        from .resources.pages import PagesResourceWithStreamingResponse
+
+        return PagesResourceWithStreamingResponse(self._client.pages)
+
+    @cached_property
     def tools(self) -> tools.ToolsResourceWithStreamingResponse:
         from .resources.tools import ToolsResourceWithStreamingResponse
 
@@ -1087,6 +1119,12 @@ class AsyncDatagridWithStreamedResponse:
         from .resources.agents import AsyncAgentsResourceWithStreamingResponse
 
         return AsyncAgentsResourceWithStreamingResponse(self._client.agents)
+
+    @cached_property
+    def pages(self) -> pages.AsyncPagesResourceWithStreamingResponse:
+        from .resources.pages import AsyncPagesResourceWithStreamingResponse
+
+        return AsyncPagesResourceWithStreamingResponse(self._client.pages)
 
     @cached_property
     def tools(self) -> tools.AsyncToolsResourceWithStreamingResponse:
