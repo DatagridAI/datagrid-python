@@ -74,6 +74,7 @@ class KnowledgeResource(SyncAPIResource):
         *,
         files: SequenceNotStr[FileTypes],
         name: Optional[str] | Omit = omit,
+        parent: Optional[knowledge_create_params.Parent] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -90,6 +91,9 @@ class KnowledgeResource(SyncAPIResource):
 
           name: The name of the knowledge.
 
+          parent: The parent page to nest this knowledge under. If not provided, knowledge will be
+              created at the root level.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -104,6 +108,7 @@ class KnowledgeResource(SyncAPIResource):
             {
                 "files": files,
                 "name": name,
+                "parent": parent,
             }
         )
         extracted_files = extract_files(cast(Mapping[str, object], body), paths=[["files", "<array>"]])
@@ -160,6 +165,7 @@ class KnowledgeResource(SyncAPIResource):
         *,
         files: Optional[SequenceNotStr[FileTypes]] | Omit = omit,
         name: Optional[str] | Omit = omit,
+        parent: Optional[knowledge_update_params.Parent] | Omit = omit,
         sync: Optional[knowledge_update_params.Sync] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -179,6 +185,8 @@ class KnowledgeResource(SyncAPIResource):
 
           name: The new name for the `knowledge`.
 
+          parent: Move the knowledge to a different parent page.
+
           sync: Sync configuration updates. Note: For multipart/form-data, this should be sent
               as a JSON string.
 
@@ -196,6 +204,7 @@ class KnowledgeResource(SyncAPIResource):
             {
                 "files": files,
                 "name": name,
+                "parent": parent,
                 "sync": sync,
             }
         )
@@ -220,6 +229,7 @@ class KnowledgeResource(SyncAPIResource):
         after: str | Omit = omit,
         before: str | Omit = omit,
         limit: int | Omit = omit,
+        parent: knowledge_list_params.Parent | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -244,6 +254,10 @@ class KnowledgeResource(SyncAPIResource):
 
           limit: The limit on the number of objects to return, ranging between 1 and 100.
 
+          parent: Filter knowledge by parent. Pass `{"type":"root"}` to get root-level knowledge,
+              or `{"type":"page","page_id":"page_123"}` to get knowledge nested under a
+              specific page. If not specified, returns all knowledge.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -265,6 +279,7 @@ class KnowledgeResource(SyncAPIResource):
                         "after": after,
                         "before": before,
                         "limit": limit,
+                        "parent": parent,
                     },
                     knowledge_list_params.KnowledgeListParams,
                 ),
@@ -404,6 +419,7 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         *,
         files: SequenceNotStr[FileTypes],
         name: Optional[str] | Omit = omit,
+        parent: Optional[knowledge_create_params.Parent] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -420,6 +436,9 @@ class AsyncKnowledgeResource(AsyncAPIResource):
 
           name: The name of the knowledge.
 
+          parent: The parent page to nest this knowledge under. If not provided, knowledge will be
+              created at the root level.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -434,6 +453,7 @@ class AsyncKnowledgeResource(AsyncAPIResource):
             {
                 "files": files,
                 "name": name,
+                "parent": parent,
             }
         )
         extracted_files = extract_files(cast(Mapping[str, object], body), paths=[["files", "<array>"]])
@@ -490,6 +510,7 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         *,
         files: Optional[SequenceNotStr[FileTypes]] | Omit = omit,
         name: Optional[str] | Omit = omit,
+        parent: Optional[knowledge_update_params.Parent] | Omit = omit,
         sync: Optional[knowledge_update_params.Sync] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -509,6 +530,8 @@ class AsyncKnowledgeResource(AsyncAPIResource):
 
           name: The new name for the `knowledge`.
 
+          parent: Move the knowledge to a different parent page.
+
           sync: Sync configuration updates. Note: For multipart/form-data, this should be sent
               as a JSON string.
 
@@ -526,6 +549,7 @@ class AsyncKnowledgeResource(AsyncAPIResource):
             {
                 "files": files,
                 "name": name,
+                "parent": parent,
                 "sync": sync,
             }
         )
@@ -550,6 +574,7 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         after: str | Omit = omit,
         before: str | Omit = omit,
         limit: int | Omit = omit,
+        parent: knowledge_list_params.Parent | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -574,6 +599,10 @@ class AsyncKnowledgeResource(AsyncAPIResource):
 
           limit: The limit on the number of objects to return, ranging between 1 and 100.
 
+          parent: Filter knowledge by parent. Pass `{"type":"root"}` to get root-level knowledge,
+              or `{"type":"page","page_id":"page_123"}` to get knowledge nested under a
+              specific page. If not specified, returns all knowledge.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -595,6 +624,7 @@ class AsyncKnowledgeResource(AsyncAPIResource):
                         "after": after,
                         "before": before,
                         "limit": limit,
+                        "parent": parent,
                     },
                     knowledge_list_params.KnowledgeListParams,
                 ),

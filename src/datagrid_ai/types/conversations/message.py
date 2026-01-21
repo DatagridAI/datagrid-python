@@ -6,28 +6,31 @@ from typing_extensions import Literal
 
 from ..._models import BaseModel
 
-__all__ = ["Message", "Citation", "CitationKnowledge", "Content", "Credits"]
+__all__ = ["Message", "Citation", "CitationSource", "Content", "Credits"]
 
 
-class CitationKnowledge(BaseModel):
+class CitationSource(BaseModel):
     confirmations: List[str]
-    """An array of text snippets from the knowledge that confirm the citation."""
+    """An array of text snippets from the source that confirm the citation."""
 
-    knowledge_name: str
-    """Name of the knowledge."""
+    source_name: str
+    """Name of the source."""
 
     type: Literal["image", "pdf_page", "record", "web_search", "sql_query_result", "action"]
 
-    knowledge_id: Optional[str] = None
-    """Id of the knowledge."""
+    source_id: Optional[str] = None
+    """Id of the source."""
+
+    source_uri: Optional[str] = None
+    """URI of the source."""
 
 
 class Citation(BaseModel):
     citation: str
     """The text snippet from the response that is being cited."""
 
-    knowledges: List[CitationKnowledge]
-    """Array of knowledges that support this citation."""
+    sources: List[CitationSource]
+    """Array of sources that support this citation."""
 
 
 class Content(BaseModel):
@@ -51,9 +54,9 @@ class Message(BaseModel):
     """The ID of the agent that sent or responded to the message."""
 
     citations: Optional[List[Citation]] = None
-    """
-    Array of citations that provide knowledges for factual statements in the
-    response. Each citation includes the referenced text and its knowledges.
+    """Array of citations that provide sources for factual statements in the response.
+
+    Each citation includes the referenced text and its sources.
     """
 
     content: List[Content]

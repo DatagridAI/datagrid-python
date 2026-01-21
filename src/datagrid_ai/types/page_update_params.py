@@ -5,27 +5,15 @@ from __future__ import annotations
 from typing import Union, Optional
 from typing_extensions import Literal, Required, TypeAlias, TypedDict
 
-from .._types import FileTypes, SequenceNotStr
-
-__all__ = ["KnowledgeCreateParams", "Parent", "ParentParentPage", "ParentRootPage"]
+__all__ = ["PageUpdateParams", "Parent", "ParentParentPage", "ParentRootPage"]
 
 
-class KnowledgeCreateParams(TypedDict, total=False):
-    files: Required[SequenceNotStr[FileTypes]]
-    """The files to be uploaded and learned.
-
-    Supported media types are `pdf`, `json`, `csv`, `text`, `png`, `jpeg`, `excel`,
-    `google sheets`, `docx`, `pptx`.
-    """
-
+class PageUpdateParams(TypedDict, total=False):
     name: Optional[str]
-    """The name of the knowledge."""
+    """The new name for the page"""
 
     parent: Optional[Parent]
-    """The parent page to nest this knowledge under.
-
-    If not provided, knowledge will be created at the root level.
-    """
+    """Move the page to a different parent."""
 
 
 class ParentParentPage(TypedDict, total=False):

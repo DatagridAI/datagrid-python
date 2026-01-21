@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import List, Union, Optional
+from typing import List, Union, Iterable, Optional
 from typing_extensions import Literal
 
 import httpx
@@ -50,6 +50,7 @@ class AgentsResource(SyncAPIResource):
         *,
         agent_model: Union[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-1", "magpie-2.0"], str, None]
         | Omit = omit,
+        corpus: Optional[Iterable[agent_create_params.Corpus]] | Omit = omit,
         custom_prompt: Optional[str] | Omit = omit,
         description: Optional[str] | Omit = omit,
         disabled_tools: Optional[List[agent_create_params.DisabledTool]] | Omit = omit,
@@ -105,6 +106,9 @@ class AgentsResource(SyncAPIResource):
               - Magpie-2.0 our latest agentic model with more proactive planning and reasoning
                 capabilities.
 
+          corpus: Array of corpus items the agent should use during the converse. When omitted,
+              all knowledge is used.
+
           custom_prompt: Use custom prompt to instruct the style and formatting of the agent's response
 
           description: The description of the agent
@@ -115,8 +119,8 @@ class AgentsResource(SyncAPIResource):
               tool. If nothing or [] is provided, nothing is disabled and therefore only the
               agent_tools setting is relevant.
 
-          knowledge_ids: Array of Knowledge IDs the agent should use during the converse. When ommited,
-              all knowledge is used.
+          knowledge_ids: Deprecated, use corpus instead. Array of Knowledge IDs the agent should use
+              during the converse. When omitted, all knowledge is used.
 
           llm_model: The LLM used to generate responses.
 
@@ -185,6 +189,7 @@ class AgentsResource(SyncAPIResource):
             body=maybe_transform(
                 {
                     "agent_model": agent_model,
+                    "corpus": corpus,
                     "custom_prompt": custom_prompt,
                     "description": description,
                     "disabled_tools": disabled_tools,
@@ -242,6 +247,7 @@ class AgentsResource(SyncAPIResource):
         *,
         agent_model: Union[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-1", "magpie-2.0"], str, None]
         | Omit = omit,
+        corpus: Optional[Iterable[agent_update_params.Corpus]] | Omit = omit,
         custom_prompt: Optional[str] | Omit = omit,
         description: Optional[str] | Omit = omit,
         disabled_tools: Optional[List[agent_update_params.DisabledTool]] | Omit = omit,
@@ -297,6 +303,9 @@ class AgentsResource(SyncAPIResource):
               - Magpie-2.0 our latest agentic model with more proactive planning and reasoning
                 capabilities.
 
+          corpus: Array of corpus items the agent should use during the converse. When omitted,
+              all knowledge is used.
+
           custom_prompt: Use custom prompt to instruct the style and formatting of the agent's response
 
           description: The description of the agent
@@ -307,8 +316,8 @@ class AgentsResource(SyncAPIResource):
               tool. If nothing or [] is provided, nothing is disabled and therefore only the
               agent_tools setting is relevant.
 
-          knowledge_ids: Array of Knowledge IDs the agent should use during the converse. When ommited,
-              all knowledge is used.
+          knowledge_ids: Deprecated, use corpus instead. Array of Knowledge IDs the agent should use
+              during the converse. When omitted, all knowledge is used.
 
           llm_model: The LLM used to generate responses.
 
@@ -379,6 +388,7 @@ class AgentsResource(SyncAPIResource):
             body=maybe_transform(
                 {
                     "agent_model": agent_model,
+                    "corpus": corpus,
                     "custom_prompt": custom_prompt,
                     "description": description,
                     "disabled_tools": disabled_tools,
@@ -514,6 +524,7 @@ class AsyncAgentsResource(AsyncAPIResource):
         *,
         agent_model: Union[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-1", "magpie-2.0"], str, None]
         | Omit = omit,
+        corpus: Optional[Iterable[agent_create_params.Corpus]] | Omit = omit,
         custom_prompt: Optional[str] | Omit = omit,
         description: Optional[str] | Omit = omit,
         disabled_tools: Optional[List[agent_create_params.DisabledTool]] | Omit = omit,
@@ -569,6 +580,9 @@ class AsyncAgentsResource(AsyncAPIResource):
               - Magpie-2.0 our latest agentic model with more proactive planning and reasoning
                 capabilities.
 
+          corpus: Array of corpus items the agent should use during the converse. When omitted,
+              all knowledge is used.
+
           custom_prompt: Use custom prompt to instruct the style and formatting of the agent's response
 
           description: The description of the agent
@@ -579,8 +593,8 @@ class AsyncAgentsResource(AsyncAPIResource):
               tool. If nothing or [] is provided, nothing is disabled and therefore only the
               agent_tools setting is relevant.
 
-          knowledge_ids: Array of Knowledge IDs the agent should use during the converse. When ommited,
-              all knowledge is used.
+          knowledge_ids: Deprecated, use corpus instead. Array of Knowledge IDs the agent should use
+              during the converse. When omitted, all knowledge is used.
 
           llm_model: The LLM used to generate responses.
 
@@ -649,6 +663,7 @@ class AsyncAgentsResource(AsyncAPIResource):
             body=await async_maybe_transform(
                 {
                     "agent_model": agent_model,
+                    "corpus": corpus,
                     "custom_prompt": custom_prompt,
                     "description": description,
                     "disabled_tools": disabled_tools,
@@ -706,6 +721,7 @@ class AsyncAgentsResource(AsyncAPIResource):
         *,
         agent_model: Union[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-1", "magpie-2.0"], str, None]
         | Omit = omit,
+        corpus: Optional[Iterable[agent_update_params.Corpus]] | Omit = omit,
         custom_prompt: Optional[str] | Omit = omit,
         description: Optional[str] | Omit = omit,
         disabled_tools: Optional[List[agent_update_params.DisabledTool]] | Omit = omit,
@@ -761,6 +777,9 @@ class AsyncAgentsResource(AsyncAPIResource):
               - Magpie-2.0 our latest agentic model with more proactive planning and reasoning
                 capabilities.
 
+          corpus: Array of corpus items the agent should use during the converse. When omitted,
+              all knowledge is used.
+
           custom_prompt: Use custom prompt to instruct the style and formatting of the agent's response
 
           description: The description of the agent
@@ -771,8 +790,8 @@ class AsyncAgentsResource(AsyncAPIResource):
               tool. If nothing or [] is provided, nothing is disabled and therefore only the
               agent_tools setting is relevant.
 
-          knowledge_ids: Array of Knowledge IDs the agent should use during the converse. When ommited,
-              all knowledge is used.
+          knowledge_ids: Deprecated, use corpus instead. Array of Knowledge IDs the agent should use
+              during the converse. When omitted, all knowledge is used.
 
           llm_model: The LLM used to generate responses.
 
@@ -843,6 +862,7 @@ class AsyncAgentsResource(AsyncAPIResource):
             body=await async_maybe_transform(
                 {
                     "agent_model": agent_model,
+                    "corpus": corpus,
                     "custom_prompt": custom_prompt,
                     "description": description,
                     "disabled_tools": disabled_tools,

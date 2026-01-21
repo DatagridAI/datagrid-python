@@ -16,6 +16,14 @@ from .files import (
     FilesResourceWithStreamingResponse,
     AsyncFilesResourceWithStreamingResponse,
 )
+from .pages import (
+    PagesResource,
+    AsyncPagesResource,
+    PagesResourceWithRawResponse,
+    AsyncPagesResourceWithRawResponse,
+    PagesResourceWithStreamingResponse,
+    AsyncPagesResourceWithStreamingResponse,
+)
 from .tools import (
     ToolsResource,
     AsyncToolsResource,
@@ -148,6 +156,12 @@ __all__ = [
     "AsyncAgentsResourceWithRawResponse",
     "AgentsResourceWithStreamingResponse",
     "AsyncAgentsResourceWithStreamingResponse",
+    "PagesResource",
+    "AsyncPagesResource",
+    "PagesResourceWithRawResponse",
+    "AsyncPagesResourceWithRawResponse",
+    "PagesResourceWithStreamingResponse",
+    "AsyncPagesResourceWithStreamingResponse",
     "ToolsResource",
     "AsyncToolsResource",
     "ToolsResourceWithRawResponse",

@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.8.0 (2026-01-20)
+
+Full Changelog: [v0.7.0...v0.8.0](https://github.com/DatagridAI/datagrid-python/compare/v0.7.0...v0.8.0)
+
+### Features
+
+* **api:** api update ([5a34b0a](https://github.com/DatagridAI/datagrid-python/commit/5a34b0afc26293e3c3d65a359d15a5708c03c714))
+
+
+### Chores
+
+* **internal:** update `actions/checkout` version ([789d9fe](https://github.com/DatagridAI/datagrid-python/commit/789d9febde7a4c522ccbaf4b0667208c955acfd1))
+
 ## 0.7.0 (2026-01-14)
 
 Full Changelog: [v0.6.0...v0.7.0](https://github.com/DatagridAI/datagrid-python/compare/v0.6.0...v0.7.0)
