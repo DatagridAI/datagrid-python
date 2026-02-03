@@ -24,6 +24,7 @@ __all__ = [
     "ConfigCorpusCorpusPageItem",
     "ConfigDisabledAgentTool",
     "ConfigDisabledTool",
+    "ConfigMcpServer",
     "ConfigTool",
     "Text",
     "User",
@@ -371,6 +372,35 @@ ConfigDisabledTool: TypeAlias = Union[
     ToolParam,
 ]
 
+
+class ConfigMcpServer(TypedDict, total=False):
+    """
+    Configuration for an MCP (Model Context Protocol) server passed directly in the request.
+    MCP servers provide additional tools that extend the agent's capabilities.
+    """
+
+    server_label: Required[str]
+    """A unique label to identify this MCP server. Used for tool namespacing."""
+
+    server_url: Required[str]
+    """The HTTPS URL of the MCP server endpoint."""
+
+    type: Required[Literal["inline_mcp"]]
+    """The type of MCP server configuration.
+
+    Use 'inline_mcp' for server configs passed directly in the request.
+    """
+
+    authorization: Optional[str]
+    """
+    Value sent in the `Authorization` header when calling the MCP server (e.g.,
+    'Bearer <token>').
+    """
+
+    server_description: Optional[str]
+    """Optional description of what this MCP server provides."""
+
+
 ConfigTool: TypeAlias = Union[
     Literal[
         "data_analysis",
@@ -515,6 +545,14 @@ class Config(TypedDict, total=False):
         None,
     ]
     """The LLM used to generate responses."""
+
+    mcp_servers: Optional[Iterable[ConfigMcpServer]]
+    """**BETA**: This feature is in beta and the schema may change.
+
+    Array of MCP (Model Context Protocol) server configurations to enable for this
+    converse call. Each MCP server provides additional tools that the agent can use
+    during the conversation.
+    """
 
     planning_prompt: Optional[str]
     """
