@@ -43,6 +43,15 @@ class TestClient:
                 "disabled_tools": ["data_analysis"],
                 "knowledge_ids": ["string"],
                 "llm_model": "gemini-3-pro-preview",
+                "mcp_servers": [
+                    {
+                        "server_label": "server_label",
+                        "server_url": "https://example.com",
+                        "type": "inline_mcp",
+                        "authorization": "authorization",
+                        "server_description": "server_description",
+                    }
+                ],
                 "planning_prompt": "planning_prompt",
                 "system_prompt": "system_prompt",
                 "tools": ["data_analysis"],
@@ -116,6 +125,15 @@ class TestAsyncClient:
                 "disabled_tools": ["data_analysis"],
                 "knowledge_ids": ["string"],
                 "llm_model": "gemini-3-pro-preview",
+                "mcp_servers": [
+                    {
+                        "server_label": "server_label",
+                        "server_url": "https://example.com",
+                        "type": "inline_mcp",
+                        "authorization": "authorization",
+                        "server_description": "server_description",
+                    }
+                ],
                 "planning_prompt": "planning_prompt",
                 "system_prompt": "system_prompt",
                 "tools": ["data_analysis"],
