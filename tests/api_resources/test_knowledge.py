@@ -26,7 +26,7 @@ class TestKnowledge:
     @skip
     def test_method_create(self, client: Datagrid) -> None:
         knowledge = client.knowledge.create(
-            files=[b"raw file contents"],
+            files=[b"Example data"],
         )
         assert_matches_type(Knowledge, knowledge, path=["response"])
 
@@ -34,7 +34,7 @@ class TestKnowledge:
     @skip
     def test_method_create_with_all_params(self, client: Datagrid) -> None:
         knowledge = client.knowledge.create(
-            files=[b"raw file contents"],
+            files=[b"Example data"],
             name="name",
             parent={
                 "page_id": "page_id",
@@ -47,7 +47,7 @@ class TestKnowledge:
     @skip
     def test_raw_response_create(self, client: Datagrid) -> None:
         response = client.knowledge.with_raw_response.create(
-            files=[b"raw file contents"],
+            files=[b"Example data"],
         )
 
         assert response.is_closed is True
@@ -59,7 +59,7 @@ class TestKnowledge:
     @skip
     def test_streaming_response_create(self, client: Datagrid) -> None:
         with client.knowledge.with_streaming_response.create(
-            files=[b"raw file contents"],
+            files=[b"Example data"],
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -120,7 +120,7 @@ class TestKnowledge:
     def test_method_update_with_all_params(self, client: Datagrid) -> None:
         knowledge = client.knowledge.update(
             knowledge_id="knowledge_id",
-            files=[b"raw file contents"],
+            files=[b"Example data"],
             name="name",
             parent={
                 "page_id": "page_id",
@@ -327,7 +327,7 @@ class TestAsyncKnowledge:
     @skip
     async def test_method_create(self, async_client: AsyncDatagrid) -> None:
         knowledge = await async_client.knowledge.create(
-            files=[b"raw file contents"],
+            files=[b"Example data"],
         )
         assert_matches_type(Knowledge, knowledge, path=["response"])
 
@@ -335,7 +335,7 @@ class TestAsyncKnowledge:
     @skip
     async def test_method_create_with_all_params(self, async_client: AsyncDatagrid) -> None:
         knowledge = await async_client.knowledge.create(
-            files=[b"raw file contents"],
+            files=[b"Example data"],
             name="name",
             parent={
                 "page_id": "page_id",
@@ -348,7 +348,7 @@ class TestAsyncKnowledge:
     @skip
     async def test_raw_response_create(self, async_client: AsyncDatagrid) -> None:
         response = await async_client.knowledge.with_raw_response.create(
-            files=[b"raw file contents"],
+            files=[b"Example data"],
         )
 
         assert response.is_closed is True
@@ -360,7 +360,7 @@ class TestAsyncKnowledge:
     @skip
     async def test_streaming_response_create(self, async_client: AsyncDatagrid) -> None:
         async with async_client.knowledge.with_streaming_response.create(
-            files=[b"raw file contents"],
+            files=[b"Example data"],
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -419,7 +419,7 @@ class TestAsyncKnowledge:
     async def test_method_update_with_all_params(self, async_client: AsyncDatagrid) -> None:
         knowledge = await async_client.knowledge.update(
             knowledge_id="knowledge_id",
-            files=[b"raw file contents"],
+            files=[b"Example data"],
             name="name",
             parent={
                 "page_id": "page_id",
