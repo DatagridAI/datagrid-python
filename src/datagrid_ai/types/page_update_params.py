@@ -15,6 +15,13 @@ class PageUpdateParams(TypedDict, total=False):
     parent: Optional[Parent]
     """Move the page to a different parent."""
 
+    scope: Optional[Literal["teamspace", "organization"]]
+    """The visibility scope of the knowledge.
+
+    'teamspace' means visible only within the owning teamspace. 'organization' means
+    visible across all teamspaces in the same organization.
+    """
+
 
 class ParentParentPage(TypedDict, total=False):
     """The parent page reference, indicating where this page is nested"""

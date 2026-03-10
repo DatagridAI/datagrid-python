@@ -3,10 +3,11 @@
 from __future__ import annotations
 
 from typing import Optional
+from typing_extensions import Literal
 
 import httpx
 
-from ...types import conversation_list_params, conversation_create_params
+from ...types import ConversationSortField, conversation_list_params, conversation_create_params
 from ..._types import Body, Omit, Query, Headers, NoneType, NotGiven, omit, not_given
 from ..._utils import maybe_transform, async_maybe_transform
 from .messages import (
@@ -28,6 +29,7 @@ from ..._response import (
 from ...pagination import SyncCursorIDPage, AsyncCursorIDPage
 from ..._base_client import AsyncPaginator, make_request_options
 from ...types.conversation import Conversation
+from ...types.conversation_sort_field import ConversationSortField
 
 __all__ = ["ConversationsResource", "AsyncConversationsResource"]
 
@@ -128,7 +130,9 @@ class ConversationsResource(SyncAPIResource):
         *,
         after: str | Omit = omit,
         before: str | Omit = omit,
+        direction: Literal["asc", "desc"] | Omit = omit,
         limit: int | Omit = omit,
+        sort: ConversationSortField | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -151,7 +155,11 @@ class ConversationsResource(SyncAPIResource):
               starting with `obj_bar`, your subsequent call can include `before=obj_bar` to
               fetch the previous page of the list.
 
+          direction: The direction to sort the results.
+
           limit: The limit on the number of objects to return, ranging between 1 and 100.
+
+          sort: The field to sort the conversations by.
 
           extra_headers: Send extra headers
 
@@ -173,7 +181,9 @@ class ConversationsResource(SyncAPIResource):
                     {
                         "after": after,
                         "before": before,
+                        "direction": direction,
                         "limit": limit,
+                        "sort": sort,
                     },
                     conversation_list_params.ConversationListParams,
                 ),
@@ -312,7 +322,9 @@ class AsyncConversationsResource(AsyncAPIResource):
         *,
         after: str | Omit = omit,
         before: str | Omit = omit,
+        direction: Literal["asc", "desc"] | Omit = omit,
         limit: int | Omit = omit,
+        sort: ConversationSortField | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -335,7 +347,11 @@ class AsyncConversationsResource(AsyncAPIResource):
               starting with `obj_bar`, your subsequent call can include `before=obj_bar` to
               fetch the previous page of the list.
 
+          direction: The direction to sort the results.
+
           limit: The limit on the number of objects to return, ranging between 1 and 100.
+
+          sort: The field to sort the conversations by.
 
           extra_headers: Send extra headers
 
@@ -357,7 +373,9 @@ class AsyncConversationsResource(AsyncAPIResource):
                     {
                         "after": after,
                         "before": before,
+                        "direction": direction,
                         "limit": limit,
+                        "sort": sort,
                     },
                     conversation_list_params.ConversationListParams,
                 ),

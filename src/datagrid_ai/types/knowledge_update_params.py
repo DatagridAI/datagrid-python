@@ -16,7 +16,8 @@ class KnowledgeUpdateParams(TypedDict, total=False):
 
     When provided, all existing data will be removed from the knowledge and replaced
     with these files. Supported media types are `pdf`, `json`, `csv`, `text`, `png`,
-    `jpeg`, `excel`, `google sheets`, `docx`, `pptx`.
+    `jpeg`, `excel`, `google sheets`, `docx`, `pptx`. Cannot be used together with
+    `sync` in the same request.
     """
 
     name: Optional[str]
@@ -25,10 +26,18 @@ class KnowledgeUpdateParams(TypedDict, total=False):
     parent: Optional[Parent]
     """Move the knowledge to a different parent page."""
 
-    sync: Optional[Sync]
-    """Sync configuration updates.
+    scope: Optional[Literal["teamspace", "organization"]]
+    """The visibility scope of the knowledge.
 
-    Note: For multipart/form-data, this should be sent as a JSON string.
+    'teamspace' means visible only within the owning teamspace. 'organization' means
+    visible across all teamspaces in the same organization.
+    """
+
+    sync: Optional[Sync]
+    """Sync configuration updates for knowledge created from a connection.
+
+    Note: For multipart/form-data, this should be sent as a JSON string. Cannot be
+    used together with `files` in the same request.
     """
 
 
@@ -72,9 +81,9 @@ class SyncTrigger(TypedDict, total=False):
 
 
 class Sync(TypedDict, total=False):
-    """Sync configuration updates.
+    """Sync configuration updates for knowledge created from a connection.
 
-    Note: For multipart/form-data, this should be sent as a JSON string.
+    Note: For multipart/form-data, this should be sent as a JSON string. Cannot be used together with `files` in the same request.
     """
 
     enabled: bool

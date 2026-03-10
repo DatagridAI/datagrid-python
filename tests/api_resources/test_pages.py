@@ -114,6 +114,7 @@ class TestPages:
                 "page_id": "page_id",
                 "type": "page",
             },
+            scope="teamspace",
         )
         assert_matches_type(Page, page, path=["response"])
 
@@ -326,6 +327,7 @@ class TestAsyncPages:
                 "page_id": "page_id",
                 "type": "page",
             },
+            scope="teamspace",
         )
         assert_matches_type(Page, page, path=["response"])
 

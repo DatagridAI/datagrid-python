@@ -252,6 +252,7 @@ class AgentsResource(SyncAPIResource):
         custom_prompt: Optional[str] | Omit = omit,
         description: Optional[str] | Omit = omit,
         disabled_tools: Optional[List[agent_update_params.DisabledTool]] | Omit = omit,
+        emoji: Optional[str] | Omit = omit,
         knowledge_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         llm_model: Union[
             Literal[
@@ -317,6 +318,8 @@ class AgentsResource(SyncAPIResource):
               disabled_tools: [data_analysis] will enable everything but the data_analysis
               tool. If nothing or [] is provided, nothing is disabled and therefore only the
               agent_tools setting is relevant.
+
+          emoji: The emoji of the agent
 
           knowledge_ids: Deprecated, use corpus instead. Array of Knowledge IDs the agent should use
               during the converse. When omitted, all knowledge is used.
@@ -394,6 +397,7 @@ class AgentsResource(SyncAPIResource):
                     "custom_prompt": custom_prompt,
                     "description": description,
                     "disabled_tools": disabled_tools,
+                    "emoji": emoji,
                     "knowledge_ids": knowledge_ids,
                     "llm_model": llm_model,
                     "name": name,
@@ -728,6 +732,7 @@ class AsyncAgentsResource(AsyncAPIResource):
         custom_prompt: Optional[str] | Omit = omit,
         description: Optional[str] | Omit = omit,
         disabled_tools: Optional[List[agent_update_params.DisabledTool]] | Omit = omit,
+        emoji: Optional[str] | Omit = omit,
         knowledge_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         llm_model: Union[
             Literal[
@@ -793,6 +798,8 @@ class AsyncAgentsResource(AsyncAPIResource):
               disabled_tools: [data_analysis] will enable everything but the data_analysis
               tool. If nothing or [] is provided, nothing is disabled and therefore only the
               agent_tools setting is relevant.
+
+          emoji: The emoji of the agent
 
           knowledge_ids: Deprecated, use corpus instead. Array of Knowledge IDs the agent should use
               during the converse. When omitted, all knowledge is used.
@@ -870,6 +877,7 @@ class AsyncAgentsResource(AsyncAPIResource):
                     "custom_prompt": custom_prompt,
                     "description": description,
                     "disabled_tools": disabled_tools,
+                    "emoji": emoji,
                     "knowledge_ids": knowledge_ids,
                     "llm_model": llm_model,
                     "name": name,

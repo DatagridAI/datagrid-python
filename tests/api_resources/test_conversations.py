@@ -98,7 +98,9 @@ class TestConversations:
         conversation = client.conversations.list(
             after="after",
             before="before",
+            direction="asc",
             limit=1,
+            sort="created_at",
         )
         assert_matches_type(SyncCursorIDPage[Conversation], conversation, path=["response"])
 
@@ -246,7 +248,9 @@ class TestAsyncConversations:
         conversation = await async_client.conversations.list(
             after="after",
             before="before",
+            direction="asc",
             limit=1,
+            sort="created_at",
         )
         assert_matches_type(AsyncCursorIDPage[Conversation], conversation, path=["response"])
 

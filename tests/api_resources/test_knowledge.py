@@ -119,6 +119,7 @@ class TestKnowledge:
                 "page_id": "page_id",
                 "type": "page",
             },
+            scope="teamspace",
             sync={
                 "enabled": True,
                 "trigger": {
@@ -411,6 +412,7 @@ class TestAsyncKnowledge:
                 "page_id": "page_id",
                 "type": "page",
             },
+            scope="teamspace",
             sync={
                 "enabled": True,
                 "trigger": {

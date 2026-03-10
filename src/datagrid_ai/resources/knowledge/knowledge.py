@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from typing import Mapping, Optional, cast
+from typing_extensions import Literal
 
 import httpx
 
@@ -166,6 +167,7 @@ class KnowledgeResource(SyncAPIResource):
         files: Optional[SequenceNotStr[FileTypes]] | Omit = omit,
         name: Optional[str] | Omit = omit,
         parent: Optional[knowledge_update_params.Parent] | Omit = omit,
+        scope: Optional[Literal["teamspace", "organization"]] | Omit = omit,
         sync: Optional[knowledge_update_params.Sync] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -174,21 +176,28 @@ class KnowledgeResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> Knowledge:
-        """
-        Update a knowledge's attributes.
+        """Update a knowledge's attributes.
+
+        Each request can include either `files` or
+        `sync`, but not both.
 
         Args:
           files: The files to replace existing knowledge. When provided, all existing data will
               be removed from the knowledge and replaced with these files. Supported media
               types are `pdf`, `json`, `csv`, `text`, `png`, `jpeg`, `excel`, `google sheets`,
-              `docx`, `pptx`.
+              `docx`, `pptx`. Cannot be used together with `sync` in the same request.
 
           name: The new name for the `knowledge`.
 
           parent: Move the knowledge to a different parent page.
 
-          sync: Sync configuration updates. Note: For multipart/form-data, this should be sent
-              as a JSON string.
+          scope: The visibility scope of the knowledge. 'teamspace' means visible only within the
+              owning teamspace. 'organization' means visible across all teamspaces in the same
+              organization.
+
+          sync: Sync configuration updates for knowledge created from a connection. Note: For
+              multipart/form-data, this should be sent as a JSON string. Cannot be used
+              together with `files` in the same request.
 
           extra_headers: Send extra headers
 
@@ -205,6 +214,7 @@ class KnowledgeResource(SyncAPIResource):
                 "files": files,
                 "name": name,
                 "parent": parent,
+                "scope": scope,
                 "sync": sync,
             }
         )
@@ -366,8 +376,11 @@ class KnowledgeResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> None:
-        """
-        Manually trigger a full re-indexing of the knowledge.
+        """Manually trigger a full re-indexing of the knowledge.
+
+        The reindex runs
+        **asynchronously**: the API returns as soon as the job is enqueued. Re-indexing
+        is not performed immediately.
 
         Args:
           extra_headers: Send extra headers
@@ -511,6 +524,7 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         files: Optional[SequenceNotStr[FileTypes]] | Omit = omit,
         name: Optional[str] | Omit = omit,
         parent: Optional[knowledge_update_params.Parent] | Omit = omit,
+        scope: Optional[Literal["teamspace", "organization"]] | Omit = omit,
         sync: Optional[knowledge_update_params.Sync] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -519,21 +533,28 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> Knowledge:
-        """
-        Update a knowledge's attributes.
+        """Update a knowledge's attributes.
+
+        Each request can include either `files` or
+        `sync`, but not both.
 
         Args:
           files: The files to replace existing knowledge. When provided, all existing data will
               be removed from the knowledge and replaced with these files. Supported media
               types are `pdf`, `json`, `csv`, `text`, `png`, `jpeg`, `excel`, `google sheets`,
-              `docx`, `pptx`.
+              `docx`, `pptx`. Cannot be used together with `sync` in the same request.
 
           name: The new name for the `knowledge`.
 
           parent: Move the knowledge to a different parent page.
 
-          sync: Sync configuration updates. Note: For multipart/form-data, this should be sent
-              as a JSON string.
+          scope: The visibility scope of the knowledge. 'teamspace' means visible only within the
+              owning teamspace. 'organization' means visible across all teamspaces in the same
+              organization.
+
+          sync: Sync configuration updates for knowledge created from a connection. Note: For
+              multipart/form-data, this should be sent as a JSON string. Cannot be used
+              together with `files` in the same request.
 
           extra_headers: Send extra headers
 
@@ -550,6 +571,7 @@ class AsyncKnowledgeResource(AsyncAPIResource):
                 "files": files,
                 "name": name,
                 "parent": parent,
+                "scope": scope,
                 "sync": sync,
             }
         )
@@ -713,8 +735,11 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> None:
-        """
-        Manually trigger a full re-indexing of the knowledge.
+        """Manually trigger a full re-indexing of the knowledge.
+
+        The reindex runs
+        **asynchronously**: the API returns as soon as the job is enqueued. Re-indexing
+        is not performed immediately.
 
         Args:
           extra_headers: Send extra headers

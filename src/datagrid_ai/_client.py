@@ -67,6 +67,7 @@ if TYPE_CHECKING:
         connections,
         organization,
         conversations,
+        connection_providers,
     )
     from .resources.files import FilesResource, AsyncFilesResource
     from .resources.pages import PagesResource, AsyncPagesResource
@@ -79,6 +80,7 @@ if TYPE_CHECKING:
     from .resources.connections import ConnectionsResource, AsyncConnectionsResource
     from .resources.memory.memory import MemoryResource, AsyncMemoryResource
     from .resources.knowledge.knowledge import KnowledgeResource, AsyncKnowledgeResource
+    from .resources.connection_providers import ConnectionProvidersResource, AsyncConnectionProvidersResource
     from .resources.data_views.data_views import DataViewsResource, AsyncDataViewsResource
     from .resources.organization.organization import OrganizationResource, AsyncOrganizationResource
     from .resources.conversations.conversations import ConversationsResource, AsyncConversationsResource
@@ -169,6 +171,12 @@ class Datagrid(SyncAPIClient):
         from .resources.connections import ConnectionsResource
 
         return ConnectionsResource(self)
+
+    @cached_property
+    def connection_providers(self) -> ConnectionProvidersResource:
+        from .resources.connection_providers import ConnectionProvidersResource
+
+        return ConnectionProvidersResource(self)
 
     @cached_property
     def connectors(self) -> ConnectorsResource:
@@ -329,6 +337,7 @@ class Datagrid(SyncAPIClient):
         *,
         prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
         agent_id: Optional[str] | Omit = omit,
+        agent_routing: Optional[client_converse_params.AgentRouting] | Omit = omit,
         config: Optional[client_converse_params.Config] | Omit = omit,
         conversation_id: Optional[str] | Omit = omit,
         generate_citations: Optional[bool] | Omit = omit,
@@ -350,6 +359,9 @@ class Datagrid(SyncAPIClient):
           prompt: A text prompt to send to the agent.
 
           agent_id: The ID of the agent that should be used for the converse.
+
+          agent_routing: Controls how the API selects which agent to use when routing is needed. This
+              field is mutually exclusive with agent_id.
 
           config: Override the agent config for this converse call. This is applied as a partial
               override.
@@ -389,6 +401,7 @@ class Datagrid(SyncAPIClient):
                 {
                     "prompt": prompt,
                     "agent_id": agent_id,
+                    "agent_routing": agent_routing,
                     "config": config,
                     "conversation_id": conversation_id,
                     "generate_citations": generate_citations,
@@ -513,6 +526,12 @@ class AsyncDatagrid(AsyncAPIClient):
         from .resources.connections import AsyncConnectionsResource
 
         return AsyncConnectionsResource(self)
+
+    @cached_property
+    def connection_providers(self) -> AsyncConnectionProvidersResource:
+        from .resources.connection_providers import AsyncConnectionProvidersResource
+
+        return AsyncConnectionProvidersResource(self)
 
     @cached_property
     def connectors(self) -> AsyncConnectorsResource:
@@ -673,6 +692,7 @@ class AsyncDatagrid(AsyncAPIClient):
         *,
         prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
         agent_id: Optional[str] | Omit = omit,
+        agent_routing: Optional[client_converse_params.AgentRouting] | Omit = omit,
         config: Optional[client_converse_params.Config] | Omit = omit,
         conversation_id: Optional[str] | Omit = omit,
         generate_citations: Optional[bool] | Omit = omit,
@@ -694,6 +714,9 @@ class AsyncDatagrid(AsyncAPIClient):
           prompt: A text prompt to send to the agent.
 
           agent_id: The ID of the agent that should be used for the converse.
+
+          agent_routing: Controls how the API selects which agent to use when routing is needed. This
+              field is mutually exclusive with agent_id.
 
           config: Override the agent config for this converse call. This is applied as a partial
               override.
@@ -733,6 +756,7 @@ class AsyncDatagrid(AsyncAPIClient):
                 {
                     "prompt": prompt,
                     "agent_id": agent_id,
+                    "agent_routing": agent_routing,
                     "config": config,
                     "conversation_id": conversation_id,
                     "generate_citations": generate_citations,
@@ -804,6 +828,12 @@ class DatagridWithRawResponse:
         from .resources.connections import ConnectionsResourceWithRawResponse
 
         return ConnectionsResourceWithRawResponse(self._client.connections)
+
+    @cached_property
+    def connection_providers(self) -> connection_providers.ConnectionProvidersResourceWithRawResponse:
+        from .resources.connection_providers import ConnectionProvidersResourceWithRawResponse
+
+        return ConnectionProvidersResourceWithRawResponse(self._client.connection_providers)
 
     @cached_property
     def connectors(self) -> connectors.ConnectorsResourceWithRawResponse:
@@ -901,6 +931,12 @@ class AsyncDatagridWithRawResponse:
         return AsyncConnectionsResourceWithRawResponse(self._client.connections)
 
     @cached_property
+    def connection_providers(self) -> connection_providers.AsyncConnectionProvidersResourceWithRawResponse:
+        from .resources.connection_providers import AsyncConnectionProvidersResourceWithRawResponse
+
+        return AsyncConnectionProvidersResourceWithRawResponse(self._client.connection_providers)
+
+    @cached_property
     def connectors(self) -> connectors.AsyncConnectorsResourceWithRawResponse:
         from .resources.connectors import AsyncConnectorsResourceWithRawResponse
 
@@ -996,6 +1032,12 @@ class DatagridWithStreamedResponse:
         return ConnectionsResourceWithStreamingResponse(self._client.connections)
 
     @cached_property
+    def connection_providers(self) -> connection_providers.ConnectionProvidersResourceWithStreamingResponse:
+        from .resources.connection_providers import ConnectionProvidersResourceWithStreamingResponse
+
+        return ConnectionProvidersResourceWithStreamingResponse(self._client.connection_providers)
+
+    @cached_property
     def connectors(self) -> connectors.ConnectorsResourceWithStreamingResponse:
         from .resources.connectors import ConnectorsResourceWithStreamingResponse
 
@@ -1089,6 +1131,12 @@ class AsyncDatagridWithStreamedResponse:
         from .resources.connections import AsyncConnectionsResourceWithStreamingResponse
 
         return AsyncConnectionsResourceWithStreamingResponse(self._client.connections)
+
+    @cached_property
+    def connection_providers(self) -> connection_providers.AsyncConnectionProvidersResourceWithStreamingResponse:
+        from .resources.connection_providers import AsyncConnectionProvidersResourceWithStreamingResponse
+
+        return AsyncConnectionProvidersResourceWithStreamingResponse(self._client.connection_providers)
 
     @cached_property
     def connectors(self) -> connectors.AsyncConnectorsResourceWithStreamingResponse:

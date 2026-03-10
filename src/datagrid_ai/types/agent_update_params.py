@@ -45,6 +45,9 @@ class AgentUpdateParams(TypedDict, total=False):
     therefore only the agent_tools setting is relevant.
     """
 
+    emoji: Optional[str]
+    """The emoji of the agent"""
+
     knowledge_ids: Optional[SequenceNotStr[str]]
     """Deprecated, use corpus instead.
 
@@ -185,6 +188,7 @@ DisabledTool: TypeAlias = Union[
         "planner",
         "webbrowser",
         "pdf_manipulation",
+        "document_generator",
         "pdf_generator",
         "acc",
         "docusign",
@@ -248,6 +252,7 @@ Tool: TypeAlias = Union[
         "planner",
         "webbrowser",
         "pdf_manipulation",
+        "document_generator",
         "pdf_generator",
         "acc",
         "docusign",

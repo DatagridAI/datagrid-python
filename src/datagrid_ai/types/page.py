@@ -48,3 +48,13 @@ class Page(BaseModel):
 
     parent: Parent
     """The parent object, indicating where the object is located in the hierarchy"""
+
+    scope: Literal["teamspace", "organization"]
+    """The visibility scope of the knowledge.
+
+    'teamspace' means visible only within the owning teamspace. 'organization' means
+    visible across all teamspaces in the same organization.
+    """
+
+    teamspace_id: str
+    """The ID of the teamspace that owns this page."""
