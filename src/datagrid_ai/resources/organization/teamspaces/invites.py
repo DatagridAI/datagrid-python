@@ -7,7 +7,7 @@ from typing import Optional
 import httpx
 
 from ...._types import Body, Omit, Query, Headers, NoneType, NotGiven, omit, not_given
-from ...._utils import maybe_transform, async_maybe_transform
+from ...._utils import path_template, maybe_transform, async_maybe_transform
 from ...._compat import cached_property
 from ...._resource import SyncAPIResource, AsyncAPIResource
 from ...._response import (
@@ -78,7 +78,7 @@ class InvitesResource(SyncAPIResource):
         if not teamspace_id:
             raise ValueError(f"Expected a non-empty value for `teamspace_id` but received {teamspace_id!r}")
         return self._post(
-            f"/organization/teamspaces/{teamspace_id}/invites",
+            path_template("/organization/teamspaces/{teamspace_id}/invites", teamspace_id=teamspace_id),
             body=maybe_transform(
                 {
                     "email": email,
@@ -121,7 +121,11 @@ class InvitesResource(SyncAPIResource):
         if not invite_id:
             raise ValueError(f"Expected a non-empty value for `invite_id` but received {invite_id!r}")
         return self._get(
-            f"/organization/teamspaces/{teamspace_id}/invites/{invite_id}",
+            path_template(
+                "/organization/teamspaces/{teamspace_id}/invites/{invite_id}",
+                teamspace_id=teamspace_id,
+                invite_id=invite_id,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -169,7 +173,7 @@ class InvitesResource(SyncAPIResource):
         if not teamspace_id:
             raise ValueError(f"Expected a non-empty value for `teamspace_id` but received {teamspace_id!r}")
         return self._get_api_list(
-            f"/organization/teamspaces/{teamspace_id}/invites",
+            path_template("/organization/teamspaces/{teamspace_id}/invites", teamspace_id=teamspace_id),
             page=SyncCursorIDPage[TeamspaceInvite],
             options=make_request_options(
                 extra_headers=extra_headers,
@@ -218,7 +222,11 @@ class InvitesResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `invite_id` but received {invite_id!r}")
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return self._delete(
-            f"/organization/teamspaces/{teamspace_id}/invites/{invite_id}",
+            path_template(
+                "/organization/teamspaces/{teamspace_id}/invites/{invite_id}",
+                teamspace_id=teamspace_id,
+                invite_id=invite_id,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -280,7 +288,7 @@ class AsyncInvitesResource(AsyncAPIResource):
         if not teamspace_id:
             raise ValueError(f"Expected a non-empty value for `teamspace_id` but received {teamspace_id!r}")
         return await self._post(
-            f"/organization/teamspaces/{teamspace_id}/invites",
+            path_template("/organization/teamspaces/{teamspace_id}/invites", teamspace_id=teamspace_id),
             body=await async_maybe_transform(
                 {
                     "email": email,
@@ -323,7 +331,11 @@ class AsyncInvitesResource(AsyncAPIResource):
         if not invite_id:
             raise ValueError(f"Expected a non-empty value for `invite_id` but received {invite_id!r}")
         return await self._get(
-            f"/organization/teamspaces/{teamspace_id}/invites/{invite_id}",
+            path_template(
+                "/organization/teamspaces/{teamspace_id}/invites/{invite_id}",
+                teamspace_id=teamspace_id,
+                invite_id=invite_id,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -371,7 +383,7 @@ class AsyncInvitesResource(AsyncAPIResource):
         if not teamspace_id:
             raise ValueError(f"Expected a non-empty value for `teamspace_id` but received {teamspace_id!r}")
         return self._get_api_list(
-            f"/organization/teamspaces/{teamspace_id}/invites",
+            path_template("/organization/teamspaces/{teamspace_id}/invites", teamspace_id=teamspace_id),
             page=AsyncCursorIDPage[TeamspaceInvite],
             options=make_request_options(
                 extra_headers=extra_headers,
@@ -420,7 +432,11 @@ class AsyncInvitesResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `invite_id` but received {invite_id!r}")
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return await self._delete(
-            f"/organization/teamspaces/{teamspace_id}/invites/{invite_id}",
+            path_template(
+                "/organization/teamspaces/{teamspace_id}/invites/{invite_id}",
+                teamspace_id=teamspace_id,
+                invite_id=invite_id,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),

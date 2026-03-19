@@ -9,7 +9,7 @@ import httpx
 
 from ..types import page_list_params, page_create_params, page_update_params
 from .._types import Body, Omit, Query, Headers, NoneType, NotGiven, omit, not_given
-from .._utils import maybe_transform, async_maybe_transform
+from .._utils import path_template, maybe_transform, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
 from .._response import (
@@ -115,7 +115,7 @@ class PagesResource(SyncAPIResource):
         if not page_id:
             raise ValueError(f"Expected a non-empty value for `page_id` but received {page_id!r}")
         return self._get(
-            f"/pages/{page_id}",
+            path_template("/pages/{page_id}", page_id=page_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -159,7 +159,7 @@ class PagesResource(SyncAPIResource):
         if not page_id:
             raise ValueError(f"Expected a non-empty value for `page_id` but received {page_id!r}")
         return self._patch(
-            f"/pages/{page_id}",
+            path_template("/pages/{page_id}", page_id=page_id),
             body=maybe_transform(
                 {
                     "name": name,
@@ -266,7 +266,7 @@ class PagesResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `page_id` but received {page_id!r}")
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return self._delete(
-            f"/pages/{page_id}",
+            path_template("/pages/{page_id}", page_id=page_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -364,7 +364,7 @@ class AsyncPagesResource(AsyncAPIResource):
         if not page_id:
             raise ValueError(f"Expected a non-empty value for `page_id` but received {page_id!r}")
         return await self._get(
-            f"/pages/{page_id}",
+            path_template("/pages/{page_id}", page_id=page_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -408,7 +408,7 @@ class AsyncPagesResource(AsyncAPIResource):
         if not page_id:
             raise ValueError(f"Expected a non-empty value for `page_id` but received {page_id!r}")
         return await self._patch(
-            f"/pages/{page_id}",
+            path_template("/pages/{page_id}", page_id=page_id),
             body=await async_maybe_transform(
                 {
                     "name": name,
@@ -515,7 +515,7 @@ class AsyncPagesResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `page_id` but received {page_id!r}")
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return await self._delete(
-            f"/pages/{page_id}",
+            path_template("/pages/{page_id}", page_id=page_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),

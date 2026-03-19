@@ -10,7 +10,7 @@ from ..types import (
     connection_provider_update_params,
 )
 from .._types import Body, Omit, Query, Headers, NoneType, NotGiven, omit, not_given
-from .._utils import maybe_transform, async_maybe_transform
+from .._utils import path_template, maybe_transform, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
 from .._response import (
@@ -127,7 +127,9 @@ class ConnectionProvidersResource(SyncAPIResource):
                 f"Expected a non-empty value for `connection_provider_id` but received {connection_provider_id!r}"
             )
         return self._get(
-            f"/connection-providers/{connection_provider_id}",
+            path_template(
+                "/connection-providers/{connection_provider_id}", connection_provider_id=connection_provider_id
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -171,7 +173,9 @@ class ConnectionProvidersResource(SyncAPIResource):
                 f"Expected a non-empty value for `connection_provider_id` but received {connection_provider_id!r}"
             )
         return self._patch(
-            f"/connection-providers/{connection_provider_id}",
+            path_template(
+                "/connection-providers/{connection_provider_id}", connection_provider_id=connection_provider_id
+            ),
             body=maybe_transform(
                 {
                     "client_id": client_id,
@@ -276,7 +280,9 @@ class ConnectionProvidersResource(SyncAPIResource):
             )
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return self._delete(
-            f"/connection-providers/{connection_provider_id}",
+            path_template(
+                "/connection-providers/{connection_provider_id}", connection_provider_id=connection_provider_id
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -385,7 +391,9 @@ class AsyncConnectionProvidersResource(AsyncAPIResource):
                 f"Expected a non-empty value for `connection_provider_id` but received {connection_provider_id!r}"
             )
         return await self._get(
-            f"/connection-providers/{connection_provider_id}",
+            path_template(
+                "/connection-providers/{connection_provider_id}", connection_provider_id=connection_provider_id
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -429,7 +437,9 @@ class AsyncConnectionProvidersResource(AsyncAPIResource):
                 f"Expected a non-empty value for `connection_provider_id` but received {connection_provider_id!r}"
             )
         return await self._patch(
-            f"/connection-providers/{connection_provider_id}",
+            path_template(
+                "/connection-providers/{connection_provider_id}", connection_provider_id=connection_provider_id
+            ),
             body=await async_maybe_transform(
                 {
                     "client_id": client_id,
@@ -534,7 +544,9 @@ class AsyncConnectionProvidersResource(AsyncAPIResource):
             )
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return await self._delete(
-            f"/connection-providers/{connection_provider_id}",
+            path_template(
+                "/connection-providers/{connection_provider_id}", connection_provider_id=connection_provider_id
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
