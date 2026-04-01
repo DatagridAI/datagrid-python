@@ -6,7 +6,17 @@ from typing_extensions import Literal, TypeAlias
 
 from ..._models import BaseModel
 
-__all__ = ["Knowledge", "Parent", "ParentParentPage", "ParentRootPage", "RowCounts", "Sync", "SyncTrigger", "Credits"]
+__all__ = ["Knowledge", "Credits", "Parent", "ParentParentPage", "ParentRootPage", "RowCounts", "Sync", "SyncTrigger"]
+
+
+class Credits(BaseModel):
+    """Credit consumption for this knowledge.
+
+    `null` when the knowledge is still being processed and the final cost is not yet known (e.g. immediately after creation or reindexing), or when the credit lookup fails. When present, `consumed` is the current summed spend for the knowledge's active tables — it is not necessarily the cost of the most recent request, nor the full lifetime spend.
+    """
+
+    consumed: float
+    """The number of credits consumed by the operation."""
 
 
 class ParentParentPage(BaseModel):
@@ -43,7 +53,7 @@ class RowCounts(BaseModel):
 
 
 class SyncTrigger(BaseModel):
-    """The cron schedule configuration for syncing data from the connection."""
+    """A cron-based schedule for syncing data"""
 
     cron_expression: str
     """Cron expression (e.g., '0 0 \\** \\** \\**' for daily at midnight)"""
@@ -68,12 +78,7 @@ class Sync(BaseModel):
     """Whether data syncing from the connection is enabled"""
 
     trigger: Optional[SyncTrigger] = None
-    """The cron schedule configuration for syncing data from the connection."""
-
-
-class Credits(BaseModel):
-    consumed: float
-    """The number of credits consumed by the knowledge."""
+    """A cron-based schedule for syncing data"""
 
 
 class Knowledge(BaseModel):
@@ -87,8 +92,18 @@ class Knowledge(BaseModel):
     created_at: datetime
     """The ISO string for when the knowledge was created."""
 
+    credits: Optional[Credits] = None
+    """Credit consumption for this knowledge.
+
+    `null` when the knowledge is still being processed and the final cost is not yet
+    known (e.g. immediately after creation or reindexing), or when the credit lookup
+    fails. When present, `consumed` is the current summed spend for the knowledge's
+    active tables — it is not necessarily the cost of the most recent request, nor
+    the full lifetime spend.
+    """
+
     name: str
-    """The name of the knowledge"""
+    """The name of the knowledge."""
 
     object: Literal["knowledge"]
     """The object type, which is always `knowledge`."""
@@ -121,8 +136,6 @@ class Knowledge(BaseModel):
 
     teamspace_id: str
     """The ID of the teamspace that owns this knowledge."""
-
-    credits: Optional[Credits] = None
 
     updated_at: Optional[datetime] = None
     """The ISO string for when the knowledge was last updated."""

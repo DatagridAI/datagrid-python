@@ -204,9 +204,9 @@ class PagesResource(SyncAPIResource):
 
           limit: The limit on the number of objects to return, ranging between 1 and 100.
 
-          parent: Filter pages by parent. Pass `{"type":"root"}` to get root-level pages, or
-              `{"type":"page","page_id":"page_123"}` to get pages nested under a specific
-              page. If not specified, returns all pages.
+          parent: Filter by parent. Pass `{"type":"root"}` to get root-level items, or
+              `{"type":"page","page_id":"page_123"}` to get items nested under a specific
+              page. If not specified, returns all items.
 
           extra_headers: Send extra headers
 
@@ -453,9 +453,9 @@ class AsyncPagesResource(AsyncAPIResource):
 
           limit: The limit on the number of objects to return, ranging between 1 and 100.
 
-          parent: Filter pages by parent. Pass `{"type":"root"}` to get root-level pages, or
-              `{"type":"page","page_id":"page_123"}` to get pages nested under a specific
-              page. If not specified, returns all pages.
+          parent: Filter by parent. Pass `{"type":"root"}` to get root-level items, or
+              `{"type":"page","page_id":"page_123"}` to get items nested under a specific
+              page. If not specified, returns all items.
 
           extra_headers: Send extra headers
 

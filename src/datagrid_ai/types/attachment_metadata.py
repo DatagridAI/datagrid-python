@@ -43,4 +43,7 @@ class AttachmentMetadata(BaseModel):
     url: str
     """The url of the blob of the attachment."""
 
+    data_lake_item_id: Optional[str] = None
+    """The data lake item ID of the attachment, used to generate fresh signed URLs."""
+
     page: Optional[Page] = None

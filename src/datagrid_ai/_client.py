@@ -57,10 +57,12 @@ if TYPE_CHECKING:
         files,
         pages,
         tools,
+        voice,
         agents,
         memory,
         search,
         secrets,
+        identity,
         knowledge,
         connectors,
         data_views,
@@ -72,9 +74,11 @@ if TYPE_CHECKING:
     from .resources.files import FilesResource, AsyncFilesResource
     from .resources.pages import PagesResource, AsyncPagesResource
     from .resources.tools import ToolsResource, AsyncToolsResource
+    from .resources.voice import VoiceResource, AsyncVoiceResource
     from .resources.agents import AgentsResource, AsyncAgentsResource
     from .resources.search import SearchResource, AsyncSearchResource
     from .resources.secrets import SecretsResource, AsyncSecretsResource
+    from .resources.identity import IdentityResource, AsyncIdentityResource
     from .resources.beta.beta import BetaResource, AsyncBetaResource
     from .resources.connectors import ConnectorsResource, AsyncConnectorsResource
     from .resources.connections import ConnectionsResource, AsyncConnectionsResource
@@ -209,6 +213,12 @@ class Datagrid(SyncAPIClient):
         return AgentsResource(self)
 
     @cached_property
+    def identity(self) -> IdentityResource:
+        from .resources.identity import IdentityResource
+
+        return IdentityResource(self)
+
+    @cached_property
     def pages(self) -> PagesResource:
         from .resources.pages import PagesResource
 
@@ -249,6 +259,12 @@ class Datagrid(SyncAPIClient):
         from .resources.beta import BetaResource
 
         return BetaResource(self)
+
+    @cached_property
+    def voice(self) -> VoiceResource:
+        from .resources.voice import VoiceResource
+
+        return VoiceResource(self)
 
     @cached_property
     def with_raw_response(self) -> DatagridWithRawResponse:
@@ -340,7 +356,9 @@ class Datagrid(SyncAPIClient):
         agent_routing: Optional[client_converse_params.AgentRouting] | Omit = omit,
         config: Optional[client_converse_params.Config] | Omit = omit,
         conversation_id: Optional[str] | Omit = omit,
+        current_view_content: Optional[str] | Omit = omit,
         generate_citations: Optional[bool] | Omit = omit,
+        include_steps: Optional[bool] | Omit = omit,
         secret_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         stream: Optional[bool] | Omit = omit,
         text: Optional[client_converse_params.Text] | Omit = omit,
@@ -358,10 +376,12 @@ class Datagrid(SyncAPIClient):
         Args:
           prompt: A text prompt to send to the agent.
 
-          agent_id: The ID of the agent that should be used for the converse.
+          agent_id: The ID of the agent that should be used for the converse. When omitted and a
+              `conversation_id` is provided, the conversation's existing agent assignments are
+              preserved. When omitted without a `conversation_id`, a new conversation is
+              created with the default agent.
 
-          agent_routing: Controls how the API selects which agent to use when routing is needed. This
-              field is mutually exclusive with agent_id.
+          agent_routing: Determines how the API routes the converse request to an agent.
 
           config: Override the agent config for this converse call. This is applied as a partial
               override.
@@ -369,8 +389,17 @@ class Datagrid(SyncAPIClient):
           conversation_id: The ID of the present conversation to use. If it's not provided - a new
               conversation will be created.
 
+          current_view_content: A datagrid file URI pointing to content the user is currently viewing on screen
+              (e.g., a web page, document, or dashboard rendered as markdown). The agent uses
+              this context to resolve ambiguous queries like 'what is this about?' or 'review
+              this'. The content is automatically summarized and made available to the agent.
+
           generate_citations: Determines whether the response should include citations. When enabled, the
               agent will generate citations for factual statements.
+
+          include_steps: When set to false, tool call and reasoning step events are omitted from SSE
+              streams. Non-streaming responses always include the tool_calls and reasoning
+              fields (as null when empty).
 
           secret_ids: Array of secret ID's to be included in the context. The secret value will be
               appended to the prompt but not stored in conversation history.
@@ -379,8 +408,9 @@ class Datagrid(SyncAPIClient):
               if stream is set to true.
 
           text: Contains the format property used to specify the structured output schema.
-              Structured output is not supported only supported by the default agent model,
-              magpie-1.1 and magpie-2.0.
+              Structured output is supported by the following agent models: `magpie-2.0`
+              (default), `magpie-2.5`, and `magpie-1.1`. It is not supported by
+              `magpie-1.1-flash` (Ask mode) or `llm-only` (Fastest mode).
 
           user: User information override for converse calls. All fields are optional - only
               provided fields will override the default user information.
@@ -404,7 +434,9 @@ class Datagrid(SyncAPIClient):
                     "agent_routing": agent_routing,
                     "config": config,
                     "conversation_id": conversation_id,
+                    "current_view_content": current_view_content,
                     "generate_citations": generate_citations,
+                    "include_steps": include_steps,
                     "secret_ids": secret_ids,
                     "stream": stream,
                     "text": text,
@@ -564,6 +596,12 @@ class AsyncDatagrid(AsyncAPIClient):
         return AsyncAgentsResource(self)
 
     @cached_property
+    def identity(self) -> AsyncIdentityResource:
+        from .resources.identity import AsyncIdentityResource
+
+        return AsyncIdentityResource(self)
+
+    @cached_property
     def pages(self) -> AsyncPagesResource:
         from .resources.pages import AsyncPagesResource
 
@@ -604,6 +642,12 @@ class AsyncDatagrid(AsyncAPIClient):
         from .resources.beta import AsyncBetaResource
 
         return AsyncBetaResource(self)
+
+    @cached_property
+    def voice(self) -> AsyncVoiceResource:
+        from .resources.voice import AsyncVoiceResource
+
+        return AsyncVoiceResource(self)
 
     @cached_property
     def with_raw_response(self) -> AsyncDatagridWithRawResponse:
@@ -695,7 +739,9 @@ class AsyncDatagrid(AsyncAPIClient):
         agent_routing: Optional[client_converse_params.AgentRouting] | Omit = omit,
         config: Optional[client_converse_params.Config] | Omit = omit,
         conversation_id: Optional[str] | Omit = omit,
+        current_view_content: Optional[str] | Omit = omit,
         generate_citations: Optional[bool] | Omit = omit,
+        include_steps: Optional[bool] | Omit = omit,
         secret_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         stream: Optional[bool] | Omit = omit,
         text: Optional[client_converse_params.Text] | Omit = omit,
@@ -713,10 +759,12 @@ class AsyncDatagrid(AsyncAPIClient):
         Args:
           prompt: A text prompt to send to the agent.
 
-          agent_id: The ID of the agent that should be used for the converse.
+          agent_id: The ID of the agent that should be used for the converse. When omitted and a
+              `conversation_id` is provided, the conversation's existing agent assignments are
+              preserved. When omitted without a `conversation_id`, a new conversation is
+              created with the default agent.
 
-          agent_routing: Controls how the API selects which agent to use when routing is needed. This
-              field is mutually exclusive with agent_id.
+          agent_routing: Determines how the API routes the converse request to an agent.
 
           config: Override the agent config for this converse call. This is applied as a partial
               override.
@@ -724,8 +772,17 @@ class AsyncDatagrid(AsyncAPIClient):
           conversation_id: The ID of the present conversation to use. If it's not provided - a new
               conversation will be created.
 
+          current_view_content: A datagrid file URI pointing to content the user is currently viewing on screen
+              (e.g., a web page, document, or dashboard rendered as markdown). The agent uses
+              this context to resolve ambiguous queries like 'what is this about?' or 'review
+              this'. The content is automatically summarized and made available to the agent.
+
           generate_citations: Determines whether the response should include citations. When enabled, the
               agent will generate citations for factual statements.
+
+          include_steps: When set to false, tool call and reasoning step events are omitted from SSE
+              streams. Non-streaming responses always include the tool_calls and reasoning
+              fields (as null when empty).
 
           secret_ids: Array of secret ID's to be included in the context. The secret value will be
               appended to the prompt but not stored in conversation history.
@@ -734,8 +791,9 @@ class AsyncDatagrid(AsyncAPIClient):
               if stream is set to true.
 
           text: Contains the format property used to specify the structured output schema.
-              Structured output is not supported only supported by the default agent model,
-              magpie-1.1 and magpie-2.0.
+              Structured output is supported by the following agent models: `magpie-2.0`
+              (default), `magpie-2.5`, and `magpie-1.1`. It is not supported by
+              `magpie-1.1-flash` (Ask mode) or `llm-only` (Fastest mode).
 
           user: User information override for converse calls. All fields are optional - only
               provided fields will override the default user information.
@@ -759,7 +817,9 @@ class AsyncDatagrid(AsyncAPIClient):
                     "agent_routing": agent_routing,
                     "config": config,
                     "conversation_id": conversation_id,
+                    "current_view_content": current_view_content,
                     "generate_citations": generate_citations,
+                    "include_steps": include_steps,
                     "secret_ids": secret_ids,
                     "stream": stream,
                     "text": text,
@@ -866,6 +926,12 @@ class DatagridWithRawResponse:
         return AgentsResourceWithRawResponse(self._client.agents)
 
     @cached_property
+    def identity(self) -> identity.IdentityResourceWithRawResponse:
+        from .resources.identity import IdentityResourceWithRawResponse
+
+        return IdentityResourceWithRawResponse(self._client.identity)
+
+    @cached_property
     def pages(self) -> pages.PagesResourceWithRawResponse:
         from .resources.pages import PagesResourceWithRawResponse
 
@@ -906,6 +972,12 @@ class DatagridWithRawResponse:
         from .resources.beta import BetaResourceWithRawResponse
 
         return BetaResourceWithRawResponse(self._client.beta)
+
+    @cached_property
+    def voice(self) -> voice.VoiceResourceWithRawResponse:
+        from .resources.voice import VoiceResourceWithRawResponse
+
+        return VoiceResourceWithRawResponse(self._client.voice)
 
 
 class AsyncDatagridWithRawResponse:
@@ -967,6 +1039,12 @@ class AsyncDatagridWithRawResponse:
         return AsyncAgentsResourceWithRawResponse(self._client.agents)
 
     @cached_property
+    def identity(self) -> identity.AsyncIdentityResourceWithRawResponse:
+        from .resources.identity import AsyncIdentityResourceWithRawResponse
+
+        return AsyncIdentityResourceWithRawResponse(self._client.identity)
+
+    @cached_property
     def pages(self) -> pages.AsyncPagesResourceWithRawResponse:
         from .resources.pages import AsyncPagesResourceWithRawResponse
 
@@ -1007,6 +1085,12 @@ class AsyncDatagridWithRawResponse:
         from .resources.beta import AsyncBetaResourceWithRawResponse
 
         return AsyncBetaResourceWithRawResponse(self._client.beta)
+
+    @cached_property
+    def voice(self) -> voice.AsyncVoiceResourceWithRawResponse:
+        from .resources.voice import AsyncVoiceResourceWithRawResponse
+
+        return AsyncVoiceResourceWithRawResponse(self._client.voice)
 
 
 class DatagridWithStreamedResponse:
@@ -1068,6 +1152,12 @@ class DatagridWithStreamedResponse:
         return AgentsResourceWithStreamingResponse(self._client.agents)
 
     @cached_property
+    def identity(self) -> identity.IdentityResourceWithStreamingResponse:
+        from .resources.identity import IdentityResourceWithStreamingResponse
+
+        return IdentityResourceWithStreamingResponse(self._client.identity)
+
+    @cached_property
     def pages(self) -> pages.PagesResourceWithStreamingResponse:
         from .resources.pages import PagesResourceWithStreamingResponse
 
@@ -1108,6 +1198,12 @@ class DatagridWithStreamedResponse:
         from .resources.beta import BetaResourceWithStreamingResponse
 
         return BetaResourceWithStreamingResponse(self._client.beta)
+
+    @cached_property
+    def voice(self) -> voice.VoiceResourceWithStreamingResponse:
+        from .resources.voice import VoiceResourceWithStreamingResponse
+
+        return VoiceResourceWithStreamingResponse(self._client.voice)
 
 
 class AsyncDatagridWithStreamedResponse:
@@ -1169,6 +1265,12 @@ class AsyncDatagridWithStreamedResponse:
         return AsyncAgentsResourceWithStreamingResponse(self._client.agents)
 
     @cached_property
+    def identity(self) -> identity.AsyncIdentityResourceWithStreamingResponse:
+        from .resources.identity import AsyncIdentityResourceWithStreamingResponse
+
+        return AsyncIdentityResourceWithStreamingResponse(self._client.identity)
+
+    @cached_property
     def pages(self) -> pages.AsyncPagesResourceWithStreamingResponse:
         from .resources.pages import AsyncPagesResourceWithStreamingResponse
 
@@ -1209,6 +1311,12 @@ class AsyncDatagridWithStreamedResponse:
         from .resources.beta import AsyncBetaResourceWithStreamingResponse
 
         return AsyncBetaResourceWithStreamingResponse(self._client.beta)
+
+    @cached_property
+    def voice(self) -> voice.AsyncVoiceResourceWithStreamingResponse:
+        from .resources.voice import AsyncVoiceResourceWithStreamingResponse
+
+        return AsyncVoiceResourceWithStreamingResponse(self._client.voice)
 
 
 Client = Datagrid

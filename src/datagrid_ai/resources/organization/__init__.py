@@ -24,6 +24,14 @@ from .teamspaces import (
     TeamspacesResourceWithStreamingResponse,
     AsyncTeamspacesResourceWithStreamingResponse,
 )
+from .mcp_servers import (
+    McpServersResource,
+    AsyncMcpServersResource,
+    McpServersResourceWithRawResponse,
+    AsyncMcpServersResourceWithRawResponse,
+    McpServersResourceWithStreamingResponse,
+    AsyncMcpServersResourceWithStreamingResponse,
+)
 from .organization import (
     OrganizationResource,
     AsyncOrganizationResource,
@@ -46,6 +54,12 @@ __all__ = [
     "AsyncTeamspacesResourceWithRawResponse",
     "TeamspacesResourceWithStreamingResponse",
     "AsyncTeamspacesResourceWithStreamingResponse",
+    "McpServersResource",
+    "AsyncMcpServersResource",
+    "McpServersResourceWithRawResponse",
+    "AsyncMcpServersResourceWithRawResponse",
+    "McpServersResourceWithStreamingResponse",
+    "AsyncMcpServersResourceWithStreamingResponse",
     "CreditsResource",
     "AsyncCreditsResource",
     "CreditsResourceWithRawResponse",

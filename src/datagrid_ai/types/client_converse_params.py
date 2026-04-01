@@ -26,6 +26,7 @@ __all__ = [
     "AgentRoutingManualTargetAgentConfigWithIDCorpusCorpusKnowledgeItem",
     "AgentRoutingManualTargetAgentConfigWithIDCorpusCorpusPageItem",
     "AgentRoutingManualTargetAgentConfigWithIDDisabledTool",
+    "AgentRoutingManualTargetAgentConfigWithIDMcpServer",
     "AgentRoutingManualTargetAgentConfigWithIDTool",
     "Config",
     "ConfigAgentTool",
@@ -46,13 +47,15 @@ class ClientConverseParams(TypedDict, total=False):
     """A text prompt to send to the agent."""
 
     agent_id: Optional[str]
-    """The ID of the agent that should be used for the converse."""
+    """The ID of the agent that should be used for the converse.
+
+    When omitted and a `conversation_id` is provided, the conversation's existing
+    agent assignments are preserved. When omitted without a `conversation_id`, a new
+    conversation is created with the default agent.
+    """
 
     agent_routing: Optional[AgentRouting]
-    """Controls how the API selects which agent to use when routing is needed.
-
-    This field is mutually exclusive with agent_id.
-    """
+    """Determines how the API routes the converse request to an agent."""
 
     config: Optional[Config]
     """Override the agent config for this converse call.
@@ -66,10 +69,25 @@ class ClientConverseParams(TypedDict, total=False):
     If it's not provided - a new conversation will be created.
     """
 
+    current_view_content: Optional[str]
+    """
+    A datagrid file URI pointing to content the user is currently viewing on screen
+    (e.g., a web page, document, or dashboard rendered as markdown). The agent uses
+    this context to resolve ambiguous queries like 'what is this about?' or 'review
+    this'. The content is automatically summarized and made available to the agent.
+    """
+
     generate_citations: Optional[bool]
     """Determines whether the response should include citations.
 
     When enabled, the agent will generate citations for factual statements.
+    """
+
+    include_steps: Optional[bool]
+    """
+    When set to false, tool call and reasoning step events are omitted from SSE
+    streams. Non-streaming responses always include the tool_calls and reasoning
+    fields (as null when empty).
     """
 
     secret_ids: Optional[SequenceNotStr[str]]
@@ -88,8 +106,9 @@ class ClientConverseParams(TypedDict, total=False):
     text: Optional[Text]
     """
     Contains the format property used to specify the structured output schema.
-    Structured output is not supported only supported by the default agent model,
-    magpie-1.1 and magpie-2.0.
+    Structured output is supported by the following agent models: `magpie-2.0`
+    (default), `magpie-2.5`, and `magpie-1.1`. It is not supported by
+    `magpie-1.1-flash` (Ask mode) or `llm-only` (Fastest mode).
     """
 
     user: Optional[User]
@@ -219,6 +238,7 @@ AgentRoutingManualTargetAgentConfigWithIDDisabledTool: TypeAlias = Union[
         "find_files",
         "read_file_contents",
         "file_analysis",
+        "procore_support_index",
         "calendar",
         "email",
         "schedule_recurring_message_tool",
@@ -271,6 +291,13 @@ AgentRoutingManualTargetAgentConfigWithIDDisabledTool: TypeAlias = Union[
     str,
     ToolParam,
 ]
+
+
+class AgentRoutingManualTargetAgentConfigWithIDMcpServer(TypedDict, total=False):
+    server_id: Required[str]
+
+    credential_id: Optional[str]
+
 
 AgentRoutingManualTargetAgentConfigWithIDTool: TypeAlias = Union[
     Literal[
@@ -283,6 +310,7 @@ AgentRoutingManualTargetAgentConfigWithIDTool: TypeAlias = Union[
         "find_files",
         "read_file_contents",
         "file_analysis",
+        "procore_support_index",
         "calendar",
         "email",
         "schedule_recurring_message_tool",
@@ -334,7 +362,6 @@ AgentRoutingManualTargetAgentConfigWithIDTool: TypeAlias = Union[
     ],
     str,
     ToolParam,
-    ToolParam,
 ]
 
 
@@ -342,16 +369,31 @@ class AgentRoutingManualTargetAgentConfigWithID(TypedDict, total=False):
     agent_id: str
     """The ID of the agent to use for routing."""
 
-    agent_model: Union[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-1", "magpie-2.0"], str, None]
-    """The version of Datagrid's agent brain.
+    agent_model: Union[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-2.0", "magpie-2.5", "llm-only"], str, None]
+    """The agent model determines the processing mode for Converse requests.
 
-    - magpie-1.1 is the default and most powerful model.
-    - magpie-1.1-flash is a faster model useful for RAG usecases, it currently only
-      supports semantic_search tool. Structured outputs are not supported with this
-      model.
-    - Can also accept any custom string value for future model versions.
-    - Magpie-2.0 our latest agentic model with more proactive planning and reasoning
-      capabilities.
+    Each model maps to one of three modes available in the Datagrid UI:
+
+    **Agentic mode** (full tool use, planning, and multi-step reasoning):
+
+    - `magpie-2.0` — Default. Agentic model with proactive planning and reasoning.
+    - `magpie-2.5` — Beta. Our latest agentic model — faster, more adaptable, and
+      built to handle a broader range of real-world tasks.
+    - `magpie-1.1` — Previous-generation agentic model.
+
+    **Ask mode** (lightweight, single-turn Q&A):
+
+    - `magpie-1.1-flash` — Fast model optimized for RAG use cases. Only supports the
+      `semantic_search` tool. A 400 error will be returned if other tools are
+      specified. Structured outputs are not supported.
+
+    **Fastest mode** (direct LLM response, no tool execution):
+
+    - `llm-only` — Runs a direct LLM conversation with no planning or tool calls. A
+      400 error will be returned if tools are specified. Structured outputs are not
+      supported.
+
+    Can also accept any custom string value for future model versions.
     """
 
     corpus: Optional[Iterable[AgentRoutingManualTargetAgentConfigWithIDCorpus]]
@@ -382,11 +424,13 @@ class AgentRoutingManualTargetAgentConfigWithID(TypedDict, total=False):
     llm_model: Union[
         Literal[
             "gemini-3-pro-preview",
+            "gemini-3.1-pro-preview",
             "gemini-3-flash-preview",
             "gemini-2.5-pro",
             "gemini-2.5-pro-preview-05-06",
             "gemini-2.5-flash",
             "gemini-2.5-flash-preview-04-17",
+            "gemini-2.5-flash-native-audio-preview-12-2025",
             "gemini-2.5-flash-lite",
             "gpt-5",
             "gpt-5.1",
@@ -407,6 +451,9 @@ class AgentRoutingManualTargetAgentConfigWithID(TypedDict, total=False):
     ]
     """The LLM used to generate responses."""
 
+    mcp_servers: Optional[Iterable[AgentRoutingManualTargetAgentConfigWithIDMcpServer]]
+    """Registered MCP servers to enable for this agent."""
+
     planning_prompt: Optional[str]
     """
     Define the planning strategy your AI Agent should use when breaking down tasks
@@ -419,10 +466,18 @@ class AgentRoutingManualTargetAgentConfigWithID(TypedDict, total=False):
     tools: Optional[List[AgentRoutingManualTargetAgentConfigWithIDTool]]
     """Array of the agent tools to enable.
 
-    If not provided - default tools of the agent are used. If empty list provided -
-    none of the tools are used. If null provided - all tools are used. When
-    connection_id is set for a tool, it will use that specific connection instead of
-    the default one.
+    If not provided, or null is provided - default tools of the agent are used. If
+    empty list provided - none of the tools are used. When connection_id is set for
+    a tool, it will use that specific connection instead of the default one.
+
+    **Tool availability by agent model:**
+
+    - **Agentic** (`magpie-2.0`, `magpie-2.5`, `magpie-1.1`): All tools below are
+      available.
+    - **Ask** (`magpie-1.1-flash`): Only `semantic_search` is supported. Requests
+      specifying other tools will be rejected with a 400 error.
+    - **Fastest** (`llm-only`): No tools are executed. Requests specifying tools
+      will be rejected with a 400 error.
 
     Knowledge management tools:
 
@@ -495,6 +550,7 @@ ConfigAgentTool: TypeAlias = Union[
         "find_files",
         "read_file_contents",
         "file_analysis",
+        "procore_support_index",
         "calendar",
         "email",
         "schedule_recurring_message_tool",
@@ -578,6 +634,7 @@ ConfigDisabledAgentTool: TypeAlias = Union[
         "find_files",
         "read_file_contents",
         "file_analysis",
+        "procore_support_index",
         "calendar",
         "email",
         "schedule_recurring_message_tool",
@@ -642,6 +699,7 @@ ConfigDisabledTool: TypeAlias = Union[
         "find_files",
         "read_file_contents",
         "file_analysis",
+        "procore_support_index",
         "calendar",
         "email",
         "schedule_recurring_message_tool",
@@ -697,12 +755,7 @@ ConfigDisabledTool: TypeAlias = Union[
 
 
 class ConfigMcpServer(TypedDict, total=False):
-    """
-    Configuration for an MCP (Model Context Protocol) server passed directly in the request.
-    MCP servers provide additional tools that extend the agent's capabilities.
-    Servers must implement the MCP streamable HTTP transport, including `initialize`,
-    `notifications/initialized`, `tools/list`, and `tools/call`.
-    """
+    server_id: Required[str]
 
     server_label: Required[str]
     """A unique label to identify this MCP server. Used for tool namespacing."""
@@ -722,6 +775,8 @@ class ConfigMcpServer(TypedDict, total=False):
     'Bearer <token>').
     """
 
+    credential_id: Optional[str]
+
     server_description: Optional[str]
     """Optional description of what this MCP server provides."""
 
@@ -737,6 +792,7 @@ ConfigTool: TypeAlias = Union[
         "find_files",
         "read_file_contents",
         "file_analysis",
+        "procore_support_index",
         "calendar",
         "email",
         "schedule_recurring_message_tool",
@@ -788,7 +844,6 @@ ConfigTool: TypeAlias = Union[
     ],
     str,
     ToolParam,
-    ToolParam,
 ]
 
 
@@ -798,16 +853,31 @@ class Config(TypedDict, total=False):
     This is applied as a partial override.
     """
 
-    agent_model: Union[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-1", "magpie-2.0"], str, None]
-    """The version of Datagrid's agent brain.
+    agent_model: Union[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-2.0", "magpie-2.5", "llm-only"], str, None]
+    """The agent model determines the processing mode for Converse requests.
 
-    - magpie-1.1 is the default and most powerful model.
-    - magpie-1.1-flash is a faster model useful for RAG usecases, it currently only
-      supports semantic_search tool. Structured outputs are not supported with this
-      model.
-    - Can also accept any custom string value for future model versions.
-    - Magpie-2.0 our latest agentic model with more proactive planning and reasoning
-      capabilities.
+    Each model maps to one of three modes available in the Datagrid UI:
+
+    **Agentic mode** (full tool use, planning, and multi-step reasoning):
+
+    - `magpie-2.0` — Default. Agentic model with proactive planning and reasoning.
+    - `magpie-2.5` — Beta. Our latest agentic model — faster, more adaptable, and
+      built to handle a broader range of real-world tasks.
+    - `magpie-1.1` — Previous-generation agentic model.
+
+    **Ask mode** (lightweight, single-turn Q&A):
+
+    - `magpie-1.1-flash` — Fast model optimized for RAG use cases. Only supports the
+      `semantic_search` tool. A 400 error will be returned if other tools are
+      specified. Structured outputs are not supported.
+
+    **Fastest mode** (direct LLM response, no tool execution):
+
+    - `llm-only` — Runs a direct LLM conversation with no planning or tool calls. A
+      400 error will be returned if tools are specified. Structured outputs are not
+      supported.
+
+    Can also accept any custom string value for future model versions.
     """
 
     agent_tools: Optional[List[ConfigAgentTool]]
@@ -847,11 +917,13 @@ class Config(TypedDict, total=False):
     llm_model: Union[
         Literal[
             "gemini-3-pro-preview",
+            "gemini-3.1-pro-preview",
             "gemini-3-flash-preview",
             "gemini-2.5-pro",
             "gemini-2.5-pro-preview-05-06",
             "gemini-2.5-flash",
             "gemini-2.5-flash-preview-04-17",
+            "gemini-2.5-flash-native-audio-preview-12-2025",
             "gemini-2.5-flash-lite",
             "gpt-5",
             "gpt-5.1",
@@ -896,10 +968,18 @@ class Config(TypedDict, total=False):
     tools: Optional[List[ConfigTool]]
     """Array of the agent tools to enable.
 
-    If not provided - default tools of the agent are used. If empty list provided -
-    none of the tools are used. If null provided - all tools are used. When
-    connection_id is set for a tool, it will use that specific connection instead of
-    the default one.
+    If not provided, or null is provided - default tools of the agent are used. If
+    empty list provided - none of the tools are used. When connection_id is set for
+    a tool, it will use that specific connection instead of the default one.
+
+    **Tool availability by agent model:**
+
+    - **Agentic** (`magpie-2.0`, `magpie-2.5`, `magpie-1.1`): All tools below are
+      available.
+    - **Ask** (`magpie-1.1-flash`): Only `semantic_search` is supported. Requests
+      specifying other tools will be rejected with a 400 error.
+    - **Fastest** (`llm-only`): No tools are executed. Requests specifying tools
+      will be rejected with a 400 error.
 
     Knowledge management tools:
 
@@ -946,7 +1026,7 @@ class Config(TypedDict, total=False):
 class Text(TypedDict, total=False):
     """
     Contains the format property used to specify the structured output schema.
-    Structured output is not supported only supported by the default agent model, magpie-1.1 and magpie-2.0.
+    Structured output is supported by the following agent models: `magpie-2.0` (default), `magpie-2.5`, and `magpie-1.1`. It is not supported by `magpie-1.1-flash` (Ask mode) or `llm-only` (Fastest mode).
     """
 
     format: object

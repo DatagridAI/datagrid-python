@@ -9,7 +9,10 @@ import pytest
 
 from datagrid_ai import Datagrid, AsyncDatagrid
 from tests.utils import assert_matches_type
-from datagrid_ai.types import DataView, DataViewListResponse
+from datagrid_ai.types import (
+    DataViewListResponse,
+    DataViewCreateResponse,
+)
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -24,7 +27,7 @@ class TestDataViews:
             knowledge_id="knowledge_id",
             service_account_id="service_account_id",
         )
-        assert_matches_type(DataView, data_view, path=["response"])
+        assert_matches_type(DataViewCreateResponse, data_view, path=["response"])
 
     @parametrize
     def test_raw_response_create(self, client: Datagrid) -> None:
@@ -37,7 +40,7 @@ class TestDataViews:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         data_view = response.parse()
-        assert_matches_type(DataView, data_view, path=["response"])
+        assert_matches_type(DataViewCreateResponse, data_view, path=["response"])
 
     @parametrize
     def test_streaming_response_create(self, client: Datagrid) -> None:
@@ -50,7 +53,7 @@ class TestDataViews:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             data_view = response.parse()
-            assert_matches_type(DataView, data_view, path=["response"])
+            assert_matches_type(DataViewCreateResponse, data_view, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -146,7 +149,7 @@ class TestAsyncDataViews:
             knowledge_id="knowledge_id",
             service_account_id="service_account_id",
         )
-        assert_matches_type(DataView, data_view, path=["response"])
+        assert_matches_type(DataViewCreateResponse, data_view, path=["response"])
 
     @parametrize
     async def test_raw_response_create(self, async_client: AsyncDatagrid) -> None:
@@ -159,7 +162,7 @@ class TestAsyncDataViews:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         data_view = await response.parse()
-        assert_matches_type(DataView, data_view, path=["response"])
+        assert_matches_type(DataViewCreateResponse, data_view, path=["response"])
 
     @parametrize
     async def test_streaming_response_create(self, async_client: AsyncDatagrid) -> None:
@@ -172,7 +175,7 @@ class TestAsyncDataViews:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             data_view = await response.parse()
-            assert_matches_type(DataView, data_view, path=["response"])
+            assert_matches_type(DataViewCreateResponse, data_view, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 

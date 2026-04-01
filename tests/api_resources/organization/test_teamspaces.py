@@ -29,6 +29,15 @@ class TestTeamspaces:
         assert_matches_type(Teamspace, teamspace, path=["response"])
 
     @parametrize
+    def test_method_create_with_all_params(self, client: Datagrid) -> None:
+        teamspace = client.organization.teamspaces.create(
+            access="open",
+            name="name",
+            cloud_provider="aws",
+        )
+        assert_matches_type(Teamspace, teamspace, path=["response"])
+
+    @parametrize
     def test_raw_response_create(self, client: Datagrid) -> None:
         response = client.organization.teamspaces.with_raw_response.create(
             access="open",
@@ -184,6 +193,15 @@ class TestAsyncTeamspaces:
         teamspace = await async_client.organization.teamspaces.create(
             access="open",
             name="name",
+        )
+        assert_matches_type(Teamspace, teamspace, path=["response"])
+
+    @parametrize
+    async def test_method_create_with_all_params(self, async_client: AsyncDatagrid) -> None:
+        teamspace = await async_client.organization.teamspaces.create(
+            access="open",
+            name="name",
+            cloud_provider="aws",
         )
         assert_matches_type(Teamspace, teamspace, path=["response"])
 
