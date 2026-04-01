@@ -116,6 +116,7 @@ Methods:
 
 - <code title="post /files">client.files.<a href="./src/datagrid_ai/resources/files.py">create</a>(\*\*<a href="src/datagrid_ai/types/file_create_params.py">params</a>) -> <a href="./src/datagrid_ai/types/file_object.py">FileObject</a></code>
 - <code title="get /files/{file_id}">client.files.<a href="./src/datagrid_ai/resources/files.py">retrieve</a>(file_id) -> <a href="./src/datagrid_ai/types/file_object.py">FileObject</a></code>
+- <code title="patch /files/{file_id}">client.files.<a href="./src/datagrid_ai/resources/files.py">update</a>(file_id, \*\*<a href="src/datagrid_ai/types/file_update_params.py">params</a>) -> <a href="./src/datagrid_ai/types/file_object.py">FileObject</a></code>
 - <code title="get /files">client.files.<a href="./src/datagrid_ai/resources/files.py">list</a>(\*\*<a href="src/datagrid_ai/types/file_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/file_object.py">SyncCursorIDPage[FileObject]</a></code>
 - <code title="delete /files/{file_id}">client.files.<a href="./src/datagrid_ai/resources/files.py">delete</a>(file_id) -> None</code>
 - <code title="get /files/{file_id}/content">client.files.<a href="./src/datagrid_ai/resources/files.py">content</a>(file_id) -> BinaryAPIResponse</code>
@@ -141,9 +142,13 @@ Types:
 
 ```python
 from datagrid_ai.types import (
+    AISource,
+    SearchAIRequestBody,
+    SearchAIResult,
     SearchResultItem,
     SearchResultResource,
     SearchResultResourceType,
+    SearchTreeResult,
     SearchSearchResponse,
 )
 ```
@@ -151,6 +156,8 @@ from datagrid_ai.types import (
 Methods:
 
 - <code title="get /search">client.search.<a href="./src/datagrid_ai/resources/search.py">search</a>(\*\*<a href="src/datagrid_ai/types/search_search_params.py">params</a>) -> <a href="./src/datagrid_ai/types/search_search_response.py">SearchSearchResponse</a></code>
+- <code title="post /search/ai">client.search.<a href="./src/datagrid_ai/resources/search.py">search_ai</a>(\*\*<a href="src/datagrid_ai/types/search_search_ai_params.py">params</a>) -> <a href="./src/datagrid_ai/types/search_ai_result.py">SearchAIResult</a></code>
+- <code title="get /search/tree">client.search.<a href="./src/datagrid_ai/resources/search.py">search_tree</a>(\*\*<a href="src/datagrid_ai/types/search_search_tree_params.py">params</a>) -> <a href="./src/datagrid_ai/types/search_tree_result.py">SearchTreeResult</a></code>
 
 # Agents
 
@@ -167,6 +174,18 @@ Methods:
 - <code title="patch /agents/{agent_id}">client.agents.<a href="./src/datagrid_ai/resources/agents.py">update</a>(agent_id, \*\*<a href="src/datagrid_ai/types/agent_update_params.py">params</a>) -> <a href="./src/datagrid_ai/types/agent.py">Agent</a></code>
 - <code title="get /agents">client.agents.<a href="./src/datagrid_ai/resources/agents.py">list</a>(\*\*<a href="src/datagrid_ai/types/agent_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/agent.py">SyncCursorIDPage[Agent]</a></code>
 - <code title="delete /agents/{agent_id}">client.agents.<a href="./src/datagrid_ai/resources/agents.py">delete</a>(agent_id) -> None</code>
+
+# Identity
+
+Types:
+
+```python
+from datagrid_ai.types import Identity, IdentityTeamspace
+```
+
+Methods:
+
+- <code title="get /identity">client.identity.<a href="./src/datagrid_ai/resources/identity.py">retrieve</a>() -> <a href="./src/datagrid_ai/types/identity.py">Identity</a></code>
 
 # Pages
 
@@ -204,12 +223,12 @@ Methods:
 Types:
 
 ```python
-from datagrid_ai.types.memory import UserMemory, UserListResponse
+from datagrid_ai.types.memory import UserMemory, UserCreateResponse, UserListResponse
 ```
 
 Methods:
 
-- <code title="post /user-memories">client.memory.user.<a href="./src/datagrid_ai/resources/memory/user.py">create</a>(\*\*<a href="src/datagrid_ai/types/memory/user_create_params.py">params</a>) -> <a href="./src/datagrid_ai/types/memory/user_memory.py">UserMemory</a></code>
+- <code title="post /user-memories">client.memory.user.<a href="./src/datagrid_ai/resources/memory/user.py">create</a>(\*\*<a href="src/datagrid_ai/types/memory/user_create_params.py">params</a>) -> <a href="./src/datagrid_ai/types/memory/user_create_response.py">UserCreateResponse</a></code>
 - <code title="get /user-memories">client.memory.user.<a href="./src/datagrid_ai/resources/memory/user.py">list</a>(\*\*<a href="src/datagrid_ai/types/memory/user_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/memory/user_list_response.py">UserListResponse</a></code>
 - <code title="delete /user-memories/{user_memory_id}">client.memory.user.<a href="./src/datagrid_ai/resources/memory/user.py">delete</a>(user_memory_id) -> None</code>
 
@@ -289,6 +308,27 @@ Methods:
 - <code title="get /organization/teamspaces/{teamspace_id}/users">client.organization.teamspaces.users.<a href="./src/datagrid_ai/resources/organization/teamspaces/users.py">list</a>(teamspace_id, \*\*<a href="src/datagrid_ai/types/organization/teamspaces/user_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/organization/teamspaces/teamspace_user.py">SyncCursorIDPage[TeamspaceUser]</a></code>
 - <code title="delete /organization/teamspaces/{teamspace_id}/users/{user_id}">client.organization.teamspaces.users.<a href="./src/datagrid_ai/resources/organization/teamspaces/users.py">delete</a>(user_id, \*, teamspace_id) -> None</code>
 
+## McpServers
+
+Types:
+
+```python
+from datagrid_ai.types.organization import (
+    CreateMcpServerRequest,
+    ListMcpServersResponse,
+    McpServer,
+    UpdateMcpServerRequest,
+)
+```
+
+Methods:
+
+- <code title="post /organization/mcp-servers">client.organization.mcp_servers.<a href="./src/datagrid_ai/resources/organization/mcp_servers.py">create</a>(\*\*<a href="src/datagrid_ai/types/organization/mcp_server_create_params.py">params</a>) -> <a href="./src/datagrid_ai/types/organization/mcp_server.py">McpServer</a></code>
+- <code title="get /organization/mcp-servers/{server_id}">client.organization.mcp_servers.<a href="./src/datagrid_ai/resources/organization/mcp_servers.py">retrieve</a>(server_id) -> <a href="./src/datagrid_ai/types/organization/mcp_server.py">McpServer</a></code>
+- <code title="patch /organization/mcp-servers/{server_id}">client.organization.mcp_servers.<a href="./src/datagrid_ai/resources/organization/mcp_servers.py">update</a>(server_id, \*\*<a href="src/datagrid_ai/types/organization/mcp_server_update_params.py">params</a>) -> <a href="./src/datagrid_ai/types/organization/mcp_server.py">McpServer</a></code>
+- <code title="get /organization/mcp-servers">client.organization.mcp_servers.<a href="./src/datagrid_ai/resources/organization/mcp_servers.py">list</a>() -> <a href="./src/datagrid_ai/types/organization/list_mcp_servers_response.py">ListMcpServersResponse</a></code>
+- <code title="delete /organization/mcp-servers/{server_id}">client.organization.mcp_servers.<a href="./src/datagrid_ai/resources/organization/mcp_servers.py">delete</a>(server_id) -> None</code>
+
 ## Credits
 
 Types:
@@ -313,6 +353,7 @@ Methods:
 
 - <code title="post /conversations">client.conversations.<a href="./src/datagrid_ai/resources/conversations/conversations.py">create</a>(\*\*<a href="src/datagrid_ai/types/conversation_create_params.py">params</a>) -> <a href="./src/datagrid_ai/types/conversation.py">Conversation</a></code>
 - <code title="get /conversations/{conversation_id}">client.conversations.<a href="./src/datagrid_ai/resources/conversations/conversations.py">retrieve</a>(conversation_id) -> <a href="./src/datagrid_ai/types/conversation.py">Conversation</a></code>
+- <code title="patch /conversations/{conversation_id}">client.conversations.<a href="./src/datagrid_ai/resources/conversations/conversations.py">update</a>(conversation_id, \*\*<a href="src/datagrid_ai/types/conversation_update_params.py">params</a>) -> <a href="./src/datagrid_ai/types/conversation.py">Conversation</a></code>
 - <code title="get /conversations">client.conversations.<a href="./src/datagrid_ai/resources/conversations/conversations.py">list</a>(\*\*<a href="src/datagrid_ai/types/conversation_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/conversation.py">SyncCursorIDPage[Conversation]</a></code>
 - <code title="delete /conversations/{conversation_id}">client.conversations.<a href="./src/datagrid_ai/resources/conversations/conversations.py">delete</a>(conversation_id) -> None</code>
 
@@ -334,12 +375,12 @@ Methods:
 Types:
 
 ```python
-from datagrid_ai.types import DataView, DataViewListResponse
+from datagrid_ai.types import DataView, DataViewCreateResponse, DataViewListResponse
 ```
 
 Methods:
 
-- <code title="post /data-views">client.data_views.<a href="./src/datagrid_ai/resources/data_views/data_views.py">create</a>(\*\*<a href="src/datagrid_ai/types/data_view_create_params.py">params</a>) -> <a href="./src/datagrid_ai/types/data_view.py">DataView</a></code>
+- <code title="post /data-views">client.data_views.<a href="./src/datagrid_ai/resources/data_views/data_views.py">create</a>(\*\*<a href="src/datagrid_ai/types/data_view_create_params.py">params</a>) -> <a href="./src/datagrid_ai/types/data_view_create_response.py">DataViewCreateResponse</a></code>
 - <code title="get /data-views">client.data_views.<a href="./src/datagrid_ai/resources/data_views/data_views.py">list</a>(\*\*<a href="src/datagrid_ai/types/data_view_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/data_view_list_response.py">DataViewListResponse</a></code>
 - <code title="delete /data-views/{data_view_id}">client.data_views.<a href="./src/datagrid_ai/resources/data_views/data_views.py">delete</a>(data_view_id) -> None</code>
 
@@ -375,3 +416,15 @@ from datagrid_ai.types.beta import RewriteRequest, RewriteResponse
 Methods:
 
 - <code title="post /beta/rewrite">client.beta.rewrite.<a href="./src/datagrid_ai/resources/beta/rewrite.py">rewrite_text</a>(\*\*<a href="src/datagrid_ai/types/beta/rewrite_rewrite_text_params.py">params</a>) -> <a href="./src/datagrid_ai/types/beta/rewrite_response.py">RewriteResponse</a></code>
+
+# Voice
+
+Types:
+
+```python
+from datagrid_ai.types import VoiceSessionRequest, VoiceSessionResponse, VoiceWebsocketMessage
+```
+
+Methods:
+
+- <code title="post /voice">client.voice.<a href="./src/datagrid_ai/resources/voice.py">start_session</a>(\*\*<a href="src/datagrid_ai/types/voice_start_session_params.py">params</a>) -> <a href="./src/datagrid_ai/types/voice_session_response.py">VoiceSessionResponse</a></code>

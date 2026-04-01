@@ -48,7 +48,7 @@ class AgentsResource(SyncAPIResource):
     def create(
         self,
         *,
-        agent_model: Union[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-1", "magpie-2.0"], str, None]
+        agent_model: Union[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-2.0", "magpie-2.5", "llm-only"], str, None]
         | Omit = omit,
         corpus: Optional[Iterable[agent_create_params.Corpus]] | Omit = omit,
         custom_prompt: Optional[str] | Omit = omit,
@@ -58,11 +58,13 @@ class AgentsResource(SyncAPIResource):
         llm_model: Union[
             Literal[
                 "gemini-3-pro-preview",
+                "gemini-3.1-pro-preview",
                 "gemini-3-flash-preview",
                 "gemini-2.5-pro",
                 "gemini-2.5-pro-preview-05-06",
                 "gemini-2.5-flash",
                 "gemini-2.5-flash-preview-04-17",
+                "gemini-2.5-flash-native-audio-preview-12-2025",
                 "gemini-2.5-flash-lite",
                 "gpt-5",
                 "gpt-5.1",
@@ -82,6 +84,7 @@ class AgentsResource(SyncAPIResource):
             None,
         ]
         | Omit = omit,
+        mcp_servers: Optional[Iterable[agent_create_params.McpServer]] | Omit = omit,
         name: Optional[str] | Omit = omit,
         planning_prompt: Optional[str] | Omit = omit,
         system_prompt: Optional[str] | Omit = omit,
@@ -97,15 +100,29 @@ class AgentsResource(SyncAPIResource):
         Create a new agent
 
         Args:
-          agent_model: The version of Datagrid's agent brain.
+          agent_model: The agent model determines the processing mode for Converse requests. Each model
+              maps to one of three modes available in the Datagrid UI:
 
-              - magpie-1.1 is the default and most powerful model.
-              - magpie-1.1-flash is a faster model useful for RAG usecases, it currently only
-                supports semantic_search tool. Structured outputs are not supported with this
-                model.
-              - Can also accept any custom string value for future model versions.
-              - Magpie-2.0 our latest agentic model with more proactive planning and reasoning
-                capabilities.
+              **Agentic mode** (full tool use, planning, and multi-step reasoning):
+
+              - `magpie-2.0` — Default. Agentic model with proactive planning and reasoning.
+              - `magpie-2.5` — Beta. Our latest agentic model — faster, more adaptable, and
+                built to handle a broader range of real-world tasks.
+              - `magpie-1.1` — Previous-generation agentic model.
+
+              **Ask mode** (lightweight, single-turn Q&A):
+
+              - `magpie-1.1-flash` — Fast model optimized for RAG use cases. Only supports the
+                `semantic_search` tool. A 400 error will be returned if other tools are
+                specified. Structured outputs are not supported.
+
+              **Fastest mode** (direct LLM response, no tool execution):
+
+              - `llm-only` — Runs a direct LLM conversation with no planning or tool calls. A
+                400 error will be returned if tools are specified. Structured outputs are not
+                supported.
+
+              Can also accept any custom string value for future model versions.
 
           corpus: Array of corpus items the agent should use during the converse. When omitted,
               all knowledge is used.
@@ -125,6 +142,8 @@ class AgentsResource(SyncAPIResource):
 
           llm_model: The LLM used to generate responses.
 
+          mcp_servers: Registered MCP servers to enable for this agent.
+
           name: The name of the agent
 
           planning_prompt: Define the planning strategy your AI Agent should use when breaking down tasks
@@ -132,10 +151,19 @@ class AgentsResource(SyncAPIResource):
 
           system_prompt: Directs your AI Agent's operational behavior.
 
-          tools: Array of the agent tools to enable. If not provided - default tools of the agent
-              are used. If empty list provided - none of the tools are used. If null
-              provided - all tools are used. When connection_id is set for a tool, it will use
-              that specific connection instead of the default one.
+          tools: Array of the agent tools to enable. If not provided, or null is provided -
+              default tools of the agent are used. If empty list provided - none of the tools
+              are used. When connection_id is set for a tool, it will use that specific
+              connection instead of the default one.
+
+              **Tool availability by agent model:**
+
+              - **Agentic** (`magpie-2.0`, `magpie-2.5`, `magpie-1.1`): All tools below are
+                available.
+              - **Ask** (`magpie-1.1-flash`): Only `semantic_search` is supported. Requests
+                specifying other tools will be rejected with a 400 error.
+              - **Fastest** (`llm-only`): No tools are executed. Requests specifying tools
+                will be rejected with a 400 error.
 
               Knowledge management tools:
 
@@ -196,6 +224,7 @@ class AgentsResource(SyncAPIResource):
                     "disabled_tools": disabled_tools,
                     "knowledge_ids": knowledge_ids,
                     "llm_model": llm_model,
+                    "mcp_servers": mcp_servers,
                     "name": name,
                     "planning_prompt": planning_prompt,
                     "system_prompt": system_prompt,
@@ -246,7 +275,7 @@ class AgentsResource(SyncAPIResource):
         self,
         agent_id: str,
         *,
-        agent_model: Union[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-1", "magpie-2.0"], str, None]
+        agent_model: Union[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-2.0", "magpie-2.5", "llm-only"], str, None]
         | Omit = omit,
         corpus: Optional[Iterable[agent_update_params.Corpus]] | Omit = omit,
         custom_prompt: Optional[str] | Omit = omit,
@@ -257,11 +286,13 @@ class AgentsResource(SyncAPIResource):
         llm_model: Union[
             Literal[
                 "gemini-3-pro-preview",
+                "gemini-3.1-pro-preview",
                 "gemini-3-flash-preview",
                 "gemini-2.5-pro",
                 "gemini-2.5-pro-preview-05-06",
                 "gemini-2.5-flash",
                 "gemini-2.5-flash-preview-04-17",
+                "gemini-2.5-flash-native-audio-preview-12-2025",
                 "gemini-2.5-flash-lite",
                 "gpt-5",
                 "gpt-5.1",
@@ -281,6 +312,7 @@ class AgentsResource(SyncAPIResource):
             None,
         ]
         | Omit = omit,
+        mcp_servers: Optional[Iterable[agent_update_params.McpServer]] | Omit = omit,
         name: Optional[str] | Omit = omit,
         planning_prompt: Optional[str] | Omit = omit,
         system_prompt: Optional[str] | Omit = omit,
@@ -296,15 +328,29 @@ class AgentsResource(SyncAPIResource):
         Update an agent configuration
 
         Args:
-          agent_model: The version of Datagrid's agent brain.
+          agent_model: The agent model determines the processing mode for Converse requests. Each model
+              maps to one of three modes available in the Datagrid UI:
 
-              - magpie-1.1 is the default and most powerful model.
-              - magpie-1.1-flash is a faster model useful for RAG usecases, it currently only
-                supports semantic_search tool. Structured outputs are not supported with this
-                model.
-              - Can also accept any custom string value for future model versions.
-              - Magpie-2.0 our latest agentic model with more proactive planning and reasoning
-                capabilities.
+              **Agentic mode** (full tool use, planning, and multi-step reasoning):
+
+              - `magpie-2.0` — Default. Agentic model with proactive planning and reasoning.
+              - `magpie-2.5` — Beta. Our latest agentic model — faster, more adaptable, and
+                built to handle a broader range of real-world tasks.
+              - `magpie-1.1` — Previous-generation agentic model.
+
+              **Ask mode** (lightweight, single-turn Q&A):
+
+              - `magpie-1.1-flash` — Fast model optimized for RAG use cases. Only supports the
+                `semantic_search` tool. A 400 error will be returned if other tools are
+                specified. Structured outputs are not supported.
+
+              **Fastest mode** (direct LLM response, no tool execution):
+
+              - `llm-only` — Runs a direct LLM conversation with no planning or tool calls. A
+                400 error will be returned if tools are specified. Structured outputs are not
+                supported.
+
+              Can also accept any custom string value for future model versions.
 
           corpus: Array of corpus items the agent should use during the converse. When omitted,
               all knowledge is used.
@@ -326,6 +372,8 @@ class AgentsResource(SyncAPIResource):
 
           llm_model: The LLM used to generate responses.
 
+          mcp_servers: Registered MCP servers to enable for this agent.
+
           name: The name of the agent
 
           planning_prompt: Define the planning strategy your AI Agent should use when breaking down tasks
@@ -333,10 +381,19 @@ class AgentsResource(SyncAPIResource):
 
           system_prompt: Directs your AI Agent's operational behavior.
 
-          tools: Array of the agent tools to enable. If not provided - default tools of the agent
-              are used. If empty list provided - none of the tools are used. If null
-              provided - all tools are used. When connection_id is set for a tool, it will use
-              that specific connection instead of the default one.
+          tools: Array of the agent tools to enable. If not provided, or null is provided -
+              default tools of the agent are used. If empty list provided - none of the tools
+              are used. When connection_id is set for a tool, it will use that specific
+              connection instead of the default one.
+
+              **Tool availability by agent model:**
+
+              - **Agentic** (`magpie-2.0`, `magpie-2.5`, `magpie-1.1`): All tools below are
+                available.
+              - **Ask** (`magpie-1.1-flash`): Only `semantic_search` is supported. Requests
+                specifying other tools will be rejected with a 400 error.
+              - **Fastest** (`llm-only`): No tools are executed. Requests specifying tools
+                will be rejected with a 400 error.
 
               Knowledge management tools:
 
@@ -400,6 +457,7 @@ class AgentsResource(SyncAPIResource):
                     "emoji": emoji,
                     "knowledge_ids": knowledge_ids,
                     "llm_model": llm_model,
+                    "mcp_servers": mcp_servers,
                     "name": name,
                     "planning_prompt": planning_prompt,
                     "system_prompt": system_prompt,
@@ -419,6 +477,7 @@ class AgentsResource(SyncAPIResource):
         after: str | Omit = omit,
         before: str | Omit = omit,
         limit: int | Omit = omit,
+        search: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -442,6 +501,8 @@ class AgentsResource(SyncAPIResource):
 
           limit: The limit on the number of objects to return, ranging between 1 and 100.
 
+          search: Optional search string to filter agents by name. Case-insensitive partial match.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -463,6 +524,7 @@ class AgentsResource(SyncAPIResource):
                         "after": after,
                         "before": before,
                         "limit": limit,
+                        "search": search,
                     },
                     agent_list_params.AgentListParams,
                 ),
@@ -528,7 +590,7 @@ class AsyncAgentsResource(AsyncAPIResource):
     async def create(
         self,
         *,
-        agent_model: Union[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-1", "magpie-2.0"], str, None]
+        agent_model: Union[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-2.0", "magpie-2.5", "llm-only"], str, None]
         | Omit = omit,
         corpus: Optional[Iterable[agent_create_params.Corpus]] | Omit = omit,
         custom_prompt: Optional[str] | Omit = omit,
@@ -538,11 +600,13 @@ class AsyncAgentsResource(AsyncAPIResource):
         llm_model: Union[
             Literal[
                 "gemini-3-pro-preview",
+                "gemini-3.1-pro-preview",
                 "gemini-3-flash-preview",
                 "gemini-2.5-pro",
                 "gemini-2.5-pro-preview-05-06",
                 "gemini-2.5-flash",
                 "gemini-2.5-flash-preview-04-17",
+                "gemini-2.5-flash-native-audio-preview-12-2025",
                 "gemini-2.5-flash-lite",
                 "gpt-5",
                 "gpt-5.1",
@@ -562,6 +626,7 @@ class AsyncAgentsResource(AsyncAPIResource):
             None,
         ]
         | Omit = omit,
+        mcp_servers: Optional[Iterable[agent_create_params.McpServer]] | Omit = omit,
         name: Optional[str] | Omit = omit,
         planning_prompt: Optional[str] | Omit = omit,
         system_prompt: Optional[str] | Omit = omit,
@@ -577,15 +642,29 @@ class AsyncAgentsResource(AsyncAPIResource):
         Create a new agent
 
         Args:
-          agent_model: The version of Datagrid's agent brain.
+          agent_model: The agent model determines the processing mode for Converse requests. Each model
+              maps to one of three modes available in the Datagrid UI:
 
-              - magpie-1.1 is the default and most powerful model.
-              - magpie-1.1-flash is a faster model useful for RAG usecases, it currently only
-                supports semantic_search tool. Structured outputs are not supported with this
-                model.
-              - Can also accept any custom string value for future model versions.
-              - Magpie-2.0 our latest agentic model with more proactive planning and reasoning
-                capabilities.
+              **Agentic mode** (full tool use, planning, and multi-step reasoning):
+
+              - `magpie-2.0` — Default. Agentic model with proactive planning and reasoning.
+              - `magpie-2.5` — Beta. Our latest agentic model — faster, more adaptable, and
+                built to handle a broader range of real-world tasks.
+              - `magpie-1.1` — Previous-generation agentic model.
+
+              **Ask mode** (lightweight, single-turn Q&A):
+
+              - `magpie-1.1-flash` — Fast model optimized for RAG use cases. Only supports the
+                `semantic_search` tool. A 400 error will be returned if other tools are
+                specified. Structured outputs are not supported.
+
+              **Fastest mode** (direct LLM response, no tool execution):
+
+              - `llm-only` — Runs a direct LLM conversation with no planning or tool calls. A
+                400 error will be returned if tools are specified. Structured outputs are not
+                supported.
+
+              Can also accept any custom string value for future model versions.
 
           corpus: Array of corpus items the agent should use during the converse. When omitted,
               all knowledge is used.
@@ -605,6 +684,8 @@ class AsyncAgentsResource(AsyncAPIResource):
 
           llm_model: The LLM used to generate responses.
 
+          mcp_servers: Registered MCP servers to enable for this agent.
+
           name: The name of the agent
 
           planning_prompt: Define the planning strategy your AI Agent should use when breaking down tasks
@@ -612,10 +693,19 @@ class AsyncAgentsResource(AsyncAPIResource):
 
           system_prompt: Directs your AI Agent's operational behavior.
 
-          tools: Array of the agent tools to enable. If not provided - default tools of the agent
-              are used. If empty list provided - none of the tools are used. If null
-              provided - all tools are used. When connection_id is set for a tool, it will use
-              that specific connection instead of the default one.
+          tools: Array of the agent tools to enable. If not provided, or null is provided -
+              default tools of the agent are used. If empty list provided - none of the tools
+              are used. When connection_id is set for a tool, it will use that specific
+              connection instead of the default one.
+
+              **Tool availability by agent model:**
+
+              - **Agentic** (`magpie-2.0`, `magpie-2.5`, `magpie-1.1`): All tools below are
+                available.
+              - **Ask** (`magpie-1.1-flash`): Only `semantic_search` is supported. Requests
+                specifying other tools will be rejected with a 400 error.
+              - **Fastest** (`llm-only`): No tools are executed. Requests specifying tools
+                will be rejected with a 400 error.
 
               Knowledge management tools:
 
@@ -676,6 +766,7 @@ class AsyncAgentsResource(AsyncAPIResource):
                     "disabled_tools": disabled_tools,
                     "knowledge_ids": knowledge_ids,
                     "llm_model": llm_model,
+                    "mcp_servers": mcp_servers,
                     "name": name,
                     "planning_prompt": planning_prompt,
                     "system_prompt": system_prompt,
@@ -726,7 +817,7 @@ class AsyncAgentsResource(AsyncAPIResource):
         self,
         agent_id: str,
         *,
-        agent_model: Union[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-1", "magpie-2.0"], str, None]
+        agent_model: Union[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-2.0", "magpie-2.5", "llm-only"], str, None]
         | Omit = omit,
         corpus: Optional[Iterable[agent_update_params.Corpus]] | Omit = omit,
         custom_prompt: Optional[str] | Omit = omit,
@@ -737,11 +828,13 @@ class AsyncAgentsResource(AsyncAPIResource):
         llm_model: Union[
             Literal[
                 "gemini-3-pro-preview",
+                "gemini-3.1-pro-preview",
                 "gemini-3-flash-preview",
                 "gemini-2.5-pro",
                 "gemini-2.5-pro-preview-05-06",
                 "gemini-2.5-flash",
                 "gemini-2.5-flash-preview-04-17",
+                "gemini-2.5-flash-native-audio-preview-12-2025",
                 "gemini-2.5-flash-lite",
                 "gpt-5",
                 "gpt-5.1",
@@ -761,6 +854,7 @@ class AsyncAgentsResource(AsyncAPIResource):
             None,
         ]
         | Omit = omit,
+        mcp_servers: Optional[Iterable[agent_update_params.McpServer]] | Omit = omit,
         name: Optional[str] | Omit = omit,
         planning_prompt: Optional[str] | Omit = omit,
         system_prompt: Optional[str] | Omit = omit,
@@ -776,15 +870,29 @@ class AsyncAgentsResource(AsyncAPIResource):
         Update an agent configuration
 
         Args:
-          agent_model: The version of Datagrid's agent brain.
+          agent_model: The agent model determines the processing mode for Converse requests. Each model
+              maps to one of three modes available in the Datagrid UI:
 
-              - magpie-1.1 is the default and most powerful model.
-              - magpie-1.1-flash is a faster model useful for RAG usecases, it currently only
-                supports semantic_search tool. Structured outputs are not supported with this
-                model.
-              - Can also accept any custom string value for future model versions.
-              - Magpie-2.0 our latest agentic model with more proactive planning and reasoning
-                capabilities.
+              **Agentic mode** (full tool use, planning, and multi-step reasoning):
+
+              - `magpie-2.0` — Default. Agentic model with proactive planning and reasoning.
+              - `magpie-2.5` — Beta. Our latest agentic model — faster, more adaptable, and
+                built to handle a broader range of real-world tasks.
+              - `magpie-1.1` — Previous-generation agentic model.
+
+              **Ask mode** (lightweight, single-turn Q&A):
+
+              - `magpie-1.1-flash` — Fast model optimized for RAG use cases. Only supports the
+                `semantic_search` tool. A 400 error will be returned if other tools are
+                specified. Structured outputs are not supported.
+
+              **Fastest mode** (direct LLM response, no tool execution):
+
+              - `llm-only` — Runs a direct LLM conversation with no planning or tool calls. A
+                400 error will be returned if tools are specified. Structured outputs are not
+                supported.
+
+              Can also accept any custom string value for future model versions.
 
           corpus: Array of corpus items the agent should use during the converse. When omitted,
               all knowledge is used.
@@ -806,6 +914,8 @@ class AsyncAgentsResource(AsyncAPIResource):
 
           llm_model: The LLM used to generate responses.
 
+          mcp_servers: Registered MCP servers to enable for this agent.
+
           name: The name of the agent
 
           planning_prompt: Define the planning strategy your AI Agent should use when breaking down tasks
@@ -813,10 +923,19 @@ class AsyncAgentsResource(AsyncAPIResource):
 
           system_prompt: Directs your AI Agent's operational behavior.
 
-          tools: Array of the agent tools to enable. If not provided - default tools of the agent
-              are used. If empty list provided - none of the tools are used. If null
-              provided - all tools are used. When connection_id is set for a tool, it will use
-              that specific connection instead of the default one.
+          tools: Array of the agent tools to enable. If not provided, or null is provided -
+              default tools of the agent are used. If empty list provided - none of the tools
+              are used. When connection_id is set for a tool, it will use that specific
+              connection instead of the default one.
+
+              **Tool availability by agent model:**
+
+              - **Agentic** (`magpie-2.0`, `magpie-2.5`, `magpie-1.1`): All tools below are
+                available.
+              - **Ask** (`magpie-1.1-flash`): Only `semantic_search` is supported. Requests
+                specifying other tools will be rejected with a 400 error.
+              - **Fastest** (`llm-only`): No tools are executed. Requests specifying tools
+                will be rejected with a 400 error.
 
               Knowledge management tools:
 
@@ -880,6 +999,7 @@ class AsyncAgentsResource(AsyncAPIResource):
                     "emoji": emoji,
                     "knowledge_ids": knowledge_ids,
                     "llm_model": llm_model,
+                    "mcp_servers": mcp_servers,
                     "name": name,
                     "planning_prompt": planning_prompt,
                     "system_prompt": system_prompt,
@@ -899,6 +1019,7 @@ class AsyncAgentsResource(AsyncAPIResource):
         after: str | Omit = omit,
         before: str | Omit = omit,
         limit: int | Omit = omit,
+        search: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -922,6 +1043,8 @@ class AsyncAgentsResource(AsyncAPIResource):
 
           limit: The limit on the number of objects to return, ranging between 1 and 100.
 
+          search: Optional search string to filter agents by name. Case-insensitive partial match.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -943,6 +1066,7 @@ class AsyncAgentsResource(AsyncAPIResource):
                         "after": after,
                         "before": before,
                         "limit": limit,
+                        "search": search,
                     },
                     agent_list_params.AgentListParams,
                 ),

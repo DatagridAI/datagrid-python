@@ -7,7 +7,7 @@ from typing_extensions import Literal, TypeAlias
 from .tool import Tool
 from .._models import BaseModel
 
-__all__ = ["Agent", "Corpus", "CorpusCorpusKnowledgeItem", "CorpusCorpusPageItem"]
+__all__ = ["Agent", "Corpus", "CorpusCorpusKnowledgeItem", "CorpusCorpusPageItem", "McpServer"]
 
 
 class CorpusCorpusKnowledgeItem(BaseModel):
@@ -29,20 +29,53 @@ class CorpusCorpusPageItem(BaseModel):
 Corpus: TypeAlias = Union[CorpusCorpusKnowledgeItem, CorpusCorpusPageItem]
 
 
+class McpServer(BaseModel):
+    base_url: str
+
+    credential_id: Optional[str] = None
+
+    name: str
+
+    object: Literal["agent_mcp_server"]
+
+    server_id: str
+
+    status: str
+
+    last_synced_at: Optional[datetime] = None
+
+    tool_count: Optional[int] = None
+
+
 class Agent(BaseModel):
     id: str
     """Unique identifier for the agent"""
 
-    agent_model: Union[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-1", "magpie-2.0"], str]
-    """The version of Datagrid's agent brain.
+    agent_model: Union[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-2.0", "magpie-2.5", "llm-only"], str]
+    """The agent model determines the processing mode for Converse requests.
 
-    - magpie-1.1 is the default and most powerful model.
-    - magpie-1.1-flash is a faster model useful for RAG usecases, it currently only
-      supports semantic_search tool. Structured outputs are not supported with this
-      model.
-    - Can also accept any custom string value for future model versions.
-    - Magpie-2.0 our latest agentic model with more proactive planning and reasoning
-      capabilities.
+    Each model maps to one of three modes available in the Datagrid UI:
+
+    **Agentic mode** (full tool use, planning, and multi-step reasoning):
+
+    - `magpie-2.0` — Default. Agentic model with proactive planning and reasoning.
+    - `magpie-2.5` — Beta. Our latest agentic model — faster, more adaptable, and
+      built to handle a broader range of real-world tasks.
+    - `magpie-1.1` — Previous-generation agentic model.
+
+    **Ask mode** (lightweight, single-turn Q&A):
+
+    - `magpie-1.1-flash` — Fast model optimized for RAG use cases. Only supports the
+      `semantic_search` tool. A 400 error will be returned if other tools are
+      specified. Structured outputs are not supported.
+
+    **Fastest mode** (direct LLM response, no tool execution):
+
+    - `llm-only` — Runs a direct LLM conversation with no planning or tool calls. A
+      400 error will be returned if tools are specified. Structured outputs are not
+      supported.
+
+    Can also accept any custom string value for future model versions.
     """
 
     corpus: Optional[List[Corpus]] = None
@@ -73,11 +106,13 @@ class Agent(BaseModel):
     llm_model: Union[
         Literal[
             "gemini-3-pro-preview",
+            "gemini-3.1-pro-preview",
             "gemini-3-flash-preview",
             "gemini-2.5-pro",
             "gemini-2.5-pro-preview-05-06",
             "gemini-2.5-flash",
             "gemini-2.5-flash-preview-04-17",
+            "gemini-2.5-flash-native-audio-preview-12-2025",
             "gemini-2.5-flash-lite",
             "gpt-5",
             "gpt-5.1",
@@ -96,6 +131,9 @@ class Agent(BaseModel):
         str,
     ]
     """The LLM used to generate responses."""
+
+    mcp_servers: List[McpServer]
+    """Registered MCP servers enabled for this agent."""
 
     name: str
     """The name of the agent"""

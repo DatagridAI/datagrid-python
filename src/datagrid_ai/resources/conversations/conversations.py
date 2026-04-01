@@ -7,8 +7,13 @@ from typing_extensions import Literal
 
 import httpx
 
-from ...types import ConversationSortField, conversation_list_params, conversation_create_params
-from ..._types import Body, Omit, Query, Headers, NoneType, NotGiven, omit, not_given
+from ...types import (
+    ConversationSortField,
+    conversation_list_params,
+    conversation_create_params,
+    conversation_update_params,
+)
+from ..._types import Body, Omit, Query, Headers, NoneType, NotGiven, SequenceNotStr, omit, not_given
 from ..._utils import path_template, maybe_transform, async_maybe_transform
 from .messages import (
     MessagesResource,
@@ -119,6 +124,53 @@ class ConversationsResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `conversation_id` but received {conversation_id!r}")
         return self._get(
             path_template("/conversations/{conversation_id}", conversation_id=conversation_id),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=Conversation,
+        )
+
+    def update(
+        self,
+        conversation_id: str,
+        *,
+        agent_ids: SequenceNotStr[str] | Omit = omit,
+        name: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> Conversation:
+        """
+        Update a conversation's properties, such as assigned agents or name.
+
+        Args:
+          agent_ids: Replace the list of agents assigned to this conversation. Pass an empty array to
+              clear all agent assignments.
+
+          name: Update the conversation name.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not conversation_id:
+            raise ValueError(f"Expected a non-empty value for `conversation_id` but received {conversation_id!r}")
+        return self._patch(
+            path_template("/conversations/{conversation_id}", conversation_id=conversation_id),
+            body=maybe_transform(
+                {
+                    "agent_ids": agent_ids,
+                    "name": name,
+                },
+                conversation_update_params.ConversationUpdateParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -317,6 +369,53 @@ class AsyncConversationsResource(AsyncAPIResource):
             cast_to=Conversation,
         )
 
+    async def update(
+        self,
+        conversation_id: str,
+        *,
+        agent_ids: SequenceNotStr[str] | Omit = omit,
+        name: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> Conversation:
+        """
+        Update a conversation's properties, such as assigned agents or name.
+
+        Args:
+          agent_ids: Replace the list of agents assigned to this conversation. Pass an empty array to
+              clear all agent assignments.
+
+          name: Update the conversation name.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not conversation_id:
+            raise ValueError(f"Expected a non-empty value for `conversation_id` but received {conversation_id!r}")
+        return await self._patch(
+            path_template("/conversations/{conversation_id}", conversation_id=conversation_id),
+            body=await async_maybe_transform(
+                {
+                    "agent_ids": agent_ids,
+                    "name": name,
+                },
+                conversation_update_params.ConversationUpdateParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=Conversation,
+        )
+
     def list(
         self,
         *,
@@ -428,6 +527,9 @@ class ConversationsResourceWithRawResponse:
         self.retrieve = to_raw_response_wrapper(
             conversations.retrieve,
         )
+        self.update = to_raw_response_wrapper(
+            conversations.update,
+        )
         self.list = to_raw_response_wrapper(
             conversations.list,
         )
@@ -449,6 +551,9 @@ class AsyncConversationsResourceWithRawResponse:
         )
         self.retrieve = async_to_raw_response_wrapper(
             conversations.retrieve,
+        )
+        self.update = async_to_raw_response_wrapper(
+            conversations.update,
         )
         self.list = async_to_raw_response_wrapper(
             conversations.list,
@@ -472,6 +577,9 @@ class ConversationsResourceWithStreamingResponse:
         self.retrieve = to_streamed_response_wrapper(
             conversations.retrieve,
         )
+        self.update = to_streamed_response_wrapper(
+            conversations.update,
+        )
         self.list = to_streamed_response_wrapper(
             conversations.list,
         )
@@ -493,6 +601,9 @@ class AsyncConversationsResourceWithStreamingResponse:
         )
         self.retrieve = async_to_streamed_response_wrapper(
             conversations.retrieve,
+        )
+        self.update = async_to_streamed_response_wrapper(
+            conversations.update,
         )
         self.list = async_to_streamed_response_wrapper(
             conversations.list,

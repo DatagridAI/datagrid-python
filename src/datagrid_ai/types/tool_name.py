@@ -16,6 +16,7 @@ ToolName: TypeAlias = Union[
         "find_files",
         "read_file_contents",
         "file_analysis",
+        "procore_support_index",
         "calendar",
         "email",
         "schedule_recurring_message_tool",

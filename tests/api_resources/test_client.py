@@ -46,10 +46,12 @@ class TestClient:
                 "llm_model": "gemini-3-pro-preview",
                 "mcp_servers": [
                     {
+                        "server_id": "server_id",
                         "server_label": "server_label",
                         "server_url": "https://example.com",
                         "type": "inline_mcp",
                         "authorization": "authorization",
+                        "credential_id": "credential_id",
                         "server_description": "server_description",
                     }
                 ],
@@ -58,7 +60,9 @@ class TestClient:
                 "tools": ["data_analysis"],
             },
             conversation_id="conversation_id",
+            current_view_content="current_view_content",
             generate_citations=True,
+            include_steps=True,
             secret_ids=["string"],
             stream=False,
             text={"format": {}},
@@ -129,10 +133,12 @@ class TestAsyncClient:
                 "llm_model": "gemini-3-pro-preview",
                 "mcp_servers": [
                     {
+                        "server_id": "server_id",
                         "server_label": "server_label",
                         "server_url": "https://example.com",
                         "type": "inline_mcp",
                         "authorization": "authorization",
+                        "credential_id": "credential_id",
                         "server_description": "server_description",
                     }
                 ],
@@ -141,7 +147,9 @@ class TestAsyncClient:
                 "tools": ["data_analysis"],
             },
             conversation_id="conversation_id",
+            current_view_content="current_view_content",
             generate_citations=True,
+            include_steps=True,
             secret_ids=["string"],
             stream=False,
             text={"format": {}},

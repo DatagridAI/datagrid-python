@@ -34,6 +34,14 @@ class TestFiles:
         assert_matches_type(FileObject, file, path=["response"])
 
     @parametrize
+    def test_method_create_with_all_params(self, client: Datagrid) -> None:
+        file = client.files.create(
+            file=b"Example data",
+            expires_after=1,
+        )
+        assert_matches_type(FileObject, file, path=["response"])
+
+    @parametrize
     def test_raw_response_create(self, client: Datagrid) -> None:
         response = client.files.with_raw_response.create(
             file=b"Example data",
@@ -93,6 +101,52 @@ class TestFiles:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `file_id` but received ''"):
             client.files.with_raw_response.retrieve(
                 "",
+            )
+
+    @parametrize
+    def test_method_update(self, client: Datagrid) -> None:
+        file = client.files.update(
+            file_id="file_id",
+        )
+        assert_matches_type(FileObject, file, path=["response"])
+
+    @parametrize
+    def test_method_update_with_all_params(self, client: Datagrid) -> None:
+        file = client.files.update(
+            file_id="file_id",
+            expires_after=1,
+        )
+        assert_matches_type(FileObject, file, path=["response"])
+
+    @parametrize
+    def test_raw_response_update(self, client: Datagrid) -> None:
+        response = client.files.with_raw_response.update(
+            file_id="file_id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        file = response.parse()
+        assert_matches_type(FileObject, file, path=["response"])
+
+    @parametrize
+    def test_streaming_response_update(self, client: Datagrid) -> None:
+        with client.files.with_streaming_response.update(
+            file_id="file_id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            file = response.parse()
+            assert_matches_type(FileObject, file, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    def test_path_params_update(self, client: Datagrid) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `file_id` but received ''"):
+            client.files.with_raw_response.update(
+                file_id="",
             )
 
     @parametrize
@@ -231,6 +285,14 @@ class TestAsyncFiles:
         assert_matches_type(FileObject, file, path=["response"])
 
     @parametrize
+    async def test_method_create_with_all_params(self, async_client: AsyncDatagrid) -> None:
+        file = await async_client.files.create(
+            file=b"Example data",
+            expires_after=1,
+        )
+        assert_matches_type(FileObject, file, path=["response"])
+
+    @parametrize
     async def test_raw_response_create(self, async_client: AsyncDatagrid) -> None:
         response = await async_client.files.with_raw_response.create(
             file=b"Example data",
@@ -290,6 +352,52 @@ class TestAsyncFiles:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `file_id` but received ''"):
             await async_client.files.with_raw_response.retrieve(
                 "",
+            )
+
+    @parametrize
+    async def test_method_update(self, async_client: AsyncDatagrid) -> None:
+        file = await async_client.files.update(
+            file_id="file_id",
+        )
+        assert_matches_type(FileObject, file, path=["response"])
+
+    @parametrize
+    async def test_method_update_with_all_params(self, async_client: AsyncDatagrid) -> None:
+        file = await async_client.files.update(
+            file_id="file_id",
+            expires_after=1,
+        )
+        assert_matches_type(FileObject, file, path=["response"])
+
+    @parametrize
+    async def test_raw_response_update(self, async_client: AsyncDatagrid) -> None:
+        response = await async_client.files.with_raw_response.update(
+            file_id="file_id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        file = await response.parse()
+        assert_matches_type(FileObject, file, path=["response"])
+
+    @parametrize
+    async def test_streaming_response_update(self, async_client: AsyncDatagrid) -> None:
+        async with async_client.files.with_streaming_response.update(
+            file_id="file_id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            file = await response.parse()
+            assert_matches_type(FileObject, file, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    async def test_path_params_update(self, async_client: AsyncDatagrid) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `file_id` but received ''"):
+            await async_client.files.with_raw_response.update(
+                file_id="",
             )
 
     @parametrize

@@ -19,8 +19,8 @@ from ..._response import (
 from ..._constants import DEFAULT_TIMEOUT
 from ..._base_client import make_request_options
 from ...types.memory import user_list_params, user_create_params
-from ...types.memory.user_memory import UserMemory
 from ...types.memory.user_list_response import UserListResponse
+from ...types.memory.user_create_response import UserCreateResponse
 
 __all__ = ["UserResource", "AsyncUserResource"]
 
@@ -58,9 +58,13 @@ class UserResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> UserMemory:
-        """
-        Create a user memory
+    ) -> UserCreateResponse:
+        """Create a user memory.
+
+        This endpoint requires credits and meters the actual
+        embedding work performed for the request. The response includes
+        `credits.consumed` with the billed amount, or `null` if the billing write fails
+        after the memory is successfully created.
 
         Args:
           agent_id: The agent ID of the user memory.
@@ -95,7 +99,7 @@ class UserResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=UserMemory,
+            cast_to=UserCreateResponse,
         )
 
     def list(
@@ -215,9 +219,13 @@ class AsyncUserResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> UserMemory:
-        """
-        Create a user memory
+    ) -> UserCreateResponse:
+        """Create a user memory.
+
+        This endpoint requires credits and meters the actual
+        embedding work performed for the request. The response includes
+        `credits.consumed` with the billed amount, or `null` if the billing write fails
+        after the memory is successfully created.
 
         Args:
           agent_id: The agent ID of the user memory.
@@ -252,7 +260,7 @@ class AsyncUserResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=UserMemory,
+            cast_to=UserCreateResponse,
         )
 
     async def list(

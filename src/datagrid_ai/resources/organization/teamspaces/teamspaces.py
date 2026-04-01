@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from typing import Optional
 from typing_extensions import Literal
 
 import httpx
@@ -73,6 +74,7 @@ class TeamspacesResource(SyncAPIResource):
         *,
         access: Literal["open", "closed"],
         name: str,
+        cloud_provider: Optional[Literal["aws", "gcp"]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -92,6 +94,10 @@ class TeamspacesResource(SyncAPIResource):
 
           name: The name of the teamspace
 
+          cloud_provider: Cloud provider for this teamspace. Determines storage (S3/GCS) and model
+              providers (Bedrock/Vertex). Immutable after creation. Defaults to `gcp` if not
+              specified.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -106,6 +112,7 @@ class TeamspacesResource(SyncAPIResource):
                 {
                     "access": access,
                     "name": name,
+                    "cloud_provider": cloud_provider,
                 },
                 teamspace_create_params.TeamspaceCreateParams,
             ),
@@ -289,6 +296,7 @@ class AsyncTeamspacesResource(AsyncAPIResource):
         *,
         access: Literal["open", "closed"],
         name: str,
+        cloud_provider: Optional[Literal["aws", "gcp"]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -308,6 +316,10 @@ class AsyncTeamspacesResource(AsyncAPIResource):
 
           name: The name of the teamspace
 
+          cloud_provider: Cloud provider for this teamspace. Determines storage (S3/GCS) and model
+              providers (Bedrock/Vertex). Immutable after creation. Defaults to `gcp` if not
+              specified.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -322,6 +334,7 @@ class AsyncTeamspacesResource(AsyncAPIResource):
                 {
                     "access": access,
                     "name": name,
+                    "cloud_provider": cloud_provider,
                 },
                 teamspace_create_params.TeamspaceCreateParams,
             ),

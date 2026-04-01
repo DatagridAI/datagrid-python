@@ -12,6 +12,13 @@ __all__ = ["Teamspace"]
 class Teamspace(BaseModel):
     id: str
 
+    cloud_provider: Literal["aws", "gcp"]
+    """Cloud provider for this teamspace.
+
+    Determines storage platform (S3/GCS) and AI model providers (Bedrock/Vertex).
+    Immutable after creation. Defaults to `gcp`.
+    """
+
     access: Optional[Literal["open", "closed"]] = None
     """Open teamspaces allow all organization members to join without admin approval.
 

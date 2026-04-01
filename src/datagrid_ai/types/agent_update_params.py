@@ -8,20 +8,43 @@ from typing_extensions import Literal, Required, TypeAlias, TypedDict
 from .._types import SequenceNotStr
 from .tool_param import ToolParam
 
-__all__ = ["AgentUpdateParams", "Corpus", "CorpusCorpusKnowledgeItem", "CorpusCorpusPageItem", "DisabledTool", "Tool"]
+__all__ = [
+    "AgentUpdateParams",
+    "Corpus",
+    "CorpusCorpusKnowledgeItem",
+    "CorpusCorpusPageItem",
+    "DisabledTool",
+    "McpServer",
+    "Tool",
+]
 
 
 class AgentUpdateParams(TypedDict, total=False):
-    agent_model: Union[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-1", "magpie-2.0"], str, None]
-    """The version of Datagrid's agent brain.
+    agent_model: Union[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-2.0", "magpie-2.5", "llm-only"], str, None]
+    """The agent model determines the processing mode for Converse requests.
 
-    - magpie-1.1 is the default and most powerful model.
-    - magpie-1.1-flash is a faster model useful for RAG usecases, it currently only
-      supports semantic_search tool. Structured outputs are not supported with this
-      model.
-    - Can also accept any custom string value for future model versions.
-    - Magpie-2.0 our latest agentic model with more proactive planning and reasoning
-      capabilities.
+    Each model maps to one of three modes available in the Datagrid UI:
+
+    **Agentic mode** (full tool use, planning, and multi-step reasoning):
+
+    - `magpie-2.0` — Default. Agentic model with proactive planning and reasoning.
+    - `magpie-2.5` — Beta. Our latest agentic model — faster, more adaptable, and
+      built to handle a broader range of real-world tasks.
+    - `magpie-1.1` — Previous-generation agentic model.
+
+    **Ask mode** (lightweight, single-turn Q&A):
+
+    - `magpie-1.1-flash` — Fast model optimized for RAG use cases. Only supports the
+      `semantic_search` tool. A 400 error will be returned if other tools are
+      specified. Structured outputs are not supported.
+
+    **Fastest mode** (direct LLM response, no tool execution):
+
+    - `llm-only` — Runs a direct LLM conversation with no planning or tool calls. A
+      400 error will be returned if tools are specified. Structured outputs are not
+      supported.
+
+    Can also accept any custom string value for future model versions.
     """
 
     corpus: Optional[Iterable[Corpus]]
@@ -58,11 +81,13 @@ class AgentUpdateParams(TypedDict, total=False):
     llm_model: Union[
         Literal[
             "gemini-3-pro-preview",
+            "gemini-3.1-pro-preview",
             "gemini-3-flash-preview",
             "gemini-2.5-pro",
             "gemini-2.5-pro-preview-05-06",
             "gemini-2.5-flash",
             "gemini-2.5-flash-preview-04-17",
+            "gemini-2.5-flash-native-audio-preview-12-2025",
             "gemini-2.5-flash-lite",
             "gpt-5",
             "gpt-5.1",
@@ -83,6 +108,9 @@ class AgentUpdateParams(TypedDict, total=False):
     ]
     """The LLM used to generate responses."""
 
+    mcp_servers: Optional[Iterable[McpServer]]
+    """Registered MCP servers to enable for this agent."""
+
     name: Optional[str]
     """The name of the agent"""
 
@@ -98,10 +126,18 @@ class AgentUpdateParams(TypedDict, total=False):
     tools: Optional[List[Tool]]
     """Array of the agent tools to enable.
 
-    If not provided - default tools of the agent are used. If empty list provided -
-    none of the tools are used. If null provided - all tools are used. When
-    connection_id is set for a tool, it will use that specific connection instead of
-    the default one.
+    If not provided, or null is provided - default tools of the agent are used. If
+    empty list provided - none of the tools are used. When connection_id is set for
+    a tool, it will use that specific connection instead of the default one.
+
+    **Tool availability by agent model:**
+
+    - **Agentic** (`magpie-2.0`, `magpie-2.5`, `magpie-1.1`): All tools below are
+      available.
+    - **Ask** (`magpie-1.1-flash`): Only `semantic_search` is supported. Requests
+      specifying other tools will be rejected with a 400 error.
+    - **Fastest** (`llm-only`): No tools are executed. Requests specifying tools
+      will be rejected with a 400 error.
 
     Knowledge management tools:
 
@@ -174,6 +210,7 @@ DisabledTool: TypeAlias = Union[
         "find_files",
         "read_file_contents",
         "file_analysis",
+        "procore_support_index",
         "calendar",
         "email",
         "schedule_recurring_message_tool",
@@ -227,6 +264,13 @@ DisabledTool: TypeAlias = Union[
     ToolParam,
 ]
 
+
+class McpServer(TypedDict, total=False):
+    server_id: Required[str]
+
+    credential_id: Optional[str]
+
+
 Tool: TypeAlias = Union[
     Literal[
         "data_analysis",
@@ -238,6 +282,7 @@ Tool: TypeAlias = Union[
         "find_files",
         "read_file_contents",
         "file_analysis",
+        "procore_support_index",
         "calendar",
         "email",
         "schedule_recurring_message_tool",
@@ -288,6 +333,5 @@ Tool: TypeAlias = Union[
         "people_prospect_researcher",
     ],
     str,
-    ToolParam,
     ToolParam,
 ]

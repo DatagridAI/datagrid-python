@@ -179,7 +179,10 @@ class KnowledgeResource(SyncAPIResource):
         """Update a knowledge's attributes.
 
         Each request can include either `files` or
-        `sync`, but not both.
+        `sync`, but not both. When `files` are provided, all existing data is replaced
+        and a re-processing pipeline runs asynchronously — this consumes credits based
+        on the volume of data processed. Metadata-only and sync-only updates do not
+        consume credits and are not blocked by credit eligibility checks.
 
         Args:
           files: The files to replace existing knowledge. When provided, all existing data will
@@ -264,9 +267,9 @@ class KnowledgeResource(SyncAPIResource):
 
           limit: The limit on the number of objects to return, ranging between 1 and 100.
 
-          parent: Filter knowledge by parent. Pass `{"type":"root"}` to get root-level knowledge,
-              or `{"type":"page","page_id":"page_123"}` to get knowledge nested under a
-              specific page. If not specified, returns all knowledge.
+          parent: Filter by parent. Pass `{"type":"root"}` to get root-level items, or
+              `{"type":"page","page_id":"page_123"}` to get items nested under a specific
+              page. If not specified, returns all items.
 
           extra_headers: Send extra headers
 
@@ -342,8 +345,12 @@ class KnowledgeResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> RedirectURLResponse:
-        """
-        Create knowledge from connection which will be learned and leveraged by agents.
+        """Initiates knowledge creation from a connection by returning a redirect URL.
+
+        The
+        organization must have enough credits to start this flow. The downstream
+        ingestion and indexing that follow still run asynchronously, and the actual
+        credit consumption remains variable based on the volume of data processed.
 
         Args:
           connection_id: The id of the connection to be used to create the knowledge.
@@ -380,7 +387,9 @@ class KnowledgeResource(SyncAPIResource):
 
         The reindex runs
         **asynchronously**: the API returns as soon as the job is enqueued. Re-indexing
-        is not performed immediately.
+        is not performed immediately. This endpoint consumes credits — the actual credit
+        cost is variable, based on the volume of data being re-indexed, and is charged
+        asynchronously as processing completes.
 
         Args:
           extra_headers: Send extra headers
@@ -536,7 +545,10 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         """Update a knowledge's attributes.
 
         Each request can include either `files` or
-        `sync`, but not both.
+        `sync`, but not both. When `files` are provided, all existing data is replaced
+        and a re-processing pipeline runs asynchronously — this consumes credits based
+        on the volume of data processed. Metadata-only and sync-only updates do not
+        consume credits and are not blocked by credit eligibility checks.
 
         Args:
           files: The files to replace existing knowledge. When provided, all existing data will
@@ -621,9 +633,9 @@ class AsyncKnowledgeResource(AsyncAPIResource):
 
           limit: The limit on the number of objects to return, ranging between 1 and 100.
 
-          parent: Filter knowledge by parent. Pass `{"type":"root"}` to get root-level knowledge,
-              or `{"type":"page","page_id":"page_123"}` to get knowledge nested under a
-              specific page. If not specified, returns all knowledge.
+          parent: Filter by parent. Pass `{"type":"root"}` to get root-level items, or
+              `{"type":"page","page_id":"page_123"}` to get items nested under a specific
+              page. If not specified, returns all items.
 
           extra_headers: Send extra headers
 
@@ -699,8 +711,12 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> RedirectURLResponse:
-        """
-        Create knowledge from connection which will be learned and leveraged by agents.
+        """Initiates knowledge creation from a connection by returning a redirect URL.
+
+        The
+        organization must have enough credits to start this flow. The downstream
+        ingestion and indexing that follow still run asynchronously, and the actual
+        credit consumption remains variable based on the volume of data processed.
 
         Args:
           connection_id: The id of the connection to be used to create the knowledge.
@@ -739,7 +755,9 @@ class AsyncKnowledgeResource(AsyncAPIResource):
 
         The reindex runs
         **asynchronously**: the API returns as soon as the job is enqueued. Re-indexing
-        is not performed immediately.
+        is not performed immediately. This endpoint consumes credits — the actual credit
+        cost is variable, based on the volume of data being re-indexed, and is charged
+        asynchronously as processing completes.
 
         Args:
           extra_headers: Send extra headers
