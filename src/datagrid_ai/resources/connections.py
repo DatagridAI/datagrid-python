@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
+from typing import Optional
+
 import httpx
 
 from ..types import connection_list_params, connection_create_params, connection_update_params
 from .._types import Body, Omit, Query, Headers, NoneType, NotGiven, omit, not_given
-from .._utils import maybe_transform, async_maybe_transform
+from .._utils import path_template, maybe_transform, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
 from .._response import (
@@ -47,6 +49,7 @@ class ConnectionsResource(SyncAPIResource):
         self,
         *,
         connector_id: str,
+        connection_provider_id: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -62,6 +65,9 @@ class ConnectionsResource(SyncAPIResource):
         Args:
           connector_id: The connector ID for the third-party service to connect to.
 
+          connection_provider_id: Optional connection provider ID to use custom OAuth credentials for this
+              connection.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -72,7 +78,13 @@ class ConnectionsResource(SyncAPIResource):
         """
         return self._post(
             "/connections",
-            body=maybe_transform({"connector_id": connector_id}, connection_create_params.ConnectionCreateParams),
+            body=maybe_transform(
+                {
+                    "connector_id": connector_id,
+                    "connection_provider_id": connection_provider_id,
+                },
+                connection_create_params.ConnectionCreateParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -105,7 +117,7 @@ class ConnectionsResource(SyncAPIResource):
         if not connection_id:
             raise ValueError(f"Expected a non-empty value for `connection_id` but received {connection_id!r}")
         return self._get(
-            f"/connections/{connection_id}",
+            path_template("/connections/{connection_id}", connection_id=connection_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -141,7 +153,7 @@ class ConnectionsResource(SyncAPIResource):
         if not connection_id:
             raise ValueError(f"Expected a non-empty value for `connection_id` but received {connection_id!r}")
         return self._patch(
-            f"/connections/{connection_id}",
+            path_template("/connections/{connection_id}", connection_id=connection_id),
             body=maybe_transform({"name": name}, connection_update_params.ConnectionUpdateParams),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
@@ -237,7 +249,7 @@ class ConnectionsResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `connection_id` but received {connection_id!r}")
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return self._delete(
-            f"/connections/{connection_id}",
+            path_template("/connections/{connection_id}", connection_id=connection_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -269,6 +281,7 @@ class AsyncConnectionsResource(AsyncAPIResource):
         self,
         *,
         connector_id: str,
+        connection_provider_id: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -284,6 +297,9 @@ class AsyncConnectionsResource(AsyncAPIResource):
         Args:
           connector_id: The connector ID for the third-party service to connect to.
 
+          connection_provider_id: Optional connection provider ID to use custom OAuth credentials for this
+              connection.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -295,7 +311,11 @@ class AsyncConnectionsResource(AsyncAPIResource):
         return await self._post(
             "/connections",
             body=await async_maybe_transform(
-                {"connector_id": connector_id}, connection_create_params.ConnectionCreateParams
+                {
+                    "connector_id": connector_id,
+                    "connection_provider_id": connection_provider_id,
+                },
+                connection_create_params.ConnectionCreateParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
@@ -329,7 +349,7 @@ class AsyncConnectionsResource(AsyncAPIResource):
         if not connection_id:
             raise ValueError(f"Expected a non-empty value for `connection_id` but received {connection_id!r}")
         return await self._get(
-            f"/connections/{connection_id}",
+            path_template("/connections/{connection_id}", connection_id=connection_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -365,7 +385,7 @@ class AsyncConnectionsResource(AsyncAPIResource):
         if not connection_id:
             raise ValueError(f"Expected a non-empty value for `connection_id` but received {connection_id!r}")
         return await self._patch(
-            f"/connections/{connection_id}",
+            path_template("/connections/{connection_id}", connection_id=connection_id),
             body=await async_maybe_transform({"name": name}, connection_update_params.ConnectionUpdateParams),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
@@ -461,7 +481,7 @@ class AsyncConnectionsResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `connection_id` but received {connection_id!r}")
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return await self._delete(
-            f"/connections/{connection_id}",
+            path_template("/connections/{connection_id}", connection_id=connection_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),

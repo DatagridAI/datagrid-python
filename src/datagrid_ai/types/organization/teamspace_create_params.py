@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from typing import Optional
 from typing_extensions import Literal, Required, TypedDict
 
 __all__ = ["TeamspaceCreateParams"]
@@ -19,3 +20,10 @@ class TeamspaceCreateParams(TypedDict, total=False):
 
     name: Required[str]
     """The name of the teamspace"""
+
+    cloud_provider: Optional[Literal["aws", "gcp"]]
+    """Cloud provider for this teamspace.
+
+    Determines storage (S3/GCS) and model providers (Bedrock/Vertex). Immutable
+    after creation. Defaults to `gcp` if not specified.
+    """

@@ -27,3 +27,9 @@ class AgentListParams(TypedDict, total=False):
 
     limit: int
     """The limit on the number of objects to return, ranging between 1 and 100."""
+
+    search: str
+    """Optional search string to filter agents by name.
+
+    Case-insensitive partial match.
+    """

@@ -30,11 +30,11 @@ class KnowledgeListParams(TypedDict, total=False):
     """The limit on the number of objects to return, ranging between 1 and 100."""
 
     parent: Parent
-    """Filter knowledge by parent.
+    """Filter by parent.
 
-    Pass `{"type":"root"}` to get root-level knowledge, or
-    `{"type":"page","page_id":"page_123"}` to get knowledge nested under a specific
-    page. If not specified, returns all knowledge.
+    Pass `{"type":"root"}` to get root-level items, or
+    `{"type":"page","page_id":"page_123"}` to get items nested under a specific
+    page. If not specified, returns all items.
     """
 
 

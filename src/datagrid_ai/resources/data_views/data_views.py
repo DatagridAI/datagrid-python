@@ -6,7 +6,7 @@ import httpx
 
 from ...types import data_view_list_params, data_view_create_params
 from ..._types import Body, Omit, Query, Headers, NoneType, NotGiven, omit, not_given
-from ..._utils import maybe_transform, async_maybe_transform
+from ..._utils import path_template, maybe_transform, async_maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from ..._response import (
@@ -24,8 +24,8 @@ from .service_accounts import (
     ServiceAccountsResourceWithStreamingResponse,
     AsyncServiceAccountsResourceWithStreamingResponse,
 )
-from ...types.data_view import DataView
 from ...types.data_view_list_response import DataViewListResponse
+from ...types.data_view_create_response import DataViewCreateResponse
 
 __all__ = ["DataViewsResource", "AsyncDataViewsResource"]
 
@@ -66,10 +66,11 @@ class DataViewsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> DataView:
+    ) -> DataViewCreateResponse:
         """
         Creates a new data view for a knowledge source, providing controlled access
-        through a service account.
+        through a service account. This endpoint requires credits and meters setup work
+        based on the number of warehouse operations performed for the request.
 
         Args:
           bigquery_dataset_name: The name of the BigQuery dataset containing views to the data. Your
@@ -100,7 +101,7 @@ class DataViewsResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=DataView,
+            cast_to=DataViewCreateResponse,
         )
 
     def list(
@@ -187,7 +188,7 @@ class DataViewsResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `data_view_id` but received {data_view_id!r}")
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return self._delete(
-            f"/data-views/{data_view_id}",
+            path_template("/data-views/{data_view_id}", data_view_id=data_view_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -231,10 +232,11 @@ class AsyncDataViewsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> DataView:
+    ) -> DataViewCreateResponse:
         """
         Creates a new data view for a knowledge source, providing controlled access
-        through a service account.
+        through a service account. This endpoint requires credits and meters setup work
+        based on the number of warehouse operations performed for the request.
 
         Args:
           bigquery_dataset_name: The name of the BigQuery dataset containing views to the data. Your
@@ -265,7 +267,7 @@ class AsyncDataViewsResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=DataView,
+            cast_to=DataViewCreateResponse,
         )
 
     async def list(
@@ -352,7 +354,7 @@ class AsyncDataViewsResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `data_view_id` but received {data_view_id!r}")
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return await self._delete(
-            f"/data-views/{data_view_id}",
+            path_template("/data-views/{data_view_id}", data_view_id=data_view_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),

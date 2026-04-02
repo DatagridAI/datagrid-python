@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from typing import Optional
 from typing_extensions import Literal
 
 import httpx
@@ -23,7 +24,7 @@ from .invites import (
     AsyncInvitesResourceWithStreamingResponse,
 )
 from ...._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
-from ...._utils import maybe_transform, async_maybe_transform
+from ...._utils import path_template, maybe_transform, async_maybe_transform
 from ...._compat import cached_property
 from ...._resource import SyncAPIResource, AsyncAPIResource
 from ...._response import (
@@ -73,6 +74,7 @@ class TeamspacesResource(SyncAPIResource):
         *,
         access: Literal["open", "closed"],
         name: str,
+        cloud_provider: Optional[Literal["aws", "gcp"]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -92,6 +94,10 @@ class TeamspacesResource(SyncAPIResource):
 
           name: The name of the teamspace
 
+          cloud_provider: Cloud provider for this teamspace. Determines storage (S3/GCS) and model
+              providers (Bedrock/Vertex). Immutable after creation. Defaults to `gcp` if not
+              specified.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -106,6 +112,7 @@ class TeamspacesResource(SyncAPIResource):
                 {
                     "access": access,
                     "name": name,
+                    "cloud_provider": cloud_provider,
                 },
                 teamspace_create_params.TeamspaceCreateParams,
             ),
@@ -141,7 +148,7 @@ class TeamspacesResource(SyncAPIResource):
         if not teamspace_id:
             raise ValueError(f"Expected a non-empty value for `teamspace_id` but received {teamspace_id!r}")
         return self._get(
-            f"/organization/teamspaces/{teamspace_id}",
+            path_template("/organization/teamspaces/{teamspace_id}", teamspace_id=teamspace_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -241,7 +248,7 @@ class TeamspacesResource(SyncAPIResource):
         if not teamspace_id:
             raise ValueError(f"Expected a non-empty value for `teamspace_id` but received {teamspace_id!r}")
         return self._patch(
-            f"/organization/teamspaces/{teamspace_id}",
+            path_template("/organization/teamspaces/{teamspace_id}", teamspace_id=teamspace_id),
             body=maybe_transform(
                 {
                     "access": access,
@@ -289,6 +296,7 @@ class AsyncTeamspacesResource(AsyncAPIResource):
         *,
         access: Literal["open", "closed"],
         name: str,
+        cloud_provider: Optional[Literal["aws", "gcp"]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -308,6 +316,10 @@ class AsyncTeamspacesResource(AsyncAPIResource):
 
           name: The name of the teamspace
 
+          cloud_provider: Cloud provider for this teamspace. Determines storage (S3/GCS) and model
+              providers (Bedrock/Vertex). Immutable after creation. Defaults to `gcp` if not
+              specified.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -322,6 +334,7 @@ class AsyncTeamspacesResource(AsyncAPIResource):
                 {
                     "access": access,
                     "name": name,
+                    "cloud_provider": cloud_provider,
                 },
                 teamspace_create_params.TeamspaceCreateParams,
             ),
@@ -357,7 +370,7 @@ class AsyncTeamspacesResource(AsyncAPIResource):
         if not teamspace_id:
             raise ValueError(f"Expected a non-empty value for `teamspace_id` but received {teamspace_id!r}")
         return await self._get(
-            f"/organization/teamspaces/{teamspace_id}",
+            path_template("/organization/teamspaces/{teamspace_id}", teamspace_id=teamspace_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -457,7 +470,7 @@ class AsyncTeamspacesResource(AsyncAPIResource):
         if not teamspace_id:
             raise ValueError(f"Expected a non-empty value for `teamspace_id` but received {teamspace_id!r}")
         return await self._patch(
-            f"/organization/teamspaces/{teamspace_id}",
+            path_template("/organization/teamspaces/{teamspace_id}", teamspace_id=teamspace_id),
             body=await async_maybe_transform(
                 {
                     "access": access,

@@ -5,7 +5,7 @@ from __future__ import annotations
 import httpx
 
 from ...._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
-from ...._utils import maybe_transform
+from ...._utils import path_template, maybe_transform
 from ...._compat import cached_property
 from ...._resource import SyncAPIResource, AsyncAPIResource
 from ...._response import (
@@ -75,7 +75,7 @@ class RecordsResource(SyncAPIResource):
         if not table_id:
             raise ValueError(f"Expected a non-empty value for `table_id` but received {table_id!r}")
         return self._get_api_list(
-            f"/tables/{table_id}/records",
+            path_template("/tables/{table_id}/records", table_id=table_id),
             page=SyncCursorPage[Record],
             options=make_request_options(
                 extra_headers=extra_headers,
@@ -147,7 +147,7 @@ class AsyncRecordsResource(AsyncAPIResource):
         if not table_id:
             raise ValueError(f"Expected a non-empty value for `table_id` but received {table_id!r}")
         return self._get_api_list(
-            f"/tables/{table_id}/records",
+            path_template("/tables/{table_id}/records", table_id=table_id),
             page=AsyncCursorPage[Record],
             options=make_request_options(
                 extra_headers=extra_headers,

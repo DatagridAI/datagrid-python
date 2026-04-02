@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from typing import Mapping, Optional, cast
+from typing_extensions import Literal
 
 import httpx
 
@@ -19,7 +20,7 @@ from ..._types import (
     omit,
     not_given,
 )
-from ..._utils import is_given, extract_files, maybe_transform, deepcopy_minimal, async_maybe_transform
+from ..._utils import is_given, extract_files, path_template, maybe_transform, deepcopy_minimal, async_maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from ..._response import (
@@ -152,7 +153,7 @@ class KnowledgeResource(SyncAPIResource):
         if not knowledge_id:
             raise ValueError(f"Expected a non-empty value for `knowledge_id` but received {knowledge_id!r}")
         return self._get(
-            f"/knowledge/{knowledge_id}",
+            path_template("/knowledge/{knowledge_id}", knowledge_id=knowledge_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -166,6 +167,7 @@ class KnowledgeResource(SyncAPIResource):
         files: Optional[SequenceNotStr[FileTypes]] | Omit = omit,
         name: Optional[str] | Omit = omit,
         parent: Optional[knowledge_update_params.Parent] | Omit = omit,
+        scope: Optional[Literal["teamspace", "organization"]] | Omit = omit,
         sync: Optional[knowledge_update_params.Sync] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -174,21 +176,31 @@ class KnowledgeResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> Knowledge:
-        """
-        Update a knowledge's attributes.
+        """Update a knowledge's attributes.
+
+        Each request can include either `files` or
+        `sync`, but not both. When `files` are provided, all existing data is replaced
+        and a re-processing pipeline runs asynchronously — this consumes credits based
+        on the volume of data processed. Metadata-only and sync-only updates do not
+        consume credits and are not blocked by credit eligibility checks.
 
         Args:
           files: The files to replace existing knowledge. When provided, all existing data will
               be removed from the knowledge and replaced with these files. Supported media
               types are `pdf`, `json`, `csv`, `text`, `png`, `jpeg`, `excel`, `google sheets`,
-              `docx`, `pptx`.
+              `docx`, `pptx`. Cannot be used together with `sync` in the same request.
 
           name: The new name for the `knowledge`.
 
           parent: Move the knowledge to a different parent page.
 
-          sync: Sync configuration updates. Note: For multipart/form-data, this should be sent
-              as a JSON string.
+          scope: The visibility scope of the knowledge. 'teamspace' means visible only within the
+              owning teamspace. 'organization' means visible across all teamspaces in the same
+              organization.
+
+          sync: Sync configuration updates for knowledge created from a connection. Note: For
+              multipart/form-data, this should be sent as a JSON string. Cannot be used
+              together with `files` in the same request.
 
           extra_headers: Send extra headers
 
@@ -205,6 +217,7 @@ class KnowledgeResource(SyncAPIResource):
                 "files": files,
                 "name": name,
                 "parent": parent,
+                "scope": scope,
                 "sync": sync,
             }
         )
@@ -214,7 +227,7 @@ class KnowledgeResource(SyncAPIResource):
         # multipart/form-data; boundary=---abc--
         extra_headers = {"Content-Type": "multipart/form-data", **(extra_headers or {})}
         return self._patch(
-            f"/knowledge/{knowledge_id}",
+            path_template("/knowledge/{knowledge_id}", knowledge_id=knowledge_id),
             body=maybe_transform(body, knowledge_update_params.KnowledgeUpdateParams),
             files=extracted_files,
             options=make_request_options(
@@ -254,9 +267,9 @@ class KnowledgeResource(SyncAPIResource):
 
           limit: The limit on the number of objects to return, ranging between 1 and 100.
 
-          parent: Filter knowledge by parent. Pass `{"type":"root"}` to get root-level knowledge,
-              or `{"type":"page","page_id":"page_123"}` to get knowledge nested under a
-              specific page. If not specified, returns all knowledge.
+          parent: Filter by parent. Pass `{"type":"root"}` to get root-level items, or
+              `{"type":"page","page_id":"page_123"}` to get items nested under a specific
+              page. If not specified, returns all items.
 
           extra_headers: Send extra headers
 
@@ -314,7 +327,7 @@ class KnowledgeResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `knowledge_id` but received {knowledge_id!r}")
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return self._delete(
-            f"/knowledge/{knowledge_id}",
+            path_template("/knowledge/{knowledge_id}", knowledge_id=knowledge_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -332,8 +345,12 @@ class KnowledgeResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> RedirectURLResponse:
-        """
-        Create knowledge from connection which will be learned and leveraged by agents.
+        """Initiates knowledge creation from a connection by returning a redirect URL.
+
+        The
+        organization must have enough credits to start this flow. The downstream
+        ingestion and indexing that follow still run asynchronously, and the actual
+        credit consumption remains variable based on the volume of data processed.
 
         Args:
           connection_id: The id of the connection to be used to create the knowledge.
@@ -366,8 +383,13 @@ class KnowledgeResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> None:
-        """
-        Manually trigger a full re-indexing of the knowledge.
+        """Manually trigger a full re-indexing of the knowledge.
+
+        The reindex runs
+        **asynchronously**: the API returns as soon as the job is enqueued. Re-indexing
+        is not performed immediately. This endpoint consumes credits — the actual credit
+        cost is variable, based on the volume of data being re-indexed, and is charged
+        asynchronously as processing completes.
 
         Args:
           extra_headers: Send extra headers
@@ -382,7 +404,7 @@ class KnowledgeResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `knowledge_id` but received {knowledge_id!r}")
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return self._post(
-            f"/knowledge/{knowledge_id}/reindex",
+            path_template("/knowledge/{knowledge_id}/reindex", knowledge_id=knowledge_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -497,7 +519,7 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         if not knowledge_id:
             raise ValueError(f"Expected a non-empty value for `knowledge_id` but received {knowledge_id!r}")
         return await self._get(
-            f"/knowledge/{knowledge_id}",
+            path_template("/knowledge/{knowledge_id}", knowledge_id=knowledge_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -511,6 +533,7 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         files: Optional[SequenceNotStr[FileTypes]] | Omit = omit,
         name: Optional[str] | Omit = omit,
         parent: Optional[knowledge_update_params.Parent] | Omit = omit,
+        scope: Optional[Literal["teamspace", "organization"]] | Omit = omit,
         sync: Optional[knowledge_update_params.Sync] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -519,21 +542,31 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> Knowledge:
-        """
-        Update a knowledge's attributes.
+        """Update a knowledge's attributes.
+
+        Each request can include either `files` or
+        `sync`, but not both. When `files` are provided, all existing data is replaced
+        and a re-processing pipeline runs asynchronously — this consumes credits based
+        on the volume of data processed. Metadata-only and sync-only updates do not
+        consume credits and are not blocked by credit eligibility checks.
 
         Args:
           files: The files to replace existing knowledge. When provided, all existing data will
               be removed from the knowledge and replaced with these files. Supported media
               types are `pdf`, `json`, `csv`, `text`, `png`, `jpeg`, `excel`, `google sheets`,
-              `docx`, `pptx`.
+              `docx`, `pptx`. Cannot be used together with `sync` in the same request.
 
           name: The new name for the `knowledge`.
 
           parent: Move the knowledge to a different parent page.
 
-          sync: Sync configuration updates. Note: For multipart/form-data, this should be sent
-              as a JSON string.
+          scope: The visibility scope of the knowledge. 'teamspace' means visible only within the
+              owning teamspace. 'organization' means visible across all teamspaces in the same
+              organization.
+
+          sync: Sync configuration updates for knowledge created from a connection. Note: For
+              multipart/form-data, this should be sent as a JSON string. Cannot be used
+              together with `files` in the same request.
 
           extra_headers: Send extra headers
 
@@ -550,6 +583,7 @@ class AsyncKnowledgeResource(AsyncAPIResource):
                 "files": files,
                 "name": name,
                 "parent": parent,
+                "scope": scope,
                 "sync": sync,
             }
         )
@@ -559,7 +593,7 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         # multipart/form-data; boundary=---abc--
         extra_headers = {"Content-Type": "multipart/form-data", **(extra_headers or {})}
         return await self._patch(
-            f"/knowledge/{knowledge_id}",
+            path_template("/knowledge/{knowledge_id}", knowledge_id=knowledge_id),
             body=await async_maybe_transform(body, knowledge_update_params.KnowledgeUpdateParams),
             files=extracted_files,
             options=make_request_options(
@@ -599,9 +633,9 @@ class AsyncKnowledgeResource(AsyncAPIResource):
 
           limit: The limit on the number of objects to return, ranging between 1 and 100.
 
-          parent: Filter knowledge by parent. Pass `{"type":"root"}` to get root-level knowledge,
-              or `{"type":"page","page_id":"page_123"}` to get knowledge nested under a
-              specific page. If not specified, returns all knowledge.
+          parent: Filter by parent. Pass `{"type":"root"}` to get root-level items, or
+              `{"type":"page","page_id":"page_123"}` to get items nested under a specific
+              page. If not specified, returns all items.
 
           extra_headers: Send extra headers
 
@@ -659,7 +693,7 @@ class AsyncKnowledgeResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `knowledge_id` but received {knowledge_id!r}")
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return await self._delete(
-            f"/knowledge/{knowledge_id}",
+            path_template("/knowledge/{knowledge_id}", knowledge_id=knowledge_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -677,8 +711,12 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> RedirectURLResponse:
-        """
-        Create knowledge from connection which will be learned and leveraged by agents.
+        """Initiates knowledge creation from a connection by returning a redirect URL.
+
+        The
+        organization must have enough credits to start this flow. The downstream
+        ingestion and indexing that follow still run asynchronously, and the actual
+        credit consumption remains variable based on the volume of data processed.
 
         Args:
           connection_id: The id of the connection to be used to create the knowledge.
@@ -713,8 +751,13 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> None:
-        """
-        Manually trigger a full re-indexing of the knowledge.
+        """Manually trigger a full re-indexing of the knowledge.
+
+        The reindex runs
+        **asynchronously**: the API returns as soon as the job is enqueued. Re-indexing
+        is not performed immediately. This endpoint consumes credits — the actual credit
+        cost is variable, based on the volume of data being re-indexed, and is charged
+        asynchronously as processing completes.
 
         Args:
           extra_headers: Send extra headers
@@ -729,7 +772,7 @@ class AsyncKnowledgeResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `knowledge_id` but received {knowledge_id!r}")
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return await self._post(
-            f"/knowledge/{knowledge_id}/reindex",
+            path_template("/knowledge/{knowledge_id}/reindex", knowledge_id=knowledge_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),

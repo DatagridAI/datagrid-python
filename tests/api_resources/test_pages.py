@@ -17,6 +17,7 @@ base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
 class TestPages:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
+    skip_list = pytest.mark.skip("Prism does not correctly validate oneOf query parameter schemas; all list endpoint requests are rejected regardless of whether `parent` is provided")
 
     @parametrize
     def test_method_create(self, client: Datagrid) -> None:
@@ -114,6 +115,7 @@ class TestPages:
                 "page_id": "page_id",
                 "type": "page",
             },
+            scope="teamspace",
         )
         assert_matches_type(Page, page, path=["response"])
 
@@ -149,11 +151,13 @@ class TestPages:
             )
 
     @parametrize
+    @skip_list
     def test_method_list(self, client: Datagrid) -> None:
         page = client.pages.list()
         assert_matches_type(SyncCursorIDPage[Page], page, path=["response"])
 
     @parametrize
+    @skip_list
     def test_method_list_with_all_params(self, client: Datagrid) -> None:
         page = client.pages.list(
             after="after",
@@ -167,6 +171,7 @@ class TestPages:
         assert_matches_type(SyncCursorIDPage[Page], page, path=["response"])
 
     @parametrize
+    @skip_list
     def test_raw_response_list(self, client: Datagrid) -> None:
         response = client.pages.with_raw_response.list()
 
@@ -176,6 +181,7 @@ class TestPages:
         assert_matches_type(SyncCursorIDPage[Page], page, path=["response"])
 
     @parametrize
+    @skip_list
     def test_streaming_response_list(self, client: Datagrid) -> None:
         with client.pages.with_streaming_response.list() as response:
             assert not response.is_closed
@@ -229,6 +235,7 @@ class TestAsyncPages:
     parametrize = pytest.mark.parametrize(
         "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
     )
+    skip_list = pytest.mark.skip("Prism does not correctly validate oneOf query parameter schemas; all list endpoint requests are rejected regardless of whether `parent` is provided")
 
     @parametrize
     async def test_method_create(self, async_client: AsyncDatagrid) -> None:
@@ -326,6 +333,7 @@ class TestAsyncPages:
                 "page_id": "page_id",
                 "type": "page",
             },
+            scope="teamspace",
         )
         assert_matches_type(Page, page, path=["response"])
 
@@ -361,11 +369,13 @@ class TestAsyncPages:
             )
 
     @parametrize
+    @skip_list
     async def test_method_list(self, async_client: AsyncDatagrid) -> None:
         page = await async_client.pages.list()
         assert_matches_type(AsyncCursorIDPage[Page], page, path=["response"])
 
     @parametrize
+    @skip_list
     async def test_method_list_with_all_params(self, async_client: AsyncDatagrid) -> None:
         page = await async_client.pages.list(
             after="after",
@@ -379,6 +389,7 @@ class TestAsyncPages:
         assert_matches_type(AsyncCursorIDPage[Page], page, path=["response"])
 
     @parametrize
+    @skip_list
     async def test_raw_response_list(self, async_client: AsyncDatagrid) -> None:
         response = await async_client.pages.with_raw_response.list()
 
@@ -388,6 +399,7 @@ class TestAsyncPages:
         assert_matches_type(AsyncCursorIDPage[Page], page, path=["response"])
 
     @parametrize
+    @skip_list
     async def test_streaming_response_list(self, async_client: AsyncDatagrid) -> None:
         async with async_client.pages.with_streaming_response.list() as response:
             assert not response.is_closed

@@ -32,6 +32,14 @@ from .tools import (
     ToolsResourceWithStreamingResponse,
     AsyncToolsResourceWithStreamingResponse,
 )
+from .voice import (
+    VoiceResource,
+    AsyncVoiceResource,
+    VoiceResourceWithRawResponse,
+    AsyncVoiceResourceWithRawResponse,
+    VoiceResourceWithStreamingResponse,
+    AsyncVoiceResourceWithStreamingResponse,
+)
 from .agents import (
     AgentsResource,
     AsyncAgentsResource,
@@ -63,6 +71,14 @@ from .secrets import (
     AsyncSecretsResourceWithRawResponse,
     SecretsResourceWithStreamingResponse,
     AsyncSecretsResourceWithStreamingResponse,
+)
+from .identity import (
+    IdentityResource,
+    AsyncIdentityResource,
+    IdentityResourceWithRawResponse,
+    AsyncIdentityResourceWithRawResponse,
+    IdentityResourceWithStreamingResponse,
+    AsyncIdentityResourceWithStreamingResponse,
 )
 from .knowledge import (
     KnowledgeResource,
@@ -112,6 +128,14 @@ from .conversations import (
     ConversationsResourceWithStreamingResponse,
     AsyncConversationsResourceWithStreamingResponse,
 )
+from .connection_providers import (
+    ConnectionProvidersResource,
+    AsyncConnectionProvidersResource,
+    ConnectionProvidersResourceWithRawResponse,
+    AsyncConnectionProvidersResourceWithRawResponse,
+    ConnectionProvidersResourceWithStreamingResponse,
+    AsyncConnectionProvidersResourceWithStreamingResponse,
+)
 
 __all__ = [
     "KnowledgeResource",
@@ -126,6 +150,12 @@ __all__ = [
     "AsyncConnectionsResourceWithRawResponse",
     "ConnectionsResourceWithStreamingResponse",
     "AsyncConnectionsResourceWithStreamingResponse",
+    "ConnectionProvidersResource",
+    "AsyncConnectionProvidersResource",
+    "ConnectionProvidersResourceWithRawResponse",
+    "AsyncConnectionProvidersResourceWithRawResponse",
+    "ConnectionProvidersResourceWithStreamingResponse",
+    "AsyncConnectionProvidersResourceWithStreamingResponse",
     "ConnectorsResource",
     "AsyncConnectorsResource",
     "ConnectorsResourceWithRawResponse",
@@ -156,6 +186,12 @@ __all__ = [
     "AsyncAgentsResourceWithRawResponse",
     "AgentsResourceWithStreamingResponse",
     "AsyncAgentsResourceWithStreamingResponse",
+    "IdentityResource",
+    "AsyncIdentityResource",
+    "IdentityResourceWithRawResponse",
+    "AsyncIdentityResourceWithRawResponse",
+    "IdentityResourceWithStreamingResponse",
+    "AsyncIdentityResourceWithStreamingResponse",
     "PagesResource",
     "AsyncPagesResource",
     "PagesResourceWithRawResponse",
@@ -198,4 +234,10 @@ __all__ = [
     "AsyncBetaResourceWithRawResponse",
     "BetaResourceWithStreamingResponse",
     "AsyncBetaResourceWithStreamingResponse",
+    "VoiceResource",
+    "AsyncVoiceResource",
+    "VoiceResourceWithRawResponse",
+    "AsyncVoiceResourceWithRawResponse",
+    "VoiceResourceWithStreamingResponse",
+    "AsyncVoiceResourceWithStreamingResponse",
 ]

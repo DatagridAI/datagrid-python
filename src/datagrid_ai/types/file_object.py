@@ -1,11 +1,19 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
+from typing import Optional
 from datetime import datetime
 from typing_extensions import Literal
 
 from .._models import BaseModel
 
-__all__ = ["FileObject"]
+__all__ = ["FileObject", "Credits"]
+
+
+class Credits(BaseModel):
+    """Credit consumption for this file upload. `null` when the billing lookup fails."""
+
+    consumed: float
+    """The number of credits consumed by the operation."""
 
 
 class FileObject(BaseModel):
@@ -25,3 +33,12 @@ class FileObject(BaseModel):
 
     object: Literal["file"]
     """The object type, which is always `file`."""
+
+    credits: Optional[Credits] = None
+    """Credit consumption for this file upload. `null` when the billing lookup fails."""
+
+    expires_at: Optional[datetime] = None
+    """
+    The ISO timestamp when the file will expire and be automatically deleted, or
+    null if the file does not expire.
+    """

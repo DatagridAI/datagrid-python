@@ -3,12 +3,18 @@
 from __future__ import annotations
 
 from typing import Optional
+from typing_extensions import Literal
 
 import httpx
 
-from ...types import conversation_list_params, conversation_create_params
-from ..._types import Body, Omit, Query, Headers, NoneType, NotGiven, omit, not_given
-from ..._utils import maybe_transform, async_maybe_transform
+from ...types import (
+    ConversationSortField,
+    conversation_list_params,
+    conversation_create_params,
+    conversation_update_params,
+)
+from ..._types import Body, Omit, Query, Headers, NoneType, NotGiven, SequenceNotStr, omit, not_given
+from ..._utils import path_template, maybe_transform, async_maybe_transform
 from .messages import (
     MessagesResource,
     AsyncMessagesResource,
@@ -28,6 +34,7 @@ from ..._response import (
 from ...pagination import SyncCursorIDPage, AsyncCursorIDPage
 from ..._base_client import AsyncPaginator, make_request_options
 from ...types.conversation import Conversation
+from ...types.conversation_sort_field import ConversationSortField
 
 __all__ = ["ConversationsResource", "AsyncConversationsResource"]
 
@@ -116,7 +123,54 @@ class ConversationsResource(SyncAPIResource):
         if not conversation_id:
             raise ValueError(f"Expected a non-empty value for `conversation_id` but received {conversation_id!r}")
         return self._get(
-            f"/conversations/{conversation_id}",
+            path_template("/conversations/{conversation_id}", conversation_id=conversation_id),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=Conversation,
+        )
+
+    def update(
+        self,
+        conversation_id: str,
+        *,
+        agent_ids: SequenceNotStr[str] | Omit = omit,
+        name: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> Conversation:
+        """
+        Update a conversation's properties, such as assigned agents or name.
+
+        Args:
+          agent_ids: Replace the list of agents assigned to this conversation. Pass an empty array to
+              clear all agent assignments.
+
+          name: Update the conversation name.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not conversation_id:
+            raise ValueError(f"Expected a non-empty value for `conversation_id` but received {conversation_id!r}")
+        return self._patch(
+            path_template("/conversations/{conversation_id}", conversation_id=conversation_id),
+            body=maybe_transform(
+                {
+                    "agent_ids": agent_ids,
+                    "name": name,
+                },
+                conversation_update_params.ConversationUpdateParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -128,7 +182,9 @@ class ConversationsResource(SyncAPIResource):
         *,
         after: str | Omit = omit,
         before: str | Omit = omit,
+        direction: Literal["asc", "desc"] | Omit = omit,
         limit: int | Omit = omit,
+        sort: ConversationSortField | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -151,7 +207,11 @@ class ConversationsResource(SyncAPIResource):
               starting with `obj_bar`, your subsequent call can include `before=obj_bar` to
               fetch the previous page of the list.
 
+          direction: The direction to sort the results.
+
           limit: The limit on the number of objects to return, ranging between 1 and 100.
+
+          sort: The field to sort the conversations by.
 
           extra_headers: Send extra headers
 
@@ -173,7 +233,9 @@ class ConversationsResource(SyncAPIResource):
                     {
                         "after": after,
                         "before": before,
+                        "direction": direction,
                         "limit": limit,
+                        "sort": sort,
                     },
                     conversation_list_params.ConversationListParams,
                 ),
@@ -208,7 +270,7 @@ class ConversationsResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `conversation_id` but received {conversation_id!r}")
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return self._delete(
-            f"/conversations/{conversation_id}",
+            path_template("/conversations/{conversation_id}", conversation_id=conversation_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -300,7 +362,54 @@ class AsyncConversationsResource(AsyncAPIResource):
         if not conversation_id:
             raise ValueError(f"Expected a non-empty value for `conversation_id` but received {conversation_id!r}")
         return await self._get(
-            f"/conversations/{conversation_id}",
+            path_template("/conversations/{conversation_id}", conversation_id=conversation_id),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=Conversation,
+        )
+
+    async def update(
+        self,
+        conversation_id: str,
+        *,
+        agent_ids: SequenceNotStr[str] | Omit = omit,
+        name: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> Conversation:
+        """
+        Update a conversation's properties, such as assigned agents or name.
+
+        Args:
+          agent_ids: Replace the list of agents assigned to this conversation. Pass an empty array to
+              clear all agent assignments.
+
+          name: Update the conversation name.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not conversation_id:
+            raise ValueError(f"Expected a non-empty value for `conversation_id` but received {conversation_id!r}")
+        return await self._patch(
+            path_template("/conversations/{conversation_id}", conversation_id=conversation_id),
+            body=await async_maybe_transform(
+                {
+                    "agent_ids": agent_ids,
+                    "name": name,
+                },
+                conversation_update_params.ConversationUpdateParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -312,7 +421,9 @@ class AsyncConversationsResource(AsyncAPIResource):
         *,
         after: str | Omit = omit,
         before: str | Omit = omit,
+        direction: Literal["asc", "desc"] | Omit = omit,
         limit: int | Omit = omit,
+        sort: ConversationSortField | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -335,7 +446,11 @@ class AsyncConversationsResource(AsyncAPIResource):
               starting with `obj_bar`, your subsequent call can include `before=obj_bar` to
               fetch the previous page of the list.
 
+          direction: The direction to sort the results.
+
           limit: The limit on the number of objects to return, ranging between 1 and 100.
+
+          sort: The field to sort the conversations by.
 
           extra_headers: Send extra headers
 
@@ -357,7 +472,9 @@ class AsyncConversationsResource(AsyncAPIResource):
                     {
                         "after": after,
                         "before": before,
+                        "direction": direction,
                         "limit": limit,
+                        "sort": sort,
                     },
                     conversation_list_params.ConversationListParams,
                 ),
@@ -392,7 +509,7 @@ class AsyncConversationsResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `conversation_id` but received {conversation_id!r}")
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return await self._delete(
-            f"/conversations/{conversation_id}",
+            path_template("/conversations/{conversation_id}", conversation_id=conversation_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -409,6 +526,9 @@ class ConversationsResourceWithRawResponse:
         )
         self.retrieve = to_raw_response_wrapper(
             conversations.retrieve,
+        )
+        self.update = to_raw_response_wrapper(
+            conversations.update,
         )
         self.list = to_raw_response_wrapper(
             conversations.list,
@@ -432,6 +552,9 @@ class AsyncConversationsResourceWithRawResponse:
         self.retrieve = async_to_raw_response_wrapper(
             conversations.retrieve,
         )
+        self.update = async_to_raw_response_wrapper(
+            conversations.update,
+        )
         self.list = async_to_raw_response_wrapper(
             conversations.list,
         )
@@ -454,6 +577,9 @@ class ConversationsResourceWithStreamingResponse:
         self.retrieve = to_streamed_response_wrapper(
             conversations.retrieve,
         )
+        self.update = to_streamed_response_wrapper(
+            conversations.update,
+        )
         self.list = to_streamed_response_wrapper(
             conversations.list,
         )
@@ -475,6 +601,9 @@ class AsyncConversationsResourceWithStreamingResponse:
         )
         self.retrieve = async_to_streamed_response_wrapper(
             conversations.retrieve,
+        )
+        self.update = async_to_streamed_response_wrapper(
+            conversations.update,
         )
         self.list = async_to_streamed_response_wrapper(
             conversations.list,

@@ -3,12 +3,13 @@
 from __future__ import annotations
 
 from typing import Optional
+from typing_extensions import Literal
 
 import httpx
 
 from ..types import page_list_params, page_create_params, page_update_params
 from .._types import Body, Omit, Query, Headers, NoneType, NotGiven, omit, not_given
-from .._utils import maybe_transform, async_maybe_transform
+from .._utils import path_template, maybe_transform, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
 from .._response import (
@@ -114,7 +115,7 @@ class PagesResource(SyncAPIResource):
         if not page_id:
             raise ValueError(f"Expected a non-empty value for `page_id` but received {page_id!r}")
         return self._get(
-            f"/pages/{page_id}",
+            path_template("/pages/{page_id}", page_id=page_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -127,6 +128,7 @@ class PagesResource(SyncAPIResource):
         *,
         name: Optional[str] | Omit = omit,
         parent: Optional[page_update_params.Parent] | Omit = omit,
+        scope: Optional[Literal["teamspace", "organization"]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -142,6 +144,10 @@ class PagesResource(SyncAPIResource):
 
           parent: Move the page to a different parent.
 
+          scope: The visibility scope of the knowledge. 'teamspace' means visible only within the
+              owning teamspace. 'organization' means visible across all teamspaces in the same
+              organization.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -153,11 +159,12 @@ class PagesResource(SyncAPIResource):
         if not page_id:
             raise ValueError(f"Expected a non-empty value for `page_id` but received {page_id!r}")
         return self._patch(
-            f"/pages/{page_id}",
+            path_template("/pages/{page_id}", page_id=page_id),
             body=maybe_transform(
                 {
                     "name": name,
                     "parent": parent,
+                    "scope": scope,
                 },
                 page_update_params.PageUpdateParams,
             ),
@@ -197,9 +204,9 @@ class PagesResource(SyncAPIResource):
 
           limit: The limit on the number of objects to return, ranging between 1 and 100.
 
-          parent: Filter pages by parent. Pass `{"type":"root"}` to get root-level pages, or
-              `{"type":"page","page_id":"page_123"}` to get pages nested under a specific
-              page. If not specified, returns all pages.
+          parent: Filter by parent. Pass `{"type":"root"}` to get root-level items, or
+              `{"type":"page","page_id":"page_123"}` to get items nested under a specific
+              page. If not specified, returns all items.
 
           extra_headers: Send extra headers
 
@@ -259,7 +266,7 @@ class PagesResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `page_id` but received {page_id!r}")
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return self._delete(
-            f"/pages/{page_id}",
+            path_template("/pages/{page_id}", page_id=page_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -357,7 +364,7 @@ class AsyncPagesResource(AsyncAPIResource):
         if not page_id:
             raise ValueError(f"Expected a non-empty value for `page_id` but received {page_id!r}")
         return await self._get(
-            f"/pages/{page_id}",
+            path_template("/pages/{page_id}", page_id=page_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -370,6 +377,7 @@ class AsyncPagesResource(AsyncAPIResource):
         *,
         name: Optional[str] | Omit = omit,
         parent: Optional[page_update_params.Parent] | Omit = omit,
+        scope: Optional[Literal["teamspace", "organization"]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -385,6 +393,10 @@ class AsyncPagesResource(AsyncAPIResource):
 
           parent: Move the page to a different parent.
 
+          scope: The visibility scope of the knowledge. 'teamspace' means visible only within the
+              owning teamspace. 'organization' means visible across all teamspaces in the same
+              organization.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -396,11 +408,12 @@ class AsyncPagesResource(AsyncAPIResource):
         if not page_id:
             raise ValueError(f"Expected a non-empty value for `page_id` but received {page_id!r}")
         return await self._patch(
-            f"/pages/{page_id}",
+            path_template("/pages/{page_id}", page_id=page_id),
             body=await async_maybe_transform(
                 {
                     "name": name,
                     "parent": parent,
+                    "scope": scope,
                 },
                 page_update_params.PageUpdateParams,
             ),
@@ -440,9 +453,9 @@ class AsyncPagesResource(AsyncAPIResource):
 
           limit: The limit on the number of objects to return, ranging between 1 and 100.
 
-          parent: Filter pages by parent. Pass `{"type":"root"}` to get root-level pages, or
-              `{"type":"page","page_id":"page_123"}` to get pages nested under a specific
-              page. If not specified, returns all pages.
+          parent: Filter by parent. Pass `{"type":"root"}` to get root-level items, or
+              `{"type":"page","page_id":"page_123"}` to get items nested under a specific
+              page. If not specified, returns all items.
 
           extra_headers: Send extra headers
 
@@ -502,7 +515,7 @@ class AsyncPagesResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `page_id` but received {page_id!r}")
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return await self._delete(
-            f"/pages/{page_id}",
+            path_template("/pages/{page_id}", page_id=page_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),

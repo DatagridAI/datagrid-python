@@ -9,7 +9,7 @@ import httpx
 
 from ..types import tool_list_params
 from .._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
-from .._utils import maybe_transform
+from .._utils import path_template, maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
 from .._response import (
@@ -58,6 +58,7 @@ class ToolsResource(SyncAPIResource):
                 "find_files",
                 "read_file_contents",
                 "file_analysis",
+                "procore_support_index",
                 "calendar",
                 "email",
                 "schedule_recurring_message_tool",
@@ -72,6 +73,7 @@ class ToolsResource(SyncAPIResource):
                 "planner",
                 "webbrowser",
                 "pdf_manipulation",
+                "document_generator",
                 "pdf_generator",
                 "acc",
                 "docusign",
@@ -129,7 +131,7 @@ class ToolsResource(SyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         return self._get(
-            f"/tools/{tool_name}",
+            path_template("/tools/{tool_name}", tool_name=tool_name),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -227,6 +229,7 @@ class AsyncToolsResource(AsyncAPIResource):
                 "find_files",
                 "read_file_contents",
                 "file_analysis",
+                "procore_support_index",
                 "calendar",
                 "email",
                 "schedule_recurring_message_tool",
@@ -241,6 +244,7 @@ class AsyncToolsResource(AsyncAPIResource):
                 "planner",
                 "webbrowser",
                 "pdf_manipulation",
+                "document_generator",
                 "pdf_generator",
                 "acc",
                 "docusign",
@@ -298,7 +302,7 @@ class AsyncToolsResource(AsyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         return await self._get(
-            f"/tools/{tool_name}",
+            path_template("/tools/{tool_name}", tool_name=tool_name),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),

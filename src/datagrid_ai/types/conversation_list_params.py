@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
-from typing_extensions import TypedDict
+from typing_extensions import Literal, TypedDict
+
+from .conversation_sort_field import ConversationSortField
 
 __all__ = ["ConversationListParams"]
 
@@ -25,5 +27,11 @@ class ConversationListParams(TypedDict, total=False):
     list.
     """
 
+    direction: Literal["asc", "desc"]
+    """The direction to sort the results."""
+
     limit: int
     """The limit on the number of objects to return, ranging between 1 and 100."""
+
+    sort: ConversationSortField
+    """The field to sort the conversations by."""

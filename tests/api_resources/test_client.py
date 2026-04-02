@@ -29,6 +29,7 @@ class TestClient:
         client_ = client.converse(
             prompt="string",
             agent_id="agent_id",
+            agent_routing={"mode": "auto"},
             config={
                 "agent_model": "magpie-1.1",
                 "agent_tools": ["data_analysis"],
@@ -43,12 +44,25 @@ class TestClient:
                 "disabled_tools": ["data_analysis"],
                 "knowledge_ids": ["string"],
                 "llm_model": "gemini-3-pro-preview",
+                "mcp_servers": [
+                    {
+                        "server_id": "server_id",
+                        "server_label": "server_label",
+                        "server_url": "https://example.com",
+                        "type": "inline_mcp",
+                        "authorization": "authorization",
+                        "credential_id": "credential_id",
+                        "server_description": "server_description",
+                    }
+                ],
                 "planning_prompt": "planning_prompt",
                 "system_prompt": "system_prompt",
                 "tools": ["data_analysis"],
             },
             conversation_id="conversation_id",
+            current_view_content="current_view_content",
             generate_citations=True,
+            include_steps=True,
             secret_ids=["string"],
             stream=False,
             text={"format": {}},
@@ -102,6 +116,7 @@ class TestAsyncClient:
         client = await async_client.converse(
             prompt="string",
             agent_id="agent_id",
+            agent_routing={"mode": "auto"},
             config={
                 "agent_model": "magpie-1.1",
                 "agent_tools": ["data_analysis"],
@@ -116,12 +131,25 @@ class TestAsyncClient:
                 "disabled_tools": ["data_analysis"],
                 "knowledge_ids": ["string"],
                 "llm_model": "gemini-3-pro-preview",
+                "mcp_servers": [
+                    {
+                        "server_id": "server_id",
+                        "server_label": "server_label",
+                        "server_url": "https://example.com",
+                        "type": "inline_mcp",
+                        "authorization": "authorization",
+                        "credential_id": "credential_id",
+                        "server_description": "server_description",
+                    }
+                ],
                 "planning_prompt": "planning_prompt",
                 "system_prompt": "system_prompt",
                 "tools": ["data_analysis"],
             },
             conversation_id="conversation_id",
+            current_view_content="current_view_content",
             generate_citations=True,
+            include_steps=True,
             secret_ids=["string"],
             stream=False,
             text={"format": {}},

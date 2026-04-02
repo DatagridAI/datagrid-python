@@ -38,6 +38,12 @@ class TestAgents:
             disabled_tools=["data_analysis"],
             knowledge_ids=["string"],
             llm_model="gemini-3-pro-preview",
+            mcp_servers=[
+                {
+                    "server_id": "server_id",
+                    "credential_id": "credential_id",
+                }
+            ],
             name="name",
             planning_prompt="planning_prompt",
             system_prompt="system_prompt",
@@ -124,8 +130,15 @@ class TestAgents:
             custom_prompt="custom_prompt",
             description="description",
             disabled_tools=["data_analysis"],
+            emoji="emoji",
             knowledge_ids=["string"],
             llm_model="gemini-3-pro-preview",
+            mcp_servers=[
+                {
+                    "server_id": "server_id",
+                    "credential_id": "credential_id",
+                }
+            ],
             name="name",
             planning_prompt="planning_prompt",
             system_prompt="system_prompt",
@@ -175,6 +188,7 @@ class TestAgents:
             after="after",
             before="before",
             limit=1,
+            search="search",
         )
         assert_matches_type(SyncCursorIDPage[Agent], agent, path=["response"])
 
@@ -262,6 +276,12 @@ class TestAsyncAgents:
             disabled_tools=["data_analysis"],
             knowledge_ids=["string"],
             llm_model="gemini-3-pro-preview",
+            mcp_servers=[
+                {
+                    "server_id": "server_id",
+                    "credential_id": "credential_id",
+                }
+            ],
             name="name",
             planning_prompt="planning_prompt",
             system_prompt="system_prompt",
@@ -348,8 +368,15 @@ class TestAsyncAgents:
             custom_prompt="custom_prompt",
             description="description",
             disabled_tools=["data_analysis"],
+            emoji="emoji",
             knowledge_ids=["string"],
             llm_model="gemini-3-pro-preview",
+            mcp_servers=[
+                {
+                    "server_id": "server_id",
+                    "credential_id": "credential_id",
+                }
+            ],
             name="name",
             planning_prompt="planning_prompt",
             system_prompt="system_prompt",
@@ -399,6 +426,7 @@ class TestAsyncAgents:
             after="after",
             before="before",
             limit=1,
+            search="search",
         )
         assert_matches_type(AsyncCursorIDPage[Agent], agent, path=["response"])
 

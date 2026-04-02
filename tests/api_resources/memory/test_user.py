@@ -9,7 +9,7 @@ import pytest
 
 from datagrid_ai import Datagrid, AsyncDatagrid
 from tests.utils import assert_matches_type
-from datagrid_ai.types.memory import UserMemory, UserListResponse
+from datagrid_ai.types.memory import UserListResponse, UserCreateResponse
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -23,7 +23,7 @@ class TestUser:
             agent_id="agent_id",
             memory="memory",
         )
-        assert_matches_type(UserMemory, user, path=["response"])
+        assert_matches_type(UserCreateResponse, user, path=["response"])
 
     @parametrize
     def test_method_create_with_all_params(self, client: Datagrid) -> None:
@@ -33,7 +33,7 @@ class TestUser:
             context="context",
             user_prompt="user_prompt",
         )
-        assert_matches_type(UserMemory, user, path=["response"])
+        assert_matches_type(UserCreateResponse, user, path=["response"])
 
     @parametrize
     def test_raw_response_create(self, client: Datagrid) -> None:
@@ -45,7 +45,7 @@ class TestUser:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         user = response.parse()
-        assert_matches_type(UserMemory, user, path=["response"])
+        assert_matches_type(UserCreateResponse, user, path=["response"])
 
     @parametrize
     def test_streaming_response_create(self, client: Datagrid) -> None:
@@ -57,7 +57,7 @@ class TestUser:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             user = response.parse()
-            assert_matches_type(UserMemory, user, path=["response"])
+            assert_matches_type(UserCreateResponse, user, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -144,7 +144,7 @@ class TestAsyncUser:
             agent_id="agent_id",
             memory="memory",
         )
-        assert_matches_type(UserMemory, user, path=["response"])
+        assert_matches_type(UserCreateResponse, user, path=["response"])
 
     @parametrize
     async def test_method_create_with_all_params(self, async_client: AsyncDatagrid) -> None:
@@ -154,7 +154,7 @@ class TestAsyncUser:
             context="context",
             user_prompt="user_prompt",
         )
-        assert_matches_type(UserMemory, user, path=["response"])
+        assert_matches_type(UserCreateResponse, user, path=["response"])
 
     @parametrize
     async def test_raw_response_create(self, async_client: AsyncDatagrid) -> None:
@@ -166,7 +166,7 @@ class TestAsyncUser:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         user = await response.parse()
-        assert_matches_type(UserMemory, user, path=["response"])
+        assert_matches_type(UserCreateResponse, user, path=["response"])
 
     @parametrize
     async def test_streaming_response_create(self, async_client: AsyncDatagrid) -> None:
@@ -178,7 +178,7 @@ class TestAsyncUser:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             user = await response.parse()
-            assert_matches_type(UserMemory, user, path=["response"])
+            assert_matches_type(UserCreateResponse, user, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 

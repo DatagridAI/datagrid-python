@@ -20,6 +20,14 @@ from .credits import (
 )
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
+from .mcp_servers import (
+    McpServersResource,
+    AsyncMcpServersResource,
+    McpServersResourceWithRawResponse,
+    AsyncMcpServersResourceWithRawResponse,
+    McpServersResourceWithStreamingResponse,
+    AsyncMcpServersResourceWithStreamingResponse,
+)
 from .teamspaces.teamspaces import (
     TeamspacesResource,
     AsyncTeamspacesResource,
@@ -40,6 +48,10 @@ class OrganizationResource(SyncAPIResource):
     @cached_property
     def teamspaces(self) -> TeamspacesResource:
         return TeamspacesResource(self._client)
+
+    @cached_property
+    def mcp_servers(self) -> McpServersResource:
+        return McpServersResource(self._client)
 
     @cached_property
     def credits(self) -> CreditsResource:
@@ -73,6 +85,10 @@ class AsyncOrganizationResource(AsyncAPIResource):
     @cached_property
     def teamspaces(self) -> AsyncTeamspacesResource:
         return AsyncTeamspacesResource(self._client)
+
+    @cached_property
+    def mcp_servers(self) -> AsyncMcpServersResource:
+        return AsyncMcpServersResource(self._client)
 
     @cached_property
     def credits(self) -> AsyncCreditsResource:
@@ -111,6 +127,10 @@ class OrganizationResourceWithRawResponse:
         return TeamspacesResourceWithRawResponse(self._organization.teamspaces)
 
     @cached_property
+    def mcp_servers(self) -> McpServersResourceWithRawResponse:
+        return McpServersResourceWithRawResponse(self._organization.mcp_servers)
+
+    @cached_property
     def credits(self) -> CreditsResourceWithRawResponse:
         return CreditsResourceWithRawResponse(self._organization.credits)
 
@@ -126,6 +146,10 @@ class AsyncOrganizationResourceWithRawResponse:
     @cached_property
     def teamspaces(self) -> AsyncTeamspacesResourceWithRawResponse:
         return AsyncTeamspacesResourceWithRawResponse(self._organization.teamspaces)
+
+    @cached_property
+    def mcp_servers(self) -> AsyncMcpServersResourceWithRawResponse:
+        return AsyncMcpServersResourceWithRawResponse(self._organization.mcp_servers)
 
     @cached_property
     def credits(self) -> AsyncCreditsResourceWithRawResponse:
@@ -145,6 +169,10 @@ class OrganizationResourceWithStreamingResponse:
         return TeamspacesResourceWithStreamingResponse(self._organization.teamspaces)
 
     @cached_property
+    def mcp_servers(self) -> McpServersResourceWithStreamingResponse:
+        return McpServersResourceWithStreamingResponse(self._organization.mcp_servers)
+
+    @cached_property
     def credits(self) -> CreditsResourceWithStreamingResponse:
         return CreditsResourceWithStreamingResponse(self._organization.credits)
 
@@ -160,6 +188,10 @@ class AsyncOrganizationResourceWithStreamingResponse:
     @cached_property
     def teamspaces(self) -> AsyncTeamspacesResourceWithStreamingResponse:
         return AsyncTeamspacesResourceWithStreamingResponse(self._organization.teamspaces)
+
+    @cached_property
+    def mcp_servers(self) -> AsyncMcpServersResourceWithStreamingResponse:
+        return AsyncMcpServersResourceWithStreamingResponse(self._organization.mcp_servers)
 
     @cached_property
     def credits(self) -> AsyncCreditsResourceWithStreamingResponse:
