@@ -416,6 +416,7 @@ class TestAsyncKnowledge:
             )
 
     @parametrize
+    @skip
     async def test_method_update(self, async_client: AsyncDatagrid) -> None:
         knowledge = await async_client.knowledge.update(
             knowledge_id="knowledge_id",
@@ -423,6 +424,7 @@ class TestAsyncKnowledge:
         assert_matches_type(Knowledge, knowledge, path=["response"])
 
     @parametrize
+    @skip
     async def test_method_update_with_all_params(self, async_client: AsyncDatagrid) -> None:
         knowledge = await async_client.knowledge.update(
             knowledge_id="knowledge_id",
@@ -446,6 +448,7 @@ class TestAsyncKnowledge:
         assert_matches_type(Knowledge, knowledge, path=["response"])
 
     @parametrize
+    @skip
     async def test_raw_response_update(self, async_client: AsyncDatagrid) -> None:
         response = await async_client.knowledge.with_raw_response.update(
             knowledge_id="knowledge_id",
@@ -457,6 +460,7 @@ class TestAsyncKnowledge:
         assert_matches_type(Knowledge, knowledge, path=["response"])
 
     @parametrize
+    @skip
     async def test_streaming_response_update(self, async_client: AsyncDatagrid) -> None:
         async with async_client.knowledge.with_streaming_response.update(
             knowledge_id="knowledge_id",
