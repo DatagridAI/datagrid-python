@@ -2,12 +2,13 @@
 
 from __future__ import annotations
 
-from typing import Optional
-from typing_extensions import Literal
-
 import httpx
 
-from ..types import page_list_params, page_create_params, page_update_params
+from ..types import (
+    connection_provider_list_params,
+    connection_provider_create_params,
+    connection_provider_update_params,
+)
 from .._types import Body, Omit, Query, Headers, NoneType, NotGiven, omit, not_given
 from .._utils import maybe_transform, async_maybe_transform
 from .._compat import cached_property
@@ -19,52 +20,59 @@ from .._response import (
     async_to_streamed_response_wrapper,
 )
 from ..pagination import SyncCursorIDPage, AsyncCursorIDPage
-from ..types.page import Page
 from .._base_client import AsyncPaginator, make_request_options
+from ..types.connection_provider import ConnectionProvider
 
-__all__ = ["PagesResource", "AsyncPagesResource"]
+__all__ = ["ConnectionProvidersResource", "AsyncConnectionProvidersResource"]
 
 
-class PagesResource(SyncAPIResource):
+class ConnectionProvidersResource(SyncAPIResource):
     @cached_property
-    def with_raw_response(self) -> PagesResourceWithRawResponse:
+    def with_raw_response(self) -> ConnectionProvidersResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
         For more information, see https://www.github.com/DatagridAI/datagrid-python#accessing-raw-response-data-eg-headers
         """
-        return PagesResourceWithRawResponse(self)
+        return ConnectionProvidersResourceWithRawResponse(self)
 
     @cached_property
-    def with_streaming_response(self) -> PagesResourceWithStreamingResponse:
+    def with_streaming_response(self) -> ConnectionProvidersResourceWithStreamingResponse:
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
         For more information, see https://www.github.com/DatagridAI/datagrid-python#with_streaming_response
         """
-        return PagesResourceWithStreamingResponse(self)
+        return ConnectionProvidersResourceWithStreamingResponse(self)
 
     def create(
         self,
         *,
+        client_id: str,
+        client_secret: str,
+        connector_id: str,
         name: str,
-        parent: Optional[page_create_params.Parent] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> Page:
+    ) -> ConnectionProvider:
         """
-        Create a new page
+        Create a new connection provider that specifies custom OAuth credentials for a
+        connector. Verify that your OAuth app meets the connector's OAuth app settings
+        requirements.
 
         Args:
-          name: The name of the page
+          client_id: The OAuth client ID to use for this connector.
 
-          parent: The parent page to nest this page under. If not provided, the page will be
-              created at the root level.
+          client_secret: The OAuth client secret to use for this connector.
+
+          connector_id: The connector ID this provider is configured for.
+
+          name: The name of the connection provider.
 
           extra_headers: Send extra headers
 
@@ -75,23 +83,25 @@ class PagesResource(SyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         return self._post(
-            "/pages",
+            "/connection-providers",
             body=maybe_transform(
                 {
+                    "client_id": client_id,
+                    "client_secret": client_secret,
+                    "connector_id": connector_id,
                     "name": name,
-                    "parent": parent,
                 },
-                page_create_params.PageCreateParams,
+                connection_provider_create_params.ConnectionProviderCreateParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=Page,
+            cast_to=ConnectionProvider,
         )
 
     def retrieve(
         self,
-        page_id: str,
+        connection_provider_id: str,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -99,9 +109,9 @@ class PagesResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> Page:
+    ) -> ConnectionProvider:
         """
-        Get details of a specific page
+        Retrieve a specific connection provider by ID.
 
         Args:
           extra_headers: Send extra headers
@@ -112,41 +122,41 @@ class PagesResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not page_id:
-            raise ValueError(f"Expected a non-empty value for `page_id` but received {page_id!r}")
+        if not connection_provider_id:
+            raise ValueError(
+                f"Expected a non-empty value for `connection_provider_id` but received {connection_provider_id!r}"
+            )
         return self._get(
-            f"/pages/{page_id}",
+            f"/connection-providers/{connection_provider_id}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=Page,
+            cast_to=ConnectionProvider,
         )
 
     def update(
         self,
-        page_id: str,
+        connection_provider_id: str,
         *,
-        name: Optional[str] | Omit = omit,
-        parent: Optional[page_update_params.Parent] | Omit = omit,
-        scope: Optional[Literal["teamspace", "organization"]] | Omit = omit,
+        client_id: str | Omit = omit,
+        client_secret: str | Omit = omit,
+        name: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> Page:
+    ) -> ConnectionProvider:
         """
-        Update a page's attributes
+        Update a connection provider.
 
         Args:
-          name: The new name for the page
+          client_id: The OAuth client ID to use for this connector.
 
-          parent: Move the page to a different parent.
+          client_secret: The OAuth client secret to use for this connector.
 
-          scope: The visibility scope of the knowledge. 'teamspace' means visible only within the
-              owning teamspace. 'organization' means visible across all teamspaces in the same
-              organization.
+          name: The name of the connection provider.
 
           extra_headers: Send extra headers
 
@@ -156,22 +166,24 @@ class PagesResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not page_id:
-            raise ValueError(f"Expected a non-empty value for `page_id` but received {page_id!r}")
+        if not connection_provider_id:
+            raise ValueError(
+                f"Expected a non-empty value for `connection_provider_id` but received {connection_provider_id!r}"
+            )
         return self._patch(
-            f"/pages/{page_id}",
+            f"/connection-providers/{connection_provider_id}",
             body=maybe_transform(
                 {
+                    "client_id": client_id,
+                    "client_secret": client_secret,
                     "name": name,
-                    "parent": parent,
-                    "scope": scope,
                 },
-                page_update_params.PageUpdateParams,
+                connection_provider_update_params.ConnectionProviderUpdateParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=Page,
+            cast_to=ConnectionProvider,
         )
 
     def list(
@@ -179,17 +191,17 @@ class PagesResource(SyncAPIResource):
         *,
         after: str | Omit = omit,
         before: str | Omit = omit,
+        connector_id: str | Omit = omit,
         limit: int | Omit = omit,
-        parent: page_list_params.Parent | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> SyncCursorIDPage[Page]:
+    ) -> SyncCursorIDPage[ConnectionProvider]:
         """
-        List all pages for the authenticated organization
+        Returns the list of connection providers.
 
         Args:
           after: A cursor to use in pagination. `after` is an object ID that defines your place
@@ -202,11 +214,9 @@ class PagesResource(SyncAPIResource):
               starting with `obj_bar`, your subsequent call can include `before=obj_bar` to
               fetch the previous page of the list.
 
-          limit: The limit on the number of objects to return, ranging between 1 and 100.
+          connector_id: Filter connection providers by connector ID.
 
-          parent: Filter pages by parent. Pass `{"type":"root"}` to get root-level pages, or
-              `{"type":"page","page_id":"page_123"}` to get pages nested under a specific
-              page. If not specified, returns all pages.
+          limit: The limit on the number of objects to return, ranging between 1 and 100.
 
           extra_headers: Send extra headers
 
@@ -217,8 +227,8 @@ class PagesResource(SyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         return self._get_api_list(
-            "/pages",
-            page=SyncCursorIDPage[Page],
+            "/connection-providers",
+            page=SyncCursorIDPage[ConnectionProvider],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -228,18 +238,18 @@ class PagesResource(SyncAPIResource):
                     {
                         "after": after,
                         "before": before,
+                        "connector_id": connector_id,
                         "limit": limit,
-                        "parent": parent,
                     },
-                    page_list_params.PageListParams,
+                    connection_provider_list_params.ConnectionProviderListParams,
                 ),
             ),
-            model=Page,
+            model=ConnectionProvider,
         )
 
     def delete(
         self,
-        page_id: str,
+        connection_provider_id: str,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -248,10 +258,8 @@ class PagesResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> None:
-        """Delete a page.
-
-        The page must have no children or all its children must have been
-        deleted before invoking this API.
+        """
+        Delete a connection provider.
 
         Args:
           extra_headers: Send extra headers
@@ -262,11 +270,13 @@ class PagesResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not page_id:
-            raise ValueError(f"Expected a non-empty value for `page_id` but received {page_id!r}")
+        if not connection_provider_id:
+            raise ValueError(
+                f"Expected a non-empty value for `connection_provider_id` but received {connection_provider_id!r}"
+            )
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return self._delete(
-            f"/pages/{page_id}",
+            f"/connection-providers/{connection_provider_id}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -274,46 +284,53 @@ class PagesResource(SyncAPIResource):
         )
 
 
-class AsyncPagesResource(AsyncAPIResource):
+class AsyncConnectionProvidersResource(AsyncAPIResource):
     @cached_property
-    def with_raw_response(self) -> AsyncPagesResourceWithRawResponse:
+    def with_raw_response(self) -> AsyncConnectionProvidersResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
         For more information, see https://www.github.com/DatagridAI/datagrid-python#accessing-raw-response-data-eg-headers
         """
-        return AsyncPagesResourceWithRawResponse(self)
+        return AsyncConnectionProvidersResourceWithRawResponse(self)
 
     @cached_property
-    def with_streaming_response(self) -> AsyncPagesResourceWithStreamingResponse:
+    def with_streaming_response(self) -> AsyncConnectionProvidersResourceWithStreamingResponse:
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
         For more information, see https://www.github.com/DatagridAI/datagrid-python#with_streaming_response
         """
-        return AsyncPagesResourceWithStreamingResponse(self)
+        return AsyncConnectionProvidersResourceWithStreamingResponse(self)
 
     async def create(
         self,
         *,
+        client_id: str,
+        client_secret: str,
+        connector_id: str,
         name: str,
-        parent: Optional[page_create_params.Parent] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> Page:
+    ) -> ConnectionProvider:
         """
-        Create a new page
+        Create a new connection provider that specifies custom OAuth credentials for a
+        connector. Verify that your OAuth app meets the connector's OAuth app settings
+        requirements.
 
         Args:
-          name: The name of the page
+          client_id: The OAuth client ID to use for this connector.
 
-          parent: The parent page to nest this page under. If not provided, the page will be
-              created at the root level.
+          client_secret: The OAuth client secret to use for this connector.
+
+          connector_id: The connector ID this provider is configured for.
+
+          name: The name of the connection provider.
 
           extra_headers: Send extra headers
 
@@ -324,23 +341,25 @@ class AsyncPagesResource(AsyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         return await self._post(
-            "/pages",
+            "/connection-providers",
             body=await async_maybe_transform(
                 {
+                    "client_id": client_id,
+                    "client_secret": client_secret,
+                    "connector_id": connector_id,
                     "name": name,
-                    "parent": parent,
                 },
-                page_create_params.PageCreateParams,
+                connection_provider_create_params.ConnectionProviderCreateParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=Page,
+            cast_to=ConnectionProvider,
         )
 
     async def retrieve(
         self,
-        page_id: str,
+        connection_provider_id: str,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -348,9 +367,9 @@ class AsyncPagesResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> Page:
+    ) -> ConnectionProvider:
         """
-        Get details of a specific page
+        Retrieve a specific connection provider by ID.
 
         Args:
           extra_headers: Send extra headers
@@ -361,41 +380,41 @@ class AsyncPagesResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not page_id:
-            raise ValueError(f"Expected a non-empty value for `page_id` but received {page_id!r}")
+        if not connection_provider_id:
+            raise ValueError(
+                f"Expected a non-empty value for `connection_provider_id` but received {connection_provider_id!r}"
+            )
         return await self._get(
-            f"/pages/{page_id}",
+            f"/connection-providers/{connection_provider_id}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=Page,
+            cast_to=ConnectionProvider,
         )
 
     async def update(
         self,
-        page_id: str,
+        connection_provider_id: str,
         *,
-        name: Optional[str] | Omit = omit,
-        parent: Optional[page_update_params.Parent] | Omit = omit,
-        scope: Optional[Literal["teamspace", "organization"]] | Omit = omit,
+        client_id: str | Omit = omit,
+        client_secret: str | Omit = omit,
+        name: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> Page:
+    ) -> ConnectionProvider:
         """
-        Update a page's attributes
+        Update a connection provider.
 
         Args:
-          name: The new name for the page
+          client_id: The OAuth client ID to use for this connector.
 
-          parent: Move the page to a different parent.
+          client_secret: The OAuth client secret to use for this connector.
 
-          scope: The visibility scope of the knowledge. 'teamspace' means visible only within the
-              owning teamspace. 'organization' means visible across all teamspaces in the same
-              organization.
+          name: The name of the connection provider.
 
           extra_headers: Send extra headers
 
@@ -405,22 +424,24 @@ class AsyncPagesResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not page_id:
-            raise ValueError(f"Expected a non-empty value for `page_id` but received {page_id!r}")
+        if not connection_provider_id:
+            raise ValueError(
+                f"Expected a non-empty value for `connection_provider_id` but received {connection_provider_id!r}"
+            )
         return await self._patch(
-            f"/pages/{page_id}",
+            f"/connection-providers/{connection_provider_id}",
             body=await async_maybe_transform(
                 {
+                    "client_id": client_id,
+                    "client_secret": client_secret,
                     "name": name,
-                    "parent": parent,
-                    "scope": scope,
                 },
-                page_update_params.PageUpdateParams,
+                connection_provider_update_params.ConnectionProviderUpdateParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=Page,
+            cast_to=ConnectionProvider,
         )
 
     def list(
@@ -428,17 +449,17 @@ class AsyncPagesResource(AsyncAPIResource):
         *,
         after: str | Omit = omit,
         before: str | Omit = omit,
+        connector_id: str | Omit = omit,
         limit: int | Omit = omit,
-        parent: page_list_params.Parent | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> AsyncPaginator[Page, AsyncCursorIDPage[Page]]:
+    ) -> AsyncPaginator[ConnectionProvider, AsyncCursorIDPage[ConnectionProvider]]:
         """
-        List all pages for the authenticated organization
+        Returns the list of connection providers.
 
         Args:
           after: A cursor to use in pagination. `after` is an object ID that defines your place
@@ -451,11 +472,9 @@ class AsyncPagesResource(AsyncAPIResource):
               starting with `obj_bar`, your subsequent call can include `before=obj_bar` to
               fetch the previous page of the list.
 
-          limit: The limit on the number of objects to return, ranging between 1 and 100.
+          connector_id: Filter connection providers by connector ID.
 
-          parent: Filter pages by parent. Pass `{"type":"root"}` to get root-level pages, or
-              `{"type":"page","page_id":"page_123"}` to get pages nested under a specific
-              page. If not specified, returns all pages.
+          limit: The limit on the number of objects to return, ranging between 1 and 100.
 
           extra_headers: Send extra headers
 
@@ -466,8 +485,8 @@ class AsyncPagesResource(AsyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         return self._get_api_list(
-            "/pages",
-            page=AsyncCursorIDPage[Page],
+            "/connection-providers",
+            page=AsyncCursorIDPage[ConnectionProvider],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -477,18 +496,18 @@ class AsyncPagesResource(AsyncAPIResource):
                     {
                         "after": after,
                         "before": before,
+                        "connector_id": connector_id,
                         "limit": limit,
-                        "parent": parent,
                     },
-                    page_list_params.PageListParams,
+                    connection_provider_list_params.ConnectionProviderListParams,
                 ),
             ),
-            model=Page,
+            model=ConnectionProvider,
         )
 
     async def delete(
         self,
-        page_id: str,
+        connection_provider_id: str,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -497,10 +516,8 @@ class AsyncPagesResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> None:
-        """Delete a page.
-
-        The page must have no children or all its children must have been
-        deleted before invoking this API.
+        """
+        Delete a connection provider.
 
         Args:
           extra_headers: Send extra headers
@@ -511,11 +528,13 @@ class AsyncPagesResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not page_id:
-            raise ValueError(f"Expected a non-empty value for `page_id` but received {page_id!r}")
+        if not connection_provider_id:
+            raise ValueError(
+                f"Expected a non-empty value for `connection_provider_id` but received {connection_provider_id!r}"
+            )
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return await self._delete(
-            f"/pages/{page_id}",
+            f"/connection-providers/{connection_provider_id}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -523,85 +542,85 @@ class AsyncPagesResource(AsyncAPIResource):
         )
 
 
-class PagesResourceWithRawResponse:
-    def __init__(self, pages: PagesResource) -> None:
-        self._pages = pages
+class ConnectionProvidersResourceWithRawResponse:
+    def __init__(self, connection_providers: ConnectionProvidersResource) -> None:
+        self._connection_providers = connection_providers
 
         self.create = to_raw_response_wrapper(
-            pages.create,
+            connection_providers.create,
         )
         self.retrieve = to_raw_response_wrapper(
-            pages.retrieve,
+            connection_providers.retrieve,
         )
         self.update = to_raw_response_wrapper(
-            pages.update,
+            connection_providers.update,
         )
         self.list = to_raw_response_wrapper(
-            pages.list,
+            connection_providers.list,
         )
         self.delete = to_raw_response_wrapper(
-            pages.delete,
+            connection_providers.delete,
         )
 
 
-class AsyncPagesResourceWithRawResponse:
-    def __init__(self, pages: AsyncPagesResource) -> None:
-        self._pages = pages
+class AsyncConnectionProvidersResourceWithRawResponse:
+    def __init__(self, connection_providers: AsyncConnectionProvidersResource) -> None:
+        self._connection_providers = connection_providers
 
         self.create = async_to_raw_response_wrapper(
-            pages.create,
+            connection_providers.create,
         )
         self.retrieve = async_to_raw_response_wrapper(
-            pages.retrieve,
+            connection_providers.retrieve,
         )
         self.update = async_to_raw_response_wrapper(
-            pages.update,
+            connection_providers.update,
         )
         self.list = async_to_raw_response_wrapper(
-            pages.list,
+            connection_providers.list,
         )
         self.delete = async_to_raw_response_wrapper(
-            pages.delete,
+            connection_providers.delete,
         )
 
 
-class PagesResourceWithStreamingResponse:
-    def __init__(self, pages: PagesResource) -> None:
-        self._pages = pages
+class ConnectionProvidersResourceWithStreamingResponse:
+    def __init__(self, connection_providers: ConnectionProvidersResource) -> None:
+        self._connection_providers = connection_providers
 
         self.create = to_streamed_response_wrapper(
-            pages.create,
+            connection_providers.create,
         )
         self.retrieve = to_streamed_response_wrapper(
-            pages.retrieve,
+            connection_providers.retrieve,
         )
         self.update = to_streamed_response_wrapper(
-            pages.update,
+            connection_providers.update,
         )
         self.list = to_streamed_response_wrapper(
-            pages.list,
+            connection_providers.list,
         )
         self.delete = to_streamed_response_wrapper(
-            pages.delete,
+            connection_providers.delete,
         )
 
 
-class AsyncPagesResourceWithStreamingResponse:
-    def __init__(self, pages: AsyncPagesResource) -> None:
-        self._pages = pages
+class AsyncConnectionProvidersResourceWithStreamingResponse:
+    def __init__(self, connection_providers: AsyncConnectionProvidersResource) -> None:
+        self._connection_providers = connection_providers
 
         self.create = async_to_streamed_response_wrapper(
-            pages.create,
+            connection_providers.create,
         )
         self.retrieve = async_to_streamed_response_wrapper(
-            pages.retrieve,
+            connection_providers.retrieve,
         )
         self.update = async_to_streamed_response_wrapper(
-            pages.update,
+            connection_providers.update,
         )
         self.list = async_to_streamed_response_wrapper(
-            pages.list,
+            connection_providers.list,
         )
         self.delete = async_to_streamed_response_wrapper(
-            pages.delete,
+            connection_providers.delete,
         )

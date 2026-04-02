@@ -29,6 +29,14 @@ class TestConnections:
         assert_matches_type(RedirectURLResponse, connection, path=["response"])
 
     @parametrize
+    def test_method_create_with_all_params(self, client: Datagrid) -> None:
+        connection = client.connections.create(
+            connector_id="connector_id",
+            connection_provider_id="connection_provider_id",
+        )
+        assert_matches_type(RedirectURLResponse, connection, path=["response"])
+
+    @parametrize
     def test_raw_response_create(self, client: Datagrid) -> None:
         response = client.connections.with_raw_response.create(
             connector_id="connector_id",
@@ -215,6 +223,14 @@ class TestAsyncConnections:
     async def test_method_create(self, async_client: AsyncDatagrid) -> None:
         connection = await async_client.connections.create(
             connector_id="connector_id",
+        )
+        assert_matches_type(RedirectURLResponse, connection, path=["response"])
+
+    @parametrize
+    async def test_method_create_with_all_params(self, async_client: AsyncDatagrid) -> None:
+        connection = await async_client.connections.create(
+            connector_id="connector_id",
+            connection_provider_id="connection_provider_id",
         )
         assert_matches_type(RedirectURLResponse, connection, path=["response"])
 

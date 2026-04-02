@@ -76,6 +76,22 @@ Methods:
 - <code title="get /connections">client.connections.<a href="./src/datagrid_ai/resources/connections.py">list</a>(\*\*<a href="src/datagrid_ai/types/connection_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/connection.py">SyncCursorIDPage[Connection]</a></code>
 - <code title="delete /connections/{connection_id}">client.connections.<a href="./src/datagrid_ai/resources/connections.py">delete</a>(connection_id) -> None</code>
 
+# ConnectionProviders
+
+Types:
+
+```python
+from datagrid_ai.types import ConnectionProvider
+```
+
+Methods:
+
+- <code title="post /connection-providers">client.connection_providers.<a href="./src/datagrid_ai/resources/connection_providers.py">create</a>(\*\*<a href="src/datagrid_ai/types/connection_provider_create_params.py">params</a>) -> <a href="./src/datagrid_ai/types/connection_provider.py">ConnectionProvider</a></code>
+- <code title="get /connection-providers/{connection_provider_id}">client.connection_providers.<a href="./src/datagrid_ai/resources/connection_providers.py">retrieve</a>(connection_provider_id) -> <a href="./src/datagrid_ai/types/connection_provider.py">ConnectionProvider</a></code>
+- <code title="patch /connection-providers/{connection_provider_id}">client.connection_providers.<a href="./src/datagrid_ai/resources/connection_providers.py">update</a>(connection_provider_id, \*\*<a href="src/datagrid_ai/types/connection_provider_update_params.py">params</a>) -> <a href="./src/datagrid_ai/types/connection_provider.py">ConnectionProvider</a></code>
+- <code title="get /connection-providers">client.connection_providers.<a href="./src/datagrid_ai/resources/connection_providers.py">list</a>(\*\*<a href="src/datagrid_ai/types/connection_provider_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/connection_provider.py">SyncCursorIDPage[ConnectionProvider]</a></code>
+- <code title="delete /connection-providers/{connection_provider_id}">client.connection_providers.<a href="./src/datagrid_ai/resources/connection_providers.py">delete</a>(connection_provider_id) -> None</code>
+
 # Connectors
 
 Types:
@@ -290,7 +306,7 @@ Methods:
 Types:
 
 ```python
-from datagrid_ai.types import Conversation
+from datagrid_ai.types import Conversation, ConversationSortField
 ```
 
 Methods:

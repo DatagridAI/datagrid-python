@@ -112,6 +112,14 @@ from .conversations import (
     ConversationsResourceWithStreamingResponse,
     AsyncConversationsResourceWithStreamingResponse,
 )
+from .connection_providers import (
+    ConnectionProvidersResource,
+    AsyncConnectionProvidersResource,
+    ConnectionProvidersResourceWithRawResponse,
+    AsyncConnectionProvidersResourceWithRawResponse,
+    ConnectionProvidersResourceWithStreamingResponse,
+    AsyncConnectionProvidersResourceWithStreamingResponse,
+)
 
 __all__ = [
     "KnowledgeResource",
@@ -126,6 +134,12 @@ __all__ = [
     "AsyncConnectionsResourceWithRawResponse",
     "ConnectionsResourceWithStreamingResponse",
     "AsyncConnectionsResourceWithStreamingResponse",
+    "ConnectionProvidersResource",
+    "AsyncConnectionProvidersResource",
+    "ConnectionProvidersResourceWithRawResponse",
+    "AsyncConnectionProvidersResourceWithRawResponse",
+    "ConnectionProvidersResourceWithStreamingResponse",
+    "AsyncConnectionProvidersResourceWithStreamingResponse",
     "ConnectorsResource",
     "AsyncConnectorsResource",
     "ConnectorsResourceWithRawResponse",

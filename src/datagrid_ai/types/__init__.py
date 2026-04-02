@@ -34,6 +34,7 @@ from .secret_list_params import SecretListParams as SecretListParams
 from .agent_create_params import AgentCreateParams as AgentCreateParams
 from .agent_update_params import AgentUpdateParams as AgentUpdateParams
 from .attachment_metadata import AttachmentMetadata as AttachmentMetadata
+from .connection_provider import ConnectionProvider as ConnectionProvider
 from .search_search_params import SearchSearchParams as SearchSearchParams
 from .secret_create_params import SecretCreateParams as SecretCreateParams
 from .connector_list_params import ConnectorListParams as ConnectorListParams
@@ -44,6 +45,7 @@ from .client_converse_params import ClientConverseParams as ClientConverseParams
 from .connection_list_params import ConnectionListParams as ConnectionListParams
 from .search_result_resource import SearchResultResource as SearchResultResource
 from .search_search_response import SearchSearchResponse as SearchSearchResponse
+from .conversation_sort_field import ConversationSortField as ConversationSortField
 from .data_view_create_params import DataViewCreateParams as DataViewCreateParams
 from .data_view_list_response import DataViewListResponse as DataViewListResponse
 from .knowledge_create_params import KnowledgeCreateParams as KnowledgeCreateParams
@@ -54,3 +56,6 @@ from .conversation_list_params import ConversationListParams as ConversationList
 from .knowledge_connect_params import KnowledgeConnectParams as KnowledgeConnectParams
 from .conversation_create_params import ConversationCreateParams as ConversationCreateParams
 from .search_result_resource_type import SearchResultResourceType as SearchResultResourceType
+from .connection_provider_list_params import ConnectionProviderListParams as ConnectionProviderListParams
+from .connection_provider_create_params import ConnectionProviderCreateParams as ConnectionProviderCreateParams
+from .connection_provider_update_params import ConnectionProviderUpdateParams as ConnectionProviderUpdateParams

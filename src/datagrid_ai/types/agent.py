@@ -60,6 +60,9 @@ class Agent(BaseModel):
     description: Optional[str] = None
     """The description of the agent"""
 
+    emoji: Optional[str] = None
+    """The emoji of the agent"""
+
     knowledge_ids: Optional[List[str]] = None
     """Deprecated, use corpus instead.
 

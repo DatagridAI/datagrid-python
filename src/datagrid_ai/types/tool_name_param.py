@@ -32,6 +32,7 @@ ToolNameParam: TypeAlias = Union[
         "planner",
         "webbrowser",
         "pdf_manipulation",
+        "document_generator",
         "pdf_generator",
         "acc",
         "docusign",

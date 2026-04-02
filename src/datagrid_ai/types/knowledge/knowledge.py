@@ -99,6 +99,13 @@ class Knowledge(BaseModel):
     row_counts: RowCounts
     """Row count statistics for the knowledge."""
 
+    scope: Literal["teamspace", "organization"]
+    """The visibility scope of the knowledge.
+
+    'teamspace' means visible only within the owning teamspace. 'organization' means
+    visible across all teamspaces in the same organization.
+    """
+
     status: Literal["pending", "partial", "ready"]
     """
     The current knowledge status can be one of three values: `pending`, `partial`,
@@ -111,6 +118,9 @@ class Knowledge(BaseModel):
 
     sync: Optional[Sync] = None
     """Sync information for knowledge that syncs data from a connection"""
+
+    teamspace_id: str
+    """The ID of the teamspace that owns this knowledge."""
 
     credits: Optional[Credits] = None
 
