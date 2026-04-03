@@ -32,7 +32,7 @@ class TestClient:
             agent_routing={"mode": "auto"},
             config={
                 "agent_model": "magpie-1.1",
-                "agent_tools": ["data_analysis"],
+                "agent_tools": ["string"],
                 "corpus": [
                     {
                         "knowledge_id": "knowledge_id",
@@ -40,8 +40,8 @@ class TestClient:
                     }
                 ],
                 "custom_prompt": "custom_prompt",
-                "disabled_agent_tools": ["data_analysis"],
-                "disabled_tools": ["data_analysis"],
+                "disabled_agent_tools": ["string"],
+                "disabled_tools": ["string"],
                 "knowledge_ids": ["string"],
                 "llm_model": "gemini-3-pro-preview",
                 "mcp_servers": [
@@ -57,7 +57,7 @@ class TestClient:
                 ],
                 "planning_prompt": "planning_prompt",
                 "system_prompt": "system_prompt",
-                "tools": ["data_analysis"],
+                "tools": ["string"],
             },
             conversation_id="conversation_id",
             current_view_content="current_view_content",
@@ -119,7 +119,7 @@ class TestAsyncClient:
             agent_routing={"mode": "auto"},
             config={
                 "agent_model": "magpie-1.1",
-                "agent_tools": ["data_analysis"],
+                "agent_tools": ["string"],
                 "corpus": [
                     {
                         "knowledge_id": "knowledge_id",
@@ -127,8 +127,8 @@ class TestAsyncClient:
                     }
                 ],
                 "custom_prompt": "custom_prompt",
-                "disabled_agent_tools": ["data_analysis"],
-                "disabled_tools": ["data_analysis"],
+                "disabled_agent_tools": ["string"],
+                "disabled_tools": ["string"],
                 "knowledge_ids": ["string"],
                 "llm_model": "gemini-3-pro-preview",
                 "mcp_servers": [
@@ -144,7 +144,7 @@ class TestAsyncClient:
                 ],
                 "planning_prompt": "planning_prompt",
                 "system_prompt": "system_prompt",
-                "tools": ["data_analysis"],
+                "tools": ["string"],
             },
             conversation_id="conversation_id",
             current_view_content="current_view_content",

@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
-from typing import List, Union, Iterable, Optional
+from typing import Union, Iterable, Optional
 from typing_extensions import Literal, Required, TypeAlias, TypedDict
 
 from .._types import SequenceNotStr
+from .tool_name import ToolName
 from .tool_param import ToolParam
 
 __all__ = [
@@ -59,7 +60,7 @@ class AgentCreateParams(TypedDict, total=False):
     description: Optional[str]
     """The description of the agent"""
 
-    disabled_tools: Optional[List[DisabledTool]]
+    disabled_tools: Optional[SequenceNotStr[DisabledTool]]
     """Array of the agent tools to disable.
 
     Disabling is performed after the 'agent_tools' rules are applied. For example,
@@ -120,7 +121,7 @@ class AgentCreateParams(TypedDict, total=False):
     system_prompt: Optional[str]
     """Directs your AI Agent's operational behavior."""
 
-    tools: Optional[List[Tool]]
+    tools: Optional[SequenceNotStr[Tool]]
     """Array of the agent tools to enable.
 
     If not provided, or null is provided - default tools of the agent are used. If
@@ -196,70 +197,7 @@ class CorpusCorpusPageItem(TypedDict, total=False):
 
 Corpus: TypeAlias = Union[CorpusCorpusKnowledgeItem, CorpusCorpusPageItem]
 
-DisabledTool: TypeAlias = Union[
-    Literal[
-        "data_analysis",
-        "semantic_search",
-        "agent_memory",
-        "schema_info",
-        "table_info",
-        "create_dataset",
-        "find_files",
-        "read_file_contents",
-        "file_analysis",
-        "procore_support_index",
-        "calendar",
-        "email",
-        "schedule_recurring_message_tool",
-        "procore",
-        "egnyte",
-        "notion",
-        "slack",
-        "microsoft_teams",
-        "sharepoint",
-        "drive",
-        "fieldwire",
-        "planner",
-        "webbrowser",
-        "pdf_manipulation",
-        "document_generator",
-        "pdf_generator",
-        "acc",
-        "docusign",
-        "webflow",
-        "hubspot",
-        "nec",
-        "github",
-        "trimble_project_site",
-        "trimble",
-        "linkedin",
-        "google_docs",
-        "google_slides",
-        "google_sheets",
-        "avoma",
-        "content_writer",
-        "code_tool",
-        "data_classification",
-        "data_extraction",
-        "image_detection",
-        "attachment_extraction",
-        "pdf_extraction",
-        "pdf_page_info",
-        "youtube_video_analysis",
-        "calculate",
-        "pdf_form_filling",
-        "image_generator",
-        "video_generator",
-        "connect_data",
-        "download_data",
-        "web_search",
-        "fetch_url",
-        "company_prospect_researcher",
-        "people_prospect_researcher",
-    ],
-    str,
-    ToolParam,
-]
+DisabledTool: TypeAlias = Union[ToolName, ToolParam]
 
 
 class McpServer(TypedDict, total=False):
@@ -268,67 +206,4 @@ class McpServer(TypedDict, total=False):
     credential_id: Optional[str]
 
 
-Tool: TypeAlias = Union[
-    Literal[
-        "data_analysis",
-        "semantic_search",
-        "agent_memory",
-        "schema_info",
-        "table_info",
-        "create_dataset",
-        "find_files",
-        "read_file_contents",
-        "file_analysis",
-        "procore_support_index",
-        "calendar",
-        "email",
-        "schedule_recurring_message_tool",
-        "procore",
-        "egnyte",
-        "notion",
-        "slack",
-        "microsoft_teams",
-        "sharepoint",
-        "drive",
-        "fieldwire",
-        "planner",
-        "webbrowser",
-        "pdf_manipulation",
-        "document_generator",
-        "pdf_generator",
-        "acc",
-        "docusign",
-        "webflow",
-        "hubspot",
-        "nec",
-        "github",
-        "trimble_project_site",
-        "trimble",
-        "linkedin",
-        "google_docs",
-        "google_slides",
-        "google_sheets",
-        "avoma",
-        "content_writer",
-        "code_tool",
-        "data_classification",
-        "data_extraction",
-        "image_detection",
-        "attachment_extraction",
-        "pdf_extraction",
-        "pdf_page_info",
-        "youtube_video_analysis",
-        "calculate",
-        "pdf_form_filling",
-        "image_generator",
-        "video_generator",
-        "connect_data",
-        "download_data",
-        "web_search",
-        "fetch_url",
-        "company_prospect_researcher",
-        "people_prospect_researcher",
-    ],
-    str,
-    ToolParam,
-]
+Tool: TypeAlias = Union[ToolName, ToolParam]

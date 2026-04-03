@@ -5,13 +5,14 @@ from __future__ import annotations
 from typing import Optional
 from typing_extensions import Required, TypedDict
 
-from .tool_name_param import ToolNameParam
+from .tool_name import ToolName
 
 __all__ = ["ToolParam"]
 
 
 class ToolParam(TypedDict, total=False):
-    name: Required[ToolNameParam]
+    name: Required[ToolName]
+    """The unique identifier for a tool."""
 
     connection_id: Optional[str]
     """The ID of the connection to use for the tool."""

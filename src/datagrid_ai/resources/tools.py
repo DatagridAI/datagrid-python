@@ -2,12 +2,9 @@
 
 from __future__ import annotations
 
-from typing import Union
-from typing_extensions import Literal
-
 import httpx
 
-from ..types import tool_list_params
+from ..types import ToolName, tool_list_params
 from .._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from .._utils import path_template, maybe_transform
 from .._compat import cached_property
@@ -21,6 +18,7 @@ from .._response import (
 from ..pagination import SyncCursorNamePage, AsyncCursorNamePage
 from .._base_client import AsyncPaginator, make_request_options
 from ..types.tool_def import ToolDef
+from ..types.tool_name import ToolName
 
 __all__ = ["ToolsResource", "AsyncToolsResource"]
 
@@ -47,69 +45,7 @@ class ToolsResource(SyncAPIResource):
 
     def retrieve(
         self,
-        tool_name: Union[
-            Literal[
-                "data_analysis",
-                "semantic_search",
-                "agent_memory",
-                "schema_info",
-                "table_info",
-                "create_dataset",
-                "find_files",
-                "read_file_contents",
-                "file_analysis",
-                "procore_support_index",
-                "calendar",
-                "email",
-                "schedule_recurring_message_tool",
-                "procore",
-                "egnyte",
-                "notion",
-                "slack",
-                "microsoft_teams",
-                "sharepoint",
-                "drive",
-                "fieldwire",
-                "planner",
-                "webbrowser",
-                "pdf_manipulation",
-                "document_generator",
-                "pdf_generator",
-                "acc",
-                "docusign",
-                "webflow",
-                "hubspot",
-                "nec",
-                "github",
-                "trimble_project_site",
-                "trimble",
-                "linkedin",
-                "google_docs",
-                "google_slides",
-                "google_sheets",
-                "avoma",
-                "content_writer",
-                "code_tool",
-                "data_classification",
-                "data_extraction",
-                "image_detection",
-                "attachment_extraction",
-                "pdf_extraction",
-                "pdf_page_info",
-                "youtube_video_analysis",
-                "calculate",
-                "pdf_form_filling",
-                "image_generator",
-                "video_generator",
-                "connect_data",
-                "download_data",
-                "web_search",
-                "fetch_url",
-                "company_prospect_researcher",
-                "people_prospect_researcher",
-            ],
-            str,
-        ],
+        tool_name: ToolName,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -122,6 +58,8 @@ class ToolsResource(SyncAPIResource):
         Retrieves a specific tool by its identifier.
 
         Args:
+          tool_name: The unique identifier for a tool.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -130,6 +68,8 @@ class ToolsResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
+        if not tool_name:
+            raise ValueError(f"Expected a non-empty value for `tool_name` but received {tool_name!r}")
         return self._get(
             path_template("/tools/{tool_name}", tool_name=tool_name),
             options=make_request_options(
@@ -218,69 +158,7 @@ class AsyncToolsResource(AsyncAPIResource):
 
     async def retrieve(
         self,
-        tool_name: Union[
-            Literal[
-                "data_analysis",
-                "semantic_search",
-                "agent_memory",
-                "schema_info",
-                "table_info",
-                "create_dataset",
-                "find_files",
-                "read_file_contents",
-                "file_analysis",
-                "procore_support_index",
-                "calendar",
-                "email",
-                "schedule_recurring_message_tool",
-                "procore",
-                "egnyte",
-                "notion",
-                "slack",
-                "microsoft_teams",
-                "sharepoint",
-                "drive",
-                "fieldwire",
-                "planner",
-                "webbrowser",
-                "pdf_manipulation",
-                "document_generator",
-                "pdf_generator",
-                "acc",
-                "docusign",
-                "webflow",
-                "hubspot",
-                "nec",
-                "github",
-                "trimble_project_site",
-                "trimble",
-                "linkedin",
-                "google_docs",
-                "google_slides",
-                "google_sheets",
-                "avoma",
-                "content_writer",
-                "code_tool",
-                "data_classification",
-                "data_extraction",
-                "image_detection",
-                "attachment_extraction",
-                "pdf_extraction",
-                "pdf_page_info",
-                "youtube_video_analysis",
-                "calculate",
-                "pdf_form_filling",
-                "image_generator",
-                "video_generator",
-                "connect_data",
-                "download_data",
-                "web_search",
-                "fetch_url",
-                "company_prospect_researcher",
-                "people_prospect_researcher",
-            ],
-            str,
-        ],
+        tool_name: ToolName,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -293,6 +171,8 @@ class AsyncToolsResource(AsyncAPIResource):
         Retrieves a specific tool by its identifier.
 
         Args:
+          tool_name: The unique identifier for a tool.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -301,6 +181,8 @@ class AsyncToolsResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
+        if not tool_name:
+            raise ValueError(f"Expected a non-empty value for `tool_name` but received {tool_name!r}")
         return await self._get(
             path_template("/tools/{tool_name}", tool_name=tool_name),
             options=make_request_options(

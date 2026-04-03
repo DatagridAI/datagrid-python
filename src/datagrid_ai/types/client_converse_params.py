@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
-from typing import List, Union, Iterable, Optional
+from typing import Union, Iterable, Optional
 from typing_extensions import Literal, Required, TypeAlias, TypedDict
 
 from .._types import SequenceNotStr
+from .tool_name import ToolName
 from .tool_param import ToolParam
 
 __all__ = [
@@ -227,70 +228,7 @@ AgentRoutingManualTargetAgentConfigWithIDCorpus: TypeAlias = Union[
     AgentRoutingManualTargetAgentConfigWithIDCorpusCorpusPageItem,
 ]
 
-AgentRoutingManualTargetAgentConfigWithIDDisabledTool: TypeAlias = Union[
-    Literal[
-        "data_analysis",
-        "semantic_search",
-        "agent_memory",
-        "schema_info",
-        "table_info",
-        "create_dataset",
-        "find_files",
-        "read_file_contents",
-        "file_analysis",
-        "procore_support_index",
-        "calendar",
-        "email",
-        "schedule_recurring_message_tool",
-        "procore",
-        "egnyte",
-        "notion",
-        "slack",
-        "microsoft_teams",
-        "sharepoint",
-        "drive",
-        "fieldwire",
-        "planner",
-        "webbrowser",
-        "pdf_manipulation",
-        "document_generator",
-        "pdf_generator",
-        "acc",
-        "docusign",
-        "webflow",
-        "hubspot",
-        "nec",
-        "github",
-        "trimble_project_site",
-        "trimble",
-        "linkedin",
-        "google_docs",
-        "google_slides",
-        "google_sheets",
-        "avoma",
-        "content_writer",
-        "code_tool",
-        "data_classification",
-        "data_extraction",
-        "image_detection",
-        "attachment_extraction",
-        "pdf_extraction",
-        "pdf_page_info",
-        "youtube_video_analysis",
-        "calculate",
-        "pdf_form_filling",
-        "image_generator",
-        "video_generator",
-        "connect_data",
-        "download_data",
-        "web_search",
-        "fetch_url",
-        "company_prospect_researcher",
-        "people_prospect_researcher",
-    ],
-    str,
-    ToolParam,
-]
+AgentRoutingManualTargetAgentConfigWithIDDisabledTool: TypeAlias = Union[ToolName, ToolParam]
 
 
 class AgentRoutingManualTargetAgentConfigWithIDMcpServer(TypedDict, total=False):
@@ -299,70 +237,7 @@ class AgentRoutingManualTargetAgentConfigWithIDMcpServer(TypedDict, total=False)
     credential_id: Optional[str]
 
 
-AgentRoutingManualTargetAgentConfigWithIDTool: TypeAlias = Union[
-    Literal[
-        "data_analysis",
-        "semantic_search",
-        "agent_memory",
-        "schema_info",
-        "table_info",
-        "create_dataset",
-        "find_files",
-        "read_file_contents",
-        "file_analysis",
-        "procore_support_index",
-        "calendar",
-        "email",
-        "schedule_recurring_message_tool",
-        "procore",
-        "egnyte",
-        "notion",
-        "slack",
-        "microsoft_teams",
-        "sharepoint",
-        "drive",
-        "fieldwire",
-        "planner",
-        "webbrowser",
-        "pdf_manipulation",
-        "document_generator",
-        "pdf_generator",
-        "acc",
-        "docusign",
-        "webflow",
-        "hubspot",
-        "nec",
-        "github",
-        "trimble_project_site",
-        "trimble",
-        "linkedin",
-        "google_docs",
-        "google_slides",
-        "google_sheets",
-        "avoma",
-        "content_writer",
-        "code_tool",
-        "data_classification",
-        "data_extraction",
-        "image_detection",
-        "attachment_extraction",
-        "pdf_extraction",
-        "pdf_page_info",
-        "youtube_video_analysis",
-        "calculate",
-        "pdf_form_filling",
-        "image_generator",
-        "video_generator",
-        "connect_data",
-        "download_data",
-        "web_search",
-        "fetch_url",
-        "company_prospect_researcher",
-        "people_prospect_researcher",
-    ],
-    str,
-    ToolParam,
-]
+AgentRoutingManualTargetAgentConfigWithIDTool: TypeAlias = Union[ToolName, ToolParam]
 
 
 class AgentRoutingManualTargetAgentConfigWithID(TypedDict, total=False):
@@ -405,7 +280,7 @@ class AgentRoutingManualTargetAgentConfigWithID(TypedDict, total=False):
     custom_prompt: Optional[str]
     """Use custom prompt to instruct the style and formatting of the agent's response"""
 
-    disabled_tools: Optional[List[AgentRoutingManualTargetAgentConfigWithIDDisabledTool]]
+    disabled_tools: Optional[SequenceNotStr[AgentRoutingManualTargetAgentConfigWithIDDisabledTool]]
     """Array of the agent tools to disable.
 
     Disabling is performed after the 'agent_tools' rules are applied. For example,
@@ -463,7 +338,7 @@ class AgentRoutingManualTargetAgentConfigWithID(TypedDict, total=False):
     system_prompt: Optional[str]
     """Directs your AI Agent's operational behavior."""
 
-    tools: Optional[List[AgentRoutingManualTargetAgentConfigWithIDTool]]
+    tools: Optional[SequenceNotStr[AgentRoutingManualTargetAgentConfigWithIDTool]]
     """Array of the agent tools to enable.
 
     If not provided, or null is provided - default tools of the agent are used. If
@@ -539,70 +414,7 @@ class AgentRoutingManual(TypedDict, total=False):
 
 AgentRouting: TypeAlias = Union[AgentRoutingAuto, AgentRoutingManual]
 
-ConfigAgentTool: TypeAlias = Union[
-    Literal[
-        "data_analysis",
-        "semantic_search",
-        "agent_memory",
-        "schema_info",
-        "table_info",
-        "create_dataset",
-        "find_files",
-        "read_file_contents",
-        "file_analysis",
-        "procore_support_index",
-        "calendar",
-        "email",
-        "schedule_recurring_message_tool",
-        "procore",
-        "egnyte",
-        "notion",
-        "slack",
-        "microsoft_teams",
-        "sharepoint",
-        "drive",
-        "fieldwire",
-        "planner",
-        "webbrowser",
-        "pdf_manipulation",
-        "document_generator",
-        "pdf_generator",
-        "acc",
-        "docusign",
-        "webflow",
-        "hubspot",
-        "nec",
-        "github",
-        "trimble_project_site",
-        "trimble",
-        "linkedin",
-        "google_docs",
-        "google_slides",
-        "google_sheets",
-        "avoma",
-        "content_writer",
-        "code_tool",
-        "data_classification",
-        "data_extraction",
-        "image_detection",
-        "attachment_extraction",
-        "pdf_extraction",
-        "pdf_page_info",
-        "youtube_video_analysis",
-        "calculate",
-        "pdf_form_filling",
-        "image_generator",
-        "video_generator",
-        "connect_data",
-        "download_data",
-        "web_search",
-        "fetch_url",
-        "company_prospect_researcher",
-        "people_prospect_researcher",
-    ],
-    str,
-    ToolParam,
-]
+ConfigAgentTool: TypeAlias = Union[ToolName, ToolParam]
 
 
 class ConfigCorpusCorpusKnowledgeItem(TypedDict, total=False):
@@ -623,135 +435,9 @@ class ConfigCorpusCorpusPageItem(TypedDict, total=False):
 
 ConfigCorpus: TypeAlias = Union[ConfigCorpusCorpusKnowledgeItem, ConfigCorpusCorpusPageItem]
 
-ConfigDisabledAgentTool: TypeAlias = Union[
-    Literal[
-        "data_analysis",
-        "semantic_search",
-        "agent_memory",
-        "schema_info",
-        "table_info",
-        "create_dataset",
-        "find_files",
-        "read_file_contents",
-        "file_analysis",
-        "procore_support_index",
-        "calendar",
-        "email",
-        "schedule_recurring_message_tool",
-        "procore",
-        "egnyte",
-        "notion",
-        "slack",
-        "microsoft_teams",
-        "sharepoint",
-        "drive",
-        "fieldwire",
-        "planner",
-        "webbrowser",
-        "pdf_manipulation",
-        "document_generator",
-        "pdf_generator",
-        "acc",
-        "docusign",
-        "webflow",
-        "hubspot",
-        "nec",
-        "github",
-        "trimble_project_site",
-        "trimble",
-        "linkedin",
-        "google_docs",
-        "google_slides",
-        "google_sheets",
-        "avoma",
-        "content_writer",
-        "code_tool",
-        "data_classification",
-        "data_extraction",
-        "image_detection",
-        "attachment_extraction",
-        "pdf_extraction",
-        "pdf_page_info",
-        "youtube_video_analysis",
-        "calculate",
-        "pdf_form_filling",
-        "image_generator",
-        "video_generator",
-        "connect_data",
-        "download_data",
-        "web_search",
-        "fetch_url",
-        "company_prospect_researcher",
-        "people_prospect_researcher",
-    ],
-    str,
-    ToolParam,
-]
+ConfigDisabledAgentTool: TypeAlias = Union[ToolName, ToolParam]
 
-ConfigDisabledTool: TypeAlias = Union[
-    Literal[
-        "data_analysis",
-        "semantic_search",
-        "agent_memory",
-        "schema_info",
-        "table_info",
-        "create_dataset",
-        "find_files",
-        "read_file_contents",
-        "file_analysis",
-        "procore_support_index",
-        "calendar",
-        "email",
-        "schedule_recurring_message_tool",
-        "procore",
-        "egnyte",
-        "notion",
-        "slack",
-        "microsoft_teams",
-        "sharepoint",
-        "drive",
-        "fieldwire",
-        "planner",
-        "webbrowser",
-        "pdf_manipulation",
-        "document_generator",
-        "pdf_generator",
-        "acc",
-        "docusign",
-        "webflow",
-        "hubspot",
-        "nec",
-        "github",
-        "trimble_project_site",
-        "trimble",
-        "linkedin",
-        "google_docs",
-        "google_slides",
-        "google_sheets",
-        "avoma",
-        "content_writer",
-        "code_tool",
-        "data_classification",
-        "data_extraction",
-        "image_detection",
-        "attachment_extraction",
-        "pdf_extraction",
-        "pdf_page_info",
-        "youtube_video_analysis",
-        "calculate",
-        "pdf_form_filling",
-        "image_generator",
-        "video_generator",
-        "connect_data",
-        "download_data",
-        "web_search",
-        "fetch_url",
-        "company_prospect_researcher",
-        "people_prospect_researcher",
-    ],
-    str,
-    ToolParam,
-]
+ConfigDisabledTool: TypeAlias = Union[ToolName, ToolParam]
 
 
 class ConfigMcpServer(TypedDict, total=False):
@@ -781,70 +467,7 @@ class ConfigMcpServer(TypedDict, total=False):
     """Optional description of what this MCP server provides."""
 
 
-ConfigTool: TypeAlias = Union[
-    Literal[
-        "data_analysis",
-        "semantic_search",
-        "agent_memory",
-        "schema_info",
-        "table_info",
-        "create_dataset",
-        "find_files",
-        "read_file_contents",
-        "file_analysis",
-        "procore_support_index",
-        "calendar",
-        "email",
-        "schedule_recurring_message_tool",
-        "procore",
-        "egnyte",
-        "notion",
-        "slack",
-        "microsoft_teams",
-        "sharepoint",
-        "drive",
-        "fieldwire",
-        "planner",
-        "webbrowser",
-        "pdf_manipulation",
-        "document_generator",
-        "pdf_generator",
-        "acc",
-        "docusign",
-        "webflow",
-        "hubspot",
-        "nec",
-        "github",
-        "trimble_project_site",
-        "trimble",
-        "linkedin",
-        "google_docs",
-        "google_slides",
-        "google_sheets",
-        "avoma",
-        "content_writer",
-        "code_tool",
-        "data_classification",
-        "data_extraction",
-        "image_detection",
-        "attachment_extraction",
-        "pdf_extraction",
-        "pdf_page_info",
-        "youtube_video_analysis",
-        "calculate",
-        "pdf_form_filling",
-        "image_generator",
-        "video_generator",
-        "connect_data",
-        "download_data",
-        "web_search",
-        "fetch_url",
-        "company_prospect_researcher",
-        "people_prospect_researcher",
-    ],
-    str,
-    ToolParam,
-]
+ConfigTool: TypeAlias = Union[ToolName, ToolParam]
 
 
 class Config(TypedDict, total=False):
@@ -880,7 +503,7 @@ class Config(TypedDict, total=False):
     Can also accept any custom string value for future model versions.
     """
 
-    agent_tools: Optional[List[ConfigAgentTool]]
+    agent_tools: Optional[SequenceNotStr[ConfigAgentTool]]
     """Deprecated, use tools instead"""
 
     corpus: Optional[Iterable[ConfigCorpus]]
@@ -892,13 +515,13 @@ class Config(TypedDict, total=False):
     custom_prompt: Optional[str]
     """Use custom prompt to instruct the style and formatting of the agent's response"""
 
-    disabled_agent_tools: Optional[List[ConfigDisabledAgentTool]]
+    disabled_agent_tools: Optional[SequenceNotStr[ConfigDisabledAgentTool]]
     """Deprecated, use disabled_tools instead.
 
     If not provided - no tools are disabled.
     """
 
-    disabled_tools: Optional[List[ConfigDisabledTool]]
+    disabled_tools: Optional[SequenceNotStr[ConfigDisabledTool]]
     """Array of the agent tools to disable.
 
     Disabling is performed after the 'agent_tools' rules are applied. For example,
@@ -965,7 +588,7 @@ class Config(TypedDict, total=False):
     system_prompt: Optional[str]
     """Directs your AI Agent's operational behavior."""
 
-    tools: Optional[List[ConfigTool]]
+    tools: Optional[SequenceNotStr[ConfigTool]]
     """Array of the agent tools to enable.
 
     If not provided, or null is provided - default tools of the agent are used. If
