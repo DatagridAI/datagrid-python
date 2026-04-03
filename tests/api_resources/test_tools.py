@@ -21,14 +21,14 @@ class TestTools:
     @parametrize
     def test_method_retrieve(self, client: Datagrid) -> None:
         tool = client.tools.retrieve(
-            "data_analysis",
+            "string",
         )
         assert_matches_type(ToolDef, tool, path=["response"])
 
     @parametrize
     def test_raw_response_retrieve(self, client: Datagrid) -> None:
         response = client.tools.with_raw_response.retrieve(
-            "data_analysis",
+            "string",
         )
 
         assert response.is_closed is True
@@ -39,7 +39,7 @@ class TestTools:
     @parametrize
     def test_streaming_response_retrieve(self, client: Datagrid) -> None:
         with client.tools.with_streaming_response.retrieve(
-            "data_analysis",
+            "string",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -48,6 +48,13 @@ class TestTools:
             assert_matches_type(ToolDef, tool, path=["response"])
 
         assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    def test_path_params_retrieve(self, client: Datagrid) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `tool_name` but received ''"):
+            client.tools.with_raw_response.retrieve(
+                "",
+            )
 
     @parametrize
     def test_method_list(self, client: Datagrid) -> None:
@@ -92,14 +99,14 @@ class TestAsyncTools:
     @parametrize
     async def test_method_retrieve(self, async_client: AsyncDatagrid) -> None:
         tool = await async_client.tools.retrieve(
-            "data_analysis",
+            "string",
         )
         assert_matches_type(ToolDef, tool, path=["response"])
 
     @parametrize
     async def test_raw_response_retrieve(self, async_client: AsyncDatagrid) -> None:
         response = await async_client.tools.with_raw_response.retrieve(
-            "data_analysis",
+            "string",
         )
 
         assert response.is_closed is True
@@ -110,7 +117,7 @@ class TestAsyncTools:
     @parametrize
     async def test_streaming_response_retrieve(self, async_client: AsyncDatagrid) -> None:
         async with async_client.tools.with_streaming_response.retrieve(
-            "data_analysis",
+            "string",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -119,6 +126,13 @@ class TestAsyncTools:
             assert_matches_type(ToolDef, tool, path=["response"])
 
         assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    async def test_path_params_retrieve(self, async_client: AsyncDatagrid) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `tool_name` but received ''"):
+            await async_client.tools.with_raw_response.retrieve(
+                "",
+            )
 
     @parametrize
     async def test_method_list(self, async_client: AsyncDatagrid) -> None:

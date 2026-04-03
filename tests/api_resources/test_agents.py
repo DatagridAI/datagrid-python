@@ -35,7 +35,7 @@ class TestAgents:
             ],
             custom_prompt="custom_prompt",
             description="description",
-            disabled_tools=["data_analysis"],
+            disabled_tools=["string"],
             knowledge_ids=["string"],
             llm_model="gemini-3-pro-preview",
             mcp_servers=[
@@ -47,7 +47,7 @@ class TestAgents:
             name="name",
             planning_prompt="planning_prompt",
             system_prompt="system_prompt",
-            tools=["data_analysis"],
+            tools=["string"],
         )
         assert_matches_type(Agent, agent, path=["response"])
 
@@ -129,7 +129,7 @@ class TestAgents:
             ],
             custom_prompt="custom_prompt",
             description="description",
-            disabled_tools=["data_analysis"],
+            disabled_tools=["string"],
             emoji="emoji",
             knowledge_ids=["string"],
             llm_model="gemini-3-pro-preview",
@@ -142,7 +142,7 @@ class TestAgents:
             name="name",
             planning_prompt="planning_prompt",
             system_prompt="system_prompt",
-            tools=["data_analysis"],
+            tools=["string"],
         )
         assert_matches_type(Agent, agent, path=["response"])
 
@@ -273,7 +273,7 @@ class TestAsyncAgents:
             ],
             custom_prompt="custom_prompt",
             description="description",
-            disabled_tools=["data_analysis"],
+            disabled_tools=["string"],
             knowledge_ids=["string"],
             llm_model="gemini-3-pro-preview",
             mcp_servers=[
@@ -285,7 +285,7 @@ class TestAsyncAgents:
             name="name",
             planning_prompt="planning_prompt",
             system_prompt="system_prompt",
-            tools=["data_analysis"],
+            tools=["string"],
         )
         assert_matches_type(Agent, agent, path=["response"])
 
@@ -367,7 +367,7 @@ class TestAsyncAgents:
             ],
             custom_prompt="custom_prompt",
             description="description",
-            disabled_tools=["data_analysis"],
+            disabled_tools=["string"],
             emoji="emoji",
             knowledge_ids=["string"],
             llm_model="gemini-3-pro-preview",
@@ -380,7 +380,7 @@ class TestAsyncAgents:
             name="name",
             planning_prompt="planning_prompt",
             system_prompt="system_prompt",
-            tools=["data_analysis"],
+            tools=["string"],
         )
         assert_matches_type(Agent, agent, path=["response"])
 

@@ -10,6 +10,7 @@ __all__ = ["Tool"]
 
 class Tool(BaseModel):
     name: ToolName
+    """The unique identifier for a tool."""
 
     connection_id: Optional[str] = None
     """The ID of the connection to use for the tool."""
