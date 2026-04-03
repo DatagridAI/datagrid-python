@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import List, Union, Iterable, Optional
+from typing import Union, Iterable, Optional
 from typing_extensions import Literal
 
 import httpx
@@ -53,7 +53,7 @@ class AgentsResource(SyncAPIResource):
         corpus: Optional[Iterable[agent_create_params.Corpus]] | Omit = omit,
         custom_prompt: Optional[str] | Omit = omit,
         description: Optional[str] | Omit = omit,
-        disabled_tools: Optional[List[agent_create_params.DisabledTool]] | Omit = omit,
+        disabled_tools: Optional[SequenceNotStr[agent_create_params.DisabledTool]] | Omit = omit,
         knowledge_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         llm_model: Union[
             Literal[
@@ -88,7 +88,7 @@ class AgentsResource(SyncAPIResource):
         name: Optional[str] | Omit = omit,
         planning_prompt: Optional[str] | Omit = omit,
         system_prompt: Optional[str] | Omit = omit,
-        tools: Optional[List[agent_create_params.Tool]] | Omit = omit,
+        tools: Optional[SequenceNotStr[agent_create_params.Tool]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -280,7 +280,7 @@ class AgentsResource(SyncAPIResource):
         corpus: Optional[Iterable[agent_update_params.Corpus]] | Omit = omit,
         custom_prompt: Optional[str] | Omit = omit,
         description: Optional[str] | Omit = omit,
-        disabled_tools: Optional[List[agent_update_params.DisabledTool]] | Omit = omit,
+        disabled_tools: Optional[SequenceNotStr[agent_update_params.DisabledTool]] | Omit = omit,
         emoji: Optional[str] | Omit = omit,
         knowledge_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         llm_model: Union[
@@ -316,7 +316,7 @@ class AgentsResource(SyncAPIResource):
         name: Optional[str] | Omit = omit,
         planning_prompt: Optional[str] | Omit = omit,
         system_prompt: Optional[str] | Omit = omit,
-        tools: Optional[List[agent_update_params.Tool]] | Omit = omit,
+        tools: Optional[SequenceNotStr[agent_update_params.Tool]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -595,7 +595,7 @@ class AsyncAgentsResource(AsyncAPIResource):
         corpus: Optional[Iterable[agent_create_params.Corpus]] | Omit = omit,
         custom_prompt: Optional[str] | Omit = omit,
         description: Optional[str] | Omit = omit,
-        disabled_tools: Optional[List[agent_create_params.DisabledTool]] | Omit = omit,
+        disabled_tools: Optional[SequenceNotStr[agent_create_params.DisabledTool]] | Omit = omit,
         knowledge_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         llm_model: Union[
             Literal[
@@ -630,7 +630,7 @@ class AsyncAgentsResource(AsyncAPIResource):
         name: Optional[str] | Omit = omit,
         planning_prompt: Optional[str] | Omit = omit,
         system_prompt: Optional[str] | Omit = omit,
-        tools: Optional[List[agent_create_params.Tool]] | Omit = omit,
+        tools: Optional[SequenceNotStr[agent_create_params.Tool]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -822,7 +822,7 @@ class AsyncAgentsResource(AsyncAPIResource):
         corpus: Optional[Iterable[agent_update_params.Corpus]] | Omit = omit,
         custom_prompt: Optional[str] | Omit = omit,
         description: Optional[str] | Omit = omit,
-        disabled_tools: Optional[List[agent_update_params.DisabledTool]] | Omit = omit,
+        disabled_tools: Optional[SequenceNotStr[agent_update_params.DisabledTool]] | Omit = omit,
         emoji: Optional[str] | Omit = omit,
         knowledge_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         llm_model: Union[
@@ -858,7 +858,7 @@ class AsyncAgentsResource(AsyncAPIResource):
         name: Optional[str] | Omit = omit,
         planning_prompt: Optional[str] | Omit = omit,
         system_prompt: Optional[str] | Omit = omit,
-        tools: Optional[List[agent_update_params.Tool]] | Omit = omit,
+        tools: Optional[SequenceNotStr[agent_update_params.Tool]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
