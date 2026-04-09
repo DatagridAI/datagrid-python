@@ -83,8 +83,12 @@ class KnowledgeResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> Knowledge:
-        """
-        Create knowledge which will be learned and leveraged by agents.
+        """Create knowledge which will be learned and leveraged by agents.
+
+        Processing
+        continues asynchronously after the request returns. If the background processing
+        run later fails, subsequent retrievals surface that terminal state through
+        `status` and `last_error`.
 
         Args:
           files: The files to be uploaded and learned. Supported media types are `pdf`, `json`,
@@ -182,7 +186,9 @@ class KnowledgeResource(SyncAPIResource):
         `sync`, but not both. When `files` are provided, all existing data is replaced
         and a re-processing pipeline runs asynchronously — this consumes credits based
         on the volume of data processed. Metadata-only and sync-only updates do not
-        consume credits and are not blocked by credit eligibility checks.
+        consume credits and are not blocked by credit eligibility checks. If the
+        asynchronous processing run later fails, subsequent retrievals surface that
+        terminal state through `status` and `last_error`.
 
         Args:
           files: The files to replace existing knowledge. When provided, all existing data will
@@ -389,7 +395,9 @@ class KnowledgeResource(SyncAPIResource):
         **asynchronously**: the API returns as soon as the job is enqueued. Re-indexing
         is not performed immediately. This endpoint consumes credits — the actual credit
         cost is variable, based on the volume of data being re-indexed, and is charged
-        asynchronously as processing completes.
+        asynchronously as processing completes. If the background re-index later fails,
+        subsequent retrievals surface that terminal state through `status` and
+        `last_error`.
 
         Args:
           extra_headers: Send extra headers
@@ -449,8 +457,12 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> Knowledge:
-        """
-        Create knowledge which will be learned and leveraged by agents.
+        """Create knowledge which will be learned and leveraged by agents.
+
+        Processing
+        continues asynchronously after the request returns. If the background processing
+        run later fails, subsequent retrievals surface that terminal state through
+        `status` and `last_error`.
 
         Args:
           files: The files to be uploaded and learned. Supported media types are `pdf`, `json`,
@@ -548,7 +560,9 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         `sync`, but not both. When `files` are provided, all existing data is replaced
         and a re-processing pipeline runs asynchronously — this consumes credits based
         on the volume of data processed. Metadata-only and sync-only updates do not
-        consume credits and are not blocked by credit eligibility checks.
+        consume credits and are not blocked by credit eligibility checks. If the
+        asynchronous processing run later fails, subsequent retrievals surface that
+        terminal state through `status` and `last_error`.
 
         Args:
           files: The files to replace existing knowledge. When provided, all existing data will
@@ -757,7 +771,9 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         **asynchronously**: the API returns as soon as the job is enqueued. Re-indexing
         is not performed immediately. This endpoint consumes credits — the actual credit
         cost is variable, based on the volume of data being re-indexed, and is charged
-        asynchronously as processing completes.
+        asynchronously as processing completes. If the background re-index later fails,
+        subsequent retrievals surface that terminal state through `status` and
+        `last_error`.
 
         Args:
           extra_headers: Send extra headers

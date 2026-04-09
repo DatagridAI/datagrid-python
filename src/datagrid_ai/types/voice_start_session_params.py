@@ -46,6 +46,13 @@ class VoiceStartSessionParams(TypedDict, total=False):
     listening for user input.
     """
 
+    initial_message: Optional[str]
+    """Optional initial user message.
+
+    When provided, the system greeting is skipped and the AI responds directly to
+    this text (e.g. a suggested prompt). Takes precedence over initial_context.
+    """
+
     knowledge_ids: Optional[SequenceNotStr[str]]
     """Array of knowledge IDs to make accessible to the agent."""
 
