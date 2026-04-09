@@ -52,6 +52,7 @@ class VoiceResource(SyncAPIResource):
         ephemeral: Optional[bool] | Omit = omit,
         file_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         initial_context: Optional[str] | Omit = omit,
+        initial_message: Optional[str] | Omit = omit,
         knowledge_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         page_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         secret_ids: Optional[SequenceNotStr[str]] | Omit = omit,
@@ -111,6 +112,10 @@ class VoiceResource(SyncAPIResource):
           initial_context: Optional context text for the voice session. When provided, the AI will start by
               briefly explaining this content before listening for user input.
 
+          initial_message: Optional initial user message. When provided, the system greeting is skipped and
+              the AI responds directly to this text (e.g. a suggested prompt). Takes
+              precedence over initial_context.
+
           knowledge_ids: Array of knowledge IDs to make accessible to the agent.
 
           page_ids: Array of page IDs to make accessible to the agent. The page and all knowledge
@@ -141,6 +146,7 @@ class VoiceResource(SyncAPIResource):
                     "ephemeral": ephemeral,
                     "file_ids": file_ids,
                     "initial_context": initial_context,
+                    "initial_message": initial_message,
                     "knowledge_ids": knowledge_ids,
                     "page_ids": page_ids,
                     "secret_ids": secret_ids,
@@ -185,6 +191,7 @@ class AsyncVoiceResource(AsyncAPIResource):
         ephemeral: Optional[bool] | Omit = omit,
         file_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         initial_context: Optional[str] | Omit = omit,
+        initial_message: Optional[str] | Omit = omit,
         knowledge_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         page_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         secret_ids: Optional[SequenceNotStr[str]] | Omit = omit,
@@ -244,6 +251,10 @@ class AsyncVoiceResource(AsyncAPIResource):
           initial_context: Optional context text for the voice session. When provided, the AI will start by
               briefly explaining this content before listening for user input.
 
+          initial_message: Optional initial user message. When provided, the system greeting is skipped and
+              the AI responds directly to this text (e.g. a suggested prompt). Takes
+              precedence over initial_context.
+
           knowledge_ids: Array of knowledge IDs to make accessible to the agent.
 
           page_ids: Array of page IDs to make accessible to the agent. The page and all knowledge
@@ -274,6 +285,7 @@ class AsyncVoiceResource(AsyncAPIResource):
                     "ephemeral": ephemeral,
                     "file_ids": file_ids,
                     "initial_context": initial_context,
+                    "initial_message": initial_message,
                     "knowledge_ids": knowledge_ids,
                     "page_ids": page_ids,
                     "secret_ids": secret_ids,
