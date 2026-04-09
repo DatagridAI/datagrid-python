@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.11.0 (2026-04-09)
+
+Full Changelog: [v0.10.0...v0.11.0](https://github.com/DatagridAI/datagrid-python/compare/v0.10.0...v0.11.0)
+
+### Features
+
+* **api:** api update ([0aaaabb](https://github.com/DatagridAI/datagrid-python/commit/0aaaabb4fe6686df8b3835a8585e3de9c84071ad))
+
+
+### Bug Fixes
+
+* **client:** preserve hardcoded query params when merging with user params ([870593f](https://github.com/DatagridAI/datagrid-python/commit/870593fcb8e651d3c17cb1679d646a510550dfc4))
+
 ## 0.10.0 (2026-04-03)
 
 Full Changelog: [v0.9.0...v0.10.0](https://github.com/DatagridAI/datagrid-python/compare/v0.9.0...v0.10.0)
