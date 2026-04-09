@@ -6,7 +6,17 @@ from typing_extensions import Literal, TypeAlias
 
 from ..._models import BaseModel
 
-__all__ = ["Knowledge", "Credits", "Parent", "ParentParentPage", "ParentRootPage", "RowCounts", "Sync", "SyncTrigger"]
+__all__ = [
+    "Knowledge",
+    "Credits",
+    "LastError",
+    "Parent",
+    "ParentParentPage",
+    "ParentRootPage",
+    "RowCounts",
+    "Sync",
+    "SyncTrigger",
+]
 
 
 class Credits(BaseModel):
@@ -17,6 +27,19 @@ class Credits(BaseModel):
 
     consumed: float
     """The number of credits consumed by the operation."""
+
+
+class LastError(BaseModel):
+    """The last terminal processing error for this knowledge, if any.
+
+    Present when the latest asynchronous processing or re-index run ended unsuccessfully; `null` when the knowledge is `failed` only because every row ended in a persistent failed state.
+    """
+
+    code: Literal["out_of_credits", "unauthorized", "processing_error"]
+    """A machine-readable error code for the most recent terminal processing failure."""
+
+    message: str
+    """A human-readable description of the most recent terminal processing failure."""
 
 
 class ParentParentPage(BaseModel):
@@ -102,6 +125,14 @@ class Knowledge(BaseModel):
     the full lifetime spend.
     """
 
+    last_error: Optional[LastError] = None
+    """The last terminal processing error for this knowledge, if any.
+
+    Present when the latest asynchronous processing or re-index run ended
+    unsuccessfully; `null` when the knowledge is `failed` only because every row
+    ended in a persistent failed state.
+    """
+
     name: str
     """The name of the knowledge."""
 
@@ -121,14 +152,17 @@ class Knowledge(BaseModel):
     visible across all teamspaces in the same organization.
     """
 
-    status: Literal["pending", "partial", "ready"]
-    """
-    The current knowledge status can be one of three values: `pending`, `partial`,
-    or `ready`. `pending` indicates that the knowledge is awaiting learning and will
-    not be used by the agent when responding. `partial` indicates that the knowledge
-    is partially learned. The agent may use some aspects of it when responding.
-    `ready` indicates that the knowledge is fully learned and will be completely
-    utilized in responses.
+    status: Literal["pending", "partial", "ready", "failed"]
+    """The current knowledge status.
+
+    `pending` indicates that processing has started but no rows have been learned
+    yet. `partial` indicates that some rows are available, but processing is either
+    still running or ended with incomplete results. `ready` indicates that
+    processing finished successfully and the knowledge is fully available. `failed`
+    indicates that no rows are currently available and the knowledge reached a
+    terminal failure state, either because the latest asynchronous processing or
+    re-index run ended unsuccessfully before any rows became available, or because
+    every row ended in a persistent failed state.
     """
 
     sync: Optional[Sync] = None
