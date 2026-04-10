@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.11.1 (2026-04-10)
+
+Full Changelog: [v0.11.0...v0.11.1](https://github.com/DatagridAI/datagrid-python/compare/v0.11.0...v0.11.1)
+
+### Bug Fixes
+
+* ensure file data are only sent as 1 parameter ([7eaca40](https://github.com/DatagridAI/datagrid-python/commit/7eaca40439a1bb068f727521caffe8fdc597cb47))
+
 ## 0.11.0 (2026-04-09)
 
 Full Changelog: [v0.10.0...v0.11.0](https://github.com/DatagridAI/datagrid-python/compare/v0.10.0...v0.11.0)
