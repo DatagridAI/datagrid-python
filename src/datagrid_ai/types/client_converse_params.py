@@ -58,6 +58,15 @@ class ClientConverseParams(TypedDict, total=False):
     agent_routing: Optional[AgentRouting]
     """Determines how the API routes the converse request to an agent."""
 
+    chat_mode: Optional[Literal["auto", "full_agent", "light_agent", "llm_router"]]
+    """Controls how the agent processes the request for this turn.
+
+    When set to `auto`, the router jointly predicts the best agent and concrete mode
+    (full_agent / light_agent / llm_router) per message. When set to a concrete
+    mode, that mode is used directly. When omitted, the mode is determined by the
+    agent_model in config.
+    """
+
     config: Optional[Config]
     """Override the agent config for this converse call.
 

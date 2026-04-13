@@ -356,6 +356,7 @@ class Datagrid(SyncAPIClient):
         prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
         agent_id: Optional[str] | Omit = omit,
         agent_routing: Optional[client_converse_params.AgentRouting] | Omit = omit,
+        chat_mode: Optional[Literal["auto", "full_agent", "light_agent", "llm_router"]] | Omit = omit,
         config: Optional[client_converse_params.Config] | Omit = omit,
         conversation_id: Optional[str] | Omit = omit,
         current_view_content: Optional[str] | Omit = omit,
@@ -456,6 +457,12 @@ class Datagrid(SyncAPIClient):
 
           agent_routing: Determines how the API routes the converse request to an agent.
 
+          chat_mode: Controls how the agent processes the request for this turn. When set to `auto`,
+              the router jointly predicts the best agent and concrete mode (full_agent /
+              light_agent / llm_router) per message. When set to a concrete mode, that mode is
+              used directly. When omitted, the mode is determined by the agent_model in
+              config.
+
           config: Override the agent config for this converse call. This is applied as a partial
               override.
 
@@ -505,6 +512,7 @@ class Datagrid(SyncAPIClient):
                     "prompt": prompt,
                     "agent_id": agent_id,
                     "agent_routing": agent_routing,
+                    "chat_mode": chat_mode,
                     "config": config,
                     "conversation_id": conversation_id,
                     "current_view_content": current_view_content,
@@ -884,6 +892,7 @@ class AsyncDatagrid(AsyncAPIClient):
         prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
         agent_id: Optional[str] | Omit = omit,
         agent_routing: Optional[client_converse_params.AgentRouting] | Omit = omit,
+        chat_mode: Optional[Literal["auto", "full_agent", "light_agent", "llm_router"]] | Omit = omit,
         config: Optional[client_converse_params.Config] | Omit = omit,
         conversation_id: Optional[str] | Omit = omit,
         current_view_content: Optional[str] | Omit = omit,
@@ -912,6 +921,12 @@ class AsyncDatagrid(AsyncAPIClient):
               created with the default agent.
 
           agent_routing: Determines how the API routes the converse request to an agent.
+
+          chat_mode: Controls how the agent processes the request for this turn. When set to `auto`,
+              the router jointly predicts the best agent and concrete mode (full_agent /
+              light_agent / llm_router) per message. When set to a concrete mode, that mode is
+              used directly. When omitted, the mode is determined by the agent_model in
+              config.
 
           config: Override the agent config for this converse call. This is applied as a partial
               override.
@@ -962,6 +977,7 @@ class AsyncDatagrid(AsyncAPIClient):
                     "prompt": prompt,
                     "agent_id": agent_id,
                     "agent_routing": agent_routing,
+                    "chat_mode": chat_mode,
                     "config": config,
                     "conversation_id": conversation_id,
                     "current_view_content": current_view_content,

@@ -30,6 +30,7 @@ class TestClient:
             prompt="string",
             agent_id="agent_id",
             agent_routing={"mode": "auto"},
+            chat_mode="auto",
             config={
                 "agent_model": "magpie-1.1",
                 "agent_tools": ["string"],
@@ -117,6 +118,7 @@ class TestAsyncClient:
             prompt="string",
             agent_id="agent_id",
             agent_routing={"mode": "auto"},
+            chat_mode="auto",
             config={
                 "agent_model": "magpie-1.1",
                 "agent_tools": ["string"],
