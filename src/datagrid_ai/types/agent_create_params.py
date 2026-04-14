@@ -42,8 +42,9 @@ class AgentCreateParams(TypedDict, total=False):
     **Fastest mode** (direct LLM response, no tool execution):
 
     - `llm-only` — Runs a direct LLM conversation with no planning or tool calls. A
-      400 error will be returned if tools are specified. Structured outputs are not
-      supported.
+      400 error will be returned if tools are specified. On **Converse**, structured
+      JSON output via **`text.format`** (JSON Schema) is supported, using the same
+      mechanism as agentic models.
 
     Can also accept any custom string value for future model versions.
     """
@@ -135,7 +136,9 @@ class AgentCreateParams(TypedDict, total=False):
     - **Ask** (`magpie-1.1-flash`): Only `semantic_search` is supported. Requests
       specifying other tools will be rejected with a 400 error.
     - **Fastest** (`llm-only`): No tools are executed. Requests specifying tools
-      will be rejected with a 400 error.
+      will be rejected with a 400 error. On **Converse**, structured output via
+      **`text.format`** is still supported (same JSON Schema mechanism as agentic
+      models).
 
     Knowledge management tools:
 
