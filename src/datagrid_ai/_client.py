@@ -414,10 +414,12 @@ class Datagrid(SyncAPIClient):
           stream: Determines the response type of the converse. Response is the Server-Sent Events
               if stream is set to true.
 
-          text: Contains the format property used to specify the structured output schema.
-              Structured output is supported by the following agent models: `magpie-2.0`
-              (default), `magpie-2.5`, and `magpie-1.1`. It is not supported by
-              `magpie-1.1-flash` (Ask mode) or `llm-only` (Fastest mode).
+          text: Contains the format property used to specify the structured output schema
+              (`text.format`). Structured output is supported for `magpie-2.0` (default),
+              `magpie-2.5`, `magpie-1.1`, and `llm-only` (Fastest mode)—the same JSON Schema
+              mechanism applies; `llm-only` uses the direct LLM path without tools, with
+              structured output behavior comparable to agentic models. It is not supported for
+              `magpie-1.1-flash` (Ask mode) or legacy `magpie-1`.
 
           user: User information override for converse calls. All fields are optional - only
               provided fields will override the default user information.
@@ -805,10 +807,12 @@ class AsyncDatagrid(AsyncAPIClient):
           stream: Determines the response type of the converse. Response is the Server-Sent Events
               if stream is set to true.
 
-          text: Contains the format property used to specify the structured output schema.
-              Structured output is supported by the following agent models: `magpie-2.0`
-              (default), `magpie-2.5`, and `magpie-1.1`. It is not supported by
-              `magpie-1.1-flash` (Ask mode) or `llm-only` (Fastest mode).
+          text: Contains the format property used to specify the structured output schema
+              (`text.format`). Structured output is supported for `magpie-2.0` (default),
+              `magpie-2.5`, `magpie-1.1`, and `llm-only` (Fastest mode)—the same JSON Schema
+              mechanism applies; `llm-only` uses the direct LLM path without tools, with
+              structured output behavior comparable to agentic models. It is not supported for
+              `magpie-1.1-flash` (Ask mode) or legacy `magpie-1`.
 
           user: User information override for converse calls. All fields are optional - only
               provided fields will override the default user information.

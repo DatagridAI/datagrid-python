@@ -72,8 +72,9 @@ class Agent(BaseModel):
     **Fastest mode** (direct LLM response, no tool execution):
 
     - `llm-only` — Runs a direct LLM conversation with no planning or tool calls. A
-      400 error will be returned if tools are specified. Structured outputs are not
-      supported.
+      400 error will be returned if tools are specified. On **Converse**, structured
+      JSON output via **`text.format`** (JSON Schema) is supported, using the same
+      mechanism as agentic models.
 
     Can also accept any custom string value for future model versions.
     """
