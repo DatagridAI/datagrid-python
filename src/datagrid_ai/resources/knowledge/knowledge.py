@@ -8,6 +8,7 @@ from typing_extensions import Literal
 import httpx
 
 from ...types import knowledge_list_params, knowledge_create_params, knowledge_update_params, knowledge_connect_params
+from ..._files import deepcopy_with_paths
 from ..._types import (
     Body,
     Omit,
@@ -20,7 +21,7 @@ from ..._types import (
     omit,
     not_given,
 )
-from ..._utils import is_given, extract_files, path_template, maybe_transform, deepcopy_minimal, async_maybe_transform
+from ..._utils import is_given, extract_files, path_template, maybe_transform, async_maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from ..._response import (
@@ -109,12 +110,13 @@ class KnowledgeResource(SyncAPIResource):
         """
         if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
             timeout = 300
-        body = deepcopy_minimal(
+        body = deepcopy_with_paths(
             {
                 "files": files,
                 "name": name,
                 "parent": parent,
-            }
+            },
+            [["files", "<array>"]],
         )
         extracted_files = extract_files(cast(Mapping[str, object], body), paths=[["files", "<array>"]])
         # It should be noted that the actual Content-Type header that will be
@@ -218,14 +220,15 @@ class KnowledgeResource(SyncAPIResource):
         """
         if not knowledge_id:
             raise ValueError(f"Expected a non-empty value for `knowledge_id` but received {knowledge_id!r}")
-        body = deepcopy_minimal(
+        body = deepcopy_with_paths(
             {
                 "files": files,
                 "name": name,
                 "parent": parent,
                 "scope": scope,
                 "sync": sync,
-            }
+            },
+            [["files", "<array>"]],
         )
         extracted_files = extract_files(cast(Mapping[str, object], body), paths=[["files", "<array>"]])
         # It should be noted that the actual Content-Type header that will be
@@ -483,12 +486,13 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         """
         if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
             timeout = 300
-        body = deepcopy_minimal(
+        body = deepcopy_with_paths(
             {
                 "files": files,
                 "name": name,
                 "parent": parent,
-            }
+            },
+            [["files", "<array>"]],
         )
         extracted_files = extract_files(cast(Mapping[str, object], body), paths=[["files", "<array>"]])
         # It should be noted that the actual Content-Type header that will be
@@ -592,14 +596,15 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         """
         if not knowledge_id:
             raise ValueError(f"Expected a non-empty value for `knowledge_id` but received {knowledge_id!r}")
-        body = deepcopy_minimal(
+        body = deepcopy_with_paths(
             {
                 "files": files,
                 "name": name,
                 "parent": parent,
                 "scope": scope,
                 "sync": sync,
-            }
+            },
+            [["files", "<array>"]],
         )
         extracted_files = extract_files(cast(Mapping[str, object], body), paths=[["files", "<array>"]])
         # It should be noted that the actual Content-Type header that will be
