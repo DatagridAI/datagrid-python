@@ -7,8 +7,9 @@ from typing import Mapping, Optional, cast
 import httpx
 
 from ..types import file_list_params, file_create_params, file_update_params
+from .._files import deepcopy_with_paths
 from .._types import Body, Omit, Query, Headers, NoneType, NotGiven, FileTypes, omit, not_given
-from .._utils import is_given, extract_files, path_template, maybe_transform, deepcopy_minimal, async_maybe_transform
+from .._utils import is_given, extract_files, path_template, maybe_transform, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
 from .._response import (
@@ -87,11 +88,12 @@ class FilesResource(SyncAPIResource):
         """
         if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
             timeout = 300
-        body = deepcopy_minimal(
+        body = deepcopy_with_paths(
             {
                 "file": file,
                 "expires_after": expires_after,
-            }
+            },
+            [["file"]],
         )
         files = extract_files(cast(Mapping[str, object], body), paths=[["file"]])
         # It should be noted that the actual Content-Type header that will be
@@ -360,11 +362,12 @@ class AsyncFilesResource(AsyncAPIResource):
         """
         if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
             timeout = 300
-        body = deepcopy_minimal(
+        body = deepcopy_with_paths(
             {
                 "file": file,
                 "expires_after": expires_after,
-            }
+            },
+            [["file"]],
         )
         files = extract_files(cast(Mapping[str, object], body), paths=[["file"]])
         # It should be noted that the actual Content-Type header that will be
