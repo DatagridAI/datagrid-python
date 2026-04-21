@@ -136,6 +136,28 @@ Methods:
 - <code title="get /secrets">client.secrets.<a href="./src/datagrid_ai/resources/secrets.py">list</a>(\*\*<a href="src/datagrid_ai/types/secret_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/secret.py">SyncCursorIDPage[Secret]</a></code>
 - <code title="delete /secrets/{secret_id}">client.secrets.<a href="./src/datagrid_ai/resources/secrets.py">delete</a>(secret_id) -> None</code>
 
+# Webhooks
+
+Types:
+
+```python
+from datagrid_ai.types import (
+    Webhook,
+    WebhookEvent,
+    WebhookCreateResponse,
+    WebhookListActiveForEventResponse,
+)
+```
+
+Methods:
+
+- <code title="post /webhooks">client.webhooks.<a href="./src/datagrid_ai/resources/webhooks.py">create</a>(\*\*<a href="src/datagrid_ai/types/webhook_create_params.py">params</a>) -> <a href="./src/datagrid_ai/types/webhook_create_response.py">WebhookCreateResponse</a></code>
+- <code title="get /webhooks/{webhook_id}">client.webhooks.<a href="./src/datagrid_ai/resources/webhooks.py">retrieve</a>(webhook_id) -> <a href="./src/datagrid_ai/types/webhook.py">Webhook</a></code>
+- <code title="patch /webhooks/{webhook_id}">client.webhooks.<a href="./src/datagrid_ai/resources/webhooks.py">update</a>(webhook_id, \*\*<a href="src/datagrid_ai/types/webhook_update_params.py">params</a>) -> <a href="./src/datagrid_ai/types/webhook.py">Webhook</a></code>
+- <code title="get /webhooks">client.webhooks.<a href="./src/datagrid_ai/resources/webhooks.py">list</a>(\*\*<a href="src/datagrid_ai/types/webhook_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/webhook.py">SyncWebhookCursorPage[Webhook]</a></code>
+- <code title="delete /webhooks/{webhook_id}">client.webhooks.<a href="./src/datagrid_ai/resources/webhooks.py">delete</a>(webhook_id) -> None</code>
+- <code title="get /webhooks/active">client.webhooks.<a href="./src/datagrid_ai/resources/webhooks.py">list_active_for_event</a>(\*\*<a href="src/datagrid_ai/types/webhook_list_active_for_event_params.py">params</a>) -> <a href="./src/datagrid_ai/types/webhook_list_active_for_event_response.py">WebhookListActiveForEventResponse</a></code>
+
 # Search
 
 Types:
