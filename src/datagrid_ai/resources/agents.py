@@ -48,7 +48,11 @@ class AgentsResource(SyncAPIResource):
     def create(
         self,
         *,
-        agent_model: Union[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-2.0", "magpie-2.5", "llm-only"], str, None]
+        agent_model: Union[
+            Literal["magpie-1.1", "magpie-1.1-flash", "magpie-2.0", "magpie-2.5", "magpie-2.5-flash", "llm-only"],
+            str,
+            None,
+        ]
         | Omit = omit,
         corpus: Optional[Iterable[agent_create_params.Corpus]] | Omit = omit,
         custom_prompt: Optional[str] | Omit = omit,
@@ -100,28 +104,33 @@ class AgentsResource(SyncAPIResource):
         Create a new agent
 
         Args:
-          agent_model: The agent model determines the processing mode for Converse requests. Each model
-              maps to one of three modes available in the Datagrid UI:
+          agent_model: The agent model determines the processing mode for Converse requests. The
+              Datagrid web app exposes **Ask**, **Extended**, and **Execute** as Converse
+              **`chat_mode`** (`llm_router`, `light_agent`, `full_agent`). The values below
+              set **`config.agent_model`** (model tier and tool limits)—use both fields when
+              mirroring in-app behavior.
 
-              **Agentic mode** (full tool use, planning, and multi-step reasoning):
+              **Execute** (full tool use, planning, and multi-step reasoning; aligns with
+              **Execute** in the web app / `full_agent`):
 
-              - `magpie-2.0` — Default. Agentic model with proactive planning and reasoning.
-              - `magpie-2.5` — Beta. Our latest agentic model — faster, more adaptable, and
+              - `magpie-2.0` — Default. Full agent model with proactive planning and
+                reasoning.
+              - `magpie-2.5` — Beta. Latest full-agent model — faster, more adaptable, and
                 built to handle a broader range of real-world tasks.
-              - `magpie-1.1` — Previous-generation agentic model.
+              - `magpie-1.1` — Previous-generation full agent model.
 
-              **Ask mode** (lightweight, single-turn Q&A):
+              **Extended** (search-focused; aligns with **Extended** in the web app /
+              `light_agent`; not **Ask**):
 
               - `magpie-1.1-flash` — Fast model optimized for RAG use cases. Only supports the
                 `semantic_search` tool. A 400 error will be returned if other tools are
-                specified. Structured outputs are not supported.
+                specified.
 
-              **Fastest mode** (direct LLM response, no tool execution):
+              **Direct LLM** (no tool execution; **`agent_model` only**—**Ask** in the web app
+              is `chat_mode: llm_router`, not `magpie-1.1-flash`):
 
               - `llm-only` — Runs a direct LLM conversation with no planning or tool calls. A
-                400 error will be returned if tools are specified. On **Converse**, structured
-                JSON output via **`text.format`** (JSON Schema) is supported, using the same
-                mechanism as agentic models.
+                400 error will be returned if tools are specified.
 
               Can also accept any custom string value for future model versions.
 
@@ -157,16 +166,19 @@ class AgentsResource(SyncAPIResource):
               are used. When connection_id is set for a tool, it will use that specific
               connection instead of the default one.
 
-              **Tool availability by agent model:**
+              **Structured outputs (Converse):** All `agent_model` values support JSON Schema
+              constrained responses via **`text.format`** on the Converse request.
 
-              - **Agentic** (`magpie-2.0`, `magpie-2.5`, `magpie-1.1`): All tools below are
+              **Tool availability by agent model** (aligned with in-app **Execute** /
+              **Extended** / direct LLM; see Converse `chat_mode` for **Ask** vs
+              `agent_model`):
+
+              - **Execute** (`magpie-2.0`, `magpie-2.5`, `magpie-1.1`): All tools below are
                 available.
-              - **Ask** (`magpie-1.1-flash`): Only `semantic_search` is supported. Requests
-                specifying other tools will be rejected with a 400 error.
-              - **Fastest** (`llm-only`): No tools are executed. Requests specifying tools
-                will be rejected with a 400 error. On **Converse**, structured output via
-                **`text.format`** is still supported (same JSON Schema mechanism as agentic
-                models).
+              - **Extended** (`magpie-1.1-flash`): Only `semantic_search` is supported.
+                Requests specifying other tools will be rejected with a 400 error.
+              - **Direct LLM** (`llm-only`): No tools are executed. Requests specifying tools
+                will be rejected with a 400 error.
 
               Knowledge management tools:
 
@@ -278,7 +290,11 @@ class AgentsResource(SyncAPIResource):
         self,
         agent_id: str,
         *,
-        agent_model: Union[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-2.0", "magpie-2.5", "llm-only"], str, None]
+        agent_model: Union[
+            Literal["magpie-1.1", "magpie-1.1-flash", "magpie-2.0", "magpie-2.5", "magpie-2.5-flash", "llm-only"],
+            str,
+            None,
+        ]
         | Omit = omit,
         corpus: Optional[Iterable[agent_update_params.Corpus]] | Omit = omit,
         custom_prompt: Optional[str] | Omit = omit,
@@ -331,28 +347,33 @@ class AgentsResource(SyncAPIResource):
         Update an agent configuration
 
         Args:
-          agent_model: The agent model determines the processing mode for Converse requests. Each model
-              maps to one of three modes available in the Datagrid UI:
+          agent_model: The agent model determines the processing mode for Converse requests. The
+              Datagrid web app exposes **Ask**, **Extended**, and **Execute** as Converse
+              **`chat_mode`** (`llm_router`, `light_agent`, `full_agent`). The values below
+              set **`config.agent_model`** (model tier and tool limits)—use both fields when
+              mirroring in-app behavior.
 
-              **Agentic mode** (full tool use, planning, and multi-step reasoning):
+              **Execute** (full tool use, planning, and multi-step reasoning; aligns with
+              **Execute** in the web app / `full_agent`):
 
-              - `magpie-2.0` — Default. Agentic model with proactive planning and reasoning.
-              - `magpie-2.5` — Beta. Our latest agentic model — faster, more adaptable, and
+              - `magpie-2.0` — Default. Full agent model with proactive planning and
+                reasoning.
+              - `magpie-2.5` — Beta. Latest full-agent model — faster, more adaptable, and
                 built to handle a broader range of real-world tasks.
-              - `magpie-1.1` — Previous-generation agentic model.
+              - `magpie-1.1` — Previous-generation full agent model.
 
-              **Ask mode** (lightweight, single-turn Q&A):
+              **Extended** (search-focused; aligns with **Extended** in the web app /
+              `light_agent`; not **Ask**):
 
               - `magpie-1.1-flash` — Fast model optimized for RAG use cases. Only supports the
                 `semantic_search` tool. A 400 error will be returned if other tools are
-                specified. Structured outputs are not supported.
+                specified.
 
-              **Fastest mode** (direct LLM response, no tool execution):
+              **Direct LLM** (no tool execution; **`agent_model` only**—**Ask** in the web app
+              is `chat_mode: llm_router`, not `magpie-1.1-flash`):
 
               - `llm-only` — Runs a direct LLM conversation with no planning or tool calls. A
-                400 error will be returned if tools are specified. On **Converse**, structured
-                JSON output via **`text.format`** (JSON Schema) is supported, using the same
-                mechanism as agentic models.
+                400 error will be returned if tools are specified.
 
               Can also accept any custom string value for future model versions.
 
@@ -390,16 +411,19 @@ class AgentsResource(SyncAPIResource):
               are used. When connection_id is set for a tool, it will use that specific
               connection instead of the default one.
 
-              **Tool availability by agent model:**
+              **Structured outputs (Converse):** All `agent_model` values support JSON Schema
+              constrained responses via **`text.format`** on the Converse request.
 
-              - **Agentic** (`magpie-2.0`, `magpie-2.5`, `magpie-1.1`): All tools below are
+              **Tool availability by agent model** (aligned with in-app **Execute** /
+              **Extended** / direct LLM; see Converse `chat_mode` for **Ask** vs
+              `agent_model`):
+
+              - **Execute** (`magpie-2.0`, `magpie-2.5`, `magpie-1.1`): All tools below are
                 available.
-              - **Ask** (`magpie-1.1-flash`): Only `semantic_search` is supported. Requests
-                specifying other tools will be rejected with a 400 error.
-              - **Fastest** (`llm-only`): No tools are executed. Requests specifying tools
-                will be rejected with a 400 error. On **Converse**, structured output via
-                **`text.format`** is still supported (same JSON Schema mechanism as agentic
-                models).
+              - **Extended** (`magpie-1.1-flash`): Only `semantic_search` is supported.
+                Requests specifying other tools will be rejected with a 400 error.
+              - **Direct LLM** (`llm-only`): No tools are executed. Requests specifying tools
+                will be rejected with a 400 error.
 
               Knowledge management tools:
 
@@ -596,7 +620,11 @@ class AsyncAgentsResource(AsyncAPIResource):
     async def create(
         self,
         *,
-        agent_model: Union[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-2.0", "magpie-2.5", "llm-only"], str, None]
+        agent_model: Union[
+            Literal["magpie-1.1", "magpie-1.1-flash", "magpie-2.0", "magpie-2.5", "magpie-2.5-flash", "llm-only"],
+            str,
+            None,
+        ]
         | Omit = omit,
         corpus: Optional[Iterable[agent_create_params.Corpus]] | Omit = omit,
         custom_prompt: Optional[str] | Omit = omit,
@@ -648,28 +676,33 @@ class AsyncAgentsResource(AsyncAPIResource):
         Create a new agent
 
         Args:
-          agent_model: The agent model determines the processing mode for Converse requests. Each model
-              maps to one of three modes available in the Datagrid UI:
+          agent_model: The agent model determines the processing mode for Converse requests. The
+              Datagrid web app exposes **Ask**, **Extended**, and **Execute** as Converse
+              **`chat_mode`** (`llm_router`, `light_agent`, `full_agent`). The values below
+              set **`config.agent_model`** (model tier and tool limits)—use both fields when
+              mirroring in-app behavior.
 
-              **Agentic mode** (full tool use, planning, and multi-step reasoning):
+              **Execute** (full tool use, planning, and multi-step reasoning; aligns with
+              **Execute** in the web app / `full_agent`):
 
-              - `magpie-2.0` — Default. Agentic model with proactive planning and reasoning.
-              - `magpie-2.5` — Beta. Our latest agentic model — faster, more adaptable, and
+              - `magpie-2.0` — Default. Full agent model with proactive planning and
+                reasoning.
+              - `magpie-2.5` — Beta. Latest full-agent model — faster, more adaptable, and
                 built to handle a broader range of real-world tasks.
-              - `magpie-1.1` — Previous-generation agentic model.
+              - `magpie-1.1` — Previous-generation full agent model.
 
-              **Ask mode** (lightweight, single-turn Q&A):
+              **Extended** (search-focused; aligns with **Extended** in the web app /
+              `light_agent`; not **Ask**):
 
               - `magpie-1.1-flash` — Fast model optimized for RAG use cases. Only supports the
                 `semantic_search` tool. A 400 error will be returned if other tools are
-                specified. Structured outputs are not supported.
+                specified.
 
-              **Fastest mode** (direct LLM response, no tool execution):
+              **Direct LLM** (no tool execution; **`agent_model` only**—**Ask** in the web app
+              is `chat_mode: llm_router`, not `magpie-1.1-flash`):
 
               - `llm-only` — Runs a direct LLM conversation with no planning or tool calls. A
-                400 error will be returned if tools are specified. On **Converse**, structured
-                JSON output via **`text.format`** (JSON Schema) is supported, using the same
-                mechanism as agentic models.
+                400 error will be returned if tools are specified.
 
               Can also accept any custom string value for future model versions.
 
@@ -705,16 +738,19 @@ class AsyncAgentsResource(AsyncAPIResource):
               are used. When connection_id is set for a tool, it will use that specific
               connection instead of the default one.
 
-              **Tool availability by agent model:**
+              **Structured outputs (Converse):** All `agent_model` values support JSON Schema
+              constrained responses via **`text.format`** on the Converse request.
 
-              - **Agentic** (`magpie-2.0`, `magpie-2.5`, `magpie-1.1`): All tools below are
+              **Tool availability by agent model** (aligned with in-app **Execute** /
+              **Extended** / direct LLM; see Converse `chat_mode` for **Ask** vs
+              `agent_model`):
+
+              - **Execute** (`magpie-2.0`, `magpie-2.5`, `magpie-1.1`): All tools below are
                 available.
-              - **Ask** (`magpie-1.1-flash`): Only `semantic_search` is supported. Requests
-                specifying other tools will be rejected with a 400 error.
-              - **Fastest** (`llm-only`): No tools are executed. Requests specifying tools
-                will be rejected with a 400 error. On **Converse**, structured output via
-                **`text.format`** is still supported (same JSON Schema mechanism as agentic
-                models).
+              - **Extended** (`magpie-1.1-flash`): Only `semantic_search` is supported.
+                Requests specifying other tools will be rejected with a 400 error.
+              - **Direct LLM** (`llm-only`): No tools are executed. Requests specifying tools
+                will be rejected with a 400 error.
 
               Knowledge management tools:
 
@@ -826,7 +862,11 @@ class AsyncAgentsResource(AsyncAPIResource):
         self,
         agent_id: str,
         *,
-        agent_model: Union[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-2.0", "magpie-2.5", "llm-only"], str, None]
+        agent_model: Union[
+            Literal["magpie-1.1", "magpie-1.1-flash", "magpie-2.0", "magpie-2.5", "magpie-2.5-flash", "llm-only"],
+            str,
+            None,
+        ]
         | Omit = omit,
         corpus: Optional[Iterable[agent_update_params.Corpus]] | Omit = omit,
         custom_prompt: Optional[str] | Omit = omit,
@@ -879,28 +919,33 @@ class AsyncAgentsResource(AsyncAPIResource):
         Update an agent configuration
 
         Args:
-          agent_model: The agent model determines the processing mode for Converse requests. Each model
-              maps to one of three modes available in the Datagrid UI:
+          agent_model: The agent model determines the processing mode for Converse requests. The
+              Datagrid web app exposes **Ask**, **Extended**, and **Execute** as Converse
+              **`chat_mode`** (`llm_router`, `light_agent`, `full_agent`). The values below
+              set **`config.agent_model`** (model tier and tool limits)—use both fields when
+              mirroring in-app behavior.
 
-              **Agentic mode** (full tool use, planning, and multi-step reasoning):
+              **Execute** (full tool use, planning, and multi-step reasoning; aligns with
+              **Execute** in the web app / `full_agent`):
 
-              - `magpie-2.0` — Default. Agentic model with proactive planning and reasoning.
-              - `magpie-2.5` — Beta. Our latest agentic model — faster, more adaptable, and
+              - `magpie-2.0` — Default. Full agent model with proactive planning and
+                reasoning.
+              - `magpie-2.5` — Beta. Latest full-agent model — faster, more adaptable, and
                 built to handle a broader range of real-world tasks.
-              - `magpie-1.1` — Previous-generation agentic model.
+              - `magpie-1.1` — Previous-generation full agent model.
 
-              **Ask mode** (lightweight, single-turn Q&A):
+              **Extended** (search-focused; aligns with **Extended** in the web app /
+              `light_agent`; not **Ask**):
 
               - `magpie-1.1-flash` — Fast model optimized for RAG use cases. Only supports the
                 `semantic_search` tool. A 400 error will be returned if other tools are
-                specified. Structured outputs are not supported.
+                specified.
 
-              **Fastest mode** (direct LLM response, no tool execution):
+              **Direct LLM** (no tool execution; **`agent_model` only**—**Ask** in the web app
+              is `chat_mode: llm_router`, not `magpie-1.1-flash`):
 
               - `llm-only` — Runs a direct LLM conversation with no planning or tool calls. A
-                400 error will be returned if tools are specified. On **Converse**, structured
-                JSON output via **`text.format`** (JSON Schema) is supported, using the same
-                mechanism as agentic models.
+                400 error will be returned if tools are specified.
 
               Can also accept any custom string value for future model versions.
 
@@ -938,16 +983,19 @@ class AsyncAgentsResource(AsyncAPIResource):
               are used. When connection_id is set for a tool, it will use that specific
               connection instead of the default one.
 
-              **Tool availability by agent model:**
+              **Structured outputs (Converse):** All `agent_model` values support JSON Schema
+              constrained responses via **`text.format`** on the Converse request.
 
-              - **Agentic** (`magpie-2.0`, `magpie-2.5`, `magpie-1.1`): All tools below are
+              **Tool availability by agent model** (aligned with in-app **Execute** /
+              **Extended** / direct LLM; see Converse `chat_mode` for **Ask** vs
+              `agent_model`):
+
+              - **Execute** (`magpie-2.0`, `magpie-2.5`, `magpie-1.1`): All tools below are
                 available.
-              - **Ask** (`magpie-1.1-flash`): Only `semantic_search` is supported. Requests
-                specifying other tools will be rejected with a 400 error.
-              - **Fastest** (`llm-only`): No tools are executed. Requests specifying tools
-                will be rejected with a 400 error. On **Converse**, structured output via
-                **`text.format`** is still supported (same JSON Schema mechanism as agentic
-                models).
+              - **Extended** (`magpie-1.1-flash`): Only `semantic_search` is supported.
+                Requests specifying other tools will be rejected with a 400 error.
+              - **Direct LLM** (`llm-only`): No tools are executed. Requests specifying tools
+                will be rejected with a 400 error.
 
               Knowledge management tools:
 

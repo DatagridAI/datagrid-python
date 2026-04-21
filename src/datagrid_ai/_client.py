@@ -64,6 +64,7 @@ if TYPE_CHECKING:
         search,
         secrets,
         identity,
+        webhooks,
         knowledge,
         connectors,
         data_views,
@@ -80,6 +81,7 @@ if TYPE_CHECKING:
     from .resources.search import SearchResource, AsyncSearchResource
     from .resources.secrets import SecretsResource, AsyncSecretsResource
     from .resources.identity import IdentityResource, AsyncIdentityResource
+    from .resources.webhooks import WebhooksResource, AsyncWebhooksResource
     from .resources.beta.beta import BetaResource, AsyncBetaResource
     from .resources.connectors import ConnectorsResource, AsyncConnectorsResource
     from .resources.connections import ConnectionsResource, AsyncConnectionsResource
@@ -200,6 +202,12 @@ class Datagrid(SyncAPIClient):
         from .resources.secrets import SecretsResource
 
         return SecretsResource(self)
+
+    @cached_property
+    def webhooks(self) -> WebhooksResource:
+        from .resources.webhooks import WebhooksResource
+
+        return WebhooksResource(self)
 
     @cached_property
     def search(self) -> SearchResource:
@@ -457,11 +465,12 @@ class Datagrid(SyncAPIClient):
 
           agent_routing: Determines how the API routes the converse request to an agent.
 
-          chat_mode: Controls how the agent processes the request for this turn. When set to `auto`,
-              the router jointly predicts the best agent and concrete mode (full_agent /
-              light_agent / llm_router) per message. When set to a concrete mode, that mode is
-              used directly. When omitted, the mode is determined by the agent_model in
-              config.
+          chat_mode: Controls how the agent processes the request for this turn. Matches the chat
+              mode selector in the Datagrid web app: **Execute** (`full_agent`), **Extended**
+              (`light_agent`), **Ask** (`llm_router`). When set to `auto`, the router jointly
+              predicts the best agent and concrete mode (`full_agent` / `light_agent` /
+              `llm_router`) per message. When set to a concrete mode, that mode is used
+              directly. When omitted, the mode is determined by the `agent_model` in `config`.
 
           config: Override the agent config for this converse call. This is applied as a partial
               override.
@@ -488,11 +497,9 @@ class Datagrid(SyncAPIClient):
               if stream is set to true.
 
           text: Contains the format property used to specify the structured output schema
-              (`text.format`). Structured output is supported for `magpie-2.0` (default),
-              `magpie-2.5`, `magpie-1.1`, and `llm-only` (Fastest mode)—the same JSON Schema
-              mechanism applies; `llm-only` uses the direct LLM path without tools, with
-              structured output behavior comparable to agentic models. It is not supported for
-              `magpie-1.1-flash` (Ask mode) or legacy `magpie-1`.
+              (`text.format`). Structured output is supported for all `agent_model` values and
+              `chat_mode` settings when `text.format` is provided (same JSON Schema mechanism
+              everywhere). **Ask** in the web app maps to `chat_mode` `magpie-2.5-flash`;.
 
           user: User information override for converse calls. All fields are optional - only
               provided fields will override the default user information.
@@ -667,6 +674,12 @@ class AsyncDatagrid(AsyncAPIClient):
         from .resources.secrets import AsyncSecretsResource
 
         return AsyncSecretsResource(self)
+
+    @cached_property
+    def webhooks(self) -> AsyncWebhooksResource:
+        from .resources.webhooks import AsyncWebhooksResource
+
+        return AsyncWebhooksResource(self)
 
     @cached_property
     def search(self) -> AsyncSearchResource:
@@ -924,11 +937,12 @@ class AsyncDatagrid(AsyncAPIClient):
 
           agent_routing: Determines how the API routes the converse request to an agent.
 
-          chat_mode: Controls how the agent processes the request for this turn. When set to `auto`,
-              the router jointly predicts the best agent and concrete mode (full_agent /
-              light_agent / llm_router) per message. When set to a concrete mode, that mode is
-              used directly. When omitted, the mode is determined by the agent_model in
-              config.
+          chat_mode: Controls how the agent processes the request for this turn. Matches the chat
+              mode selector in the Datagrid web app: **Execute** (`full_agent`), **Extended**
+              (`light_agent`), **Ask** (`llm_router`). When set to `auto`, the router jointly
+              predicts the best agent and concrete mode (`full_agent` / `light_agent` /
+              `llm_router`) per message. When set to a concrete mode, that mode is used
+              directly. When omitted, the mode is determined by the `agent_model` in `config`.
 
           config: Override the agent config for this converse call. This is applied as a partial
               override.
@@ -955,11 +969,9 @@ class AsyncDatagrid(AsyncAPIClient):
               if stream is set to true.
 
           text: Contains the format property used to specify the structured output schema
-              (`text.format`). Structured output is supported for `magpie-2.0` (default),
-              `magpie-2.5`, `magpie-1.1`, and `llm-only` (Fastest mode)—the same JSON Schema
-              mechanism applies; `llm-only` uses the direct LLM path without tools, with
-              structured output behavior comparable to agentic models. It is not supported for
-              `magpie-1.1-flash` (Ask mode) or legacy `magpie-1`.
+              (`text.format`). Structured output is supported for all `agent_model` values and
+              `chat_mode` settings when `text.format` is provided (same JSON Schema mechanism
+              everywhere). **Ask** in the web app maps to `chat_mode` `magpie-2.5-flash`;.
 
           user: User information override for converse calls. All fields are optional - only
               provided fields will override the default user information.
@@ -1083,6 +1095,12 @@ class DatagridWithRawResponse:
         return SecretsResourceWithRawResponse(self._client.secrets)
 
     @cached_property
+    def webhooks(self) -> webhooks.WebhooksResourceWithRawResponse:
+        from .resources.webhooks import WebhooksResourceWithRawResponse
+
+        return WebhooksResourceWithRawResponse(self._client.webhooks)
+
+    @cached_property
     def search(self) -> search.SearchResourceWithRawResponse:
         from .resources.search import SearchResourceWithRawResponse
 
@@ -1194,6 +1212,12 @@ class AsyncDatagridWithRawResponse:
         from .resources.secrets import AsyncSecretsResourceWithRawResponse
 
         return AsyncSecretsResourceWithRawResponse(self._client.secrets)
+
+    @cached_property
+    def webhooks(self) -> webhooks.AsyncWebhooksResourceWithRawResponse:
+        from .resources.webhooks import AsyncWebhooksResourceWithRawResponse
+
+        return AsyncWebhooksResourceWithRawResponse(self._client.webhooks)
 
     @cached_property
     def search(self) -> search.AsyncSearchResourceWithRawResponse:
@@ -1309,6 +1333,12 @@ class DatagridWithStreamedResponse:
         return SecretsResourceWithStreamingResponse(self._client.secrets)
 
     @cached_property
+    def webhooks(self) -> webhooks.WebhooksResourceWithStreamingResponse:
+        from .resources.webhooks import WebhooksResourceWithStreamingResponse
+
+        return WebhooksResourceWithStreamingResponse(self._client.webhooks)
+
+    @cached_property
     def search(self) -> search.SearchResourceWithStreamingResponse:
         from .resources.search import SearchResourceWithStreamingResponse
 
@@ -1420,6 +1450,12 @@ class AsyncDatagridWithStreamedResponse:
         from .resources.secrets import AsyncSecretsResourceWithStreamingResponse
 
         return AsyncSecretsResourceWithStreamingResponse(self._client.secrets)
+
+    @cached_property
+    def webhooks(self) -> webhooks.AsyncWebhooksResourceWithStreamingResponse:
+        from .resources.webhooks import AsyncWebhooksResourceWithStreamingResponse
+
+        return AsyncWebhooksResourceWithStreamingResponse(self._client.webhooks)
 
     @cached_property
     def search(self) -> search.AsyncSearchResourceWithStreamingResponse:
