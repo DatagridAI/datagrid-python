@@ -357,6 +357,12 @@ class AgentRoutingManualTargetAgentConfigWithID(TypedDict, total=False):
     system_prompt: Optional[str]
     """Directs your AI Agent's operational behavior."""
 
+    temperature: Optional[float]
+    """Sampling temperature for model output.
+
+    Lower values are more deterministic; higher values are more diverse.
+    """
+
     tools: Optional[SequenceNotStr[AgentRoutingManualTargetAgentConfigWithIDTool]]
     """Array of the agent tools to enable.
 
@@ -619,6 +625,12 @@ class Config(TypedDict, total=False):
 
     system_prompt: Optional[str]
     """Directs your AI Agent's operational behavior."""
+
+    temperature: Optional[float]
+    """Sampling temperature for model output.
+
+    Lower values are more deterministic; higher values are more diverse.
+    """
 
     tools: Optional[SequenceNotStr[ConfigTool]]
     """Array of the agent tools to enable.
