@@ -47,6 +47,7 @@ class TestAgents:
             name="name",
             planning_prompt="planning_prompt",
             system_prompt="system_prompt",
+            temperature=0,
             tools=["string"],
         )
         assert_matches_type(Agent, agent, path=["response"])
@@ -142,6 +143,7 @@ class TestAgents:
             name="name",
             planning_prompt="planning_prompt",
             system_prompt="system_prompt",
+            temperature=0,
             tools=["string"],
         )
         assert_matches_type(Agent, agent, path=["response"])
@@ -285,6 +287,7 @@ class TestAsyncAgents:
             name="name",
             planning_prompt="planning_prompt",
             system_prompt="system_prompt",
+            temperature=0,
             tools=["string"],
         )
         assert_matches_type(Agent, agent, path=["response"])
@@ -380,6 +383,7 @@ class TestAsyncAgents:
             name="name",
             planning_prompt="planning_prompt",
             system_prompt="system_prompt",
+            temperature=0,
             tools=["string"],
         )
         assert_matches_type(Agent, agent, path=["response"])

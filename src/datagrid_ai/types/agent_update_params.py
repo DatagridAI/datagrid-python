@@ -132,6 +132,12 @@ class AgentUpdateParams(TypedDict, total=False):
     system_prompt: Optional[str]
     """Directs your AI Agent's operational behavior."""
 
+    temperature: Optional[float]
+    """Sampling temperature for model output.
+
+    Lower values are more deterministic; higher values are more diverse.
+    """
+
     tools: Optional[SequenceNotStr[Tool]]
     """Array of the agent tools to enable.
 

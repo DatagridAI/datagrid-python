@@ -92,6 +92,7 @@ class AgentsResource(SyncAPIResource):
         name: Optional[str] | Omit = omit,
         planning_prompt: Optional[str] | Omit = omit,
         system_prompt: Optional[str] | Omit = omit,
+        temperature: Optional[float] | Omit = omit,
         tools: Optional[SequenceNotStr[agent_create_params.Tool]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -160,6 +161,9 @@ class AgentsResource(SyncAPIResource):
               and solving problems
 
           system_prompt: Directs your AI Agent's operational behavior.
+
+          temperature: Sampling temperature for model output. Lower values are more deterministic;
+              higher values are more diverse.
 
           tools: Array of the agent tools to enable. If not provided, or null is provided -
               default tools of the agent are used. If empty list provided - none of the tools
@@ -243,6 +247,7 @@ class AgentsResource(SyncAPIResource):
                     "name": name,
                     "planning_prompt": planning_prompt,
                     "system_prompt": system_prompt,
+                    "temperature": temperature,
                     "tools": tools,
                 },
                 agent_create_params.AgentCreateParams,
@@ -335,6 +340,7 @@ class AgentsResource(SyncAPIResource):
         name: Optional[str] | Omit = omit,
         planning_prompt: Optional[str] | Omit = omit,
         system_prompt: Optional[str] | Omit = omit,
+        temperature: Optional[float] | Omit = omit,
         tools: Optional[SequenceNotStr[agent_update_params.Tool]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -405,6 +411,9 @@ class AgentsResource(SyncAPIResource):
               and solving problems
 
           system_prompt: Directs your AI Agent's operational behavior.
+
+          temperature: Sampling temperature for model output. Lower values are more deterministic;
+              higher values are more diverse.
 
           tools: Array of the agent tools to enable. If not provided, or null is provided -
               default tools of the agent are used. If empty list provided - none of the tools
@@ -491,6 +500,7 @@ class AgentsResource(SyncAPIResource):
                     "name": name,
                     "planning_prompt": planning_prompt,
                     "system_prompt": system_prompt,
+                    "temperature": temperature,
                     "tools": tools,
                 },
                 agent_update_params.AgentUpdateParams,
@@ -664,6 +674,7 @@ class AsyncAgentsResource(AsyncAPIResource):
         name: Optional[str] | Omit = omit,
         planning_prompt: Optional[str] | Omit = omit,
         system_prompt: Optional[str] | Omit = omit,
+        temperature: Optional[float] | Omit = omit,
         tools: Optional[SequenceNotStr[agent_create_params.Tool]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -732,6 +743,9 @@ class AsyncAgentsResource(AsyncAPIResource):
               and solving problems
 
           system_prompt: Directs your AI Agent's operational behavior.
+
+          temperature: Sampling temperature for model output. Lower values are more deterministic;
+              higher values are more diverse.
 
           tools: Array of the agent tools to enable. If not provided, or null is provided -
               default tools of the agent are used. If empty list provided - none of the tools
@@ -815,6 +829,7 @@ class AsyncAgentsResource(AsyncAPIResource):
                     "name": name,
                     "planning_prompt": planning_prompt,
                     "system_prompt": system_prompt,
+                    "temperature": temperature,
                     "tools": tools,
                 },
                 agent_create_params.AgentCreateParams,
@@ -907,6 +922,7 @@ class AsyncAgentsResource(AsyncAPIResource):
         name: Optional[str] | Omit = omit,
         planning_prompt: Optional[str] | Omit = omit,
         system_prompt: Optional[str] | Omit = omit,
+        temperature: Optional[float] | Omit = omit,
         tools: Optional[SequenceNotStr[agent_update_params.Tool]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -977,6 +993,9 @@ class AsyncAgentsResource(AsyncAPIResource):
               and solving problems
 
           system_prompt: Directs your AI Agent's operational behavior.
+
+          temperature: Sampling temperature for model output. Lower values are more deterministic;
+              higher values are more diverse.
 
           tools: Array of the agent tools to enable. If not provided, or null is provided -
               default tools of the agent are used. If empty list provided - none of the tools
@@ -1063,6 +1082,7 @@ class AsyncAgentsResource(AsyncAPIResource):
                     "name": name,
                     "planning_prompt": planning_prompt,
                     "system_prompt": system_prompt,
+                    "temperature": temperature,
                     "tools": tools,
                 },
                 agent_update_params.AgentUpdateParams,
