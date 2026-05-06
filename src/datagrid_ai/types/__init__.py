@@ -20,6 +20,8 @@ from .file_object import FileObject as FileObject
 from .conversation import Conversation as Conversation
 from .row_metadata import RowMetadata as RowMetadata
 from .table_metadata import TableMetadata as TableMetadata
+from .problem_details import ProblemDetails as ProblemDetails
+from .batch_prediction import BatchPrediction as BatchPrediction
 from .file_list_params import FileListParams as FileListParams
 from .message_metadata import MessageMetadata as MessageMetadata
 from .page_list_params import PageListParams as PageListParams
@@ -72,6 +74,10 @@ from .conversation_create_params import ConversationCreateParams as Conversation
 from .conversation_update_params import ConversationUpdateParams as ConversationUpdateParams
 from .voice_start_session_params import VoiceStartSessionParams as VoiceStartSessionParams
 from .search_result_resource_type import SearchResultResourceType as SearchResultResourceType
+from .batch_prediction_list_params import BatchPredictionListParams as BatchPredictionListParams
+from .batch_prediction_result_line import BatchPredictionResultLine as BatchPredictionResultLine
+from .batch_prediction_create_params import BatchPredictionCreateParams as BatchPredictionCreateParams
+from .batch_prediction_request_counts import BatchPredictionRequestCounts as BatchPredictionRequestCounts
 from .connection_provider_list_params import ConnectionProviderListParams as ConnectionProviderListParams
 from .connection_provider_create_params import ConnectionProviderCreateParams as ConnectionProviderCreateParams
 from .connection_provider_update_params import ConnectionProviderUpdateParams as ConnectionProviderUpdateParams

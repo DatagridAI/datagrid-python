@@ -136,6 +136,14 @@ from .conversations import (
     ConversationsResourceWithStreamingResponse,
     AsyncConversationsResourceWithStreamingResponse,
 )
+from .batch_predictions import (
+    BatchPredictionsResource,
+    AsyncBatchPredictionsResource,
+    BatchPredictionsResourceWithRawResponse,
+    AsyncBatchPredictionsResourceWithRawResponse,
+    BatchPredictionsResourceWithStreamingResponse,
+    AsyncBatchPredictionsResourceWithStreamingResponse,
+)
 from .connection_providers import (
     ConnectionProvidersResource,
     AsyncConnectionProvidersResource,
@@ -176,6 +184,12 @@ __all__ = [
     "AsyncFilesResourceWithRawResponse",
     "FilesResourceWithStreamingResponse",
     "AsyncFilesResourceWithStreamingResponse",
+    "BatchPredictionsResource",
+    "AsyncBatchPredictionsResource",
+    "BatchPredictionsResourceWithRawResponse",
+    "AsyncBatchPredictionsResourceWithRawResponse",
+    "BatchPredictionsResourceWithStreamingResponse",
+    "AsyncBatchPredictionsResourceWithStreamingResponse",
     "SecretsResource",
     "AsyncSecretsResource",
     "SecretsResourceWithRawResponse",

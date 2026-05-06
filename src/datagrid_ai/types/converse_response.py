@@ -64,6 +64,12 @@ class ConverseResponse(Message):
     selected by the router for this turn.
     """
 
+    generated_title: Optional[str] = None
+    """Auto-generated conversation title for this turn.
+
+    Null when title generation does not run or fails.
+    """
+
     reasoning: Optional[List[ConverseResponseReasoning]] = None
     """Array of reasoning steps that occurred during this response.
 

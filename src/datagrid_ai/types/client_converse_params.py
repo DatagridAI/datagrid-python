@@ -95,6 +95,13 @@ class ClientConverseParams(TypedDict, total=False):
     When enabled, the agent will generate citations for factual statements.
     """
 
+    generate_title: Optional[bool]
+    """Determines whether generated_title metadata should be included.
+
+    Defaults to false. generated_title is emitted only when this flag is explicitly
+    true.
+    """
+
     include_steps: Optional[bool]
     """
     When set to false, tool call and reasoning step events are omitted from SSE
