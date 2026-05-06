@@ -25,16 +25,16 @@ class TestWebhooks:
     @parametrize
     def test_method_create(self, client: Datagrid) -> None:
         webhook = client.webhooks.create(
-            events=["string"],
-            url="url",
+            events=["batch_prediction.completed", "batch_prediction.failed"],
+            url="https://example.com/webhooks/datagrid",
         )
         assert_matches_type(WebhookCreateResponse, webhook, path=["response"])
 
     @parametrize
     def test_raw_response_create(self, client: Datagrid) -> None:
         response = client.webhooks.with_raw_response.create(
-            events=["string"],
-            url="url",
+            events=["batch_prediction.completed", "batch_prediction.failed"],
+            url="https://example.com/webhooks/datagrid",
         )
 
         assert response.is_closed is True
@@ -45,8 +45,8 @@ class TestWebhooks:
     @parametrize
     def test_streaming_response_create(self, client: Datagrid) -> None:
         with client.webhooks.with_streaming_response.create(
-            events=["string"],
-            url="url",
+            events=["batch_prediction.completed", "batch_prediction.failed"],
+            url="https://example.com/webhooks/datagrid",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -106,7 +106,7 @@ class TestWebhooks:
         webhook = client.webhooks.update(
             webhook_id="webhook_id",
             enabled=True,
-            events=["string"],
+            events=["knowledge.processing.completed"],
             url="url",
         )
         assert_matches_type(Webhook, webhook, path=["response"])
@@ -216,14 +216,14 @@ class TestWebhooks:
     @parametrize
     def test_method_list_active_for_event(self, client: Datagrid) -> None:
         webhook = client.webhooks.list_active_for_event(
-            event_type="event_type",
+            event_type="knowledge.processing.completed",
         )
         assert_matches_type(WebhookListActiveForEventResponse, webhook, path=["response"])
 
     @parametrize
     def test_raw_response_list_active_for_event(self, client: Datagrid) -> None:
         response = client.webhooks.with_raw_response.list_active_for_event(
-            event_type="event_type",
+            event_type="knowledge.processing.completed",
         )
 
         assert response.is_closed is True
@@ -234,7 +234,7 @@ class TestWebhooks:
     @parametrize
     def test_streaming_response_list_active_for_event(self, client: Datagrid) -> None:
         with client.webhooks.with_streaming_response.list_active_for_event(
-            event_type="event_type",
+            event_type="knowledge.processing.completed",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -253,16 +253,16 @@ class TestAsyncWebhooks:
     @parametrize
     async def test_method_create(self, async_client: AsyncDatagrid) -> None:
         webhook = await async_client.webhooks.create(
-            events=["string"],
-            url="url",
+            events=["batch_prediction.completed", "batch_prediction.failed"],
+            url="https://example.com/webhooks/datagrid",
         )
         assert_matches_type(WebhookCreateResponse, webhook, path=["response"])
 
     @parametrize
     async def test_raw_response_create(self, async_client: AsyncDatagrid) -> None:
         response = await async_client.webhooks.with_raw_response.create(
-            events=["string"],
-            url="url",
+            events=["batch_prediction.completed", "batch_prediction.failed"],
+            url="https://example.com/webhooks/datagrid",
         )
 
         assert response.is_closed is True
@@ -273,8 +273,8 @@ class TestAsyncWebhooks:
     @parametrize
     async def test_streaming_response_create(self, async_client: AsyncDatagrid) -> None:
         async with async_client.webhooks.with_streaming_response.create(
-            events=["string"],
-            url="url",
+            events=["batch_prediction.completed", "batch_prediction.failed"],
+            url="https://example.com/webhooks/datagrid",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -334,7 +334,7 @@ class TestAsyncWebhooks:
         webhook = await async_client.webhooks.update(
             webhook_id="webhook_id",
             enabled=True,
-            events=["string"],
+            events=["knowledge.processing.completed"],
             url="url",
         )
         assert_matches_type(Webhook, webhook, path=["response"])
@@ -444,14 +444,14 @@ class TestAsyncWebhooks:
     @parametrize
     async def test_method_list_active_for_event(self, async_client: AsyncDatagrid) -> None:
         webhook = await async_client.webhooks.list_active_for_event(
-            event_type="event_type",
+            event_type="knowledge.processing.completed",
         )
         assert_matches_type(WebhookListActiveForEventResponse, webhook, path=["response"])
 
     @parametrize
     async def test_raw_response_list_active_for_event(self, async_client: AsyncDatagrid) -> None:
         response = await async_client.webhooks.with_raw_response.list_active_for_event(
-            event_type="event_type",
+            event_type="knowledge.processing.completed",
         )
 
         assert response.is_closed is True
@@ -462,7 +462,7 @@ class TestAsyncWebhooks:
     @parametrize
     async def test_streaming_response_list_active_for_event(self, async_client: AsyncDatagrid) -> None:
         async with async_client.webhooks.with_streaming_response.list_active_for_event(
-            event_type="event_type",
+            event_type="knowledge.processing.completed",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"

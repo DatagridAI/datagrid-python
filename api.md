@@ -121,6 +121,29 @@ Methods:
 - <code title="delete /files/{file_id}">client.files.<a href="./src/datagrid_ai/resources/files.py">delete</a>(file_id) -> None</code>
 - <code title="get /files/{file_id}/content">client.files.<a href="./src/datagrid_ai/resources/files.py">content</a>(file_id) -> BinaryAPIResponse</code>
 
+# BatchPredictions
+
+Types:
+
+```python
+from datagrid_ai.types import (
+    BatchPrediction,
+    BatchPredictionRequestCounts,
+    BatchPredictionResultLine,
+    ProblemDetails,
+    ValidationProblemDetails,
+    ValidationProblemError,
+)
+```
+
+Methods:
+
+- <code title="post /batch-predictions">client.batch_predictions.<a href="./src/datagrid_ai/resources/batch_predictions.py">create</a>(\*\*<a href="src/datagrid_ai/types/batch_prediction_create_params.py">params</a>) -> <a href="./src/datagrid_ai/types/batch_prediction.py">BatchPrediction</a></code>
+- <code title="get /batch-predictions/{batch_prediction_id}">client.batch_predictions.<a href="./src/datagrid_ai/resources/batch_predictions.py">retrieve</a>(batch_prediction_id) -> <a href="./src/datagrid_ai/types/batch_prediction.py">BatchPrediction</a></code>
+- <code title="get /batch-predictions">client.batch_predictions.<a href="./src/datagrid_ai/resources/batch_predictions.py">list</a>(\*\*<a href="src/datagrid_ai/types/batch_prediction_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/batch_prediction.py">SyncAfterCursorPage[BatchPrediction]</a></code>
+- <code title="post /batch-predictions/{batch_prediction_id}/cancel">client.batch_predictions.<a href="./src/datagrid_ai/resources/batch_predictions.py">cancel</a>(batch_prediction_id) -> <a href="./src/datagrid_ai/types/batch_prediction.py">BatchPrediction</a></code>
+- <code title="get /batch-predictions/{batch_prediction_id}/results">client.batch_predictions.<a href="./src/datagrid_ai/resources/batch_predictions.py">retrieve_results</a>(batch_prediction_id) -> <a href="./src/datagrid_ai/types/batch_prediction_result_line.py">JSONLDecoder[BatchPredictionResultLine]</a></code>
+
 # Secrets
 
 Types:

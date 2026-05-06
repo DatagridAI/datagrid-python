@@ -72,6 +72,7 @@ if TYPE_CHECKING:
         connections,
         organization,
         conversations,
+        batch_predictions,
         connection_providers,
     )
     from .resources.files import FilesResource, AsyncFilesResource
@@ -87,6 +88,7 @@ if TYPE_CHECKING:
     from .resources.connectors import ConnectorsResource, AsyncConnectorsResource
     from .resources.connections import ConnectionsResource, AsyncConnectionsResource
     from .resources.memory.memory import MemoryResource, AsyncMemoryResource
+    from .resources.batch_predictions import BatchPredictionsResource, AsyncBatchPredictionsResource
     from .resources.knowledge.knowledge import KnowledgeResource, AsyncKnowledgeResource
     from .resources.connection_providers import ConnectionProvidersResource, AsyncConnectionProvidersResource
     from .resources.data_views.data_views import DataViewsResource, AsyncDataViewsResource
@@ -206,6 +208,12 @@ class Datagrid(SyncAPIClient):
         from .resources.files import FilesResource
 
         return FilesResource(self)
+
+    @cached_property
+    def batch_predictions(self) -> BatchPredictionsResource:
+        from .resources.batch_predictions import BatchPredictionsResource
+
+        return BatchPredictionsResource(self)
 
     @cached_property
     def secrets(self) -> SecretsResource:
@@ -379,6 +387,7 @@ class Datagrid(SyncAPIClient):
         conversation_id: Optional[str] | Omit = omit,
         current_view_content: Optional[str] | Omit = omit,
         generate_citations: Optional[bool] | Omit = omit,
+        generate_title: Optional[bool] | Omit = omit,
         include_steps: Optional[bool] | Omit = omit,
         secret_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         stream: Optional[bool] | Omit = omit,
@@ -496,6 +505,9 @@ class Datagrid(SyncAPIClient):
           generate_citations: Determines whether the response should include citations. When enabled, the
               agent will generate citations for factual statements.
 
+          generate_title: Determines whether generated_title metadata should be included. Defaults to
+              false. generated_title is emitted only when this flag is explicitly true.
+
           include_steps: When set to false, tool call and reasoning step events are omitted from SSE
               streams. Non-streaming responses always include the tool_calls and reasoning
               fields (as null when empty).
@@ -536,6 +548,7 @@ class Datagrid(SyncAPIClient):
                     "conversation_id": conversation_id,
                     "current_view_content": current_view_content,
                     "generate_citations": generate_citations,
+                    "generate_title": generate_title,
                     "include_steps": include_steps,
                     "secret_ids": secret_ids,
                     "stream": stream,
@@ -687,6 +700,12 @@ class AsyncDatagrid(AsyncAPIClient):
         from .resources.files import AsyncFilesResource
 
         return AsyncFilesResource(self)
+
+    @cached_property
+    def batch_predictions(self) -> AsyncBatchPredictionsResource:
+        from .resources.batch_predictions import AsyncBatchPredictionsResource
+
+        return AsyncBatchPredictionsResource(self)
 
     @cached_property
     def secrets(self) -> AsyncSecretsResource:
@@ -931,6 +950,7 @@ class AsyncDatagrid(AsyncAPIClient):
         conversation_id: Optional[str] | Omit = omit,
         current_view_content: Optional[str] | Omit = omit,
         generate_citations: Optional[bool] | Omit = omit,
+        generate_title: Optional[bool] | Omit = omit,
         include_steps: Optional[bool] | Omit = omit,
         secret_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         stream: Optional[bool] | Omit = omit,
@@ -977,6 +997,9 @@ class AsyncDatagrid(AsyncAPIClient):
           generate_citations: Determines whether the response should include citations. When enabled, the
               agent will generate citations for factual statements.
 
+          generate_title: Determines whether generated_title metadata should be included. Defaults to
+              false. generated_title is emitted only when this flag is explicitly true.
+
           include_steps: When set to false, tool call and reasoning step events are omitted from SSE
               streams. Non-streaming responses always include the tool_calls and reasoning
               fields (as null when empty).
@@ -1017,6 +1040,7 @@ class AsyncDatagrid(AsyncAPIClient):
                     "conversation_id": conversation_id,
                     "current_view_content": current_view_content,
                     "generate_citations": generate_citations,
+                    "generate_title": generate_title,
                     "include_steps": include_steps,
                     "secret_ids": secret_ids,
                     "stream": stream,
@@ -1106,6 +1130,12 @@ class DatagridWithRawResponse:
         from .resources.files import FilesResourceWithRawResponse
 
         return FilesResourceWithRawResponse(self._client.files)
+
+    @cached_property
+    def batch_predictions(self) -> batch_predictions.BatchPredictionsResourceWithRawResponse:
+        from .resources.batch_predictions import BatchPredictionsResourceWithRawResponse
+
+        return BatchPredictionsResourceWithRawResponse(self._client.batch_predictions)
 
     @cached_property
     def secrets(self) -> secrets.SecretsResourceWithRawResponse:
@@ -1227,6 +1257,12 @@ class AsyncDatagridWithRawResponse:
         return AsyncFilesResourceWithRawResponse(self._client.files)
 
     @cached_property
+    def batch_predictions(self) -> batch_predictions.AsyncBatchPredictionsResourceWithRawResponse:
+        from .resources.batch_predictions import AsyncBatchPredictionsResourceWithRawResponse
+
+        return AsyncBatchPredictionsResourceWithRawResponse(self._client.batch_predictions)
+
+    @cached_property
     def secrets(self) -> secrets.AsyncSecretsResourceWithRawResponse:
         from .resources.secrets import AsyncSecretsResourceWithRawResponse
 
@@ -1346,6 +1382,12 @@ class DatagridWithStreamedResponse:
         return FilesResourceWithStreamingResponse(self._client.files)
 
     @cached_property
+    def batch_predictions(self) -> batch_predictions.BatchPredictionsResourceWithStreamingResponse:
+        from .resources.batch_predictions import BatchPredictionsResourceWithStreamingResponse
+
+        return BatchPredictionsResourceWithStreamingResponse(self._client.batch_predictions)
+
+    @cached_property
     def secrets(self) -> secrets.SecretsResourceWithStreamingResponse:
         from .resources.secrets import SecretsResourceWithStreamingResponse
 
@@ -1463,6 +1505,12 @@ class AsyncDatagridWithStreamedResponse:
         from .resources.files import AsyncFilesResourceWithStreamingResponse
 
         return AsyncFilesResourceWithStreamingResponse(self._client.files)
+
+    @cached_property
+    def batch_predictions(self) -> batch_predictions.AsyncBatchPredictionsResourceWithStreamingResponse:
+        from .resources.batch_predictions import AsyncBatchPredictionsResourceWithStreamingResponse
+
+        return AsyncBatchPredictionsResourceWithStreamingResponse(self._client.batch_predictions)
 
     @cached_property
     def secrets(self) -> secrets.AsyncSecretsResourceWithStreamingResponse:

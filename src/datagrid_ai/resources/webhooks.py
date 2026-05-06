@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+from typing import List
+from typing_extensions import Literal
+
 import httpx
 
 from ..types import (
@@ -10,7 +13,7 @@ from ..types import (
     webhook_update_params,
     webhook_list_active_for_event_params,
 )
-from .._types import Body, Omit, Query, Headers, NoneType, NotGiven, SequenceNotStr, omit, not_given
+from .._types import Body, Omit, Query, Headers, NoneType, NotGiven, omit, not_given
 from .._utils import path_template, maybe_transform, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
@@ -52,7 +55,15 @@ class WebhooksResource(SyncAPIResource):
     def create(
         self,
         *,
-        events: SequenceNotStr[str],
+        events: List[
+            Literal[
+                "knowledge.processing.completed",
+                "batch_prediction.completed",
+                "batch_prediction.failed",
+                "batch_prediction.expired",
+                "batch_prediction.cancelled",
+            ]
+        ],
         url: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -61,11 +72,17 @@ class WebhooksResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> WebhookCreateResponse:
-        """
-        Create a webhook subscription for your teamspace.
+        """Create an HTTPS webhook subscription for your teamspace.
+
+        Datagrid returns the
+        signing secret only in this response; store it securely and use it to verify
+        future `Datagrid-Signature` headers.
 
         Args:
-          events: List of event types to subscribe to.
+          events: List of event types to subscribe to. Currently delivered events include
+              `knowledge.processing.completed`, `batch_prediction.completed`,
+              `batch_prediction.failed`, `batch_prediction.expired`, and
+              `batch_prediction.cancelled`.
 
           url: HTTPS destination URL for webhook deliveries.
 
@@ -130,7 +147,16 @@ class WebhooksResource(SyncAPIResource):
         webhook_id: str,
         *,
         enabled: bool | Omit = omit,
-        events: SequenceNotStr[str] | Omit = omit,
+        events: List[
+            Literal[
+                "knowledge.processing.completed",
+                "batch_prediction.completed",
+                "batch_prediction.failed",
+                "batch_prediction.expired",
+                "batch_prediction.cancelled",
+            ]
+        ]
+        | Omit = omit,
         url: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -147,7 +173,10 @@ class WebhooksResource(SyncAPIResource):
         Args:
           enabled: Enable or disable webhook delivery.
 
-          events: Updated set of event type subscriptions.
+          events: Updated set of event type subscriptions. Currently delivered events include
+              `knowledge.processing.completed`, `batch_prediction.completed`,
+              `batch_prediction.failed`, `batch_prediction.expired`, and
+              `batch_prediction.cancelled`.
 
           url: Updated HTTPS destination URL.
 
@@ -261,7 +290,13 @@ class WebhooksResource(SyncAPIResource):
     def list_active_for_event(
         self,
         *,
-        event_type: str,
+        event_type: Literal[
+            "knowledge.processing.completed",
+            "batch_prediction.completed",
+            "batch_prediction.failed",
+            "batch_prediction.expired",
+            "batch_prediction.cancelled",
+        ],
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -273,7 +308,8 @@ class WebhooksResource(SyncAPIResource):
         Returns enabled webhook subscriptions for a specific event type.
 
         Args:
-          event_type: The event type to filter by (for example `knowledge.processing.completed`).
+          event_type: The event type to filter by, for example `knowledge.processing.completed` or
+              `batch_prediction.completed`.
 
           extra_headers: Send extra headers
 
@@ -321,7 +357,15 @@ class AsyncWebhooksResource(AsyncAPIResource):
     async def create(
         self,
         *,
-        events: SequenceNotStr[str],
+        events: List[
+            Literal[
+                "knowledge.processing.completed",
+                "batch_prediction.completed",
+                "batch_prediction.failed",
+                "batch_prediction.expired",
+                "batch_prediction.cancelled",
+            ]
+        ],
         url: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -330,11 +374,17 @@ class AsyncWebhooksResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> WebhookCreateResponse:
-        """
-        Create a webhook subscription for your teamspace.
+        """Create an HTTPS webhook subscription for your teamspace.
+
+        Datagrid returns the
+        signing secret only in this response; store it securely and use it to verify
+        future `Datagrid-Signature` headers.
 
         Args:
-          events: List of event types to subscribe to.
+          events: List of event types to subscribe to. Currently delivered events include
+              `knowledge.processing.completed`, `batch_prediction.completed`,
+              `batch_prediction.failed`, `batch_prediction.expired`, and
+              `batch_prediction.cancelled`.
 
           url: HTTPS destination URL for webhook deliveries.
 
@@ -399,7 +449,16 @@ class AsyncWebhooksResource(AsyncAPIResource):
         webhook_id: str,
         *,
         enabled: bool | Omit = omit,
-        events: SequenceNotStr[str] | Omit = omit,
+        events: List[
+            Literal[
+                "knowledge.processing.completed",
+                "batch_prediction.completed",
+                "batch_prediction.failed",
+                "batch_prediction.expired",
+                "batch_prediction.cancelled",
+            ]
+        ]
+        | Omit = omit,
         url: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -416,7 +475,10 @@ class AsyncWebhooksResource(AsyncAPIResource):
         Args:
           enabled: Enable or disable webhook delivery.
 
-          events: Updated set of event type subscriptions.
+          events: Updated set of event type subscriptions. Currently delivered events include
+              `knowledge.processing.completed`, `batch_prediction.completed`,
+              `batch_prediction.failed`, `batch_prediction.expired`, and
+              `batch_prediction.cancelled`.
 
           url: Updated HTTPS destination URL.
 
@@ -530,7 +592,13 @@ class AsyncWebhooksResource(AsyncAPIResource):
     async def list_active_for_event(
         self,
         *,
-        event_type: str,
+        event_type: Literal[
+            "knowledge.processing.completed",
+            "batch_prediction.completed",
+            "batch_prediction.failed",
+            "batch_prediction.expired",
+            "batch_prediction.cancelled",
+        ],
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -542,7 +610,8 @@ class AsyncWebhooksResource(AsyncAPIResource):
         Returns enabled webhook subscriptions for a specific event type.
 
         Args:
-          event_type: The event type to filter by (for example `knowledge.processing.completed`).
+          event_type: The event type to filter by, for example `knowledge.processing.completed` or
+              `batch_prediction.completed`.
 
           extra_headers: Send extra headers
 

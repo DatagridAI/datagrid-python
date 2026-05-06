@@ -21,8 +21,21 @@ class Webhook(BaseModel):
     enabled: bool
     """Whether delivery is enabled for this webhook."""
 
-    events: List[str]
-    """The subscribed event types."""
+    events: List[
+        Literal[
+            "knowledge.processing.completed",
+            "batch_prediction.completed",
+            "batch_prediction.failed",
+            "batch_prediction.expired",
+            "batch_prediction.cancelled",
+        ]
+    ]
+    """The subscribed event types.
+
+    Currently delivered events include `knowledge.processing.completed`,
+    `batch_prediction.completed`, `batch_prediction.failed`,
+    `batch_prediction.expired`, and `batch_prediction.cancelled`.
+    """
 
     object: Literal["webhook"]
     """The object type, which is always `webhook`."""

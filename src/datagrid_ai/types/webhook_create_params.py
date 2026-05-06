@@ -2,16 +2,30 @@
 
 from __future__ import annotations
 
-from typing_extensions import Required, TypedDict
-
-from .._types import SequenceNotStr
+from typing import List
+from typing_extensions import Literal, Required, TypedDict
 
 __all__ = ["WebhookCreateParams"]
 
 
 class WebhookCreateParams(TypedDict, total=False):
-    events: Required[SequenceNotStr[str]]
-    """List of event types to subscribe to."""
+    events: Required[
+        List[
+            Literal[
+                "knowledge.processing.completed",
+                "batch_prediction.completed",
+                "batch_prediction.failed",
+                "batch_prediction.expired",
+                "batch_prediction.cancelled",
+            ]
+        ]
+    ]
+    """List of event types to subscribe to.
+
+    Currently delivered events include `knowledge.processing.completed`,
+    `batch_prediction.completed`, `batch_prediction.failed`,
+    `batch_prediction.expired`, and `batch_prediction.cancelled`.
+    """
 
     url: Required[str]
     """HTTPS destination URL for webhook deliveries."""
