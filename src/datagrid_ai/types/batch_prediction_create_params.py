@@ -18,6 +18,7 @@ class BatchPredictionCreateParams(TypedDict, total=False):
         Literal[
             "gemini-2.5-flash",
             "gemini-2.5-flash-lite",
+            "gemini-3.1-flash-lite",
             "gemini-2.5-pro",
             "anthropic.claude-haiku-4-5-20251001-v1:0",
             "anthropic.claude-sonnet-4-5-20250929-v1:0",
