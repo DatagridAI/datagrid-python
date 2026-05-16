@@ -86,6 +86,7 @@ class AgentCreateParams(TypedDict, total=False):
 
     llm_model: Union[
         Literal[
+            "gemini-3.1-flash-lite",
             "gemini-3-pro-preview",
             "gemini-3.1-pro-preview",
             "gemini-3-flash-preview",

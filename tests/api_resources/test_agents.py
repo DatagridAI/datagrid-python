@@ -37,7 +37,7 @@ class TestAgents:
             description="description",
             disabled_tools=["string"],
             knowledge_ids=["string"],
-            llm_model="gemini-3-pro-preview",
+            llm_model="gemini-3.1-flash-lite",
             mcp_servers=[
                 {
                     "server_id": "server_id",
@@ -133,7 +133,7 @@ class TestAgents:
             disabled_tools=["string"],
             emoji="emoji",
             knowledge_ids=["string"],
-            llm_model="gemini-3-pro-preview",
+            llm_model="gemini-3.1-flash-lite",
             mcp_servers=[
                 {
                     "server_id": "server_id",
@@ -277,7 +277,7 @@ class TestAsyncAgents:
             description="description",
             disabled_tools=["string"],
             knowledge_ids=["string"],
-            llm_model="gemini-3-pro-preview",
+            llm_model="gemini-3.1-flash-lite",
             mcp_servers=[
                 {
                     "server_id": "server_id",
@@ -373,7 +373,7 @@ class TestAsyncAgents:
             disabled_tools=["string"],
             emoji="emoji",
             knowledge_ids=["string"],
-            llm_model="gemini-3-pro-preview",
+            llm_model="gemini-3.1-flash-lite",
             mcp_servers=[
                 {
                     "server_id": "server_id",

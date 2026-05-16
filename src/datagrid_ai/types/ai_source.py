@@ -42,4 +42,4 @@ class AISource(BaseModel):
     """URI for a thumbnail preview of the source, if available."""
 
     url: Optional[str] = None
-    """URL to view the source in the DataGrid web app."""
+    """URL to view the source in the Datagrid web app."""

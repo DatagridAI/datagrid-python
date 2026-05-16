@@ -141,6 +141,12 @@ class VoiceConfig(TypedDict, total=False):
     pauses the countdown. Disabled by default.
     """
 
+    silent_start: Optional[bool]
+    """When true, skip the launch greeting and start directly in listening mode.
+
+    Disabled by default.
+    """
+
     voice_preset: Optional[str]
     """Voice preset to use (e.g., 'sage', 'nova', 'spark').
 

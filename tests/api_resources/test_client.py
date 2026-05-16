@@ -10,6 +10,7 @@ import pytest
 from datagrid_ai import Datagrid, AsyncDatagrid
 from tests.utils import assert_matches_type
 from datagrid_ai.types import ConverseResponse
+from datagrid_ai._utils import parse_date
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -44,7 +45,7 @@ class TestClient:
                 "disabled_agent_tools": ["string"],
                 "disabled_tools": ["string"],
                 "knowledge_ids": ["string"],
-                "llm_model": "gemini-3-pro-preview",
+                "llm_model": "gemini-3.1-flash-lite",
                 "mcp_servers": [
                     {
                         "server_id": "server_id",
@@ -66,6 +67,7 @@ class TestClient:
             generate_citations=True,
             generate_title=True,
             include_steps=True,
+            reference_date=parse_date("2019-12-27"),
             secret_ids=["string"],
             stream=False,
             text={"format": {}},
@@ -134,7 +136,7 @@ class TestAsyncClient:
                 "disabled_agent_tools": ["string"],
                 "disabled_tools": ["string"],
                 "knowledge_ids": ["string"],
-                "llm_model": "gemini-3-pro-preview",
+                "llm_model": "gemini-3.1-flash-lite",
                 "mcp_servers": [
                     {
                         "server_id": "server_id",
@@ -156,6 +158,7 @@ class TestAsyncClient:
             generate_citations=True,
             generate_title=True,
             include_steps=True,
+            reference_date=parse_date("2019-12-27"),
             secret_ids=["string"],
             stream=False,
             text={"format": {}},

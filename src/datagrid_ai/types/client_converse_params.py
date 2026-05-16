@@ -3,9 +3,11 @@
 from __future__ import annotations
 
 from typing import Union, Iterable, Optional
-from typing_extensions import Literal, Required, TypeAlias, TypedDict
+from datetime import date
+from typing_extensions import Literal, Required, Annotated, TypeAlias, TypedDict
 
 from .._types import SequenceNotStr
+from .._utils import PropertyInfo
 from .tool_name import ToolName
 from .tool_param import ToolParam
 
@@ -107,6 +109,14 @@ class ClientConverseParams(TypedDict, total=False):
     When set to false, tool call and reasoning step events are omitted from SSE
     streams. Non-streaming responses always include the tool_calls and reasoning
     fields (as null when empty).
+    """
+
+    reference_date: Annotated[Union[str, date, None], PropertyInfo(format="iso8601")]
+    """Optional deterministic reference date override in YYYY-MM-DD format.
+
+    Must be a real calendar date (for example, rejects impossible dates like
+    2026-02-31). When set, the agent treats this date as today for relative date
+    resolution and date context rendering.
     """
 
     secret_ids: Optional[SequenceNotStr[str]]
@@ -324,6 +334,7 @@ class AgentRoutingManualTargetAgentConfigWithID(TypedDict, total=False):
 
     llm_model: Union[
         Literal[
+            "gemini-3.1-flash-lite",
             "gemini-3-pro-preview",
             "gemini-3.1-pro-preview",
             "gemini-3-flash-preview",
@@ -584,6 +595,7 @@ class Config(TypedDict, total=False):
 
     llm_model: Union[
         Literal[
+            "gemini-3.1-flash-lite",
             "gemini-3-pro-preview",
             "gemini-3.1-pro-preview",
             "gemini-3-flash-preview",

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import os
 from typing import TYPE_CHECKING, Any, Union, Mapping, Iterable, Optional, overload
+from datetime import date
 from typing_extensions import Self, Literal, override
 
 import httpx
@@ -389,6 +390,7 @@ class Datagrid(SyncAPIClient):
         generate_citations: Optional[bool] | Omit = omit,
         generate_title: Optional[bool] | Omit = omit,
         include_steps: Optional[bool] | Omit = omit,
+        reference_date: Union[str, date, None] | Omit = omit,
         secret_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         stream: Optional[bool] | Omit = omit,
         text: Optional[client_converse_params.Text] | Omit = omit,
@@ -512,6 +514,11 @@ class Datagrid(SyncAPIClient):
               streams. Non-streaming responses always include the tool_calls and reasoning
               fields (as null when empty).
 
+          reference_date: Optional deterministic reference date override in YYYY-MM-DD format. Must be a
+              real calendar date (for example, rejects impossible dates like 2026-02-31). When
+              set, the agent treats this date as today for relative date resolution and date
+              context rendering.
+
           secret_ids: Array of secret ID's to be included in the context. The secret value will be
               appended to the prompt but not stored in conversation history.
 
@@ -550,6 +557,7 @@ class Datagrid(SyncAPIClient):
                     "generate_citations": generate_citations,
                     "generate_title": generate_title,
                     "include_steps": include_steps,
+                    "reference_date": reference_date,
                     "secret_ids": secret_ids,
                     "stream": stream,
                     "text": text,
@@ -952,6 +960,7 @@ class AsyncDatagrid(AsyncAPIClient):
         generate_citations: Optional[bool] | Omit = omit,
         generate_title: Optional[bool] | Omit = omit,
         include_steps: Optional[bool] | Omit = omit,
+        reference_date: Union[str, date, None] | Omit = omit,
         secret_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         stream: Optional[bool] | Omit = omit,
         text: Optional[client_converse_params.Text] | Omit = omit,
@@ -1004,6 +1013,11 @@ class AsyncDatagrid(AsyncAPIClient):
               streams. Non-streaming responses always include the tool_calls and reasoning
               fields (as null when empty).
 
+          reference_date: Optional deterministic reference date override in YYYY-MM-DD format. Must be a
+              real calendar date (for example, rejects impossible dates like 2026-02-31). When
+              set, the agent treats this date as today for relative date resolution and date
+              context rendering.
+
           secret_ids: Array of secret ID's to be included in the context. The secret value will be
               appended to the prompt but not stored in conversation history.
 
@@ -1042,6 +1056,7 @@ class AsyncDatagrid(AsyncAPIClient):
                     "generate_citations": generate_citations,
                     "generate_title": generate_title,
                     "include_steps": include_steps,
+                    "reference_date": reference_date,
                     "secret_ids": secret_ids,
                     "stream": stream,
                     "text": text,
