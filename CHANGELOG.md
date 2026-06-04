@@ -1,5 +1,39 @@
 # Changelog
 
+## 0.12.0 (2026-06-04)
+
+Full Changelog: [v0.11.1...v0.12.0](https://github.com/DatagridAI/datagrid-python/compare/v0.11.1...v0.12.0)
+
+### Features
+
+* **api:** api update ([0d0fa4e](https://github.com/DatagridAI/datagrid-python/commit/0d0fa4e7ccfccf4b02066039677ac8d38ff7ae01))
+* **api:** api update ([1eb3444](https://github.com/DatagridAI/datagrid-python/commit/1eb3444b253ee8ba40212dce2241944fe81a2a55))
+* **api:** api update ([78a6246](https://github.com/DatagridAI/datagrid-python/commit/78a6246e2777d54cf053ca5067dbaf9c1f97ae7b))
+* **api:** api update ([5150524](https://github.com/DatagridAI/datagrid-python/commit/5150524b9f7b649cf1c8d001039b8ac1a00a86d2))
+* **api:** api update ([8acada1](https://github.com/DatagridAI/datagrid-python/commit/8acada170fee282d93dc329c9b938f018512d7ef))
+* **api:** api update ([434714f](https://github.com/DatagridAI/datagrid-python/commit/434714f3b487971b5043b81852805891fad32554))
+* **internal/types:** support eagerly validating pydantic iterators ([3ee8d60](https://github.com/DatagridAI/datagrid-python/commit/3ee8d60fbe4d3d25939e725d7ceda779f010efb5))
+* support setting headers via env ([c5079b3](https://github.com/DatagridAI/datagrid-python/commit/c5079b3bfe4202920500cb29f1884106ed9b8642))
+
+
+### Bug Fixes
+
+* **client:** add missing f-string prefix in file type error message ([841bcc5](https://github.com/DatagridAI/datagrid-python/commit/841bcc5f47425ce3cb01e9f00baf32d1faae2553))
+* **client:** align converse overload signatures with implementation ([098c2ec](https://github.com/DatagridAI/datagrid-python/commit/098c2ecc9d09ddf339c3db5fa2d74c75839af1a3))
+* use correct field name format for multipart file arrays ([5657fbc](https://github.com/DatagridAI/datagrid-python/commit/5657fbcd161da2f88db73c1c9a681264c3b5fc07))
+
+
+### Performance Improvements
+
+* **client:** optimize file structure copying in multipart requests ([491cdc2](https://github.com/DatagridAI/datagrid-python/commit/491cdc2819ef77864d8c8325acd95a21b3b1d0d4))
+
+
+### Chores
+
+* **internal:** more robust bootstrap script ([f203172](https://github.com/DatagridAI/datagrid-python/commit/f2031721de803b560f3d704b51b00377789cc5b9))
+* **internal:** reformat pyproject.toml ([6b3e401](https://github.com/DatagridAI/datagrid-python/commit/6b3e401de4e6207832f26b064d47ccf221481103))
+* **tests:** bump steady to v0.22.1 ([d6e475c](https://github.com/DatagridAI/datagrid-python/commit/d6e475c42a99fd33f098765af810176d14245176))
+
 ## 0.11.1 (2026-04-10)
 
 Full Changelog: [v0.11.0...v0.11.1](https://github.com/DatagridAI/datagrid-python/compare/v0.11.0...v0.11.1)
