@@ -6,6 +6,7 @@ from .page import Page as Page
 from .tool import Tool as Tool
 from .agent import Agent as Agent
 from .secret import Secret as Secret
+from .webhook import Webhook as Webhook
 from .identity import Identity as Identity
 from .tool_def import ToolDef as ToolDef
 from .ai_source import AISource as AISource
@@ -19,6 +20,8 @@ from .file_object import FileObject as FileObject
 from .conversation import Conversation as Conversation
 from .row_metadata import RowMetadata as RowMetadata
 from .table_metadata import TableMetadata as TableMetadata
+from .problem_details import ProblemDetails as ProblemDetails
+from .batch_prediction import BatchPrediction as BatchPrediction
 from .file_list_params import FileListParams as FileListParams
 from .message_metadata import MessageMetadata as MessageMetadata
 from .page_list_params import PageListParams as PageListParams
@@ -40,12 +43,15 @@ from .agent_create_params import AgentCreateParams as AgentCreateParams
 from .agent_update_params import AgentUpdateParams as AgentUpdateParams
 from .attachment_metadata import AttachmentMetadata as AttachmentMetadata
 from .connection_provider import ConnectionProvider as ConnectionProvider
+from .webhook_list_params import WebhookListParams as WebhookListParams
 from .search_search_params import SearchSearchParams as SearchSearchParams
 from .secret_create_params import SecretCreateParams as SecretCreateParams
 from .connector_list_params import ConnectorListParams as ConnectorListParams
 from .data_view_list_params import DataViewListParams as DataViewListParams
 from .knowledge_list_params import KnowledgeListParams as KnowledgeListParams
 from .redirect_url_response import RedirectURLResponse as RedirectURLResponse
+from .webhook_create_params import WebhookCreateParams as WebhookCreateParams
+from .webhook_update_params import WebhookUpdateParams as WebhookUpdateParams
 from .client_converse_params import ClientConverseParams as ClientConverseParams
 from .connection_list_params import ConnectionListParams as ConnectionListParams
 from .search_result_resource import SearchResultResource as SearchResultResource
@@ -57,6 +63,7 @@ from .data_view_list_response import DataViewListResponse as DataViewListRespons
 from .knowledge_create_params import KnowledgeCreateParams as KnowledgeCreateParams
 from .knowledge_update_params import KnowledgeUpdateParams as KnowledgeUpdateParams
 from .search_search_ai_params import SearchSearchAIParams as SearchSearchAIParams
+from .webhook_create_response import WebhookCreateResponse as WebhookCreateResponse
 from .connection_create_params import ConnectionCreateParams as ConnectionCreateParams
 from .connection_update_params import ConnectionUpdateParams as ConnectionUpdateParams
 from .conversation_list_params import ConversationListParams as ConversationListParams
@@ -67,6 +74,14 @@ from .conversation_create_params import ConversationCreateParams as Conversation
 from .conversation_update_params import ConversationUpdateParams as ConversationUpdateParams
 from .voice_start_session_params import VoiceStartSessionParams as VoiceStartSessionParams
 from .search_result_resource_type import SearchResultResourceType as SearchResultResourceType
+from .batch_prediction_list_params import BatchPredictionListParams as BatchPredictionListParams
+from .batch_prediction_result_line import BatchPredictionResultLine as BatchPredictionResultLine
+from .batch_prediction_create_params import BatchPredictionCreateParams as BatchPredictionCreateParams
+from .batch_prediction_request_counts import BatchPredictionRequestCounts as BatchPredictionRequestCounts
 from .connection_provider_list_params import ConnectionProviderListParams as ConnectionProviderListParams
 from .connection_provider_create_params import ConnectionProviderCreateParams as ConnectionProviderCreateParams
 from .connection_provider_update_params import ConnectionProviderUpdateParams as ConnectionProviderUpdateParams
+from .webhook_list_active_for_event_params import WebhookListActiveForEventParams as WebhookListActiveForEventParams
+from .webhook_list_active_for_event_response import (
+    WebhookListActiveForEventResponse as WebhookListActiveForEventResponse,
+)

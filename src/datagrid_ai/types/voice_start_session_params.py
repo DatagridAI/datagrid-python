@@ -133,6 +133,20 @@ class VoiceConfig(TypedDict, total=False):
     Default: 0.9 (90% silence threshold).
     """
 
+    silence_timeout: Optional[bool]
+    """
+    When true, the server closes the connection after the client has been
+    continuously sending audio frames below the speech-detection threshold for 60
+    seconds. Frames are still required — a fully muted microphone (no frames sent)
+    pauses the countdown. Disabled by default.
+    """
+
+    silent_start: Optional[bool]
+    """When true, skip the launch greeting and start directly in listening mode.
+
+    Disabled by default.
+    """
+
     voice_preset: Optional[str]
     """Voice preset to use (e.g., 'sage', 'nova', 'spark').
 

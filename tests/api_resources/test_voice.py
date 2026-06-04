@@ -49,6 +49,8 @@ class TestVoice:
                 "segment_max_duration_ms": 0,
                 "silence_commit_ms": 0,
                 "silence_discard_ratio": 0,
+                "silence_timeout": True,
+                "silent_start": True,
                 "voice_preset": "voice_preset",
             },
         )
@@ -112,6 +114,8 @@ class TestAsyncVoice:
                 "segment_max_duration_ms": 0,
                 "silence_commit_ms": 0,
                 "silence_discard_ratio": 0,
+                "silence_timeout": True,
+                "silent_start": True,
                 "voice_preset": "voice_preset",
             },
         )

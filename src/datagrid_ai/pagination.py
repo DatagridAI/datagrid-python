@@ -12,6 +12,10 @@ __all__ = [
     "AsyncCursorNamePage",
     "SyncCursorPage",
     "AsyncCursorPage",
+    "SyncWebhookCursorPage",
+    "AsyncWebhookCursorPage",
+    "SyncAfterCursorPage",
+    "AsyncAfterCursorPage",
 ]
 
 _T = TypeVar("_T")
@@ -201,3 +205,83 @@ class AsyncCursorPage(BaseAsyncPage[_T], BasePage[_T], Generic[_T]):
             return None
 
         return PageInfo(params={"next": cursor})
+
+
+class SyncWebhookCursorPage(BaseSyncPage[_T], BasePage[_T], Generic[_T]):
+    data: List[_T]
+    next_cursor: Optional[str] = None
+
+    @override
+    def _get_page_items(self) -> List[_T]:
+        data = self.data
+        if not data:
+            return []
+        return data
+
+    @override
+    def next_page_info(self) -> Optional[PageInfo]:
+        next_cursor = self.next_cursor
+        if not next_cursor:
+            return None
+
+        return PageInfo(params={"cursor": next_cursor})
+
+
+class AsyncWebhookCursorPage(BaseAsyncPage[_T], BasePage[_T], Generic[_T]):
+    data: List[_T]
+    next_cursor: Optional[str] = None
+
+    @override
+    def _get_page_items(self) -> List[_T]:
+        data = self.data
+        if not data:
+            return []
+        return data
+
+    @override
+    def next_page_info(self) -> Optional[PageInfo]:
+        next_cursor = self.next_cursor
+        if not next_cursor:
+            return None
+
+        return PageInfo(params={"cursor": next_cursor})
+
+
+class SyncAfterCursorPage(BaseSyncPage[_T], BasePage[_T], Generic[_T]):
+    data: List[_T]
+    next_cursor: Optional[str] = None
+
+    @override
+    def _get_page_items(self) -> List[_T]:
+        data = self.data
+        if not data:
+            return []
+        return data
+
+    @override
+    def next_page_info(self) -> Optional[PageInfo]:
+        next_cursor = self.next_cursor
+        if not next_cursor:
+            return None
+
+        return PageInfo(params={"after": next_cursor})
+
+
+class AsyncAfterCursorPage(BaseAsyncPage[_T], BasePage[_T], Generic[_T]):
+    data: List[_T]
+    next_cursor: Optional[str] = None
+
+    @override
+    def _get_page_items(self) -> List[_T]:
+        data = self.data
+        if not data:
+            return []
+        return data
+
+    @override
+    def next_page_info(self) -> Optional[PageInfo]:
+        next_cursor = self.next_cursor
+        if not next_cursor:
+            return None
+
+        return PageInfo(params={"after": next_cursor})

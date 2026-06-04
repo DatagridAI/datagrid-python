@@ -80,6 +80,14 @@ from .identity import (
     IdentityResourceWithStreamingResponse,
     AsyncIdentityResourceWithStreamingResponse,
 )
+from .webhooks import (
+    WebhooksResource,
+    AsyncWebhooksResource,
+    WebhooksResourceWithRawResponse,
+    AsyncWebhooksResourceWithRawResponse,
+    WebhooksResourceWithStreamingResponse,
+    AsyncWebhooksResourceWithStreamingResponse,
+)
 from .knowledge import (
     KnowledgeResource,
     AsyncKnowledgeResource,
@@ -128,6 +136,14 @@ from .conversations import (
     ConversationsResourceWithStreamingResponse,
     AsyncConversationsResourceWithStreamingResponse,
 )
+from .batch_predictions import (
+    BatchPredictionsResource,
+    AsyncBatchPredictionsResource,
+    BatchPredictionsResourceWithRawResponse,
+    AsyncBatchPredictionsResourceWithRawResponse,
+    BatchPredictionsResourceWithStreamingResponse,
+    AsyncBatchPredictionsResourceWithStreamingResponse,
+)
 from .connection_providers import (
     ConnectionProvidersResource,
     AsyncConnectionProvidersResource,
@@ -168,12 +184,24 @@ __all__ = [
     "AsyncFilesResourceWithRawResponse",
     "FilesResourceWithStreamingResponse",
     "AsyncFilesResourceWithStreamingResponse",
+    "BatchPredictionsResource",
+    "AsyncBatchPredictionsResource",
+    "BatchPredictionsResourceWithRawResponse",
+    "AsyncBatchPredictionsResourceWithRawResponse",
+    "BatchPredictionsResourceWithStreamingResponse",
+    "AsyncBatchPredictionsResourceWithStreamingResponse",
     "SecretsResource",
     "AsyncSecretsResource",
     "SecretsResourceWithRawResponse",
     "AsyncSecretsResourceWithRawResponse",
     "SecretsResourceWithStreamingResponse",
     "AsyncSecretsResourceWithStreamingResponse",
+    "WebhooksResource",
+    "AsyncWebhooksResource",
+    "WebhooksResourceWithRawResponse",
+    "AsyncWebhooksResourceWithRawResponse",
+    "WebhooksResourceWithStreamingResponse",
+    "AsyncWebhooksResourceWithStreamingResponse",
     "SearchResource",
     "AsyncSearchResource",
     "SearchResourceWithRawResponse",

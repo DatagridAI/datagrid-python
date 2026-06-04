@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import os
 from typing import TYPE_CHECKING, Any, Union, Mapping, Iterable, Optional, overload
+from datetime import date
 from typing_extensions import Self, Literal, override
 
 import httpx
@@ -28,6 +29,7 @@ from ._types import (
 )
 from ._utils import (
     is_given,
+    is_mapping_t,
     maybe_transform,
     get_async_library,
     async_maybe_transform,
@@ -64,12 +66,14 @@ if TYPE_CHECKING:
         search,
         secrets,
         identity,
+        webhooks,
         knowledge,
         connectors,
         data_views,
         connections,
         organization,
         conversations,
+        batch_predictions,
         connection_providers,
     )
     from .resources.files import FilesResource, AsyncFilesResource
@@ -80,10 +84,12 @@ if TYPE_CHECKING:
     from .resources.search import SearchResource, AsyncSearchResource
     from .resources.secrets import SecretsResource, AsyncSecretsResource
     from .resources.identity import IdentityResource, AsyncIdentityResource
+    from .resources.webhooks import WebhooksResource, AsyncWebhooksResource
     from .resources.beta.beta import BetaResource, AsyncBetaResource
     from .resources.connectors import ConnectorsResource, AsyncConnectorsResource
     from .resources.connections import ConnectionsResource, AsyncConnectionsResource
     from .resources.memory.memory import MemoryResource, AsyncMemoryResource
+    from .resources.batch_predictions import BatchPredictionsResource, AsyncBatchPredictionsResource
     from .resources.knowledge.knowledge import KnowledgeResource, AsyncKnowledgeResource
     from .resources.connection_providers import ConnectionProvidersResource, AsyncConnectionProvidersResource
     from .resources.data_views.data_views import DataViewsResource, AsyncDataViewsResource
@@ -154,6 +160,15 @@ class Datagrid(SyncAPIClient):
         if base_url is None:
             base_url = f"https://api.datagrid.com/v1"
 
+        custom_headers_env = os.environ.get("DATAGRID_CUSTOM_HEADERS")
+        if custom_headers_env is not None:
+            parsed: dict[str, str] = {}
+            for line in custom_headers_env.split("\n"):
+                colon = line.find(":")
+                if colon >= 0:
+                    parsed[line[:colon].strip()] = line[colon + 1 :].strip()
+            default_headers = {**parsed, **(default_headers if is_mapping_t(default_headers) else {})}
+
         super().__init__(
             version=__version__,
             base_url=base_url,
@@ -196,10 +211,22 @@ class Datagrid(SyncAPIClient):
         return FilesResource(self)
 
     @cached_property
+    def batch_predictions(self) -> BatchPredictionsResource:
+        from .resources.batch_predictions import BatchPredictionsResource
+
+        return BatchPredictionsResource(self)
+
+    @cached_property
     def secrets(self) -> SecretsResource:
         from .resources.secrets import SecretsResource
 
         return SecretsResource(self)
+
+    @cached_property
+    def webhooks(self) -> WebhooksResource:
+        from .resources.webhooks import WebhooksResource
+
+        return WebhooksResource(self)
 
     @cached_property
     def search(self) -> SearchResource:
@@ -356,11 +383,14 @@ class Datagrid(SyncAPIClient):
         prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
         agent_id: Optional[str] | Omit = omit,
         agent_routing: Optional[client_converse_params.AgentRouting] | Omit = omit,
+        chat_mode: Optional[Literal["auto", "full_agent", "light_agent", "llm_router"]] | Omit = omit,
         config: Optional[client_converse_params.Config] | Omit = omit,
         conversation_id: Optional[str] | Omit = omit,
         current_view_content: Optional[str] | Omit = omit,
         generate_citations: Optional[bool] | Omit = omit,
+        generate_title: Optional[bool] | Omit = omit,
         include_steps: Optional[bool] | Omit = omit,
+        reference_date: Union[str, date, None] | Omit = omit,
         secret_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         stream: Optional[bool] | Omit = omit,
         text: Optional[client_converse_params.Text] | Omit = omit,
@@ -380,11 +410,14 @@ class Datagrid(SyncAPIClient):
         prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
         agent_id: Optional[str] | Omit = omit,
         agent_routing: Optional[client_converse_params.AgentRouting] | Omit = omit,
+        chat_mode: Optional[Literal["auto", "full_agent", "light_agent", "llm_router"]] | Omit = omit,
         config: Optional[client_converse_params.Config] | Omit = omit,
         conversation_id: Optional[str] | Omit = omit,
         current_view_content: Optional[str] | Omit = omit,
         generate_citations: Optional[bool] | Omit = omit,
+        generate_title: Optional[bool] | Omit = omit,
         include_steps: Optional[bool] | Omit = omit,
+        reference_date: Union[str, date, None] | Omit = omit,
         secret_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         stream: Literal[True],
         text: Optional[client_converse_params.Text] | Omit = omit,
@@ -404,11 +437,14 @@ class Datagrid(SyncAPIClient):
         prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
         agent_id: Optional[str] | Omit = omit,
         agent_routing: Optional[client_converse_params.AgentRouting] | Omit = omit,
+        chat_mode: Optional[Literal["auto", "full_agent", "light_agent", "llm_router"]] | Omit = omit,
         config: Optional[client_converse_params.Config] | Omit = omit,
         conversation_id: Optional[str] | Omit = omit,
         current_view_content: Optional[str] | Omit = omit,
         generate_citations: Optional[bool] | Omit = omit,
+        generate_title: Optional[bool] | Omit = omit,
         include_steps: Optional[bool] | Omit = omit,
+        reference_date: Union[str, date, None] | Omit = omit,
         secret_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         stream: bool,
         text: Optional[client_converse_params.Text] | Omit = omit,
@@ -427,11 +463,14 @@ class Datagrid(SyncAPIClient):
         prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
         agent_id: Optional[str] | Omit = omit,
         agent_routing: Optional[client_converse_params.AgentRouting] | Omit = omit,
+        chat_mode: Optional[Literal["auto", "full_agent", "light_agent", "llm_router"]] | Omit = omit,
         config: Optional[client_converse_params.Config] | Omit = omit,
         conversation_id: Optional[str] | Omit = omit,
         current_view_content: Optional[str] | Omit = omit,
         generate_citations: Optional[bool] | Omit = omit,
+        generate_title: Optional[bool] | Omit = omit,
         include_steps: Optional[bool] | Omit = omit,
+        reference_date: Union[str, date, None] | Omit = omit,
         secret_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         stream: Optional[bool] | Omit = omit,
         text: Optional[client_converse_params.Text] | Omit = omit,
@@ -456,6 +495,13 @@ class Datagrid(SyncAPIClient):
 
           agent_routing: Determines how the API routes the converse request to an agent.
 
+          chat_mode: Controls how the agent processes the request for this turn. Matches the chat
+              mode selector in the Datagrid web app: **Execute** (`full_agent`), **Extended**
+              (`light_agent`), **Ask** (`llm_router`). When set to `auto`, the router jointly
+              predicts the best agent and concrete mode (`full_agent` / `light_agent` /
+              `llm_router`) per message. When set to a concrete mode, that mode is used
+              directly. When omitted, the mode is determined by the `agent_model` in `config`.
+
           config: Override the agent config for this converse call. This is applied as a partial
               override.
 
@@ -470,9 +516,17 @@ class Datagrid(SyncAPIClient):
           generate_citations: Determines whether the response should include citations. When enabled, the
               agent will generate citations for factual statements.
 
+          generate_title: Determines whether generated_title metadata should be included. Defaults to
+              false. generated_title is emitted only when this flag is explicitly true.
+
           include_steps: When set to false, tool call and reasoning step events are omitted from SSE
               streams. Non-streaming responses always include the tool_calls and reasoning
               fields (as null when empty).
+
+          reference_date: Optional deterministic reference date override in YYYY-MM-DD format. Must be a
+              real calendar date (for example, rejects impossible dates like 2026-02-31). When
+              set, the agent treats this date as today for relative date resolution and date
+              context rendering.
 
           secret_ids: Array of secret ID's to be included in the context. The secret value will be
               appended to the prompt but not stored in conversation history.
@@ -480,10 +534,10 @@ class Datagrid(SyncAPIClient):
           stream: Determines the response type of the converse. Response is the Server-Sent Events
               if stream is set to true.
 
-          text: Contains the format property used to specify the structured output schema.
-              Structured output is supported by the following agent models: `magpie-2.0`
-              (default), `magpie-2.5`, and `magpie-1.1`. It is not supported by
-              `magpie-1.1-flash` (Ask mode) or `llm-only` (Fastest mode).
+          text: Contains the format property used to specify the structured output schema
+              (`text.format`). Structured output is supported for all `agent_model` values and
+              `chat_mode` settings when `text.format` is provided (same JSON Schema mechanism
+              everywhere). **Ask** in the web app maps to `chat_mode` `magpie-2.5-flash`;.
 
           user: User information override for converse calls. All fields are optional - only
               provided fields will override the default user information.
@@ -505,11 +559,14 @@ class Datagrid(SyncAPIClient):
                     "prompt": prompt,
                     "agent_id": agent_id,
                     "agent_routing": agent_routing,
+                    "chat_mode": chat_mode,
                     "config": config,
                     "conversation_id": conversation_id,
                     "current_view_content": current_view_content,
                     "generate_citations": generate_citations,
+                    "generate_title": generate_title,
                     "include_steps": include_steps,
+                    "reference_date": reference_date,
                     "secret_ids": secret_ids,
                     "stream": stream,
                     "text": text,
@@ -611,6 +668,15 @@ class AsyncDatagrid(AsyncAPIClient):
         if base_url is None:
             base_url = f"https://api.datagrid.com/v1"
 
+        custom_headers_env = os.environ.get("DATAGRID_CUSTOM_HEADERS")
+        if custom_headers_env is not None:
+            parsed: dict[str, str] = {}
+            for line in custom_headers_env.split("\n"):
+                colon = line.find(":")
+                if colon >= 0:
+                    parsed[line[:colon].strip()] = line[colon + 1 :].strip()
+            default_headers = {**parsed, **(default_headers if is_mapping_t(default_headers) else {})}
+
         super().__init__(
             version=__version__,
             base_url=base_url,
@@ -653,10 +719,22 @@ class AsyncDatagrid(AsyncAPIClient):
         return AsyncFilesResource(self)
 
     @cached_property
+    def batch_predictions(self) -> AsyncBatchPredictionsResource:
+        from .resources.batch_predictions import AsyncBatchPredictionsResource
+
+        return AsyncBatchPredictionsResource(self)
+
+    @cached_property
     def secrets(self) -> AsyncSecretsResource:
         from .resources.secrets import AsyncSecretsResource
 
         return AsyncSecretsResource(self)
+
+    @cached_property
+    def webhooks(self) -> AsyncWebhooksResource:
+        from .resources.webhooks import AsyncWebhooksResource
+
+        return AsyncWebhooksResource(self)
 
     @cached_property
     def search(self) -> AsyncSearchResource:
@@ -813,11 +891,14 @@ class AsyncDatagrid(AsyncAPIClient):
         prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
         agent_id: Optional[str] | Omit = omit,
         agent_routing: Optional[client_converse_params.AgentRouting] | Omit = omit,
+        chat_mode: Optional[Literal["auto", "full_agent", "light_agent", "llm_router"]] | Omit = omit,
         config: Optional[client_converse_params.Config] | Omit = omit,
         conversation_id: Optional[str] | Omit = omit,
         current_view_content: Optional[str] | Omit = omit,
         generate_citations: Optional[bool] | Omit = omit,
+        generate_title: Optional[bool] | Omit = omit,
         include_steps: Optional[bool] | Omit = omit,
+        reference_date: Union[str, date, None] | Omit = omit,
         secret_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         stream: Literal[False] | Omit = omit,
         text: Optional[client_converse_params.Text] | Omit = omit,
@@ -837,11 +918,14 @@ class AsyncDatagrid(AsyncAPIClient):
         prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
         agent_id: Optional[str] | Omit = omit,
         agent_routing: Optional[client_converse_params.AgentRouting] | Omit = omit,
+        chat_mode: Optional[Literal["auto", "full_agent", "light_agent", "llm_router"]] | Omit = omit,
         config: Optional[client_converse_params.Config] | Omit = omit,
         conversation_id: Optional[str] | Omit = omit,
         current_view_content: Optional[str] | Omit = omit,
         generate_citations: Optional[bool] | Omit = omit,
+        generate_title: Optional[bool] | Omit = omit,
         include_steps: Optional[bool] | Omit = omit,
+        reference_date: Union[str, date, None] | Omit = omit,
         secret_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         stream: Literal[True],
         text: Optional[client_converse_params.Text] | Omit = omit,
@@ -861,11 +945,14 @@ class AsyncDatagrid(AsyncAPIClient):
         prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
         agent_id: Optional[str] | Omit = omit,
         agent_routing: Optional[client_converse_params.AgentRouting] | Omit = omit,
+        chat_mode: Optional[Literal["auto", "full_agent", "light_agent", "llm_router"]] | Omit = omit,
         config: Optional[client_converse_params.Config] | Omit = omit,
         conversation_id: Optional[str] | Omit = omit,
         current_view_content: Optional[str] | Omit = omit,
         generate_citations: Optional[bool] | Omit = omit,
+        generate_title: Optional[bool] | Omit = omit,
         include_steps: Optional[bool] | Omit = omit,
+        reference_date: Union[str, date, None] | Omit = omit,
         secret_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         stream: bool,
         text: Optional[client_converse_params.Text] | Omit = omit,
@@ -884,11 +971,14 @@ class AsyncDatagrid(AsyncAPIClient):
         prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
         agent_id: Optional[str] | Omit = omit,
         agent_routing: Optional[client_converse_params.AgentRouting] | Omit = omit,
+        chat_mode: Optional[Literal["auto", "full_agent", "light_agent", "llm_router"]] | Omit = omit,
         config: Optional[client_converse_params.Config] | Omit = omit,
         conversation_id: Optional[str] | Omit = omit,
         current_view_content: Optional[str] | Omit = omit,
         generate_citations: Optional[bool] | Omit = omit,
+        generate_title: Optional[bool] | Omit = omit,
         include_steps: Optional[bool] | Omit = omit,
+        reference_date: Union[str, date, None] | Omit = omit,
         secret_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         stream: Optional[bool] | Omit = omit,
         text: Optional[client_converse_params.Text] | Omit = omit,
@@ -913,6 +1003,13 @@ class AsyncDatagrid(AsyncAPIClient):
 
           agent_routing: Determines how the API routes the converse request to an agent.
 
+          chat_mode: Controls how the agent processes the request for this turn. Matches the chat
+              mode selector in the Datagrid web app: **Execute** (`full_agent`), **Extended**
+              (`light_agent`), **Ask** (`llm_router`). When set to `auto`, the router jointly
+              predicts the best agent and concrete mode (`full_agent` / `light_agent` /
+              `llm_router`) per message. When set to a concrete mode, that mode is used
+              directly. When omitted, the mode is determined by the `agent_model` in `config`.
+
           config: Override the agent config for this converse call. This is applied as a partial
               override.
 
@@ -927,9 +1024,17 @@ class AsyncDatagrid(AsyncAPIClient):
           generate_citations: Determines whether the response should include citations. When enabled, the
               agent will generate citations for factual statements.
 
+          generate_title: Determines whether generated_title metadata should be included. Defaults to
+              false. generated_title is emitted only when this flag is explicitly true.
+
           include_steps: When set to false, tool call and reasoning step events are omitted from SSE
               streams. Non-streaming responses always include the tool_calls and reasoning
               fields (as null when empty).
+
+          reference_date: Optional deterministic reference date override in YYYY-MM-DD format. Must be a
+              real calendar date (for example, rejects impossible dates like 2026-02-31). When
+              set, the agent treats this date as today for relative date resolution and date
+              context rendering.
 
           secret_ids: Array of secret ID's to be included in the context. The secret value will be
               appended to the prompt but not stored in conversation history.
@@ -937,10 +1042,10 @@ class AsyncDatagrid(AsyncAPIClient):
           stream: Determines the response type of the converse. Response is the Server-Sent Events
               if stream is set to true.
 
-          text: Contains the format property used to specify the structured output schema.
-              Structured output is supported by the following agent models: `magpie-2.0`
-              (default), `magpie-2.5`, and `magpie-1.1`. It is not supported by
-              `magpie-1.1-flash` (Ask mode) or `llm-only` (Fastest mode).
+          text: Contains the format property used to specify the structured output schema
+              (`text.format`). Structured output is supported for all `agent_model` values and
+              `chat_mode` settings when `text.format` is provided (same JSON Schema mechanism
+              everywhere). **Ask** in the web app maps to `chat_mode` `magpie-2.5-flash`;.
 
           user: User information override for converse calls. All fields are optional - only
               provided fields will override the default user information.
@@ -962,11 +1067,14 @@ class AsyncDatagrid(AsyncAPIClient):
                     "prompt": prompt,
                     "agent_id": agent_id,
                     "agent_routing": agent_routing,
+                    "chat_mode": chat_mode,
                     "config": config,
                     "conversation_id": conversation_id,
                     "current_view_content": current_view_content,
                     "generate_citations": generate_citations,
+                    "generate_title": generate_title,
                     "include_steps": include_steps,
+                    "reference_date": reference_date,
                     "secret_ids": secret_ids,
                     "stream": stream,
                     "text": text,
@@ -1057,10 +1165,22 @@ class DatagridWithRawResponse:
         return FilesResourceWithRawResponse(self._client.files)
 
     @cached_property
+    def batch_predictions(self) -> batch_predictions.BatchPredictionsResourceWithRawResponse:
+        from .resources.batch_predictions import BatchPredictionsResourceWithRawResponse
+
+        return BatchPredictionsResourceWithRawResponse(self._client.batch_predictions)
+
+    @cached_property
     def secrets(self) -> secrets.SecretsResourceWithRawResponse:
         from .resources.secrets import SecretsResourceWithRawResponse
 
         return SecretsResourceWithRawResponse(self._client.secrets)
+
+    @cached_property
+    def webhooks(self) -> webhooks.WebhooksResourceWithRawResponse:
+        from .resources.webhooks import WebhooksResourceWithRawResponse
+
+        return WebhooksResourceWithRawResponse(self._client.webhooks)
 
     @cached_property
     def search(self) -> search.SearchResourceWithRawResponse:
@@ -1170,10 +1290,22 @@ class AsyncDatagridWithRawResponse:
         return AsyncFilesResourceWithRawResponse(self._client.files)
 
     @cached_property
+    def batch_predictions(self) -> batch_predictions.AsyncBatchPredictionsResourceWithRawResponse:
+        from .resources.batch_predictions import AsyncBatchPredictionsResourceWithRawResponse
+
+        return AsyncBatchPredictionsResourceWithRawResponse(self._client.batch_predictions)
+
+    @cached_property
     def secrets(self) -> secrets.AsyncSecretsResourceWithRawResponse:
         from .resources.secrets import AsyncSecretsResourceWithRawResponse
 
         return AsyncSecretsResourceWithRawResponse(self._client.secrets)
+
+    @cached_property
+    def webhooks(self) -> webhooks.AsyncWebhooksResourceWithRawResponse:
+        from .resources.webhooks import AsyncWebhooksResourceWithRawResponse
+
+        return AsyncWebhooksResourceWithRawResponse(self._client.webhooks)
 
     @cached_property
     def search(self) -> search.AsyncSearchResourceWithRawResponse:
@@ -1283,10 +1415,22 @@ class DatagridWithStreamedResponse:
         return FilesResourceWithStreamingResponse(self._client.files)
 
     @cached_property
+    def batch_predictions(self) -> batch_predictions.BatchPredictionsResourceWithStreamingResponse:
+        from .resources.batch_predictions import BatchPredictionsResourceWithStreamingResponse
+
+        return BatchPredictionsResourceWithStreamingResponse(self._client.batch_predictions)
+
+    @cached_property
     def secrets(self) -> secrets.SecretsResourceWithStreamingResponse:
         from .resources.secrets import SecretsResourceWithStreamingResponse
 
         return SecretsResourceWithStreamingResponse(self._client.secrets)
+
+    @cached_property
+    def webhooks(self) -> webhooks.WebhooksResourceWithStreamingResponse:
+        from .resources.webhooks import WebhooksResourceWithStreamingResponse
+
+        return WebhooksResourceWithStreamingResponse(self._client.webhooks)
 
     @cached_property
     def search(self) -> search.SearchResourceWithStreamingResponse:
@@ -1396,10 +1540,22 @@ class AsyncDatagridWithStreamedResponse:
         return AsyncFilesResourceWithStreamingResponse(self._client.files)
 
     @cached_property
+    def batch_predictions(self) -> batch_predictions.AsyncBatchPredictionsResourceWithStreamingResponse:
+        from .resources.batch_predictions import AsyncBatchPredictionsResourceWithStreamingResponse
+
+        return AsyncBatchPredictionsResourceWithStreamingResponse(self._client.batch_predictions)
+
+    @cached_property
     def secrets(self) -> secrets.AsyncSecretsResourceWithStreamingResponse:
         from .resources.secrets import AsyncSecretsResourceWithStreamingResponse
 
         return AsyncSecretsResourceWithStreamingResponse(self._client.secrets)
+
+    @cached_property
+    def webhooks(self) -> webhooks.AsyncWebhooksResourceWithStreamingResponse:
+        from .resources.webhooks import AsyncWebhooksResourceWithStreamingResponse
+
+        return AsyncWebhooksResourceWithStreamingResponse(self._client.webhooks)
 
     @cached_property
     def search(self) -> search.AsyncSearchResourceWithStreamingResponse:

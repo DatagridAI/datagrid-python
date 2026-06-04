@@ -3,9 +3,11 @@
 from __future__ import annotations
 
 from typing import Union, Iterable, Optional
-from typing_extensions import Literal, Required, TypeAlias, TypedDict
+from datetime import date
+from typing_extensions import Literal, Required, Annotated, TypeAlias, TypedDict
 
 from .._types import SequenceNotStr
+from .._utils import PropertyInfo
 from .tool_name import ToolName
 from .tool_param import ToolParam
 
@@ -58,6 +60,17 @@ class ClientConverseParams(TypedDict, total=False):
     agent_routing: Optional[AgentRouting]
     """Determines how the API routes the converse request to an agent."""
 
+    chat_mode: Optional[Literal["auto", "full_agent", "light_agent", "llm_router"]]
+    """Controls how the agent processes the request for this turn.
+
+    Matches the chat mode selector in the Datagrid web app: **Execute**
+    (`full_agent`), **Extended** (`light_agent`), **Ask** (`llm_router`). When set
+    to `auto`, the router jointly predicts the best agent and concrete mode
+    (`full_agent` / `light_agent` / `llm_router`) per message. When set to a
+    concrete mode, that mode is used directly. When omitted, the mode is determined
+    by the `agent_model` in `config`.
+    """
+
     config: Optional[Config]
     """Override the agent config for this converse call.
 
@@ -84,11 +97,26 @@ class ClientConverseParams(TypedDict, total=False):
     When enabled, the agent will generate citations for factual statements.
     """
 
+    generate_title: Optional[bool]
+    """Determines whether generated_title metadata should be included.
+
+    Defaults to false. generated_title is emitted only when this flag is explicitly
+    true.
+    """
+
     include_steps: Optional[bool]
     """
     When set to false, tool call and reasoning step events are omitted from SSE
     streams. Non-streaming responses always include the tool_calls and reasoning
     fields (as null when empty).
+    """
+
+    reference_date: Annotated[Union[str, date, None], PropertyInfo(format="iso8601")]
+    """Optional deterministic reference date override in YYYY-MM-DD format.
+
+    Must be a real calendar date (for example, rejects impossible dates like
+    2026-02-31). When set, the agent treats this date as today for relative date
+    resolution and date context rendering.
     """
 
     secret_ids: Optional[SequenceNotStr[str]]
@@ -106,10 +134,10 @@ class ClientConverseParams(TypedDict, total=False):
 
     text: Optional[Text]
     """
-    Contains the format property used to specify the structured output schema.
-    Structured output is supported by the following agent models: `magpie-2.0`
-    (default), `magpie-2.5`, and `magpie-1.1`. It is not supported by
-    `magpie-1.1-flash` (Ask mode) or `llm-only` (Fastest mode).
+    Contains the format property used to specify the structured output schema
+    (`text.format`). Structured output is supported for all `agent_model` values and
+    `chat_mode` settings when `text.format` is provided (same JSON Schema mechanism
+    everywhere). **Ask** in the web app maps to `chat_mode` `magpie-2.5-flash`;.
     """
 
     user: Optional[User]
@@ -244,29 +272,37 @@ class AgentRoutingManualTargetAgentConfigWithID(TypedDict, total=False):
     agent_id: str
     """The ID of the agent to use for routing."""
 
-    agent_model: Union[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-2.0", "magpie-2.5", "llm-only"], str, None]
+    agent_model: Union[
+        Literal["magpie-1.1", "magpie-1.1-flash", "magpie-2.0", "magpie-2.5", "magpie-2.5-flash", "llm-only"], str, None
+    ]
     """The agent model determines the processing mode for Converse requests.
 
-    Each model maps to one of three modes available in the Datagrid UI:
+    The Datagrid web app exposes **Ask**, **Extended**, and **Execute** as Converse
+    **`chat_mode`** (`llm_router`, `light_agent`, `full_agent`). The values below
+    set **`config.agent_model`** (model tier and tool limits)—use both fields when
+    mirroring in-app behavior.
 
-    **Agentic mode** (full tool use, planning, and multi-step reasoning):
+    **Execute** (full tool use, planning, and multi-step reasoning; aligns with
+    **Execute** in the web app / `full_agent`):
 
-    - `magpie-2.0` — Default. Agentic model with proactive planning and reasoning.
-    - `magpie-2.5` — Beta. Our latest agentic model — faster, more adaptable, and
+    - `magpie-2.0` — Default. Full agent model with proactive planning and
+      reasoning.
+    - `magpie-2.5` — Beta. Latest full-agent model — faster, more adaptable, and
       built to handle a broader range of real-world tasks.
-    - `magpie-1.1` — Previous-generation agentic model.
+    - `magpie-1.1` — Previous-generation full agent model.
 
-    **Ask mode** (lightweight, single-turn Q&A):
+    **Extended** (search-focused; aligns with **Extended** in the web app /
+    `light_agent`; not **Ask**):
 
     - `magpie-1.1-flash` — Fast model optimized for RAG use cases. Only supports the
       `semantic_search` tool. A 400 error will be returned if other tools are
-      specified. Structured outputs are not supported.
+      specified.
 
-    **Fastest mode** (direct LLM response, no tool execution):
+    **Direct LLM** (no tool execution; **`agent_model` only**—**Ask** in the web app
+    is `chat_mode: llm_router`, not `magpie-1.1-flash`):
 
     - `llm-only` — Runs a direct LLM conversation with no planning or tool calls. A
-      400 error will be returned if tools are specified. Structured outputs are not
-      supported.
+      400 error will be returned if tools are specified.
 
     Can also accept any custom string value for future model versions.
     """
@@ -298,6 +334,7 @@ class AgentRoutingManualTargetAgentConfigWithID(TypedDict, total=False):
 
     llm_model: Union[
         Literal[
+            "gemini-3.1-flash-lite",
             "gemini-3-pro-preview",
             "gemini-3.1-pro-preview",
             "gemini-3-flash-preview",
@@ -338,6 +375,12 @@ class AgentRoutingManualTargetAgentConfigWithID(TypedDict, total=False):
     system_prompt: Optional[str]
     """Directs your AI Agent's operational behavior."""
 
+    temperature: Optional[float]
+    """Sampling temperature for model output.
+
+    Lower values are more deterministic; higher values are more diverse.
+    """
+
     tools: Optional[SequenceNotStr[AgentRoutingManualTargetAgentConfigWithIDTool]]
     """Array of the agent tools to enable.
 
@@ -345,13 +388,18 @@ class AgentRoutingManualTargetAgentConfigWithID(TypedDict, total=False):
     empty list provided - none of the tools are used. When connection_id is set for
     a tool, it will use that specific connection instead of the default one.
 
-    **Tool availability by agent model:**
+    **Structured outputs (Converse):** All `agent_model` values support JSON Schema
+    constrained responses via **`text.format`** on the Converse request.
 
-    - **Agentic** (`magpie-2.0`, `magpie-2.5`, `magpie-1.1`): All tools below are
+    **Tool availability by agent model** (aligned with in-app **Execute** /
+    **Extended** / direct LLM; see Converse `chat_mode` for **Ask** vs
+    `agent_model`):
+
+    - **Execute** (`magpie-2.0`, `magpie-2.5`, `magpie-1.1`): All tools below are
       available.
-    - **Ask** (`magpie-1.1-flash`): Only `semantic_search` is supported. Requests
-      specifying other tools will be rejected with a 400 error.
-    - **Fastest** (`llm-only`): No tools are executed. Requests specifying tools
+    - **Extended** (`magpie-1.1-flash`): Only `semantic_search` is supported.
+      Requests specifying other tools will be rejected with a 400 error.
+    - **Direct LLM** (`llm-only`): No tools are executed. Requests specifying tools
       will be rejected with a 400 error.
 
     Knowledge management tools:
@@ -476,29 +524,37 @@ class Config(TypedDict, total=False):
     This is applied as a partial override.
     """
 
-    agent_model: Union[Literal["magpie-1.1", "magpie-1.1-flash", "magpie-2.0", "magpie-2.5", "llm-only"], str, None]
+    agent_model: Union[
+        Literal["magpie-1.1", "magpie-1.1-flash", "magpie-2.0", "magpie-2.5", "magpie-2.5-flash", "llm-only"], str, None
+    ]
     """The agent model determines the processing mode for Converse requests.
 
-    Each model maps to one of three modes available in the Datagrid UI:
+    The Datagrid web app exposes **Ask**, **Extended**, and **Execute** as Converse
+    **`chat_mode`** (`llm_router`, `light_agent`, `full_agent`). The values below
+    set **`config.agent_model`** (model tier and tool limits)—use both fields when
+    mirroring in-app behavior.
 
-    **Agentic mode** (full tool use, planning, and multi-step reasoning):
+    **Execute** (full tool use, planning, and multi-step reasoning; aligns with
+    **Execute** in the web app / `full_agent`):
 
-    - `magpie-2.0` — Default. Agentic model with proactive planning and reasoning.
-    - `magpie-2.5` — Beta. Our latest agentic model — faster, more adaptable, and
+    - `magpie-2.0` — Default. Full agent model with proactive planning and
+      reasoning.
+    - `magpie-2.5` — Beta. Latest full-agent model — faster, more adaptable, and
       built to handle a broader range of real-world tasks.
-    - `magpie-1.1` — Previous-generation agentic model.
+    - `magpie-1.1` — Previous-generation full agent model.
 
-    **Ask mode** (lightweight, single-turn Q&A):
+    **Extended** (search-focused; aligns with **Extended** in the web app /
+    `light_agent`; not **Ask**):
 
     - `magpie-1.1-flash` — Fast model optimized for RAG use cases. Only supports the
       `semantic_search` tool. A 400 error will be returned if other tools are
-      specified. Structured outputs are not supported.
+      specified.
 
-    **Fastest mode** (direct LLM response, no tool execution):
+    **Direct LLM** (no tool execution; **`agent_model` only**—**Ask** in the web app
+    is `chat_mode: llm_router`, not `magpie-1.1-flash`):
 
     - `llm-only` — Runs a direct LLM conversation with no planning or tool calls. A
-      400 error will be returned if tools are specified. Structured outputs are not
-      supported.
+      400 error will be returned if tools are specified.
 
     Can also accept any custom string value for future model versions.
     """
@@ -539,6 +595,7 @@ class Config(TypedDict, total=False):
 
     llm_model: Union[
         Literal[
+            "gemini-3.1-flash-lite",
             "gemini-3-pro-preview",
             "gemini-3.1-pro-preview",
             "gemini-3-flash-preview",
@@ -588,6 +645,12 @@ class Config(TypedDict, total=False):
     system_prompt: Optional[str]
     """Directs your AI Agent's operational behavior."""
 
+    temperature: Optional[float]
+    """Sampling temperature for model output.
+
+    Lower values are more deterministic; higher values are more diverse.
+    """
+
     tools: Optional[SequenceNotStr[ConfigTool]]
     """Array of the agent tools to enable.
 
@@ -595,13 +658,18 @@ class Config(TypedDict, total=False):
     empty list provided - none of the tools are used. When connection_id is set for
     a tool, it will use that specific connection instead of the default one.
 
-    **Tool availability by agent model:**
+    **Structured outputs (Converse):** All `agent_model` values support JSON Schema
+    constrained responses via **`text.format`** on the Converse request.
 
-    - **Agentic** (`magpie-2.0`, `magpie-2.5`, `magpie-1.1`): All tools below are
+    **Tool availability by agent model** (aligned with in-app **Execute** /
+    **Extended** / direct LLM; see Converse `chat_mode` for **Ask** vs
+    `agent_model`):
+
+    - **Execute** (`magpie-2.0`, `magpie-2.5`, `magpie-1.1`): All tools below are
       available.
-    - **Ask** (`magpie-1.1-flash`): Only `semantic_search` is supported. Requests
-      specifying other tools will be rejected with a 400 error.
-    - **Fastest** (`llm-only`): No tools are executed. Requests specifying tools
+    - **Extended** (`magpie-1.1-flash`): Only `semantic_search` is supported.
+      Requests specifying other tools will be rejected with a 400 error.
+    - **Direct LLM** (`llm-only`): No tools are executed. Requests specifying tools
       will be rejected with a 400 error.
 
     Knowledge management tools:
@@ -648,8 +716,8 @@ class Config(TypedDict, total=False):
 
 class Text(TypedDict, total=False):
     """
-    Contains the format property used to specify the structured output schema.
-    Structured output is supported by the following agent models: `magpie-2.0` (default), `magpie-2.5`, and `magpie-1.1`. It is not supported by `magpie-1.1-flash` (Ask mode) or `llm-only` (Fastest mode).
+    Contains the format property used to specify the structured output schema (`text.format`).
+    Structured output is supported for all `agent_model` values and `chat_mode` settings when `text.format` is provided (same JSON Schema mechanism everywhere). **Ask** in the web app maps to `chat_mode` `magpie-2.5-flash`;.
     """
 
     format: object

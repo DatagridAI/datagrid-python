@@ -2,81 +2,89 @@
 
 from __future__ import annotations
 
-from typing import Mapping, Optional, cast
+from typing import List
+from typing_extensions import Literal
 
 import httpx
 
-from ..types import file_list_params, file_create_params, file_update_params
-from .._files import deepcopy_with_paths
-from .._types import Body, Omit, Query, Headers, NoneType, NotGiven, FileTypes, omit, not_given
-from .._utils import is_given, extract_files, path_template, maybe_transform, async_maybe_transform
+from ..types import (
+    webhook_list_params,
+    webhook_create_params,
+    webhook_update_params,
+    webhook_list_active_for_event_params,
+)
+from .._types import Body, Omit, Query, Headers, NoneType, NotGiven, omit, not_given
+from .._utils import path_template, maybe_transform, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
 from .._response import (
-    BinaryAPIResponse,
-    AsyncBinaryAPIResponse,
-    StreamedBinaryAPIResponse,
-    AsyncStreamedBinaryAPIResponse,
     to_raw_response_wrapper,
     to_streamed_response_wrapper,
     async_to_raw_response_wrapper,
-    to_custom_raw_response_wrapper,
     async_to_streamed_response_wrapper,
-    to_custom_streamed_response_wrapper,
-    async_to_custom_raw_response_wrapper,
-    async_to_custom_streamed_response_wrapper,
 )
-from .._constants import DEFAULT_TIMEOUT
-from ..pagination import SyncCursorIDPage, AsyncCursorIDPage
+from ..pagination import SyncWebhookCursorPage, AsyncWebhookCursorPage
 from .._base_client import AsyncPaginator, make_request_options
-from ..types.file_object import FileObject
+from ..types.webhook import Webhook
+from ..types.webhook_create_response import WebhookCreateResponse
+from ..types.webhook_list_active_for_event_response import WebhookListActiveForEventResponse
 
-__all__ = ["FilesResource", "AsyncFilesResource"]
+__all__ = ["WebhooksResource", "AsyncWebhooksResource"]
 
 
-class FilesResource(SyncAPIResource):
+class WebhooksResource(SyncAPIResource):
     @cached_property
-    def with_raw_response(self) -> FilesResourceWithRawResponse:
+    def with_raw_response(self) -> WebhooksResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
         For more information, see https://www.github.com/DatagridAI/datagrid-python#accessing-raw-response-data-eg-headers
         """
-        return FilesResourceWithRawResponse(self)
+        return WebhooksResourceWithRawResponse(self)
 
     @cached_property
-    def with_streaming_response(self) -> FilesResourceWithStreamingResponse:
+    def with_streaming_response(self) -> WebhooksResourceWithStreamingResponse:
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
         For more information, see https://www.github.com/DatagridAI/datagrid-python#with_streaming_response
         """
-        return FilesResourceWithStreamingResponse(self)
+        return WebhooksResourceWithStreamingResponse(self)
 
     def create(
         self,
         *,
-        file: FileTypes,
-        expires_after: Optional[int] | Omit = omit,
+        events: List[
+            Literal[
+                "knowledge.processing.completed",
+                "batch_prediction.completed",
+                "batch_prediction.failed",
+                "batch_prediction.expired",
+                "batch_prediction.cancelled",
+            ]
+        ],
+        url: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> FileObject:
-        """Create files which can be passed as input to agents.
+    ) -> WebhookCreateResponse:
+        """Create an HTTPS webhook subscription for your teamspace.
 
-        This endpoint consumes a
-        flat credit charge per upload. The response includes a `credits` field with the
-        amount consumed, or `null` if the billing write fails — the upload still
-        succeeds in that case.
+        Datagrid returns the
+        signing secret only in this response; store it securely and use it to verify
+        future `Datagrid-Signature` headers.
 
         Args:
-          expires_after: The number of seconds after creation when the file will expire and be
-              automatically deleted. Must be a positive integer, maximum 6 days (518400s). If
-              not provided, the file will not expire.
+          events: List of event types to subscribe to. Currently delivered events include
+              `knowledge.processing.completed`, `batch_prediction.completed`,
+              `batch_prediction.failed`, `batch_prediction.expired`, and
+              `batch_prediction.cancelled`.
+
+          url: HTTPS destination URL for webhook deliveries.
 
           extra_headers: Send extra headers
 
@@ -86,33 +94,24 @@ class FilesResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
-            timeout = 300
-        body = deepcopy_with_paths(
-            {
-                "file": file,
-                "expires_after": expires_after,
-            },
-            [["file"]],
-        )
-        files = extract_files(cast(Mapping[str, object], body), paths=[["file"]])
-        # It should be noted that the actual Content-Type header that will be
-        # sent to the server will contain a `boundary` parameter, e.g.
-        # multipart/form-data; boundary=---abc--
-        extra_headers = {"Content-Type": "multipart/form-data", **(extra_headers or {})}
         return self._post(
-            "/files",
-            body=maybe_transform(body, file_create_params.FileCreateParams),
-            files=files,
+            "/webhooks",
+            body=maybe_transform(
+                {
+                    "events": events,
+                    "url": url,
+                },
+                webhook_create_params.WebhookCreateParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=FileObject,
+            cast_to=WebhookCreateResponse,
         )
 
     def retrieve(
         self,
-        file_id: str,
+        webhook_id: str,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -120,9 +119,9 @@ class FilesResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> FileObject:
+    ) -> Webhook:
         """
-        Retrieves a file by id.
+        Retrieve a specific webhook subscription by ID.
 
         Args:
           extra_headers: Send extra headers
@@ -133,34 +132,53 @@ class FilesResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not file_id:
-            raise ValueError(f"Expected a non-empty value for `file_id` but received {file_id!r}")
+        if not webhook_id:
+            raise ValueError(f"Expected a non-empty value for `webhook_id` but received {webhook_id!r}")
         return self._get(
-            path_template("/files/{file_id}", file_id=file_id),
+            path_template("/webhooks/{webhook_id}", webhook_id=webhook_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=FileObject,
+            cast_to=Webhook,
         )
 
     def update(
         self,
-        file_id: str,
+        webhook_id: str,
         *,
-        expires_after: int | Omit = omit,
+        enabled: bool | Omit = omit,
+        events: List[
+            Literal[
+                "knowledge.processing.completed",
+                "batch_prediction.completed",
+                "batch_prediction.failed",
+                "batch_prediction.expired",
+                "batch_prediction.cancelled",
+            ]
+        ]
+        | Omit = omit,
+        url: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> FileObject:
-        """
-        Update file metadata.
+    ) -> Webhook:
+        """Update webhook configuration.
+
+        You can modify the URL, subscribed events, and
+        enabled status.
 
         Args:
-          expires_after: Seconds from now until the file expires. Only applies to temporary files. Max 6
-              days (518400s). Omitted leaves expiration unchanged.
+          enabled: Enable or disable webhook delivery.
+
+          events: Updated set of event type subscriptions. Currently delivered events include
+              `knowledge.processing.completed`, `batch_prediction.completed`,
+              `batch_prediction.failed`, `batch_prediction.expired`, and
+              `batch_prediction.cancelled`.
+
+          url: Updated HTTPS destination URL.
 
           extra_headers: Send extra headers
 
@@ -170,22 +188,28 @@ class FilesResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not file_id:
-            raise ValueError(f"Expected a non-empty value for `file_id` but received {file_id!r}")
+        if not webhook_id:
+            raise ValueError(f"Expected a non-empty value for `webhook_id` but received {webhook_id!r}")
         return self._patch(
-            path_template("/files/{file_id}", file_id=file_id),
-            body=maybe_transform({"expires_after": expires_after}, file_update_params.FileUpdateParams),
+            path_template("/webhooks/{webhook_id}", webhook_id=webhook_id),
+            body=maybe_transform(
+                {
+                    "enabled": enabled,
+                    "events": events,
+                    "url": url,
+                },
+                webhook_update_params.WebhookUpdateParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=FileObject,
+            cast_to=Webhook,
         )
 
     def list(
         self,
         *,
-        after: str | Omit = omit,
-        before: str | Omit = omit,
+        cursor: str | Omit = omit,
         limit: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -193,23 +217,14 @@ class FilesResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> SyncCursorIDPage[FileObject]:
-        """Returns the list of files.
+    ) -> SyncWebhookCursorPage[Webhook]:
+        """
+        Returns a cursor-paginated list of webhook subscriptions.
 
         Args:
-          after: A cursor to use in pagination.
+          cursor: A pagination cursor returned by a previous list call.
 
-        `after` is an object ID that defines your place
-              in the list. For example, if you make a list request and receive 100 objects,
-              ending with `obj_foo`, your subsequent call can include `after=obj_foo` to fetch
-              the next page of the list.
-
-          before: A cursor to use in pagination. `before` is an object ID that defines your place
-              in the list. For example, if you make a list request and receive 100 objects,
-              starting with `obj_bar`, your subsequent call can include `before=obj_bar` to
-              fetch the previous page of the list.
-
-          limit: The limit on the number of objects to return, ranging between 1 and 100.
+          limit: The maximum number of webhook subscriptions to return.
 
           extra_headers: Send extra headers
 
@@ -220,8 +235,8 @@ class FilesResource(SyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         return self._get_api_list(
-            "/files",
-            page=SyncCursorIDPage[FileObject],
+            "/webhooks",
+            page=SyncWebhookCursorPage[Webhook],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -229,19 +244,18 @@ class FilesResource(SyncAPIResource):
                 timeout=timeout,
                 query=maybe_transform(
                     {
-                        "after": after,
-                        "before": before,
+                        "cursor": cursor,
                         "limit": limit,
                     },
-                    file_list_params.FileListParams,
+                    webhook_list_params.WebhookListParams,
                 ),
             ),
-            model=FileObject,
+            model=Webhook,
         )
 
     def delete(
         self,
-        file_id: str,
+        webhook_id: str,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -251,7 +265,7 @@ class FilesResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> None:
         """
-        Delete file.
+        Delete a webhook subscription.
 
         Args:
           extra_headers: Send extra headers
@@ -262,32 +276,41 @@ class FilesResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not file_id:
-            raise ValueError(f"Expected a non-empty value for `file_id` but received {file_id!r}")
+        if not webhook_id:
+            raise ValueError(f"Expected a non-empty value for `webhook_id` but received {webhook_id!r}")
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return self._delete(
-            path_template("/files/{file_id}", file_id=file_id),
+            path_template("/webhooks/{webhook_id}", webhook_id=webhook_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=NoneType,
         )
 
-    def content(
+    def list_active_for_event(
         self,
-        file_id: str,
         *,
+        event_type: Literal[
+            "knowledge.processing.completed",
+            "batch_prediction.completed",
+            "batch_prediction.failed",
+            "batch_prediction.expired",
+            "batch_prediction.cancelled",
+        ],
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> BinaryAPIResponse:
+    ) -> WebhookListActiveForEventResponse:
         """
-        Returns the content of a file.
+        Returns enabled webhook subscriptions for a specific event type.
 
         Args:
+          event_type: The event type to filter by, for example `knowledge.processing.completed` or
+              `batch_prediction.completed`.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -296,61 +319,74 @@ class FilesResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not file_id:
-            raise ValueError(f"Expected a non-empty value for `file_id` but received {file_id!r}")
-        extra_headers = {"Accept": "application/octet-stream", **(extra_headers or {})}
         return self._get(
-            path_template("/files/{file_id}/content", file_id=file_id),
+            "/webhooks/active",
             options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform(
+                    {"event_type": event_type}, webhook_list_active_for_event_params.WebhookListActiveForEventParams
+                ),
             ),
-            cast_to=BinaryAPIResponse,
+            cast_to=WebhookListActiveForEventResponse,
         )
 
 
-class AsyncFilesResource(AsyncAPIResource):
+class AsyncWebhooksResource(AsyncAPIResource):
     @cached_property
-    def with_raw_response(self) -> AsyncFilesResourceWithRawResponse:
+    def with_raw_response(self) -> AsyncWebhooksResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
         For more information, see https://www.github.com/DatagridAI/datagrid-python#accessing-raw-response-data-eg-headers
         """
-        return AsyncFilesResourceWithRawResponse(self)
+        return AsyncWebhooksResourceWithRawResponse(self)
 
     @cached_property
-    def with_streaming_response(self) -> AsyncFilesResourceWithStreamingResponse:
+    def with_streaming_response(self) -> AsyncWebhooksResourceWithStreamingResponse:
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
         For more information, see https://www.github.com/DatagridAI/datagrid-python#with_streaming_response
         """
-        return AsyncFilesResourceWithStreamingResponse(self)
+        return AsyncWebhooksResourceWithStreamingResponse(self)
 
     async def create(
         self,
         *,
-        file: FileTypes,
-        expires_after: Optional[int] | Omit = omit,
+        events: List[
+            Literal[
+                "knowledge.processing.completed",
+                "batch_prediction.completed",
+                "batch_prediction.failed",
+                "batch_prediction.expired",
+                "batch_prediction.cancelled",
+            ]
+        ],
+        url: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> FileObject:
-        """Create files which can be passed as input to agents.
+    ) -> WebhookCreateResponse:
+        """Create an HTTPS webhook subscription for your teamspace.
 
-        This endpoint consumes a
-        flat credit charge per upload. The response includes a `credits` field with the
-        amount consumed, or `null` if the billing write fails — the upload still
-        succeeds in that case.
+        Datagrid returns the
+        signing secret only in this response; store it securely and use it to verify
+        future `Datagrid-Signature` headers.
 
         Args:
-          expires_after: The number of seconds after creation when the file will expire and be
-              automatically deleted. Must be a positive integer, maximum 6 days (518400s). If
-              not provided, the file will not expire.
+          events: List of event types to subscribe to. Currently delivered events include
+              `knowledge.processing.completed`, `batch_prediction.completed`,
+              `batch_prediction.failed`, `batch_prediction.expired`, and
+              `batch_prediction.cancelled`.
+
+          url: HTTPS destination URL for webhook deliveries.
 
           extra_headers: Send extra headers
 
@@ -360,33 +396,24 @@ class AsyncFilesResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
-            timeout = 300
-        body = deepcopy_with_paths(
-            {
-                "file": file,
-                "expires_after": expires_after,
-            },
-            [["file"]],
-        )
-        files = extract_files(cast(Mapping[str, object], body), paths=[["file"]])
-        # It should be noted that the actual Content-Type header that will be
-        # sent to the server will contain a `boundary` parameter, e.g.
-        # multipart/form-data; boundary=---abc--
-        extra_headers = {"Content-Type": "multipart/form-data", **(extra_headers or {})}
         return await self._post(
-            "/files",
-            body=await async_maybe_transform(body, file_create_params.FileCreateParams),
-            files=files,
+            "/webhooks",
+            body=await async_maybe_transform(
+                {
+                    "events": events,
+                    "url": url,
+                },
+                webhook_create_params.WebhookCreateParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=FileObject,
+            cast_to=WebhookCreateResponse,
         )
 
     async def retrieve(
         self,
-        file_id: str,
+        webhook_id: str,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -394,9 +421,9 @@ class AsyncFilesResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> FileObject:
+    ) -> Webhook:
         """
-        Retrieves a file by id.
+        Retrieve a specific webhook subscription by ID.
 
         Args:
           extra_headers: Send extra headers
@@ -407,34 +434,53 @@ class AsyncFilesResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not file_id:
-            raise ValueError(f"Expected a non-empty value for `file_id` but received {file_id!r}")
+        if not webhook_id:
+            raise ValueError(f"Expected a non-empty value for `webhook_id` but received {webhook_id!r}")
         return await self._get(
-            path_template("/files/{file_id}", file_id=file_id),
+            path_template("/webhooks/{webhook_id}", webhook_id=webhook_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=FileObject,
+            cast_to=Webhook,
         )
 
     async def update(
         self,
-        file_id: str,
+        webhook_id: str,
         *,
-        expires_after: int | Omit = omit,
+        enabled: bool | Omit = omit,
+        events: List[
+            Literal[
+                "knowledge.processing.completed",
+                "batch_prediction.completed",
+                "batch_prediction.failed",
+                "batch_prediction.expired",
+                "batch_prediction.cancelled",
+            ]
+        ]
+        | Omit = omit,
+        url: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> FileObject:
-        """
-        Update file metadata.
+    ) -> Webhook:
+        """Update webhook configuration.
+
+        You can modify the URL, subscribed events, and
+        enabled status.
 
         Args:
-          expires_after: Seconds from now until the file expires. Only applies to temporary files. Max 6
-              days (518400s). Omitted leaves expiration unchanged.
+          enabled: Enable or disable webhook delivery.
+
+          events: Updated set of event type subscriptions. Currently delivered events include
+              `knowledge.processing.completed`, `batch_prediction.completed`,
+              `batch_prediction.failed`, `batch_prediction.expired`, and
+              `batch_prediction.cancelled`.
+
+          url: Updated HTTPS destination URL.
 
           extra_headers: Send extra headers
 
@@ -444,22 +490,28 @@ class AsyncFilesResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not file_id:
-            raise ValueError(f"Expected a non-empty value for `file_id` but received {file_id!r}")
+        if not webhook_id:
+            raise ValueError(f"Expected a non-empty value for `webhook_id` but received {webhook_id!r}")
         return await self._patch(
-            path_template("/files/{file_id}", file_id=file_id),
-            body=await async_maybe_transform({"expires_after": expires_after}, file_update_params.FileUpdateParams),
+            path_template("/webhooks/{webhook_id}", webhook_id=webhook_id),
+            body=await async_maybe_transform(
+                {
+                    "enabled": enabled,
+                    "events": events,
+                    "url": url,
+                },
+                webhook_update_params.WebhookUpdateParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=FileObject,
+            cast_to=Webhook,
         )
 
     def list(
         self,
         *,
-        after: str | Omit = omit,
-        before: str | Omit = omit,
+        cursor: str | Omit = omit,
         limit: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -467,23 +519,14 @@ class AsyncFilesResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> AsyncPaginator[FileObject, AsyncCursorIDPage[FileObject]]:
-        """Returns the list of files.
+    ) -> AsyncPaginator[Webhook, AsyncWebhookCursorPage[Webhook]]:
+        """
+        Returns a cursor-paginated list of webhook subscriptions.
 
         Args:
-          after: A cursor to use in pagination.
+          cursor: A pagination cursor returned by a previous list call.
 
-        `after` is an object ID that defines your place
-              in the list. For example, if you make a list request and receive 100 objects,
-              ending with `obj_foo`, your subsequent call can include `after=obj_foo` to fetch
-              the next page of the list.
-
-          before: A cursor to use in pagination. `before` is an object ID that defines your place
-              in the list. For example, if you make a list request and receive 100 objects,
-              starting with `obj_bar`, your subsequent call can include `before=obj_bar` to
-              fetch the previous page of the list.
-
-          limit: The limit on the number of objects to return, ranging between 1 and 100.
+          limit: The maximum number of webhook subscriptions to return.
 
           extra_headers: Send extra headers
 
@@ -494,8 +537,8 @@ class AsyncFilesResource(AsyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         return self._get_api_list(
-            "/files",
-            page=AsyncCursorIDPage[FileObject],
+            "/webhooks",
+            page=AsyncWebhookCursorPage[Webhook],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -503,19 +546,18 @@ class AsyncFilesResource(AsyncAPIResource):
                 timeout=timeout,
                 query=maybe_transform(
                     {
-                        "after": after,
-                        "before": before,
+                        "cursor": cursor,
                         "limit": limit,
                     },
-                    file_list_params.FileListParams,
+                    webhook_list_params.WebhookListParams,
                 ),
             ),
-            model=FileObject,
+            model=Webhook,
         )
 
     async def delete(
         self,
-        file_id: str,
+        webhook_id: str,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -525,7 +567,7 @@ class AsyncFilesResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> None:
         """
-        Delete file.
+        Delete a webhook subscription.
 
         Args:
           extra_headers: Send extra headers
@@ -536,32 +578,41 @@ class AsyncFilesResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not file_id:
-            raise ValueError(f"Expected a non-empty value for `file_id` but received {file_id!r}")
+        if not webhook_id:
+            raise ValueError(f"Expected a non-empty value for `webhook_id` but received {webhook_id!r}")
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return await self._delete(
-            path_template("/files/{file_id}", file_id=file_id),
+            path_template("/webhooks/{webhook_id}", webhook_id=webhook_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=NoneType,
         )
 
-    async def content(
+    async def list_active_for_event(
         self,
-        file_id: str,
         *,
+        event_type: Literal[
+            "knowledge.processing.completed",
+            "batch_prediction.completed",
+            "batch_prediction.failed",
+            "batch_prediction.expired",
+            "batch_prediction.cancelled",
+        ],
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> AsyncBinaryAPIResponse:
+    ) -> WebhookListActiveForEventResponse:
         """
-        Returns the content of a file.
+        Returns enabled webhook subscriptions for a specific event type.
 
         Args:
+          event_type: The event type to filter by, for example `knowledge.processing.completed` or
+              `batch_prediction.completed`.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -570,113 +621,112 @@ class AsyncFilesResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not file_id:
-            raise ValueError(f"Expected a non-empty value for `file_id` but received {file_id!r}")
-        extra_headers = {"Accept": "application/octet-stream", **(extra_headers or {})}
         return await self._get(
-            path_template("/files/{file_id}/content", file_id=file_id),
+            "/webhooks/active",
             options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=await async_maybe_transform(
+                    {"event_type": event_type}, webhook_list_active_for_event_params.WebhookListActiveForEventParams
+                ),
             ),
-            cast_to=AsyncBinaryAPIResponse,
+            cast_to=WebhookListActiveForEventResponse,
         )
 
 
-class FilesResourceWithRawResponse:
-    def __init__(self, files: FilesResource) -> None:
-        self._files = files
+class WebhooksResourceWithRawResponse:
+    def __init__(self, webhooks: WebhooksResource) -> None:
+        self._webhooks = webhooks
 
         self.create = to_raw_response_wrapper(
-            files.create,
+            webhooks.create,
         )
         self.retrieve = to_raw_response_wrapper(
-            files.retrieve,
+            webhooks.retrieve,
         )
         self.update = to_raw_response_wrapper(
-            files.update,
+            webhooks.update,
         )
         self.list = to_raw_response_wrapper(
-            files.list,
+            webhooks.list,
         )
         self.delete = to_raw_response_wrapper(
-            files.delete,
+            webhooks.delete,
         )
-        self.content = to_custom_raw_response_wrapper(
-            files.content,
-            BinaryAPIResponse,
+        self.list_active_for_event = to_raw_response_wrapper(
+            webhooks.list_active_for_event,
         )
 
 
-class AsyncFilesResourceWithRawResponse:
-    def __init__(self, files: AsyncFilesResource) -> None:
-        self._files = files
+class AsyncWebhooksResourceWithRawResponse:
+    def __init__(self, webhooks: AsyncWebhooksResource) -> None:
+        self._webhooks = webhooks
 
         self.create = async_to_raw_response_wrapper(
-            files.create,
+            webhooks.create,
         )
         self.retrieve = async_to_raw_response_wrapper(
-            files.retrieve,
+            webhooks.retrieve,
         )
         self.update = async_to_raw_response_wrapper(
-            files.update,
+            webhooks.update,
         )
         self.list = async_to_raw_response_wrapper(
-            files.list,
+            webhooks.list,
         )
         self.delete = async_to_raw_response_wrapper(
-            files.delete,
+            webhooks.delete,
         )
-        self.content = async_to_custom_raw_response_wrapper(
-            files.content,
-            AsyncBinaryAPIResponse,
+        self.list_active_for_event = async_to_raw_response_wrapper(
+            webhooks.list_active_for_event,
         )
 
 
-class FilesResourceWithStreamingResponse:
-    def __init__(self, files: FilesResource) -> None:
-        self._files = files
+class WebhooksResourceWithStreamingResponse:
+    def __init__(self, webhooks: WebhooksResource) -> None:
+        self._webhooks = webhooks
 
         self.create = to_streamed_response_wrapper(
-            files.create,
+            webhooks.create,
         )
         self.retrieve = to_streamed_response_wrapper(
-            files.retrieve,
+            webhooks.retrieve,
         )
         self.update = to_streamed_response_wrapper(
-            files.update,
+            webhooks.update,
         )
         self.list = to_streamed_response_wrapper(
-            files.list,
+            webhooks.list,
         )
         self.delete = to_streamed_response_wrapper(
-            files.delete,
+            webhooks.delete,
         )
-        self.content = to_custom_streamed_response_wrapper(
-            files.content,
-            StreamedBinaryAPIResponse,
+        self.list_active_for_event = to_streamed_response_wrapper(
+            webhooks.list_active_for_event,
         )
 
 
-class AsyncFilesResourceWithStreamingResponse:
-    def __init__(self, files: AsyncFilesResource) -> None:
-        self._files = files
+class AsyncWebhooksResourceWithStreamingResponse:
+    def __init__(self, webhooks: AsyncWebhooksResource) -> None:
+        self._webhooks = webhooks
 
         self.create = async_to_streamed_response_wrapper(
-            files.create,
+            webhooks.create,
         )
         self.retrieve = async_to_streamed_response_wrapper(
-            files.retrieve,
+            webhooks.retrieve,
         )
         self.update = async_to_streamed_response_wrapper(
-            files.update,
+            webhooks.update,
         )
         self.list = async_to_streamed_response_wrapper(
-            files.list,
+            webhooks.list,
         )
         self.delete = async_to_streamed_response_wrapper(
-            files.delete,
+            webhooks.delete,
         )
-        self.content = async_to_custom_streamed_response_wrapper(
-            files.content,
-            AsyncStreamedBinaryAPIResponse,
+        self.list_active_for_event = async_to_streamed_response_wrapper(
+            webhooks.list_active_for_event,
         )

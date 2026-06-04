@@ -62,8 +62,10 @@ class McpServersResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> McpServer:
-        """
-        Register a new MCP server in the current teamspace.
+        """Register a new MCP server in the current teamspace.
+
+        Each teamspace can have at
+        most 30 registered MCP servers.
 
         Args:
           base_url: The HTTPS URL of the MCP server.
@@ -289,8 +291,10 @@ class AsyncMcpServersResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> McpServer:
-        """
-        Register a new MCP server in the current teamspace.
+        """Register a new MCP server in the current teamspace.
+
+        Each teamspace can have at
+        most 30 registered MCP servers.
 
         Args:
           base_url: The HTTPS URL of the MCP server.

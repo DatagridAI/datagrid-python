@@ -121,6 +121,29 @@ Methods:
 - <code title="delete /files/{file_id}">client.files.<a href="./src/datagrid_ai/resources/files.py">delete</a>(file_id) -> None</code>
 - <code title="get /files/{file_id}/content">client.files.<a href="./src/datagrid_ai/resources/files.py">content</a>(file_id) -> BinaryAPIResponse</code>
 
+# BatchPredictions
+
+Types:
+
+```python
+from datagrid_ai.types import (
+    BatchPrediction,
+    BatchPredictionRequestCounts,
+    BatchPredictionResultLine,
+    ProblemDetails,
+    ValidationProblemDetails,
+    ValidationProblemError,
+)
+```
+
+Methods:
+
+- <code title="post /batch-predictions">client.batch_predictions.<a href="./src/datagrid_ai/resources/batch_predictions.py">create</a>(\*\*<a href="src/datagrid_ai/types/batch_prediction_create_params.py">params</a>) -> <a href="./src/datagrid_ai/types/batch_prediction.py">BatchPrediction</a></code>
+- <code title="get /batch-predictions/{batch_prediction_id}">client.batch_predictions.<a href="./src/datagrid_ai/resources/batch_predictions.py">retrieve</a>(batch_prediction_id) -> <a href="./src/datagrid_ai/types/batch_prediction.py">BatchPrediction</a></code>
+- <code title="get /batch-predictions">client.batch_predictions.<a href="./src/datagrid_ai/resources/batch_predictions.py">list</a>(\*\*<a href="src/datagrid_ai/types/batch_prediction_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/batch_prediction.py">SyncAfterCursorPage[BatchPrediction]</a></code>
+- <code title="post /batch-predictions/{batch_prediction_id}/cancel">client.batch_predictions.<a href="./src/datagrid_ai/resources/batch_predictions.py">cancel</a>(batch_prediction_id) -> <a href="./src/datagrid_ai/types/batch_prediction.py">BatchPrediction</a></code>
+- <code title="get /batch-predictions/{batch_prediction_id}/results">client.batch_predictions.<a href="./src/datagrid_ai/resources/batch_predictions.py">retrieve_results</a>(batch_prediction_id) -> <a href="./src/datagrid_ai/types/batch_prediction_result_line.py">JSONLDecoder[BatchPredictionResultLine]</a></code>
+
 # Secrets
 
 Types:
@@ -135,6 +158,28 @@ Methods:
 - <code title="get /secrets/{secret_id}">client.secrets.<a href="./src/datagrid_ai/resources/secrets.py">retrieve</a>(secret_id) -> <a href="./src/datagrid_ai/types/secret.py">Secret</a></code>
 - <code title="get /secrets">client.secrets.<a href="./src/datagrid_ai/resources/secrets.py">list</a>(\*\*<a href="src/datagrid_ai/types/secret_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/secret.py">SyncCursorIDPage[Secret]</a></code>
 - <code title="delete /secrets/{secret_id}">client.secrets.<a href="./src/datagrid_ai/resources/secrets.py">delete</a>(secret_id) -> None</code>
+
+# Webhooks
+
+Types:
+
+```python
+from datagrid_ai.types import (
+    Webhook,
+    WebhookEvent,
+    WebhookCreateResponse,
+    WebhookListActiveForEventResponse,
+)
+```
+
+Methods:
+
+- <code title="post /webhooks">client.webhooks.<a href="./src/datagrid_ai/resources/webhooks.py">create</a>(\*\*<a href="src/datagrid_ai/types/webhook_create_params.py">params</a>) -> <a href="./src/datagrid_ai/types/webhook_create_response.py">WebhookCreateResponse</a></code>
+- <code title="get /webhooks/{webhook_id}">client.webhooks.<a href="./src/datagrid_ai/resources/webhooks.py">retrieve</a>(webhook_id) -> <a href="./src/datagrid_ai/types/webhook.py">Webhook</a></code>
+- <code title="patch /webhooks/{webhook_id}">client.webhooks.<a href="./src/datagrid_ai/resources/webhooks.py">update</a>(webhook_id, \*\*<a href="src/datagrid_ai/types/webhook_update_params.py">params</a>) -> <a href="./src/datagrid_ai/types/webhook.py">Webhook</a></code>
+- <code title="get /webhooks">client.webhooks.<a href="./src/datagrid_ai/resources/webhooks.py">list</a>(\*\*<a href="src/datagrid_ai/types/webhook_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/webhook.py">SyncWebhookCursorPage[Webhook]</a></code>
+- <code title="delete /webhooks/{webhook_id}">client.webhooks.<a href="./src/datagrid_ai/resources/webhooks.py">delete</a>(webhook_id) -> None</code>
+- <code title="get /webhooks/active">client.webhooks.<a href="./src/datagrid_ai/resources/webhooks.py">list_active_for_event</a>(\*\*<a href="src/datagrid_ai/types/webhook_list_active_for_event_params.py">params</a>) -> <a href="./src/datagrid_ai/types/webhook_list_active_for_event_response.py">WebhookListActiveForEventResponse</a></code>
 
 # Search
 

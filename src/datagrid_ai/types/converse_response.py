@@ -57,6 +57,19 @@ class ConverseResponseToolCall(BaseModel):
 class ConverseResponse(Message):
     """The `conversation.message` object represents a message in a conversation."""
 
+    chat_mode: Optional[Literal["full_agent", "light_agent", "llm_router"]] = None
+    """
+    The chat mode used for this response (web app: Execute = full_agent, Extended =
+    light_agent, Ask = llm_router). For Auto mode conversations, this is the mode
+    selected by the router for this turn.
+    """
+
+    generated_title: Optional[str] = None
+    """Auto-generated conversation title for this turn.
+
+    Null when title generation does not run or fails.
+    """
+
     reasoning: Optional[List[ConverseResponseReasoning]] = None
     """Array of reasoning steps that occurred during this response.
 
