@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from typing import Optional
-from typing_extensions import TypedDict
+from typing_extensions import Literal, TypedDict
 
 from .._types import SequenceNotStr
 
@@ -12,9 +12,9 @@ __all__ = ["VoiceStartSessionParams", "Config", "User", "VoiceConfig"]
 
 class VoiceStartSessionParams(TypedDict, total=False):
     agent_id: Optional[str]
-    """The ID of the agent to use for the voice conversation.
+    """The ID of the agent to use for a direct-agent voice conversation.
 
-    If not provided, the default agent is used.
+    Ignored when voice_mode is orchestrator.
     """
 
     config: Optional[Config]
@@ -74,6 +74,13 @@ class VoiceStartSessionParams(TypedDict, total=False):
 
     voice_config: Optional[VoiceConfig]
     """Voice session configuration options."""
+
+    voice_mode: Optional[Literal["orchestrator", "direct_agent"]]
+    """
+    Controls whether the session uses the voice orchestrator, with delegation tools,
+    or talks directly to a specific agent. Defaults to orchestrator when agent_id is
+    omitted and direct_agent when agent_id is provided.
+    """
 
 
 class Config(TypedDict, total=False):
