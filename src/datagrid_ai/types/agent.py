@@ -113,6 +113,7 @@ class Agent(BaseModel):
 
     llm_model: Union[
         Literal[
+            "gemini-3.5-flash",
             "gemini-3.1-flash-lite",
             "gemini-3-pro-preview",
             "gemini-3.1-pro-preview",
@@ -139,7 +140,11 @@ class Agent(BaseModel):
         ],
         str,
     ]
-    """The LLM used to generate responses."""
+    """The LLM used to generate responses.
+
+    Deprecated Gemini 2.0 Flash ids are accepted for backward compatibility and
+    automatically run as gemini-3.1-flash-lite.
+    """
 
     mcp_servers: List[McpServer]
     """Registered MCP servers enabled for this agent."""
