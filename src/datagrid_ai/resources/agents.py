@@ -61,6 +61,7 @@ class AgentsResource(SyncAPIResource):
         knowledge_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         llm_model: Union[
             Literal[
+                "gemini-3.5-flash",
                 "gemini-3.1-flash-lite",
                 "gemini-3-pro-preview",
                 "gemini-3.1-pro-preview",
@@ -152,7 +153,8 @@ class AgentsResource(SyncAPIResource):
           knowledge_ids: Deprecated, use corpus instead. Array of Knowledge IDs the agent should use
               during the converse. When omitted, all knowledge is used.
 
-          llm_model: The LLM used to generate responses.
+          llm_model: The LLM used to generate responses. Deprecated Gemini 2.0 Flash ids are accepted
+              for backward compatibility and automatically run as gemini-3.1-flash-lite.
 
           mcp_servers: Registered MCP servers to enable for this agent.
 
@@ -196,6 +198,8 @@ class AgentsResource(SyncAPIResource):
                 Avoid disabling
               - table_info: Allow the AI Agent to get information about datasets and schemas
               - create_dataset: Agents respond with data tables
+              - charts: Agents render charts inline in the conversation (bar, line, area,
+                combo, pie, funnel, gauge, treemap, scorecard).
 
               Actions:
 
@@ -310,6 +314,7 @@ class AgentsResource(SyncAPIResource):
         knowledge_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         llm_model: Union[
             Literal[
+                "gemini-3.5-flash",
                 "gemini-3.1-flash-lite",
                 "gemini-3-pro-preview",
                 "gemini-3.1-pro-preview",
@@ -403,7 +408,8 @@ class AgentsResource(SyncAPIResource):
           knowledge_ids: Deprecated, use corpus instead. Array of Knowledge IDs the agent should use
               during the converse. When omitted, all knowledge is used.
 
-          llm_model: The LLM used to generate responses.
+          llm_model: The LLM used to generate responses. Deprecated Gemini 2.0 Flash ids are accepted
+              for backward compatibility and automatically run as gemini-3.1-flash-lite.
 
           mcp_servers: Registered MCP servers to enable for this agent.
 
@@ -447,6 +453,8 @@ class AgentsResource(SyncAPIResource):
                 Avoid disabling
               - table_info: Allow the AI Agent to get information about datasets and schemas
               - create_dataset: Agents respond with data tables
+              - charts: Agents render charts inline in the conversation (bar, line, area,
+                combo, pie, funnel, gauge, treemap, scorecard).
 
               Actions:
 
@@ -645,6 +653,7 @@ class AsyncAgentsResource(AsyncAPIResource):
         knowledge_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         llm_model: Union[
             Literal[
+                "gemini-3.5-flash",
                 "gemini-3.1-flash-lite",
                 "gemini-3-pro-preview",
                 "gemini-3.1-pro-preview",
@@ -736,7 +745,8 @@ class AsyncAgentsResource(AsyncAPIResource):
           knowledge_ids: Deprecated, use corpus instead. Array of Knowledge IDs the agent should use
               during the converse. When omitted, all knowledge is used.
 
-          llm_model: The LLM used to generate responses.
+          llm_model: The LLM used to generate responses. Deprecated Gemini 2.0 Flash ids are accepted
+              for backward compatibility and automatically run as gemini-3.1-flash-lite.
 
           mcp_servers: Registered MCP servers to enable for this agent.
 
@@ -780,6 +790,8 @@ class AsyncAgentsResource(AsyncAPIResource):
                 Avoid disabling
               - table_info: Allow the AI Agent to get information about datasets and schemas
               - create_dataset: Agents respond with data tables
+              - charts: Agents render charts inline in the conversation (bar, line, area,
+                combo, pie, funnel, gauge, treemap, scorecard).
 
               Actions:
 
@@ -894,6 +906,7 @@ class AsyncAgentsResource(AsyncAPIResource):
         knowledge_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         llm_model: Union[
             Literal[
+                "gemini-3.5-flash",
                 "gemini-3.1-flash-lite",
                 "gemini-3-pro-preview",
                 "gemini-3.1-pro-preview",
@@ -987,7 +1000,8 @@ class AsyncAgentsResource(AsyncAPIResource):
           knowledge_ids: Deprecated, use corpus instead. Array of Knowledge IDs the agent should use
               during the converse. When omitted, all knowledge is used.
 
-          llm_model: The LLM used to generate responses.
+          llm_model: The LLM used to generate responses. Deprecated Gemini 2.0 Flash ids are accepted
+              for backward compatibility and automatically run as gemini-3.1-flash-lite.
 
           mcp_servers: Registered MCP servers to enable for this agent.
 
@@ -1031,6 +1045,8 @@ class AsyncAgentsResource(AsyncAPIResource):
                 Avoid disabling
               - table_info: Allow the AI Agent to get information about datasets and schemas
               - create_dataset: Agents respond with data tables
+              - charts: Agents render charts inline in the conversation (bar, line, area,
+                combo, pie, funnel, gauge, treemap, scorecard).
 
               Actions:
 

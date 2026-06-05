@@ -472,4 +472,18 @@ from datagrid_ai.types import VoiceSessionRequest, VoiceSessionResponse, VoiceWe
 
 Methods:
 
-- <code title="post /voice">client.voice.<a href="./src/datagrid_ai/resources/voice.py">start_session</a>(\*\*<a href="src/datagrid_ai/types/voice_start_session_params.py">params</a>) -> <a href="./src/datagrid_ai/types/voice_session_response.py">VoiceSessionResponse</a></code>
+- <code title="post /voice">client.voice.<a href="./src/datagrid_ai/resources/voice/voice.py">start_session</a>(\*\*<a href="src/datagrid_ai/types/voice_start_session_params.py">params</a>) -> <a href="./src/datagrid_ai/types/voice_session_response.py">VoiceSessionResponse</a></code>
+
+## OrchestratorTasks
+
+Types:
+
+```python
+from datagrid_ai.types.voice import VoiceOrchestratorTask, VoiceOrchestratorTaskList
+```
+
+Methods:
+
+- <code title="get /voice-orchestrator/tasks/{task_id}">client.voice.orchestrator_tasks.<a href="./src/datagrid_ai/resources/voice/orchestrator_tasks.py">retrieve</a>(task_id) -> <a href="./src/datagrid_ai/types/voice/voice_orchestrator_task.py">VoiceOrchestratorTask</a></code>
+- <code title="get /voice-orchestrator/tasks">client.voice.orchestrator_tasks.<a href="./src/datagrid_ai/resources/voice/orchestrator_tasks.py">list</a>(\*\*<a href="src/datagrid_ai/types/voice/orchestrator_task_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/voice/voice_orchestrator_task_list.py">VoiceOrchestratorTaskList</a></code>
+- <code title="patch /voice-orchestrator/tasks/{task_id}/acknowledge">client.voice.orchestrator_tasks.<a href="./src/datagrid_ai/resources/voice/orchestrator_tasks.py">acknowledge</a>(task_id) -> <a href="./src/datagrid_ai/types/voice/voice_orchestrator_task.py">VoiceOrchestratorTask</a></code>

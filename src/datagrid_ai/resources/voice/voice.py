@@ -3,27 +3,40 @@
 from __future__ import annotations
 
 from typing import Optional
+from typing_extensions import Literal
 
 import httpx
 
-from ..types import voice_start_session_params
-from .._types import Body, Omit, Query, Headers, NotGiven, SequenceNotStr, omit, not_given
-from .._utils import maybe_transform, async_maybe_transform
-from .._compat import cached_property
-from .._resource import SyncAPIResource, AsyncAPIResource
-from .._response import (
+from ...types import voice_start_session_params
+from ..._types import Body, Omit, Query, Headers, NotGiven, SequenceNotStr, omit, not_given
+from ..._utils import maybe_transform, async_maybe_transform
+from ..._compat import cached_property
+from ..._resource import SyncAPIResource, AsyncAPIResource
+from ..._response import (
     to_raw_response_wrapper,
     to_streamed_response_wrapper,
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from .._base_client import make_request_options
-from ..types.voice_session_response import VoiceSessionResponse
+from ..._base_client import make_request_options
+from .orchestrator_tasks import (
+    OrchestratorTasksResource,
+    AsyncOrchestratorTasksResource,
+    OrchestratorTasksResourceWithRawResponse,
+    AsyncOrchestratorTasksResourceWithRawResponse,
+    OrchestratorTasksResourceWithStreamingResponse,
+    AsyncOrchestratorTasksResourceWithStreamingResponse,
+)
+from ...types.voice_session_response import VoiceSessionResponse
 
 __all__ = ["VoiceResource", "AsyncVoiceResource"]
 
 
 class VoiceResource(SyncAPIResource):
+    @cached_property
+    def orchestrator_tasks(self) -> OrchestratorTasksResource:
+        return OrchestratorTasksResource(self._client)
+
     @cached_property
     def with_raw_response(self) -> VoiceResourceWithRawResponse:
         """
@@ -58,6 +71,7 @@ class VoiceResource(SyncAPIResource):
         secret_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         user: Optional[voice_start_session_params.User] | Omit = omit,
         voice_config: Optional[voice_start_session_params.VoiceConfig] | Omit = omit,
+        voice_mode: Optional[Literal["orchestrator", "direct_agent"]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -71,6 +85,10 @@ class VoiceResource(SyncAPIResource):
         Returns a WebSocket URL and a ready-made `start` message. Open a WebSocket
         connection to the returned `url`, send `start_message` as the first frame, then
         stream audio back and forth.
+
+        This REST flow depends on Redis to issue a short-lived REST-to-WebSocket handoff
+        token. During a Redis incident, clients that can construct their own `start`
+        message may use the direct WebSocket flow below with a raw API key.
 
         You can also skip this endpoint and connect directly:
         `wss://api.datagrid.com/ws/voice?token=YOUR_API_KEY`
@@ -94,8 +112,8 @@ class VoiceResource(SyncAPIResource):
           `transcript`, `citation`, `ended`
 
         Args:
-          agent_id: The ID of the agent to use for the voice conversation. If not provided, the
-              default agent is used.
+          agent_id: The ID of the agent to use for a direct-agent voice conversation. Ignored when
+              voice_mode is orchestrator.
 
           config: Override the agent config for this voice session. Only prompt overrides are
               supported — voice sessions always use Gemini Live, so LLM model, agent model,
@@ -128,6 +146,10 @@ class VoiceResource(SyncAPIResource):
 
           voice_config: Voice session configuration options.
 
+          voice_mode: Controls whether the session uses the voice orchestrator, with delegation tools,
+              or talks directly to a specific agent. Defaults to orchestrator when agent_id is
+              omitted and direct_agent when agent_id is provided.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -152,6 +174,7 @@ class VoiceResource(SyncAPIResource):
                     "secret_ids": secret_ids,
                     "user": user,
                     "voice_config": voice_config,
+                    "voice_mode": voice_mode,
                 },
                 voice_start_session_params.VoiceStartSessionParams,
             ),
@@ -163,6 +186,10 @@ class VoiceResource(SyncAPIResource):
 
 
 class AsyncVoiceResource(AsyncAPIResource):
+    @cached_property
+    def orchestrator_tasks(self) -> AsyncOrchestratorTasksResource:
+        return AsyncOrchestratorTasksResource(self._client)
+
     @cached_property
     def with_raw_response(self) -> AsyncVoiceResourceWithRawResponse:
         """
@@ -197,6 +224,7 @@ class AsyncVoiceResource(AsyncAPIResource):
         secret_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         user: Optional[voice_start_session_params.User] | Omit = omit,
         voice_config: Optional[voice_start_session_params.VoiceConfig] | Omit = omit,
+        voice_mode: Optional[Literal["orchestrator", "direct_agent"]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -210,6 +238,10 @@ class AsyncVoiceResource(AsyncAPIResource):
         Returns a WebSocket URL and a ready-made `start` message. Open a WebSocket
         connection to the returned `url`, send `start_message` as the first frame, then
         stream audio back and forth.
+
+        This REST flow depends on Redis to issue a short-lived REST-to-WebSocket handoff
+        token. During a Redis incident, clients that can construct their own `start`
+        message may use the direct WebSocket flow below with a raw API key.
 
         You can also skip this endpoint and connect directly:
         `wss://api.datagrid.com/ws/voice?token=YOUR_API_KEY`
@@ -233,8 +265,8 @@ class AsyncVoiceResource(AsyncAPIResource):
           `transcript`, `citation`, `ended`
 
         Args:
-          agent_id: The ID of the agent to use for the voice conversation. If not provided, the
-              default agent is used.
+          agent_id: The ID of the agent to use for a direct-agent voice conversation. Ignored when
+              voice_mode is orchestrator.
 
           config: Override the agent config for this voice session. Only prompt overrides are
               supported — voice sessions always use Gemini Live, so LLM model, agent model,
@@ -267,6 +299,10 @@ class AsyncVoiceResource(AsyncAPIResource):
 
           voice_config: Voice session configuration options.
 
+          voice_mode: Controls whether the session uses the voice orchestrator, with delegation tools,
+              or talks directly to a specific agent. Defaults to orchestrator when agent_id is
+              omitted and direct_agent when agent_id is provided.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -291,6 +327,7 @@ class AsyncVoiceResource(AsyncAPIResource):
                     "secret_ids": secret_ids,
                     "user": user,
                     "voice_config": voice_config,
+                    "voice_mode": voice_mode,
                 },
                 voice_start_session_params.VoiceStartSessionParams,
             ),
@@ -309,6 +346,10 @@ class VoiceResourceWithRawResponse:
             voice.start_session,
         )
 
+    @cached_property
+    def orchestrator_tasks(self) -> OrchestratorTasksResourceWithRawResponse:
+        return OrchestratorTasksResourceWithRawResponse(self._voice.orchestrator_tasks)
+
 
 class AsyncVoiceResourceWithRawResponse:
     def __init__(self, voice: AsyncVoiceResource) -> None:
@@ -317,6 +358,10 @@ class AsyncVoiceResourceWithRawResponse:
         self.start_session = async_to_raw_response_wrapper(
             voice.start_session,
         )
+
+    @cached_property
+    def orchestrator_tasks(self) -> AsyncOrchestratorTasksResourceWithRawResponse:
+        return AsyncOrchestratorTasksResourceWithRawResponse(self._voice.orchestrator_tasks)
 
 
 class VoiceResourceWithStreamingResponse:
@@ -327,6 +372,10 @@ class VoiceResourceWithStreamingResponse:
             voice.start_session,
         )
 
+    @cached_property
+    def orchestrator_tasks(self) -> OrchestratorTasksResourceWithStreamingResponse:
+        return OrchestratorTasksResourceWithStreamingResponse(self._voice.orchestrator_tasks)
+
 
 class AsyncVoiceResourceWithStreamingResponse:
     def __init__(self, voice: AsyncVoiceResource) -> None:
@@ -335,3 +384,7 @@ class AsyncVoiceResourceWithStreamingResponse:
         self.start_session = async_to_streamed_response_wrapper(
             voice.start_session,
         )
+
+    @cached_property
+    def orchestrator_tasks(self) -> AsyncOrchestratorTasksResourceWithStreamingResponse:
+        return AsyncOrchestratorTasksResourceWithStreamingResponse(self._voice.orchestrator_tasks)

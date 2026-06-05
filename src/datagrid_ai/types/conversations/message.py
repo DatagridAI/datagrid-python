@@ -116,13 +116,13 @@ class ContentMessageContentVoiceTimelineEventCitation(BaseModel):
 
 class ContentMessageContentVoiceTimelineEvent(BaseModel):
     """
-    A single event from a voice session timeline, representing either a transcript turn or a citation.
+    A single event from a voice session timeline, representing a transcript turn, citation, or tool-call status update.
     """
 
     timestamp_ms: float
     """Timestamp offset from the start of the voice session, in milliseconds."""
 
-    type: Literal["transcript", "citation"]
+    type: Literal["transcript", "citation", "tool_call_status"]
     """The type of timeline event."""
 
     citations: Optional[List[ContentMessageContentVoiceTimelineEventCitation]] = None
@@ -131,8 +131,14 @@ class ContentMessageContentVoiceTimelineEvent(BaseModel):
     role: Optional[Literal["user", "agent"]] = None
     """The role of the participant for this event."""
 
+    status: Optional[Literal["started", "completed", "failed"]] = None
+    """Tool-call status for this event. Present when type is 'tool_call_status'."""
+
     text: Optional[str] = None
     """Plain text transcript for this turn. Present when type is 'transcript'."""
+
+    tool_name: Optional[str] = None
+    """Name of the tool whose status changed. Present when type is 'tool_call_status'."""
 
 
 class ContentMessageContentVoice(BaseModel):
@@ -153,9 +159,9 @@ class ContentMessageContentVoice(BaseModel):
     """Agent transcript of the voice message (for agent role messages)."""
 
     timeline_events: Optional[List[ContentMessageContentVoiceTimelineEvent]] = None
-    """Per-turn transcript and citation events in chronological order.
-
-    Each entry is plain text with a timestamp offset from the start of the voice
+    """
+    Per-turn transcript, citation, and tool-call status events in chronological
+    order. Each entry includes a timestamp offset from the start of the voice
     session. Present only for voice sessions that recorded timeline data.
     """
 

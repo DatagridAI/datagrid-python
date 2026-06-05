@@ -86,6 +86,7 @@ class AgentCreateParams(TypedDict, total=False):
 
     llm_model: Union[
         Literal[
+            "gemini-3.5-flash",
             "gemini-3.1-flash-lite",
             "gemini-3-pro-preview",
             "gemini-3.1-pro-preview",
@@ -113,7 +114,11 @@ class AgentCreateParams(TypedDict, total=False):
         str,
         None,
     ]
-    """The LLM used to generate responses."""
+    """The LLM used to generate responses.
+
+    Deprecated Gemini 2.0 Flash ids are accepted for backward compatibility and
+    automatically run as gemini-3.1-flash-lite.
+    """
 
     mcp_servers: Optional[Iterable[McpServer]]
     """Registered MCP servers to enable for this agent."""
@@ -168,6 +173,8 @@ class AgentCreateParams(TypedDict, total=False):
       Avoid disabling
     - table_info: Allow the AI Agent to get information about datasets and schemas
     - create_dataset: Agents respond with data tables
+    - charts: Agents render charts inline in the conversation (bar, line, area,
+      combo, pie, funnel, gauge, treemap, scorecard).
 
     Actions:
 

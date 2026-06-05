@@ -53,6 +53,7 @@ class TestVoice:
                 "silent_start": True,
                 "voice_preset": "voice_preset",
             },
+            voice_mode="orchestrator",
         )
         assert_matches_type(VoiceSessionResponse, voice, path=["response"])
 
@@ -118,6 +119,7 @@ class TestAsyncVoice:
                 "silent_start": True,
                 "voice_preset": "voice_preset",
             },
+            voice_mode="orchestrator",
         )
         assert_matches_type(VoiceSessionResponse, voice, path=["response"])
 
