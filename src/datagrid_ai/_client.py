@@ -1,4 +1,4 @@
-# File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+ # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 from __future__ import annotations
 
@@ -42,11 +42,9 @@ from ._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from ._constants import DEFAULT_TIMEOUT
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
 from ._exceptions import DatagridError, APIStatusError
 from ._base_client import (
-    DEFAULT_TIMEOUT,
     DEFAULT_MAX_RETRIES,
     SyncAPIClient,
     AsyncAPIClient,
