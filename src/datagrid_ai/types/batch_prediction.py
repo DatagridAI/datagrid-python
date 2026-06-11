@@ -82,11 +82,15 @@ class BatchPrediction(BaseModel):
         "claude-sonnet-4-6@default",
         "claude-opus-4-5@20251101",
         "claude-opus-4-6@default",
+        "claude-opus-4-7",
+        "claude-opus-4-8",
         "anthropic.claude-haiku-4-5-20251001-v1:0",
         "anthropic.claude-sonnet-4-5-20250929-v1:0",
         "anthropic.claude-sonnet-4-6",
         "anthropic.claude-opus-4-5-20251101-v1:0",
         "anthropic.claude-opus-4-6-v1",
+        "anthropic.claude-opus-4-7",
+        "anthropic.claude-opus-4-8",
         "amazon.nova-2-lite-v1:0",
     ]
     """LLM model to use for every item in the batch.
