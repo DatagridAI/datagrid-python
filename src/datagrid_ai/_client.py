@@ -41,11 +41,9 @@ from ._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from ._constants import DEFAULT_TIMEOUT
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
 from ._exceptions import DatagridError, APIStatusError
 from ._base_client import (
-    DEFAULT_TIMEOUT,
     DEFAULT_MAX_RETRIES,
     SyncAPIClient,
     AsyncAPIClient,
@@ -468,8 +466,6 @@ class Datagrid(SyncAPIClient):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
-            timeout = 1800
         return self.post(
             "/converse",
             body=maybe_transform(
@@ -893,8 +889,6 @@ class AsyncDatagrid(AsyncAPIClient):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
-            timeout = 1800
         return await self.post(
             "/converse",
             body=await async_maybe_transform(
