@@ -29,6 +29,7 @@ from .search_ai_result import SearchAIResult as SearchAIResult
 from .tool_list_params import ToolListParams as ToolListParams
 from .agent_list_params import AgentListParams as AgentListParams
 from .converse_response import ConverseResponse as ConverseResponse
+from .agent_claim_params import AgentClaimParams as AgentClaimParams
 from .file_create_params import FileCreateParams as FileCreateParams
 from .file_update_params import FileUpdateParams as FileUpdateParams
 from .i_frame_event_type import IFrameEventType as IFrameEventType
@@ -44,8 +45,10 @@ from .agent_update_params import AgentUpdateParams as AgentUpdateParams
 from .attachment_metadata import AttachmentMetadata as AttachmentMetadata
 from .connection_provider import ConnectionProvider as ConnectionProvider
 from .webhook_list_params import WebhookListParams as WebhookListParams
+from .agent_claim_response import AgentClaimResponse as AgentClaimResponse
 from .search_search_params import SearchSearchParams as SearchSearchParams
 from .secret_create_params import SecretCreateParams as SecretCreateParams
+from .agent_generate_params import AgentGenerateParams as AgentGenerateParams
 from .connector_list_params import ConnectorListParams as ConnectorListParams
 from .data_view_list_params import DataViewListParams as DataViewListParams
 from .knowledge_list_params import KnowledgeListParams as KnowledgeListParams
@@ -57,6 +60,7 @@ from .connection_list_params import ConnectionListParams as ConnectionListParams
 from .search_result_resource import SearchResultResource as SearchResultResource
 from .search_search_response import SearchSearchResponse as SearchSearchResponse
 from .voice_session_response import VoiceSessionResponse as VoiceSessionResponse
+from .agent_generate_response import AgentGenerateResponse as AgentGenerateResponse
 from .conversation_sort_field import ConversationSortField as ConversationSortField
 from .data_view_create_params import DataViewCreateParams as DataViewCreateParams
 from .data_view_list_response import DataViewListResponse as DataViewListResponse

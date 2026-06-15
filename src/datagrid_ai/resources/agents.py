@@ -7,7 +7,13 @@ from typing_extensions import Literal
 
 import httpx
 
-from ..types import agent_list_params, agent_create_params, agent_update_params
+from ..types import (
+    agent_list_params,
+    agent_claim_params,
+    agent_create_params,
+    agent_update_params,
+    agent_generate_params,
+)
 from .._types import Body, Omit, Query, Headers, NoneType, NotGiven, SequenceNotStr, omit, not_given
 from .._utils import path_template, maybe_transform, async_maybe_transform
 from .._compat import cached_property
@@ -21,6 +27,8 @@ from .._response import (
 from ..pagination import SyncCursorIDPage, AsyncCursorIDPage
 from ..types.agent import Agent
 from .._base_client import AsyncPaginator, make_request_options
+from ..types.agent_claim_response import AgentClaimResponse
+from ..types.agent_generate_response import AgentGenerateResponse
 
 __all__ = ["AgentsResource", "AsyncAgentsResource"]
 
@@ -636,6 +644,82 @@ class AgentsResource(SyncAPIResource):
             cast_to=NoneType,
         )
 
+    def claim(
+        self,
+        *,
+        claim_token: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> AgentClaimResponse:
+        """
+        Redeem a `claim_token` from a prior `POST /agents/generate` call to retrieve the
+        generated agent template. The token is consumed (single-use). Use the returned
+        template to pre-populate the agent creation dialog.
+
+        Args:
+          claim_token: The claim token returned from `POST /agents/generate`
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return self._post(
+            "/agents/claim",
+            body=maybe_transform({"claim_token": claim_token}, agent_claim_params.AgentClaimParams),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=AgentClaimResponse,
+        )
+
+    def generate(
+        self,
+        *,
+        prompt: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> AgentGenerateResponse:
+        """Generate an AI agent configuration from a natural language description.
+
+        Uses the
+        same LLM-powered generation as the in-product agent builder. This is a public
+        endpoint that does not require authentication. Rate limited to 5 requests per
+        day per IP address. The response includes a `claim_token` that can be redeemed
+        via `POST /agents/claim` after signing up to persist the agent.
+
+        Args:
+          prompt: Natural language description of the agent you want. e.g. "I want an agent that
+              helps my sales team answer product questions and draft follow-up emails."
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return self._post(
+            "/agents/generate",
+            body=maybe_transform({"prompt": prompt}, agent_generate_params.AgentGenerateParams),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=AgentGenerateResponse,
+        )
+
 
 class AsyncAgentsResource(AsyncAPIResource):
     @cached_property
@@ -1248,6 +1332,82 @@ class AsyncAgentsResource(AsyncAPIResource):
             cast_to=NoneType,
         )
 
+    async def claim(
+        self,
+        *,
+        claim_token: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> AgentClaimResponse:
+        """
+        Redeem a `claim_token` from a prior `POST /agents/generate` call to retrieve the
+        generated agent template. The token is consumed (single-use). Use the returned
+        template to pre-populate the agent creation dialog.
+
+        Args:
+          claim_token: The claim token returned from `POST /agents/generate`
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return await self._post(
+            "/agents/claim",
+            body=await async_maybe_transform({"claim_token": claim_token}, agent_claim_params.AgentClaimParams),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=AgentClaimResponse,
+        )
+
+    async def generate(
+        self,
+        *,
+        prompt: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> AgentGenerateResponse:
+        """Generate an AI agent configuration from a natural language description.
+
+        Uses the
+        same LLM-powered generation as the in-product agent builder. This is a public
+        endpoint that does not require authentication. Rate limited to 5 requests per
+        day per IP address. The response includes a `claim_token` that can be redeemed
+        via `POST /agents/claim` after signing up to persist the agent.
+
+        Args:
+          prompt: Natural language description of the agent you want. e.g. "I want an agent that
+              helps my sales team answer product questions and draft follow-up emails."
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return await self._post(
+            "/agents/generate",
+            body=await async_maybe_transform({"prompt": prompt}, agent_generate_params.AgentGenerateParams),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=AgentGenerateResponse,
+        )
+
 
 class AgentsResourceWithRawResponse:
     def __init__(self, agents: AgentsResource) -> None:
@@ -1267,6 +1427,12 @@ class AgentsResourceWithRawResponse:
         )
         self.delete = to_raw_response_wrapper(
             agents.delete,
+        )
+        self.claim = to_raw_response_wrapper(
+            agents.claim,
+        )
+        self.generate = to_raw_response_wrapper(
+            agents.generate,
         )
 
 
@@ -1289,6 +1455,12 @@ class AsyncAgentsResourceWithRawResponse:
         self.delete = async_to_raw_response_wrapper(
             agents.delete,
         )
+        self.claim = async_to_raw_response_wrapper(
+            agents.claim,
+        )
+        self.generate = async_to_raw_response_wrapper(
+            agents.generate,
+        )
 
 
 class AgentsResourceWithStreamingResponse:
@@ -1310,6 +1482,12 @@ class AgentsResourceWithStreamingResponse:
         self.delete = to_streamed_response_wrapper(
             agents.delete,
         )
+        self.claim = to_streamed_response_wrapper(
+            agents.claim,
+        )
+        self.generate = to_streamed_response_wrapper(
+            agents.generate,
+        )
 
 
 class AsyncAgentsResourceWithStreamingResponse:
@@ -1330,4 +1508,10 @@ class AsyncAgentsResourceWithStreamingResponse:
         )
         self.delete = async_to_streamed_response_wrapper(
             agents.delete,
+        )
+        self.claim = async_to_streamed_response_wrapper(
+            agents.claim,
+        )
+        self.generate = async_to_streamed_response_wrapper(
+            agents.generate,
         )
