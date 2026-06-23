@@ -21,7 +21,9 @@ class VoiceStartSessionParams(TypedDict, total=False):
     """
     Override the agent config for this voice session. Only prompt overrides are
     supported — voice sessions always use Gemini Live, so LLM model, agent model,
-    planning prompt, and tool settings are not applicable.
+    planning prompt, and tool settings are not applicable. Prompt overrides fully
+    replace the agent's stored values for this session only and are never persisted;
+    empty or whitespace-only values are treated as omitted.
     """
 
     conversation_id: Optional[str]
@@ -88,13 +90,25 @@ class Config(TypedDict, total=False):
     Override the agent config for this voice session.
     Only prompt overrides are supported — voice sessions always use Gemini Live,
     so LLM model, agent model, planning prompt, and tool settings are not applicable.
+    Prompt overrides fully replace the agent's stored values for this session only
+    and are never persisted; empty or whitespace-only values are treated as omitted.
     """
 
     custom_prompt: Optional[str]
     """Custom instructions for the AI Agent during the voice session."""
 
     system_prompt: Optional[str]
-    """Directs your AI Agent's operational behavior during the voice session."""
+    """Directs your AI Agent's operational behavior during the voice session.
+
+    Replaces the agent's stored system prompt for this session only.
+    """
+
+    voice_prompt: Optional[str]
+    """Voice-specific instructions (tone, pacing, speaking style).
+
+    Replaces the agent's stored voice instructions for this session only. Not
+    persisted.
+    """
 
 
 class User(TypedDict, total=False):

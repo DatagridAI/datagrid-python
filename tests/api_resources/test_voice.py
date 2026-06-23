@@ -29,6 +29,7 @@ class TestVoice:
             config={
                 "custom_prompt": "custom_prompt",
                 "system_prompt": "system_prompt",
+                "voice_prompt": "voice_prompt",
             },
             conversation_id="conversation_id",
             ephemeral=True,
@@ -95,6 +96,7 @@ class TestAsyncVoice:
             config={
                 "custom_prompt": "custom_prompt",
                 "system_prompt": "system_prompt",
+                "voice_prompt": "voice_prompt",
             },
             conversation_id="conversation_id",
             ephemeral=True,

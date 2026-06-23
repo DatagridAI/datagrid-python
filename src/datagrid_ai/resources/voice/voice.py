@@ -117,7 +117,9 @@ class VoiceResource(SyncAPIResource):
 
           config: Override the agent config for this voice session. Only prompt overrides are
               supported — voice sessions always use Gemini Live, so LLM model, agent model,
-              planning prompt, and tool settings are not applicable.
+              planning prompt, and tool settings are not applicable. Prompt overrides fully
+              replace the agent's stored values for this session only and are never persisted;
+              empty or whitespace-only values are treated as omitted.
 
           conversation_id: The ID of an existing conversation to continue. If not provided, a new
               conversation will be created.
@@ -270,7 +272,9 @@ class AsyncVoiceResource(AsyncAPIResource):
 
           config: Override the agent config for this voice session. Only prompt overrides are
               supported — voice sessions always use Gemini Live, so LLM model, agent model,
-              planning prompt, and tool settings are not applicable.
+              planning prompt, and tool settings are not applicable. Prompt overrides fully
+              replace the agent's stored values for this session only and are never persisted;
+              empty or whitespace-only values are treated as omitted.
 
           conversation_id: The ID of an existing conversation to continue. If not provided, a new
               conversation will be created.
