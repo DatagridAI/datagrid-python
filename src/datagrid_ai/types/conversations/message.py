@@ -33,11 +33,23 @@ class CitationSource(BaseModel):
 
     type: Literal["image", "pdf_page", "record", "web_search", "sql_query_result", "action"]
 
+    external_url: Optional[str] = None
+    """Origin-system deep-link for the source (e.g.
+
+    an `app.procore.com` universal link), when one exists. Unlike `source_uri`, it
+    is never overridden by the signed Datagrid file URI, so clients can offer an
+    "open in source" action.
+    """
+
     source_id: Optional[str] = None
     """Id of the source."""
 
     source_uri: Optional[str] = None
-    """URI of the source."""
+    """URI of the source.
+
+    For file-backed sources this is the in-app target (signed Datagrid file URI when
+    available); use `external_url` for the origin-system deep-link.
+    """
 
 
 class Citation(BaseModel):
@@ -99,11 +111,23 @@ class ContentMessageContentVoiceTimelineEventCitationSource(BaseModel):
 
     type: Literal["image", "pdf_page", "record", "web_search", "sql_query_result", "action"]
 
+    external_url: Optional[str] = None
+    """Origin-system deep-link for the source (e.g.
+
+    an `app.procore.com` universal link), when one exists. Unlike `source_uri`, it
+    is never overridden by the signed Datagrid file URI, so clients can offer an
+    "open in source" action.
+    """
+
     source_id: Optional[str] = None
     """Id of the source."""
 
     source_uri: Optional[str] = None
-    """URI of the source."""
+    """URI of the source.
+
+    For file-backed sources this is the in-app target (signed Datagrid file URI when
+    available); use `external_url` for the origin-system deep-link.
+    """
 
 
 class ContentMessageContentVoiceTimelineEventCitation(BaseModel):
