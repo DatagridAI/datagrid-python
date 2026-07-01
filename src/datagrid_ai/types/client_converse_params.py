@@ -64,11 +64,15 @@ class ClientConverseParams(TypedDict, total=False):
     """Controls how the agent processes the request for this turn.
 
     Matches the chat mode selector in the Datagrid web app: **Execute**
-    (`full_agent`), **Extended** (`light_agent`), **Ask** (`llm_router`). When set
-    to `auto`, the router jointly predicts the best agent and concrete mode
-    (`full_agent` / `light_agent` / `llm_router`) per message. When set to a
-    concrete mode, that mode is used directly. When omitted, the mode is determined
-    by the `agent_model` in `config`.
+    (`full_agent`), **Extended** (`light_agent`), **Ask** (`llm_router`). Ask uses
+    the agent path with Magpie 2.5 and Ask-specific prompt guidance. When omitted,
+    the request inherits the conversation's persisted `chat_mode`; new conversations
+    default to **Execute** (`full_agent`). When set to `auto`, the request also runs
+    as **Execute** (`full_agent`); Auto is currently accepted for compatibility but
+    does not predict Ask, Extended, or Execute per message. When set to a concrete
+    mode, that concrete mode is used directly. The default `agent_model` for Execute
+    is `magpie-2.5` unless `config.agent_model` explicitly sets another supported
+    model.
     """
 
     config: Optional[Config]
@@ -137,7 +141,8 @@ class ClientConverseParams(TypedDict, total=False):
     Contains the format property used to specify the structured output schema
     (`text.format`). Structured output is supported for all `agent_model` values and
     `chat_mode` settings when `text.format` is provided (same JSON Schema mechanism
-    everywhere). **Ask** in the web app maps to `chat_mode` `magpie-2.5-flash`;.
+    everywhere). **Ask** in the web app maps to `chat_mode: llm_router`; `auto`
+    currently maps to **Execute** (`full_agent`).
     """
 
     user: Optional[User]
@@ -285,9 +290,8 @@ class AgentRoutingManualTargetAgentConfigWithID(TypedDict, total=False):
     **Execute** (full tool use, planning, and multi-step reasoning; aligns with
     **Execute** in the web app / `full_agent`):
 
-    - `magpie-2.0` — Default. Full agent model with proactive planning and
-      reasoning.
-    - `magpie-2.5` — Beta. Latest full-agent model — faster, more adaptable, and
+    - `magpie-2.0` — Legacy full-agent model with proactive planning and reasoning.
+    - `magpie-2.5` — Default. Latest full-agent model — faster, more adaptable, and
       built to handle a broader range of real-world tasks.
     - `magpie-1.1` — Previous-generation full agent model.
 
@@ -554,9 +558,8 @@ class Config(TypedDict, total=False):
     **Execute** (full tool use, planning, and multi-step reasoning; aligns with
     **Execute** in the web app / `full_agent`):
 
-    - `magpie-2.0` — Default. Full agent model with proactive planning and
-      reasoning.
-    - `magpie-2.5` — Beta. Latest full-agent model — faster, more adaptable, and
+    - `magpie-2.0` — Legacy full-agent model with proactive planning and reasoning.
+    - `magpie-2.5` — Default. Latest full-agent model — faster, more adaptable, and
       built to handle a broader range of real-world tasks.
     - `magpie-1.1` — Previous-generation full agent model.
 
@@ -751,7 +754,7 @@ class Config(TypedDict, total=False):
 class Text(TypedDict, total=False):
     """
     Contains the format property used to specify the structured output schema (`text.format`).
-    Structured output is supported for all `agent_model` values and `chat_mode` settings when `text.format` is provided (same JSON Schema mechanism everywhere). **Ask** in the web app maps to `chat_mode` `magpie-2.5-flash`;.
+    Structured output is supported for all `agent_model` values and `chat_mode` settings when `text.format` is provided (same JSON Schema mechanism everywhere). **Ask** in the web app maps to `chat_mode: llm_router`; `auto` currently maps to **Execute** (`full_agent`).
     """
 
     format: object
