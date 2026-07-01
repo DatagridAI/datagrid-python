@@ -413,10 +413,15 @@ class Datagrid(SyncAPIClient):
 
           chat_mode: Controls how the agent processes the request for this turn. Matches the chat
               mode selector in the Datagrid web app: **Execute** (`full_agent`), **Extended**
-              (`light_agent`), **Ask** (`llm_router`). When set to `auto`, the router jointly
-              predicts the best agent and concrete mode (`full_agent` / `light_agent` /
-              `llm_router`) per message. When set to a concrete mode, that mode is used
-              directly. When omitted, the mode is determined by the `agent_model` in `config`.
+              (`light_agent`), **Ask** (`llm_router`). Ask uses the agent path with Magpie 2.5
+              and Ask-specific prompt guidance. When omitted, the request inherits the
+              conversation's persisted `chat_mode`; new conversations default to **Execute**
+              (`full_agent`). When set to `auto`, the request also runs as **Execute**
+              (`full_agent`); Auto is currently accepted for compatibility but does not
+              predict Ask, Extended, or Execute per message. When set to a concrete mode, that
+              concrete mode is used directly. The default `agent_model` for Execute is
+              `magpie-2.5` unless `config.agent_model` explicitly sets another supported
+              model.
 
           config: Override the agent config for this converse call. This is applied as a partial
               override.
@@ -453,7 +458,8 @@ class Datagrid(SyncAPIClient):
           text: Contains the format property used to specify the structured output schema
               (`text.format`). Structured output is supported for all `agent_model` values and
               `chat_mode` settings when `text.format` is provided (same JSON Schema mechanism
-              everywhere). **Ask** in the web app maps to `chat_mode` `magpie-2.5-flash`;.
+              everywhere). **Ask** in the web app maps to `chat_mode: llm_router`; `auto`
+              currently maps to **Execute** (`full_agent`).
 
           user: User information override for converse calls. All fields are optional - only
               provided fields will override the default user information.
@@ -836,10 +842,15 @@ class AsyncDatagrid(AsyncAPIClient):
 
           chat_mode: Controls how the agent processes the request for this turn. Matches the chat
               mode selector in the Datagrid web app: **Execute** (`full_agent`), **Extended**
-              (`light_agent`), **Ask** (`llm_router`). When set to `auto`, the router jointly
-              predicts the best agent and concrete mode (`full_agent` / `light_agent` /
-              `llm_router`) per message. When set to a concrete mode, that mode is used
-              directly. When omitted, the mode is determined by the `agent_model` in `config`.
+              (`light_agent`), **Ask** (`llm_router`). Ask uses the agent path with Magpie 2.5
+              and Ask-specific prompt guidance. When omitted, the request inherits the
+              conversation's persisted `chat_mode`; new conversations default to **Execute**
+              (`full_agent`). When set to `auto`, the request also runs as **Execute**
+              (`full_agent`); Auto is currently accepted for compatibility but does not
+              predict Ask, Extended, or Execute per message. When set to a concrete mode, that
+              concrete mode is used directly. The default `agent_model` for Execute is
+              `magpie-2.5` unless `config.agent_model` explicitly sets another supported
+              model.
 
           config: Override the agent config for this converse call. This is applied as a partial
               override.
@@ -876,7 +887,8 @@ class AsyncDatagrid(AsyncAPIClient):
           text: Contains the format property used to specify the structured output schema
               (`text.format`). Structured output is supported for all `agent_model` values and
               `chat_mode` settings when `text.format` is provided (same JSON Schema mechanism
-              everywhere). **Ask** in the web app maps to `chat_mode` `magpie-2.5-flash`;.
+              everywhere). **Ask** in the web app maps to `chat_mode: llm_router`; `auto`
+              currently maps to **Execute** (`full_agent`).
 
           user: User information override for converse calls. All fields are optional - only
               provided fields will override the default user information.

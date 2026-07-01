@@ -126,9 +126,8 @@ class AgentsResource(SyncAPIResource):
               **Execute** (full tool use, planning, and multi-step reasoning; aligns with
               **Execute** in the web app / `full_agent`):
 
-              - `magpie-2.0` — Default. Full agent model with proactive planning and
-                reasoning.
-              - `magpie-2.5` — Beta. Latest full-agent model — faster, more adaptable, and
+              - `magpie-2.0` — Legacy full-agent model with proactive planning and reasoning.
+              - `magpie-2.5` — Default. Latest full-agent model — faster, more adaptable, and
                 built to handle a broader range of real-world tasks.
               - `magpie-1.1` — Previous-generation full agent model.
 
@@ -389,9 +388,8 @@ class AgentsResource(SyncAPIResource):
               **Execute** (full tool use, planning, and multi-step reasoning; aligns with
               **Execute** in the web app / `full_agent`):
 
-              - `magpie-2.0` — Default. Full agent model with proactive planning and
-                reasoning.
-              - `magpie-2.5` — Beta. Latest full-agent model — faster, more adaptable, and
+              - `magpie-2.0` — Legacy full-agent model with proactive planning and reasoning.
+              - `magpie-2.5` — Default. Latest full-agent model — faster, more adaptable, and
                 built to handle a broader range of real-world tasks.
               - `magpie-1.1` — Previous-generation full agent model.
 
@@ -738,9 +736,8 @@ class AsyncAgentsResource(AsyncAPIResource):
               **Execute** (full tool use, planning, and multi-step reasoning; aligns with
               **Execute** in the web app / `full_agent`):
 
-              - `magpie-2.0` — Default. Full agent model with proactive planning and
-                reasoning.
-              - `magpie-2.5` — Beta. Latest full-agent model — faster, more adaptable, and
+              - `magpie-2.0` — Legacy full-agent model with proactive planning and reasoning.
+              - `magpie-2.5` — Default. Latest full-agent model — faster, more adaptable, and
                 built to handle a broader range of real-world tasks.
               - `magpie-1.1` — Previous-generation full agent model.
 
@@ -1001,9 +998,8 @@ class AsyncAgentsResource(AsyncAPIResource):
               **Execute** (full tool use, planning, and multi-step reasoning; aligns with
               **Execute** in the web app / `full_agent`):
 
-              - `magpie-2.0` — Default. Full agent model with proactive planning and
-                reasoning.
-              - `magpie-2.5` — Beta. Latest full-agent model — faster, more adaptable, and
+              - `magpie-2.0` — Legacy full-agent model with proactive planning and reasoning.
+              - `magpie-2.5` — Default. Latest full-agent model — faster, more adaptable, and
                 built to handle a broader range of real-world tasks.
               - `magpie-1.1` — Previous-generation full agent model.
 

@@ -60,8 +60,8 @@ class ConverseResponse(Message):
     chat_mode: Optional[Literal["full_agent", "light_agent", "llm_router"]] = None
     """
     The chat mode used for this response (web app: Execute = full_agent, Extended =
-    light_agent, Ask = llm_router). For Auto mode conversations, this is the mode
-    selected by the router for this turn.
+    light_agent, Ask = llm_router). Auto mode currently runs and reports as Execute
+    (full_agent).
     """
 
     generated_title: Optional[str] = None
