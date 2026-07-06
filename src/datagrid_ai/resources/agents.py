@@ -183,7 +183,11 @@ class AgentsResource(SyncAPIResource):
               connection instead of the default one.
 
               **Structured outputs (Converse):** All `agent_model` values support JSON Schema
-              constrained responses via **`text.format`** on the Converse request.
+              constrained responses via **`text.format`** on the Converse request. Responses
+              are validated server-side against the schema and returned as a `json` content
+              item; output that cannot be made schema-valid is rejected with a deterministic
+              `structured_output_generation_failed` error instead of being returned as a
+              success.
 
               **Tool availability by agent model** (aligned with in-app **Execute** /
               **Extended** / direct LLM; see Converse `chat_mode` for **Ask** vs
@@ -447,7 +451,11 @@ class AgentsResource(SyncAPIResource):
               connection instead of the default one.
 
               **Structured outputs (Converse):** All `agent_model` values support JSON Schema
-              constrained responses via **`text.format`** on the Converse request.
+              constrained responses via **`text.format`** on the Converse request. Responses
+              are validated server-side against the schema and returned as a `json` content
+              item; output that cannot be made schema-valid is rejected with a deterministic
+              `structured_output_generation_failed` error instead of being returned as a
+              success.
 
               **Tool availability by agent model** (aligned with in-app **Execute** /
               **Extended** / direct LLM; see Converse `chat_mode` for **Ask** vs
@@ -793,7 +801,11 @@ class AsyncAgentsResource(AsyncAPIResource):
               connection instead of the default one.
 
               **Structured outputs (Converse):** All `agent_model` values support JSON Schema
-              constrained responses via **`text.format`** on the Converse request.
+              constrained responses via **`text.format`** on the Converse request. Responses
+              are validated server-side against the schema and returned as a `json` content
+              item; output that cannot be made schema-valid is rejected with a deterministic
+              `structured_output_generation_failed` error instead of being returned as a
+              success.
 
               **Tool availability by agent model** (aligned with in-app **Execute** /
               **Extended** / direct LLM; see Converse `chat_mode` for **Ask** vs
@@ -1057,7 +1069,11 @@ class AsyncAgentsResource(AsyncAPIResource):
               connection instead of the default one.
 
               **Structured outputs (Converse):** All `agent_model` values support JSON Schema
-              constrained responses via **`text.format`** on the Converse request.
+              constrained responses via **`text.format`** on the Converse request. Responses
+              are validated server-side against the schema and returned as a `json` content
+              item; output that cannot be made schema-valid is rejected with a deterministic
+              `structured_output_generation_failed` error instead of being returned as a
+              success.
 
               **Tool availability by agent model** (aligned with in-app **Execute** /
               **Extended** / direct LLM; see Converse `chat_mode` for **Ask** vs
