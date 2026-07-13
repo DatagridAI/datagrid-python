@@ -4,6 +4,8 @@ from typing import List, Union, Optional
 from datetime import datetime
 from typing_extensions import Literal, Annotated, TypeAlias
 
+from pydantic import Field as FieldInfo
+
 from ..._utils import PropertyInfo
 from ..._models import BaseModel
 
@@ -13,6 +15,7 @@ __all__ = [
     "CitationSource",
     "Content",
     "ContentMessageContentText",
+    "ContentMessageContentJson",
     "ContentMessageContentVoice",
     "ContentMessageContentVoiceAudioClip",
     "ContentMessageContentVoiceAudioClipParticipant",
@@ -67,6 +70,15 @@ class ContentMessageContentText(BaseModel):
     """The text content of the message."""
 
     type: Literal["text"]
+
+
+class ContentMessageContentJson(BaseModel):
+    """JSON content for structured-output responses."""
+
+    json_: object = FieldInfo(alias="json")
+    """The JSON value produced by the agent."""
+
+    type: Literal["json"]
 
 
 class ContentMessageContentVoiceAudioClipParticipant(BaseModel):
@@ -206,7 +218,7 @@ class ContentMessageContentFile(BaseModel):
 
 
 Content: TypeAlias = Annotated[
-    Union[ContentMessageContentText, ContentMessageContentVoice, ContentMessageContentFile],
+    Union[ContentMessageContentText, ContentMessageContentJson, ContentMessageContentVoice, ContentMessageContentFile],
     PropertyInfo(discriminator="type"),
 ]
 

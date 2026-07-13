@@ -408,7 +408,11 @@ class AgentRoutingManualTargetAgentConfigWithID(TypedDict, total=False):
     a tool, it will use that specific connection instead of the default one.
 
     **Structured outputs (Converse):** All `agent_model` values support JSON Schema
-    constrained responses via **`text.format`** on the Converse request.
+    constrained responses via **`text.format`** on the Converse request. Responses
+    are validated server-side against the schema and returned as a `json` content
+    item; output that cannot be made schema-valid is rejected with a deterministic
+    `structured_output_generation_failed` error instead of being returned as a
+    success.
 
     **Tool availability by agent model** (aligned with in-app **Execute** /
     **Extended** / direct LLM; see Converse `chat_mode` for **Ask** vs
@@ -694,7 +698,11 @@ class Config(TypedDict, total=False):
     a tool, it will use that specific connection instead of the default one.
 
     **Structured outputs (Converse):** All `agent_model` values support JSON Schema
-    constrained responses via **`text.format`** on the Converse request.
+    constrained responses via **`text.format`** on the Converse request. Responses
+    are validated server-side against the schema and returned as a `json` content
+    item; output that cannot be made schema-valid is rejected with a deterministic
+    `structured_output_generation_failed` error instead of being returned as a
+    success.
 
     **Tool availability by agent model** (aligned with in-app **Execute** /
     **Extended** / direct LLM; see Converse `chat_mode` for **Ask** vs
@@ -758,9 +766,21 @@ class Text(TypedDict, total=False):
     """
 
     format: object
-    """
-    The converse response will be a JSON string object, that adheres to the provided
-    JSON schema.
+    """Constrain the Converse response to the provided JSON Schema.
+
+    The agent's output is **validated server-side against this schema**: a
+    conforming result is returned as structured content, while non-conforming output
+    (missing required fields, invalid enum values, or disallowed properties) is
+    converted into an application-level error payload rather than returned as a
+    structured success.
+
+    On success the structured result is returned as a `json` content item with the
+    value already parsed (no `JSON.parse` required), alongside a JSON-string `text`
+    content item kept for backward compatibility with callers that read
+    `content[0].text`. When the agent cannot produce schema-valid JSON, no `json`
+    item is returned — a `text` content item carries a deterministic error object
+    instead:
+    `{ "error": { "code": "structured_output_generation_failed", "message": "..." } }`.
 
     ```javascript
     const exampleJsonSchema = {
@@ -790,8 +810,12 @@ class Text(TypedDict, total=False):
       text: { format: exampleJsonSchema },
     });
 
-    // Example response: "{ "name": "Gladiator", "director": "Ridley Scott", "release_year": 2000 }"
-    const parsedResponse = JSON.parse(response.content[0].text);
+    // Structured output is returned as a `json` content item (already
+    // parsed); `content[0].text` still holds the JSON string for
+    // backward compatibility.
+    const jsonPart = response.content.find((part) => part.type === "json");
+    const movie = jsonPart?.json;
+    // => { name: "Gladiator", director: "Ridley Scott", release_year: 2000 }
     ```
     """
 
