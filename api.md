@@ -209,7 +209,7 @@ Methods:
 Types:
 
 ```python
-from datagrid_ai.types import Agent
+from datagrid_ai.types import Agent, AgentClaimResponse, AgentGenerateResponse
 ```
 
 Methods:
@@ -219,6 +219,8 @@ Methods:
 - <code title="patch /agents/{agent_id}">client.agents.<a href="./src/datagrid_ai/resources/agents.py">update</a>(agent_id, \*\*<a href="src/datagrid_ai/types/agent_update_params.py">params</a>) -> <a href="./src/datagrid_ai/types/agent.py">Agent</a></code>
 - <code title="get /agents">client.agents.<a href="./src/datagrid_ai/resources/agents.py">list</a>(\*\*<a href="src/datagrid_ai/types/agent_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/agent.py">SyncCursorIDPage[Agent]</a></code>
 - <code title="delete /agents/{agent_id}">client.agents.<a href="./src/datagrid_ai/resources/agents.py">delete</a>(agent_id) -> None</code>
+- <code title="post /agents/claim">client.agents.<a href="./src/datagrid_ai/resources/agents.py">claim</a>(\*\*<a href="src/datagrid_ai/types/agent_claim_params.py">params</a>) -> <a href="./src/datagrid_ai/types/agent_claim_response.py">AgentClaimResponse</a></code>
+- <code title="post /agents/generate">client.agents.<a href="./src/datagrid_ai/resources/agents.py">generate</a>(\*\*<a href="src/datagrid_ai/types/agent_generate_params.py">params</a>) -> <a href="./src/datagrid_ai/types/agent_generate_response.py">AgentGenerateResponse</a></code>
 
 # Identity
 

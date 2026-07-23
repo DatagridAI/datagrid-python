@@ -7,7 +7,7 @@ from typing_extensions import Literal, TypeAlias
 from .tool import Tool
 from .._models import BaseModel
 
-__all__ = ["Agent", "Corpus", "CorpusCorpusKnowledgeItem", "CorpusCorpusPageItem", "McpServer"]
+__all__ = ["Agent", "Corpus", "CorpusCorpusKnowledgeItem", "CorpusCorpusPageItem", "McpServer", "ManagedByApp"]
 
 
 class CorpusCorpusKnowledgeItem(BaseModel):
@@ -45,6 +45,14 @@ class McpServer(BaseModel):
     last_synced_at: Optional[datetime] = None
 
     tool_count: Optional[int] = None
+
+
+class ManagedByApp(BaseModel):
+    app_name: Optional[str] = None
+    """The name of the app that manages the agent"""
+
+    app_uuid: Optional[str] = None
+    """The UUID of the app that manages the agent"""
 
 
 class Agent(BaseModel):
@@ -176,3 +184,5 @@ class Agent(BaseModel):
 
     tools: List[Tool]
     """Tools that this agent can use."""
+
+    managed_by_app: Optional[ManagedByApp] = None
