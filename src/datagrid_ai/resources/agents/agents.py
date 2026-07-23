@@ -7,33 +7,45 @@ from typing_extensions import Literal
 
 import httpx
 
-from ..types import (
+from ...types import (
     agent_list_params,
     agent_claim_params,
     agent_create_params,
     agent_update_params,
     agent_generate_params,
 )
-from .._types import Body, Omit, Query, Headers, NoneType, NotGiven, SequenceNotStr, omit, not_given
-from .._utils import path_template, maybe_transform, async_maybe_transform
-from .._compat import cached_property
-from .._resource import SyncAPIResource, AsyncAPIResource
-from .._response import (
+from ..._types import Body, Omit, Query, Headers, NoneType, NotGiven, SequenceNotStr, omit, not_given
+from ..._utils import path_template, maybe_transform, async_maybe_transform
+from ..._compat import cached_property
+from ..._resource import SyncAPIResource, AsyncAPIResource
+from ..._response import (
     to_raw_response_wrapper,
     to_streamed_response_wrapper,
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from ..pagination import SyncCursorIDPage, AsyncCursorIDPage
-from ..types.agent import Agent
-from .._base_client import AsyncPaginator, make_request_options
-from ..types.agent_claim_response import AgentClaimResponse
-from ..types.agent_generate_response import AgentGenerateResponse
+from .automations import (
+    AutomationsResource,
+    AsyncAutomationsResource,
+    AutomationsResourceWithRawResponse,
+    AsyncAutomationsResourceWithRawResponse,
+    AutomationsResourceWithStreamingResponse,
+    AsyncAutomationsResourceWithStreamingResponse,
+)
+from ...pagination import SyncCursorIDPage, AsyncCursorIDPage
+from ...types.agent import Agent
+from ..._base_client import AsyncPaginator, make_request_options
+from ...types.agent_claim_response import AgentClaimResponse
+from ...types.agent_generate_response import AgentGenerateResponse
 
 __all__ = ["AgentsResource", "AsyncAgentsResource"]
 
 
 class AgentsResource(SyncAPIResource):
+    @cached_property
+    def automations(self) -> AutomationsResource:
+        return AutomationsResource(self._client)
+
     @cached_property
     def with_raw_response(self) -> AgentsResourceWithRawResponse:
         """
@@ -730,6 +742,10 @@ class AgentsResource(SyncAPIResource):
 
 
 class AsyncAgentsResource(AsyncAPIResource):
+    @cached_property
+    def automations(self) -> AsyncAutomationsResource:
+        return AsyncAutomationsResource(self._client)
+
     @cached_property
     def with_raw_response(self) -> AsyncAgentsResourceWithRawResponse:
         """
@@ -1451,6 +1467,10 @@ class AgentsResourceWithRawResponse:
             agents.generate,
         )
 
+    @cached_property
+    def automations(self) -> AutomationsResourceWithRawResponse:
+        return AutomationsResourceWithRawResponse(self._agents.automations)
+
 
 class AsyncAgentsResourceWithRawResponse:
     def __init__(self, agents: AsyncAgentsResource) -> None:
@@ -1477,6 +1497,10 @@ class AsyncAgentsResourceWithRawResponse:
         self.generate = async_to_raw_response_wrapper(
             agents.generate,
         )
+
+    @cached_property
+    def automations(self) -> AsyncAutomationsResourceWithRawResponse:
+        return AsyncAutomationsResourceWithRawResponse(self._agents.automations)
 
 
 class AgentsResourceWithStreamingResponse:
@@ -1505,6 +1529,10 @@ class AgentsResourceWithStreamingResponse:
             agents.generate,
         )
 
+    @cached_property
+    def automations(self) -> AutomationsResourceWithStreamingResponse:
+        return AutomationsResourceWithStreamingResponse(self._agents.automations)
+
 
 class AsyncAgentsResourceWithStreamingResponse:
     def __init__(self, agents: AsyncAgentsResource) -> None:
@@ -1531,3 +1559,7 @@ class AsyncAgentsResourceWithStreamingResponse:
         self.generate = async_to_streamed_response_wrapper(
             agents.generate,
         )
+
+    @cached_property
+    def automations(self) -> AsyncAutomationsResourceWithStreamingResponse:
+        return AsyncAutomationsResourceWithStreamingResponse(self._agents.automations)

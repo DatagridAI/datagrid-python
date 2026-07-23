@@ -78,7 +78,6 @@ if TYPE_CHECKING:
     from .resources.files import FilesResource, AsyncFilesResource
     from .resources.pages import PagesResource, AsyncPagesResource
     from .resources.tools import ToolsResource, AsyncToolsResource
-    from .resources.agents import AgentsResource, AsyncAgentsResource
     from .resources.search import SearchResource, AsyncSearchResource
     from .resources.secrets import SecretsResource, AsyncSecretsResource
     from .resources.identity import IdentityResource, AsyncIdentityResource
@@ -87,6 +86,7 @@ if TYPE_CHECKING:
     from .resources.connectors import ConnectorsResource, AsyncConnectorsResource
     from .resources.connections import ConnectionsResource, AsyncConnectionsResource
     from .resources.voice.voice import VoiceResource, AsyncVoiceResource
+    from .resources.agents.agents import AgentsResource, AsyncAgentsResource
     from .resources.memory.memory import MemoryResource, AsyncMemoryResource
     from .resources.batch_predictions import BatchPredictionsResource, AsyncBatchPredictionsResource
     from .resources.knowledge.knowledge import KnowledgeResource, AsyncKnowledgeResource
