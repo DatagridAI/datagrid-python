@@ -34,7 +34,7 @@ class TestBatchPredictions:
                     "file_id": "file_def456",
                 },
             ],
-            model="gemini-2.5-flash",
+            model="gemini-3.1-flash-lite",
             output_schema={
                 "type": "bar",
                 "additionalProperties": "bar",
@@ -60,7 +60,7 @@ class TestBatchPredictions:
                     "page": 1,
                 },
             ],
-            model="gemini-2.5-flash",
+            model="gemini-3.1-flash-lite",
             output_schema={
                 "type": "bar",
                 "additionalProperties": "bar",
@@ -87,7 +87,7 @@ class TestBatchPredictions:
                     "file_id": "file_def456",
                 },
             ],
-            model="gemini-2.5-flash",
+            model="gemini-3.1-flash-lite",
             output_schema={
                 "type": "bar",
                 "additionalProperties": "bar",
@@ -115,7 +115,7 @@ class TestBatchPredictions:
                     "file_id": "file_def456",
                 },
             ],
-            model="gemini-2.5-flash",
+            model="gemini-3.1-flash-lite",
             output_schema={
                 "type": "bar",
                 "additionalProperties": "bar",
@@ -301,7 +301,7 @@ class TestAsyncBatchPredictions:
                     "file_id": "file_def456",
                 },
             ],
-            model="gemini-2.5-flash",
+            model="gemini-3.1-flash-lite",
             output_schema={
                 "type": "bar",
                 "additionalProperties": "bar",
@@ -327,7 +327,7 @@ class TestAsyncBatchPredictions:
                     "page": 1,
                 },
             ],
-            model="gemini-2.5-flash",
+            model="gemini-3.1-flash-lite",
             output_schema={
                 "type": "bar",
                 "additionalProperties": "bar",
@@ -354,7 +354,7 @@ class TestAsyncBatchPredictions:
                     "file_id": "file_def456",
                 },
             ],
-            model="gemini-2.5-flash",
+            model="gemini-3.1-flash-lite",
             output_schema={
                 "type": "bar",
                 "additionalProperties": "bar",
@@ -382,7 +382,7 @@ class TestAsyncBatchPredictions:
                     "file_id": "file_def456",
                 },
             ],
-            model="gemini-2.5-flash",
+            model="gemini-3.1-flash-lite",
             output_schema={
                 "type": "bar",
                 "additionalProperties": "bar",

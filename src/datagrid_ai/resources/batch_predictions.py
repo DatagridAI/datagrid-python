@@ -111,8 +111,8 @@ class BatchPredictionsResource(SyncAPIResource):
               LLM model to use for every item in the batch. Model availability is cloud-aware:
               AWS teamspaces accept Bedrock-native batch-capable models, while GCP teamspaces
               accept non-Bedrock batch-capable models and reject Bedrock-only ids. Deprecated
-              gemini-2.0-flash is accepted for backward compatibility and automatically runs
-              as gemini-3.1-flash-lite.
+              gemini-2.x-flash ids are accepted for backward compatibility and automatically
+              run as gemini-3.1-flash-lite.
 
           output_schema: JSON Schema Draft 2020-12 describing each item output. The root schema must be
               `type: object`. The batch prediction API currently rejects `$defs`, `$ref`,
@@ -410,8 +410,8 @@ class AsyncBatchPredictionsResource(AsyncAPIResource):
               LLM model to use for every item in the batch. Model availability is cloud-aware:
               AWS teamspaces accept Bedrock-native batch-capable models, while GCP teamspaces
               accept non-Bedrock batch-capable models and reject Bedrock-only ids. Deprecated
-              gemini-2.0-flash is accepted for backward compatibility and automatically runs
-              as gemini-3.1-flash-lite.
+              gemini-2.x-flash ids are accepted for backward compatibility and automatically
+              run as gemini-3.1-flash-lite.
 
           output_schema: JSON Schema Draft 2020-12 describing each item output. The root schema must be
               `type: object`. The batch prediction API currently rejects `$defs`, `$ref`,

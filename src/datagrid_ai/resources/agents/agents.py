@@ -89,9 +89,9 @@ class AgentsResource(SyncAPIResource):
                 "gemini-2.5-pro",
                 "gemini-2.5-pro-preview-05-06",
                 "gemini-2.5-flash",
+                "gemini-2.5-flash-lite",
                 "gemini-2.5-flash-preview-04-17",
                 "gemini-2.5-flash-native-audio-preview-12-2025",
-                "gemini-2.5-flash-lite",
                 "gpt-5",
                 "gpt-5.1",
                 "openai.gpt-5.5",
@@ -183,7 +183,7 @@ class AgentsResource(SyncAPIResource):
           knowledge_ids: Deprecated, use corpus instead. Array of Knowledge IDs the agent should use
               during the converse. When omitted, all knowledge is used.
 
-          llm_model: The LLM used to generate responses. Deprecated Gemini 2.0 Flash ids are accepted
+          llm_model: The LLM used to generate responses. Deprecated Gemini 2.x Flash ids are accepted
               for backward compatibility and automatically run as gemini-3.1-flash-lite.
 
           mcp_servers: Registered MCP servers to enable for this agent.
@@ -356,9 +356,9 @@ class AgentsResource(SyncAPIResource):
                 "gemini-2.5-pro",
                 "gemini-2.5-pro-preview-05-06",
                 "gemini-2.5-flash",
+                "gemini-2.5-flash-lite",
                 "gemini-2.5-flash-preview-04-17",
                 "gemini-2.5-flash-native-audio-preview-12-2025",
-                "gemini-2.5-flash-lite",
                 "gpt-5",
                 "gpt-5.1",
                 "openai.gpt-5.5",
@@ -452,7 +452,7 @@ class AgentsResource(SyncAPIResource):
           knowledge_ids: Deprecated, use corpus instead. Array of Knowledge IDs the agent should use
               during the converse. When omitted, all knowledge is used.
 
-          llm_model: The LLM used to generate responses. Deprecated Gemini 2.0 Flash ids are accepted
+          llm_model: The LLM used to generate responses. Deprecated Gemini 2.x Flash ids are accepted
               for backward compatibility and automatically run as gemini-3.1-flash-lite.
 
           mcp_servers: Registered MCP servers to enable for this agent.
@@ -789,9 +789,9 @@ class AsyncAgentsResource(AsyncAPIResource):
                 "gemini-2.5-pro",
                 "gemini-2.5-pro-preview-05-06",
                 "gemini-2.5-flash",
+                "gemini-2.5-flash-lite",
                 "gemini-2.5-flash-preview-04-17",
                 "gemini-2.5-flash-native-audio-preview-12-2025",
-                "gemini-2.5-flash-lite",
                 "gpt-5",
                 "gpt-5.1",
                 "openai.gpt-5.5",
@@ -883,7 +883,7 @@ class AsyncAgentsResource(AsyncAPIResource):
           knowledge_ids: Deprecated, use corpus instead. Array of Knowledge IDs the agent should use
               during the converse. When omitted, all knowledge is used.
 
-          llm_model: The LLM used to generate responses. Deprecated Gemini 2.0 Flash ids are accepted
+          llm_model: The LLM used to generate responses. Deprecated Gemini 2.x Flash ids are accepted
               for backward compatibility and automatically run as gemini-3.1-flash-lite.
 
           mcp_servers: Registered MCP servers to enable for this agent.
@@ -1056,9 +1056,9 @@ class AsyncAgentsResource(AsyncAPIResource):
                 "gemini-2.5-pro",
                 "gemini-2.5-pro-preview-05-06",
                 "gemini-2.5-flash",
+                "gemini-2.5-flash-lite",
                 "gemini-2.5-flash-preview-04-17",
                 "gemini-2.5-flash-native-audio-preview-12-2025",
-                "gemini-2.5-flash-lite",
                 "gpt-5",
                 "gpt-5.1",
                 "openai.gpt-5.5",
@@ -1152,7 +1152,7 @@ class AsyncAgentsResource(AsyncAPIResource):
           knowledge_ids: Deprecated, use corpus instead. Array of Knowledge IDs the agent should use
               during the converse. When omitted, all knowledge is used.
 
-          llm_model: The LLM used to generate responses. Deprecated Gemini 2.0 Flash ids are accepted
+          llm_model: The LLM used to generate responses. Deprecated Gemini 2.x Flash ids are accepted
               for backward compatibility and automatically run as gemini-3.1-flash-lite.
 
           mcp_servers: Registered MCP servers to enable for this agent.
