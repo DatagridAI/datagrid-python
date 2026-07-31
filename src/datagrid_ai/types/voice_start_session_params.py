@@ -32,6 +32,14 @@ class VoiceStartSessionParams(TypedDict, total=False):
     If not provided, a new conversation will be created.
     """
 
+    discard_if_empty: Optional[bool]
+    """
+    When true and this session creates a brand-new conversation (no conversation_id
+    was provided), that conversation is discarded if the session ends without any
+    message ever being sent. Has no effect when continuing an existing conversation.
+    Disabled by default.
+    """
+
     ephemeral: Optional[bool]
     """
     When true, the session is ephemeral and will not save messages to conversation

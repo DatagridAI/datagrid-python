@@ -183,6 +183,7 @@ class ConversationsResource(SyncAPIResource):
         after: str | Omit = omit,
         before: str | Omit = omit,
         direction: Literal["asc", "desc"] | Omit = omit,
+        has_messages: bool | Omit = omit,
         limit: int | Omit = omit,
         sort: ConversationSortField | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -209,6 +210,12 @@ class ConversationsResource(SyncAPIResource):
 
           direction: The direction to sort the results.
 
+          has_messages: When true, excludes conversations that never had a message sent (e.g. abandoned
+              sessions). Defaults to false, returning every conversation regardless of message
+              count. Changing this value between requests that reuse the same `before`/`after`
+              cursor is not supported — the cursor was computed against a different result
+              set, so pass a consistent value for the lifetime of a given pagination sequence.
+
           limit: The limit on the number of objects to return, ranging between 1 and 100.
 
           sort: The field to sort the conversations by.
@@ -234,6 +241,7 @@ class ConversationsResource(SyncAPIResource):
                         "after": after,
                         "before": before,
                         "direction": direction,
+                        "has_messages": has_messages,
                         "limit": limit,
                         "sort": sort,
                     },
@@ -422,6 +430,7 @@ class AsyncConversationsResource(AsyncAPIResource):
         after: str | Omit = omit,
         before: str | Omit = omit,
         direction: Literal["asc", "desc"] | Omit = omit,
+        has_messages: bool | Omit = omit,
         limit: int | Omit = omit,
         sort: ConversationSortField | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -448,6 +457,12 @@ class AsyncConversationsResource(AsyncAPIResource):
 
           direction: The direction to sort the results.
 
+          has_messages: When true, excludes conversations that never had a message sent (e.g. abandoned
+              sessions). Defaults to false, returning every conversation regardless of message
+              count. Changing this value between requests that reuse the same `before`/`after`
+              cursor is not supported — the cursor was computed against a different result
+              set, so pass a consistent value for the lifetime of a given pagination sequence.
+
           limit: The limit on the number of objects to return, ranging between 1 and 100.
 
           sort: The field to sort the conversations by.
@@ -473,6 +488,7 @@ class AsyncConversationsResource(AsyncAPIResource):
                         "after": after,
                         "before": before,
                         "direction": direction,
+                        "has_messages": has_messages,
                         "limit": limit,
                         "sort": sort,
                     },
