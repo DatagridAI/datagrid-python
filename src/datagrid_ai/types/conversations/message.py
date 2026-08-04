@@ -13,6 +13,7 @@ __all__ = [
     "Message",
     "Citation",
     "CitationSource",
+    "CitationSourceField",
     "Content",
     "ContentMessageContentText",
     "ContentMessageContentJson",
@@ -22,9 +23,18 @@ __all__ = [
     "ContentMessageContentVoiceTimelineEvent",
     "ContentMessageContentVoiceTimelineEventCitation",
     "ContentMessageContentVoiceTimelineEventCitationSource",
+    "ContentMessageContentVoiceTimelineEventCitationSourceField",
     "ContentMessageContentFile",
     "Credits",
 ]
+
+
+class CitationSourceField(BaseModel):
+    label: str
+    """Human-readable field label (e.g. "Due Date")."""
+
+    value: str
+    """Human-readable field value (e.g. "2025-09-14")."""
 
 
 class CitationSource(BaseModel):
@@ -44,6 +54,14 @@ class CitationSource(BaseModel):
     "open in source" action.
     """
 
+    fields: Optional[List[CitationSourceField]] = None
+    """record only.
+
+    Backend-normalized, render-ready structured fields promoted from the record row
+    (due date, ball-in-court, assignee, revision, type, vendor, scope, …). Excludes
+    `status`, which is surfaced on its own.
+    """
+
     source_id: Optional[str] = None
     """Id of the source."""
 
@@ -52,6 +70,13 @@ class CitationSource(BaseModel):
 
     For file-backed sources this is the in-app target (signed Datagrid file URI when
     available); use `external_url` for the origin-system deep-link.
+    """
+
+    status: Optional[str] = None
+    """record only.
+
+    Primary status value for the record (e.g. "Open", "Pending Review"), surfaced
+    separately from `fields` so clients can render a status chip.
     """
 
 
@@ -114,6 +139,14 @@ class ContentMessageContentVoiceAudioClip(BaseModel):
     """
 
 
+class ContentMessageContentVoiceTimelineEventCitationSourceField(BaseModel):
+    label: str
+    """Human-readable field label (e.g. "Due Date")."""
+
+    value: str
+    """Human-readable field value (e.g. "2025-09-14")."""
+
+
 class ContentMessageContentVoiceTimelineEventCitationSource(BaseModel):
     confirmations: List[str]
     """An array of text snippets from the source that confirm the citation."""
@@ -131,6 +164,14 @@ class ContentMessageContentVoiceTimelineEventCitationSource(BaseModel):
     "open in source" action.
     """
 
+    fields: Optional[List[ContentMessageContentVoiceTimelineEventCitationSourceField]] = None
+    """record only.
+
+    Backend-normalized, render-ready structured fields promoted from the record row
+    (due date, ball-in-court, assignee, revision, type, vendor, scope, …). Excludes
+    `status`, which is surfaced on its own.
+    """
+
     source_id: Optional[str] = None
     """Id of the source."""
 
@@ -139,6 +180,13 @@ class ContentMessageContentVoiceTimelineEventCitationSource(BaseModel):
 
     For file-backed sources this is the in-app target (signed Datagrid file URI when
     available); use `external_url` for the origin-system deep-link.
+    """
+
+    status: Optional[str] = None
+    """record only.
+
+    Primary status value for the record (e.g. "Open", "Pending Review"), surfaced
+    separately from `fields` so clients can render a status chip.
     """
 
 
