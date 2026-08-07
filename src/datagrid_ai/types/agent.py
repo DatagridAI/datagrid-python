@@ -7,7 +7,7 @@ from typing_extensions import Literal, TypeAlias
 from .tool import Tool
 from .._models import BaseModel
 
-__all__ = ["Agent", "Corpus", "CorpusCorpusKnowledgeItem", "CorpusCorpusPageItem", "McpServer"]
+__all__ = ["Agent", "Corpus", "CorpusCorpusKnowledgeItem", "CorpusCorpusPageItem", "McpServer", "ManagedByApp"]
 
 
 class CorpusCorpusKnowledgeItem(BaseModel):
@@ -45,6 +45,14 @@ class McpServer(BaseModel):
     last_synced_at: Optional[datetime] = None
 
     tool_count: Optional[int] = None
+
+
+class ManagedByApp(BaseModel):
+    app_name: Optional[str] = None
+    """The name of the app that manages the agent"""
+
+    app_uuid: Optional[str] = None
+    """The UUID of the app that manages the agent"""
 
 
 class Agent(BaseModel):
@@ -120,11 +128,12 @@ class Agent(BaseModel):
             "gemini-2.5-pro",
             "gemini-2.5-pro-preview-05-06",
             "gemini-2.5-flash",
+            "gemini-2.5-flash-lite",
             "gemini-2.5-flash-preview-04-17",
             "gemini-2.5-flash-native-audio-preview-12-2025",
-            "gemini-2.5-flash-lite",
             "gpt-5",
             "gpt-5.1",
+            "openai.gpt-5.5",
             "gemini-2.0-flash-001",
             "gemini-2.0-flash",
             "gemini-1.5-pro-001",
@@ -151,7 +160,7 @@ class Agent(BaseModel):
     ]
     """The LLM used to generate responses.
 
-    Deprecated Gemini 2.0 Flash ids are accepted for backward compatibility and
+    Deprecated Gemini 2.x Flash ids are accepted for backward compatibility and
     automatically run as gemini-3.1-flash-lite.
     """
 
@@ -175,3 +184,5 @@ class Agent(BaseModel):
 
     tools: List[Tool]
     """Tools that this agent can use."""
+
+    managed_by_app: Optional[ManagedByApp] = None

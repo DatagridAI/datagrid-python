@@ -148,6 +148,7 @@ class TestConversations:
             after="after",
             before="before",
             direction="asc",
+            has_messages=True,
             limit=1,
             sort="created_at",
         )
@@ -345,6 +346,7 @@ class TestAsyncConversations:
             after="after",
             before="before",
             direction="asc",
+            has_messages=True,
             limit=1,
             sort="created_at",
         )

@@ -97,8 +97,8 @@ class BatchPrediction(BaseModel):
 
     Model availability is cloud-aware: AWS teamspaces accept Bedrock-native
     batch-capable models, while GCP teamspaces accept non-Bedrock batch-capable
-    models and reject Bedrock-only ids. Deprecated gemini-2.0-flash is accepted for
-    backward compatibility and automatically runs as gemini-3.1-flash-lite.
+    models and reject Bedrock-only ids. Deprecated gemini-2.x-flash ids are accepted
+    for backward compatibility and automatically run as gemini-3.1-flash-lite.
     """
 
     object: Literal["batch_prediction"]

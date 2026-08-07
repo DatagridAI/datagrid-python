@@ -9,7 +9,11 @@ import pytest
 
 from datagrid_ai import Datagrid, AsyncDatagrid
 from tests.utils import assert_matches_type
-from datagrid_ai.types import Agent
+from datagrid_ai.types import (
+    Agent,
+    AgentClaimResponse,
+    AgentGenerateResponse,
+)
 from datagrid_ai.pagination import SyncCursorIDPage, AsyncCursorIDPage
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
@@ -252,6 +256,68 @@ class TestAgents:
                 "",
             )
 
+    @parametrize
+    def test_method_claim(self, client: Datagrid) -> None:
+        agent = client.agents.claim(
+            claim_token="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+        )
+        assert_matches_type(AgentClaimResponse, agent, path=["response"])
+
+    @parametrize
+    def test_raw_response_claim(self, client: Datagrid) -> None:
+        response = client.agents.with_raw_response.claim(
+            claim_token="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        agent = response.parse()
+        assert_matches_type(AgentClaimResponse, agent, path=["response"])
+
+    @parametrize
+    def test_streaming_response_claim(self, client: Datagrid) -> None:
+        with client.agents.with_streaming_response.claim(
+            claim_token="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            agent = response.parse()
+            assert_matches_type(AgentClaimResponse, agent, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    def test_method_generate(self, client: Datagrid) -> None:
+        agent = client.agents.generate(
+            prompt="prompt",
+        )
+        assert_matches_type(AgentGenerateResponse, agent, path=["response"])
+
+    @parametrize
+    def test_raw_response_generate(self, client: Datagrid) -> None:
+        response = client.agents.with_raw_response.generate(
+            prompt="prompt",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        agent = response.parse()
+        assert_matches_type(AgentGenerateResponse, agent, path=["response"])
+
+    @parametrize
+    def test_streaming_response_generate(self, client: Datagrid) -> None:
+        with client.agents.with_streaming_response.generate(
+            prompt="prompt",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            agent = response.parse()
+            assert_matches_type(AgentGenerateResponse, agent, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
 
 class TestAsyncAgents:
     parametrize = pytest.mark.parametrize(
@@ -491,3 +557,65 @@ class TestAsyncAgents:
             await async_client.agents.with_raw_response.delete(
                 "",
             )
+
+    @parametrize
+    async def test_method_claim(self, async_client: AsyncDatagrid) -> None:
+        agent = await async_client.agents.claim(
+            claim_token="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+        )
+        assert_matches_type(AgentClaimResponse, agent, path=["response"])
+
+    @parametrize
+    async def test_raw_response_claim(self, async_client: AsyncDatagrid) -> None:
+        response = await async_client.agents.with_raw_response.claim(
+            claim_token="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        agent = await response.parse()
+        assert_matches_type(AgentClaimResponse, agent, path=["response"])
+
+    @parametrize
+    async def test_streaming_response_claim(self, async_client: AsyncDatagrid) -> None:
+        async with async_client.agents.with_streaming_response.claim(
+            claim_token="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            agent = await response.parse()
+            assert_matches_type(AgentClaimResponse, agent, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    async def test_method_generate(self, async_client: AsyncDatagrid) -> None:
+        agent = await async_client.agents.generate(
+            prompt="prompt",
+        )
+        assert_matches_type(AgentGenerateResponse, agent, path=["response"])
+
+    @parametrize
+    async def test_raw_response_generate(self, async_client: AsyncDatagrid) -> None:
+        response = await async_client.agents.with_raw_response.generate(
+            prompt="prompt",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        agent = await response.parse()
+        assert_matches_type(AgentGenerateResponse, agent, path=["response"])
+
+    @parametrize
+    async def test_streaming_response_generate(self, async_client: AsyncDatagrid) -> None:
+        async with async_client.agents.with_streaming_response.generate(
+            prompt="prompt",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            agent = await response.parse()
+            assert_matches_type(AgentGenerateResponse, agent, path=["response"])
+
+        assert cast(Any, response.is_closed) is True

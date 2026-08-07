@@ -7,25 +7,57 @@ from typing_extensions import Literal
 
 import httpx
 
-from ..types import agent_list_params, agent_create_params, agent_update_params
-from .._types import Body, Omit, Query, Headers, NoneType, NotGiven, SequenceNotStr, omit, not_given
-from .._utils import path_template, maybe_transform, async_maybe_transform
-from .._compat import cached_property
-from .._resource import SyncAPIResource, AsyncAPIResource
-from .._response import (
+from ...types import (
+    agent_list_params,
+    agent_claim_params,
+    agent_create_params,
+    agent_update_params,
+    agent_generate_params,
+)
+from ..._types import Body, Omit, Query, Headers, NoneType, NotGiven, SequenceNotStr, omit, not_given
+from ..._utils import path_template, maybe_transform, async_maybe_transform
+from ..._compat import cached_property
+from ..._resource import SyncAPIResource, AsyncAPIResource
+from ..._response import (
     to_raw_response_wrapper,
     to_streamed_response_wrapper,
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from ..pagination import SyncCursorIDPage, AsyncCursorIDPage
-from ..types.agent import Agent
-from .._base_client import AsyncPaginator, make_request_options
+from .automations import (
+    AutomationsResource,
+    AsyncAutomationsResource,
+    AutomationsResourceWithRawResponse,
+    AsyncAutomationsResourceWithRawResponse,
+    AutomationsResourceWithStreamingResponse,
+    AsyncAutomationsResourceWithStreamingResponse,
+)
+from ...pagination import SyncCursorIDPage, AsyncCursorIDPage
+from ...types.agent import Agent
+from ..._base_client import AsyncPaginator, make_request_options
+from .event_triggers import (
+    EventTriggersResource,
+    AsyncEventTriggersResource,
+    EventTriggersResourceWithRawResponse,
+    AsyncEventTriggersResourceWithRawResponse,
+    EventTriggersResourceWithStreamingResponse,
+    AsyncEventTriggersResourceWithStreamingResponse,
+)
+from ...types.agent_claim_response import AgentClaimResponse
+from ...types.agent_generate_response import AgentGenerateResponse
 
 __all__ = ["AgentsResource", "AsyncAgentsResource"]
 
 
 class AgentsResource(SyncAPIResource):
+    @cached_property
+    def automations(self) -> AutomationsResource:
+        return AutomationsResource(self._client)
+
+    @cached_property
+    def event_triggers(self) -> EventTriggersResource:
+        return EventTriggersResource(self._client)
+
     @cached_property
     def with_raw_response(self) -> AgentsResourceWithRawResponse:
         """
@@ -69,11 +101,12 @@ class AgentsResource(SyncAPIResource):
                 "gemini-2.5-pro",
                 "gemini-2.5-pro-preview-05-06",
                 "gemini-2.5-flash",
+                "gemini-2.5-flash-lite",
                 "gemini-2.5-flash-preview-04-17",
                 "gemini-2.5-flash-native-audio-preview-12-2025",
-                "gemini-2.5-flash-lite",
                 "gpt-5",
                 "gpt-5.1",
+                "openai.gpt-5.5",
                 "gemini-2.0-flash-001",
                 "gemini-2.0-flash",
                 "gemini-1.5-pro-001",
@@ -162,7 +195,7 @@ class AgentsResource(SyncAPIResource):
           knowledge_ids: Deprecated, use corpus instead. Array of Knowledge IDs the agent should use
               during the converse. When omitted, all knowledge is used.
 
-          llm_model: The LLM used to generate responses. Deprecated Gemini 2.0 Flash ids are accepted
+          llm_model: The LLM used to generate responses. Deprecated Gemini 2.x Flash ids are accepted
               for backward compatibility and automatically run as gemini-3.1-flash-lite.
 
           mcp_servers: Registered MCP servers to enable for this agent.
@@ -335,11 +368,12 @@ class AgentsResource(SyncAPIResource):
                 "gemini-2.5-pro",
                 "gemini-2.5-pro-preview-05-06",
                 "gemini-2.5-flash",
+                "gemini-2.5-flash-lite",
                 "gemini-2.5-flash-preview-04-17",
                 "gemini-2.5-flash-native-audio-preview-12-2025",
-                "gemini-2.5-flash-lite",
                 "gpt-5",
                 "gpt-5.1",
+                "openai.gpt-5.5",
                 "gemini-2.0-flash-001",
                 "gemini-2.0-flash",
                 "gemini-1.5-pro-001",
@@ -430,7 +464,7 @@ class AgentsResource(SyncAPIResource):
           knowledge_ids: Deprecated, use corpus instead. Array of Knowledge IDs the agent should use
               during the converse. When omitted, all knowledge is used.
 
-          llm_model: The LLM used to generate responses. Deprecated Gemini 2.0 Flash ids are accepted
+          llm_model: The LLM used to generate responses. Deprecated Gemini 2.x Flash ids are accepted
               for backward compatibility and automatically run as gemini-3.1-flash-lite.
 
           mcp_servers: Registered MCP servers to enable for this agent.
@@ -642,8 +676,92 @@ class AgentsResource(SyncAPIResource):
             cast_to=NoneType,
         )
 
+    def claim(
+        self,
+        *,
+        claim_token: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> AgentClaimResponse:
+        """
+        Redeem a `claim_token` from a prior `POST /agents/generate` call to retrieve the
+        generated agent template. The token is consumed (single-use). Use the returned
+        template to pre-populate the agent creation dialog.
+
+        Args:
+          claim_token: The claim token returned from `POST /agents/generate`
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return self._post(
+            "/agents/claim",
+            body=maybe_transform({"claim_token": claim_token}, agent_claim_params.AgentClaimParams),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=AgentClaimResponse,
+        )
+
+    def generate(
+        self,
+        *,
+        prompt: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> AgentGenerateResponse:
+        """Generate an AI agent configuration from a natural language description.
+
+        Uses the
+        same LLM-powered generation as the in-product agent builder. This is a public
+        endpoint that does not require authentication. Rate limited to 5 requests per
+        day per IP address. The response includes a `claim_token` that can be redeemed
+        via `POST /agents/claim` after signing up to persist the agent.
+
+        Args:
+          prompt: Natural language description of the agent you want. e.g. "I want an agent that
+              helps my sales team answer product questions and draft follow-up emails."
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return self._post(
+            "/agents/generate",
+            body=maybe_transform({"prompt": prompt}, agent_generate_params.AgentGenerateParams),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=AgentGenerateResponse,
+        )
+
 
 class AsyncAgentsResource(AsyncAPIResource):
+    @cached_property
+    def automations(self) -> AsyncAutomationsResource:
+        return AsyncAutomationsResource(self._client)
+
+    @cached_property
+    def event_triggers(self) -> AsyncEventTriggersResource:
+        return AsyncEventTriggersResource(self._client)
+
     @cached_property
     def with_raw_response(self) -> AsyncAgentsResourceWithRawResponse:
         """
@@ -687,11 +805,12 @@ class AsyncAgentsResource(AsyncAPIResource):
                 "gemini-2.5-pro",
                 "gemini-2.5-pro-preview-05-06",
                 "gemini-2.5-flash",
+                "gemini-2.5-flash-lite",
                 "gemini-2.5-flash-preview-04-17",
                 "gemini-2.5-flash-native-audio-preview-12-2025",
-                "gemini-2.5-flash-lite",
                 "gpt-5",
                 "gpt-5.1",
+                "openai.gpt-5.5",
                 "gemini-2.0-flash-001",
                 "gemini-2.0-flash",
                 "gemini-1.5-pro-001",
@@ -780,7 +899,7 @@ class AsyncAgentsResource(AsyncAPIResource):
           knowledge_ids: Deprecated, use corpus instead. Array of Knowledge IDs the agent should use
               during the converse. When omitted, all knowledge is used.
 
-          llm_model: The LLM used to generate responses. Deprecated Gemini 2.0 Flash ids are accepted
+          llm_model: The LLM used to generate responses. Deprecated Gemini 2.x Flash ids are accepted
               for backward compatibility and automatically run as gemini-3.1-flash-lite.
 
           mcp_servers: Registered MCP servers to enable for this agent.
@@ -953,11 +1072,12 @@ class AsyncAgentsResource(AsyncAPIResource):
                 "gemini-2.5-pro",
                 "gemini-2.5-pro-preview-05-06",
                 "gemini-2.5-flash",
+                "gemini-2.5-flash-lite",
                 "gemini-2.5-flash-preview-04-17",
                 "gemini-2.5-flash-native-audio-preview-12-2025",
-                "gemini-2.5-flash-lite",
                 "gpt-5",
                 "gpt-5.1",
+                "openai.gpt-5.5",
                 "gemini-2.0-flash-001",
                 "gemini-2.0-flash",
                 "gemini-1.5-pro-001",
@@ -1048,7 +1168,7 @@ class AsyncAgentsResource(AsyncAPIResource):
           knowledge_ids: Deprecated, use corpus instead. Array of Knowledge IDs the agent should use
               during the converse. When omitted, all knowledge is used.
 
-          llm_model: The LLM used to generate responses. Deprecated Gemini 2.0 Flash ids are accepted
+          llm_model: The LLM used to generate responses. Deprecated Gemini 2.x Flash ids are accepted
               for backward compatibility and automatically run as gemini-3.1-flash-lite.
 
           mcp_servers: Registered MCP servers to enable for this agent.
@@ -1260,6 +1380,82 @@ class AsyncAgentsResource(AsyncAPIResource):
             cast_to=NoneType,
         )
 
+    async def claim(
+        self,
+        *,
+        claim_token: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> AgentClaimResponse:
+        """
+        Redeem a `claim_token` from a prior `POST /agents/generate` call to retrieve the
+        generated agent template. The token is consumed (single-use). Use the returned
+        template to pre-populate the agent creation dialog.
+
+        Args:
+          claim_token: The claim token returned from `POST /agents/generate`
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return await self._post(
+            "/agents/claim",
+            body=await async_maybe_transform({"claim_token": claim_token}, agent_claim_params.AgentClaimParams),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=AgentClaimResponse,
+        )
+
+    async def generate(
+        self,
+        *,
+        prompt: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> AgentGenerateResponse:
+        """Generate an AI agent configuration from a natural language description.
+
+        Uses the
+        same LLM-powered generation as the in-product agent builder. This is a public
+        endpoint that does not require authentication. Rate limited to 5 requests per
+        day per IP address. The response includes a `claim_token` that can be redeemed
+        via `POST /agents/claim` after signing up to persist the agent.
+
+        Args:
+          prompt: Natural language description of the agent you want. e.g. "I want an agent that
+              helps my sales team answer product questions and draft follow-up emails."
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return await self._post(
+            "/agents/generate",
+            body=await async_maybe_transform({"prompt": prompt}, agent_generate_params.AgentGenerateParams),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=AgentGenerateResponse,
+        )
+
 
 class AgentsResourceWithRawResponse:
     def __init__(self, agents: AgentsResource) -> None:
@@ -1280,6 +1476,20 @@ class AgentsResourceWithRawResponse:
         self.delete = to_raw_response_wrapper(
             agents.delete,
         )
+        self.claim = to_raw_response_wrapper(
+            agents.claim,
+        )
+        self.generate = to_raw_response_wrapper(
+            agents.generate,
+        )
+
+    @cached_property
+    def automations(self) -> AutomationsResourceWithRawResponse:
+        return AutomationsResourceWithRawResponse(self._agents.automations)
+
+    @cached_property
+    def event_triggers(self) -> EventTriggersResourceWithRawResponse:
+        return EventTriggersResourceWithRawResponse(self._agents.event_triggers)
 
 
 class AsyncAgentsResourceWithRawResponse:
@@ -1301,6 +1511,20 @@ class AsyncAgentsResourceWithRawResponse:
         self.delete = async_to_raw_response_wrapper(
             agents.delete,
         )
+        self.claim = async_to_raw_response_wrapper(
+            agents.claim,
+        )
+        self.generate = async_to_raw_response_wrapper(
+            agents.generate,
+        )
+
+    @cached_property
+    def automations(self) -> AsyncAutomationsResourceWithRawResponse:
+        return AsyncAutomationsResourceWithRawResponse(self._agents.automations)
+
+    @cached_property
+    def event_triggers(self) -> AsyncEventTriggersResourceWithRawResponse:
+        return AsyncEventTriggersResourceWithRawResponse(self._agents.event_triggers)
 
 
 class AgentsResourceWithStreamingResponse:
@@ -1322,6 +1546,20 @@ class AgentsResourceWithStreamingResponse:
         self.delete = to_streamed_response_wrapper(
             agents.delete,
         )
+        self.claim = to_streamed_response_wrapper(
+            agents.claim,
+        )
+        self.generate = to_streamed_response_wrapper(
+            agents.generate,
+        )
+
+    @cached_property
+    def automations(self) -> AutomationsResourceWithStreamingResponse:
+        return AutomationsResourceWithStreamingResponse(self._agents.automations)
+
+    @cached_property
+    def event_triggers(self) -> EventTriggersResourceWithStreamingResponse:
+        return EventTriggersResourceWithStreamingResponse(self._agents.event_triggers)
 
 
 class AsyncAgentsResourceWithStreamingResponse:
@@ -1343,3 +1581,17 @@ class AsyncAgentsResourceWithStreamingResponse:
         self.delete = async_to_streamed_response_wrapper(
             agents.delete,
         )
+        self.claim = async_to_streamed_response_wrapper(
+            agents.claim,
+        )
+        self.generate = async_to_streamed_response_wrapper(
+            agents.generate,
+        )
+
+    @cached_property
+    def automations(self) -> AsyncAutomationsResourceWithStreamingResponse:
+        return AsyncAutomationsResourceWithStreamingResponse(self._agents.automations)
+
+    @cached_property
+    def event_triggers(self) -> AsyncEventTriggersResourceWithStreamingResponse:
+        return AsyncEventTriggersResourceWithStreamingResponse(self._agents.event_triggers)

@@ -62,6 +62,7 @@ class VoiceResource(SyncAPIResource):
         agent_id: Optional[str] | Omit = omit,
         config: Optional[voice_start_session_params.Config] | Omit = omit,
         conversation_id: Optional[str] | Omit = omit,
+        discard_if_empty: Optional[bool] | Omit = omit,
         ephemeral: Optional[bool] | Omit = omit,
         file_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         initial_context: Optional[str] | Omit = omit,
@@ -124,6 +125,11 @@ class VoiceResource(SyncAPIResource):
           conversation_id: The ID of an existing conversation to continue. If not provided, a new
               conversation will be created.
 
+          discard_if_empty: When true and this session creates a brand-new conversation (no conversation_id
+              was provided), that conversation is discarded if the session ends without any
+              message ever being sent. Has no effect when continuing an existing conversation.
+              Disabled by default.
+
           ephemeral: When true, the session is ephemeral and will not save messages to conversation
               history.
 
@@ -167,6 +173,7 @@ class VoiceResource(SyncAPIResource):
                     "agent_id": agent_id,
                     "config": config,
                     "conversation_id": conversation_id,
+                    "discard_if_empty": discard_if_empty,
                     "ephemeral": ephemeral,
                     "file_ids": file_ids,
                     "initial_context": initial_context,
@@ -217,6 +224,7 @@ class AsyncVoiceResource(AsyncAPIResource):
         agent_id: Optional[str] | Omit = omit,
         config: Optional[voice_start_session_params.Config] | Omit = omit,
         conversation_id: Optional[str] | Omit = omit,
+        discard_if_empty: Optional[bool] | Omit = omit,
         ephemeral: Optional[bool] | Omit = omit,
         file_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         initial_context: Optional[str] | Omit = omit,
@@ -279,6 +287,11 @@ class AsyncVoiceResource(AsyncAPIResource):
           conversation_id: The ID of an existing conversation to continue. If not provided, a new
               conversation will be created.
 
+          discard_if_empty: When true and this session creates a brand-new conversation (no conversation_id
+              was provided), that conversation is discarded if the session ends without any
+              message ever being sent. Has no effect when continuing an existing conversation.
+              Disabled by default.
+
           ephemeral: When true, the session is ephemeral and will not save messages to conversation
               history.
 
@@ -322,6 +335,7 @@ class AsyncVoiceResource(AsyncAPIResource):
                     "agent_id": agent_id,
                     "config": config,
                     "conversation_id": conversation_id,
+                    "discard_if_empty": discard_if_empty,
                     "ephemeral": ephemeral,
                     "file_ids": file_ids,
                     "initial_context": initial_context,
