@@ -238,26 +238,6 @@ Methods:
 - <code title="get /agents/{agent_id}/automations">client.agents.automations.<a href="./src/datagrid_ai/resources/agents/automations.py">list</a>(agent_id, \*\*<a href="src/datagrid_ai/types/agents/automation_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/agents/automation.py">SyncCursorIDPage[Automation]</a></code>
 - <code title="delete /agents/{agent_id}/automations/{automation_id}">client.agents.automations.<a href="./src/datagrid_ai/resources/agents/automations.py">delete</a>(automation_id, \*, agent_id) -> None</code>
 
-## EventTriggers
-
-Types:
-
-```python
-from datagrid_ai.types.agents import (
-    AgentEventTrigger,
-    EventTriggerCreateResponse,
-    EventTriggerUpdateResponse,
-    EventTriggerListResponse,
-)
-```
-
-Methods:
-
-- <code title="post /agents/{agent_id}/event-triggers">client.agents.event_triggers.<a href="./src/datagrid_ai/resources/agents/event_triggers.py">create</a>(agent_id, \*\*<a href="src/datagrid_ai/types/agents/event_trigger_create_params.py">params</a>) -> <a href="./src/datagrid_ai/types/agents/event_trigger_create_response.py">EventTriggerCreateResponse</a></code>
-- <code title="patch /agents/{agent_id}/event-triggers/{trigger_id}">client.agents.event_triggers.<a href="./src/datagrid_ai/resources/agents/event_triggers.py">update</a>(trigger_id, \*, agent_id, \*\*<a href="src/datagrid_ai/types/agents/event_trigger_update_params.py">params</a>) -> <a href="./src/datagrid_ai/types/agents/event_trigger_update_response.py">EventTriggerUpdateResponse</a></code>
-- <code title="get /agents/{agent_id}/event-triggers">client.agents.event_triggers.<a href="./src/datagrid_ai/resources/agents/event_triggers.py">list</a>(agent_id) -> <a href="./src/datagrid_ai/types/agents/event_trigger_list_response.py">EventTriggerListResponse</a></code>
-- <code title="delete /agents/{agent_id}/event-triggers/{trigger_id}">client.agents.event_triggers.<a href="./src/datagrid_ai/resources/agents/event_triggers.py">delete</a>(trigger_id, \*, agent_id) -> None</code>
-
 # Identity
 
 Types:
