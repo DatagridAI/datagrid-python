@@ -93,8 +93,9 @@ class OrchestratorTasksResource(SyncAPIResource):
         By default this returns
         active, non-expired queued or running tasks plus unacknowledged terminal tasks
         and omits task result content from list views. Pass an explicit status filter to
-        request a specific task state. A `cancelled` status marks tasks stopped via the
-        cancel endpoint (`PATCH /voice-orchestrator/tasks/{task_id}/cancel`).
+        request a specific task state. A `cancelled` status is reserved for terminal
+        task records produced by future cancellation flows; the current voice task inbox
+        does not add a user-facing cancel endpoint.
 
         Args:
           status: Status filter. Repeat the parameter for multiple statuses
@@ -155,39 +156,6 @@ class OrchestratorTasksResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `task_id` but received {task_id!r}")
         return self._patch(
             path_template("/voice-orchestrator/tasks/{task_id}/acknowledge", task_id=task_id),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=VoiceOrchestratorTask,
-        )
-
-    def cancel(
-        self,
-        task_id: str,
-        *,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> VoiceOrchestratorTask:
-        """
-        Cancel voice orchestrator task
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not task_id:
-            raise ValueError(f"Expected a non-empty value for `task_id` but received {task_id!r}")
-        return self._patch(
-            path_template("/voice-orchestrator/tasks/{task_id}/cancel", task_id=task_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -266,8 +234,9 @@ class AsyncOrchestratorTasksResource(AsyncAPIResource):
         By default this returns
         active, non-expired queued or running tasks plus unacknowledged terminal tasks
         and omits task result content from list views. Pass an explicit status filter to
-        request a specific task state. A `cancelled` status marks tasks stopped via the
-        cancel endpoint (`PATCH /voice-orchestrator/tasks/{task_id}/cancel`).
+        request a specific task state. A `cancelled` status is reserved for terminal
+        task records produced by future cancellation flows; the current voice task inbox
+        does not add a user-facing cancel endpoint.
 
         Args:
           status: Status filter. Repeat the parameter for multiple statuses
@@ -334,39 +303,6 @@ class AsyncOrchestratorTasksResource(AsyncAPIResource):
             cast_to=VoiceOrchestratorTask,
         )
 
-    async def cancel(
-        self,
-        task_id: str,
-        *,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> VoiceOrchestratorTask:
-        """
-        Cancel voice orchestrator task
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not task_id:
-            raise ValueError(f"Expected a non-empty value for `task_id` but received {task_id!r}")
-        return await self._patch(
-            path_template("/voice-orchestrator/tasks/{task_id}/cancel", task_id=task_id),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=VoiceOrchestratorTask,
-        )
-
 
 class OrchestratorTasksResourceWithRawResponse:
     def __init__(self, orchestrator_tasks: OrchestratorTasksResource) -> None:
@@ -380,9 +316,6 @@ class OrchestratorTasksResourceWithRawResponse:
         )
         self.acknowledge = to_raw_response_wrapper(
             orchestrator_tasks.acknowledge,
-        )
-        self.cancel = to_raw_response_wrapper(
-            orchestrator_tasks.cancel,
         )
 
 
@@ -399,9 +332,6 @@ class AsyncOrchestratorTasksResourceWithRawResponse:
         self.acknowledge = async_to_raw_response_wrapper(
             orchestrator_tasks.acknowledge,
         )
-        self.cancel = async_to_raw_response_wrapper(
-            orchestrator_tasks.cancel,
-        )
 
 
 class OrchestratorTasksResourceWithStreamingResponse:
@@ -417,9 +347,6 @@ class OrchestratorTasksResourceWithStreamingResponse:
         self.acknowledge = to_streamed_response_wrapper(
             orchestrator_tasks.acknowledge,
         )
-        self.cancel = to_streamed_response_wrapper(
-            orchestrator_tasks.cancel,
-        )
 
 
 class AsyncOrchestratorTasksResourceWithStreamingResponse:
@@ -434,7 +361,4 @@ class AsyncOrchestratorTasksResourceWithStreamingResponse:
         )
         self.acknowledge = async_to_streamed_response_wrapper(
             orchestrator_tasks.acknowledge,
-        )
-        self.cancel = async_to_streamed_response_wrapper(
-            orchestrator_tasks.cancel,
         )

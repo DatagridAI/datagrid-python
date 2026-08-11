@@ -8,7 +8,7 @@ from pydantic import Field as FieldInfo
 
 from ..._models import BaseModel
 
-__all__ = ["McpServer", "Metadata", "ManagedByApp"]
+__all__ = ["McpServer", "Metadata"]
 
 
 class Metadata(BaseModel):
@@ -33,22 +33,6 @@ class Metadata(BaseModel):
         def __getattr__(self, attr: str) -> object: ...
     else:
         __pydantic_extra__: Dict[str, object]
-
-
-class ManagedByApp(BaseModel):
-    """Present when the MCP server is provisioned and managed by an installed app.
-
-    Managed servers are read-only through this API.
-    """
-
-    app_name: Optional[str] = None
-    """The display name of the app that manages the MCP server.
-
-    Falls back to app_uuid when the app installation is not known to this teamspace.
-    """
-
-    app_uuid: Optional[str] = None
-    """The UUID of the app that manages the MCP server."""
 
 
 class McpServer(BaseModel):
@@ -80,9 +64,3 @@ class McpServer(BaseModel):
     transport: str
 
     updated_at: datetime
-
-    managed_by_app: Optional[ManagedByApp] = None
-    """Present when the MCP server is provisioned and managed by an installed app.
-
-    Managed servers are read-only through this API.
-    """
