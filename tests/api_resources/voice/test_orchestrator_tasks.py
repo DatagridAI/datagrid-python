@@ -127,6 +127,44 @@ class TestOrchestratorTasks:
                 "",
             )
 
+    @parametrize
+    def test_method_cancel(self, client: Datagrid) -> None:
+        orchestrator_task = client.voice.orchestrator_tasks.cancel(
+            "task_id",
+        )
+        assert_matches_type(VoiceOrchestratorTask, orchestrator_task, path=["response"])
+
+    @parametrize
+    def test_raw_response_cancel(self, client: Datagrid) -> None:
+        response = client.voice.orchestrator_tasks.with_raw_response.cancel(
+            "task_id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        orchestrator_task = response.parse()
+        assert_matches_type(VoiceOrchestratorTask, orchestrator_task, path=["response"])
+
+    @parametrize
+    def test_streaming_response_cancel(self, client: Datagrid) -> None:
+        with client.voice.orchestrator_tasks.with_streaming_response.cancel(
+            "task_id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            orchestrator_task = response.parse()
+            assert_matches_type(VoiceOrchestratorTask, orchestrator_task, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    def test_path_params_cancel(self, client: Datagrid) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `task_id` but received ''"):
+            client.voice.orchestrator_tasks.with_raw_response.cancel(
+                "",
+            )
+
 
 class TestAsyncOrchestratorTasks:
     parametrize = pytest.mark.parametrize(
@@ -240,5 +278,43 @@ class TestAsyncOrchestratorTasks:
     async def test_path_params_acknowledge(self, async_client: AsyncDatagrid) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `task_id` but received ''"):
             await async_client.voice.orchestrator_tasks.with_raw_response.acknowledge(
+                "",
+            )
+
+    @parametrize
+    async def test_method_cancel(self, async_client: AsyncDatagrid) -> None:
+        orchestrator_task = await async_client.voice.orchestrator_tasks.cancel(
+            "task_id",
+        )
+        assert_matches_type(VoiceOrchestratorTask, orchestrator_task, path=["response"])
+
+    @parametrize
+    async def test_raw_response_cancel(self, async_client: AsyncDatagrid) -> None:
+        response = await async_client.voice.orchestrator_tasks.with_raw_response.cancel(
+            "task_id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        orchestrator_task = await response.parse()
+        assert_matches_type(VoiceOrchestratorTask, orchestrator_task, path=["response"])
+
+    @parametrize
+    async def test_streaming_response_cancel(self, async_client: AsyncDatagrid) -> None:
+        async with async_client.voice.orchestrator_tasks.with_streaming_response.cancel(
+            "task_id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            orchestrator_task = await response.parse()
+            assert_matches_type(VoiceOrchestratorTask, orchestrator_task, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    async def test_path_params_cancel(self, async_client: AsyncDatagrid) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `task_id` but received ''"):
+            await async_client.voice.orchestrator_tasks.with_raw_response.cancel(
                 "",
             )
