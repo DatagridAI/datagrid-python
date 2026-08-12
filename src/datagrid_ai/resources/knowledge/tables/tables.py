@@ -14,6 +14,14 @@ from .records import (
 )
 from ...._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from ...._utils import path_template, maybe_transform
+from .summaries import (
+    SummariesResource,
+    AsyncSummariesResource,
+    SummariesResourceWithRawResponse,
+    AsyncSummariesResourceWithRawResponse,
+    SummariesResourceWithStreamingResponse,
+    AsyncSummariesResourceWithStreamingResponse,
+)
 from ...._compat import cached_property
 from ...._resource import SyncAPIResource, AsyncAPIResource
 from ...._response import (
@@ -34,6 +42,10 @@ class TablesResource(SyncAPIResource):
     @cached_property
     def records(self) -> RecordsResource:
         return RecordsResource(self._client)
+
+    @cached_property
+    def summaries(self) -> SummariesResource:
+        return SummariesResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> TablesResourceWithRawResponse:
@@ -154,6 +166,10 @@ class AsyncTablesResource(AsyncAPIResource):
     @cached_property
     def records(self) -> AsyncRecordsResource:
         return AsyncRecordsResource(self._client)
+
+    @cached_property
+    def summaries(self) -> AsyncSummariesResource:
+        return AsyncSummariesResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> AsyncTablesResourceWithRawResponse:
@@ -285,6 +301,10 @@ class TablesResourceWithRawResponse:
     def records(self) -> RecordsResourceWithRawResponse:
         return RecordsResourceWithRawResponse(self._tables.records)
 
+    @cached_property
+    def summaries(self) -> SummariesResourceWithRawResponse:
+        return SummariesResourceWithRawResponse(self._tables.summaries)
+
 
 class AsyncTablesResourceWithRawResponse:
     def __init__(self, tables: AsyncTablesResource) -> None:
@@ -300,6 +320,10 @@ class AsyncTablesResourceWithRawResponse:
     @cached_property
     def records(self) -> AsyncRecordsResourceWithRawResponse:
         return AsyncRecordsResourceWithRawResponse(self._tables.records)
+
+    @cached_property
+    def summaries(self) -> AsyncSummariesResourceWithRawResponse:
+        return AsyncSummariesResourceWithRawResponse(self._tables.summaries)
 
 
 class TablesResourceWithStreamingResponse:
@@ -317,6 +341,10 @@ class TablesResourceWithStreamingResponse:
     def records(self) -> RecordsResourceWithStreamingResponse:
         return RecordsResourceWithStreamingResponse(self._tables.records)
 
+    @cached_property
+    def summaries(self) -> SummariesResourceWithStreamingResponse:
+        return SummariesResourceWithStreamingResponse(self._tables.summaries)
+
 
 class AsyncTablesResourceWithStreamingResponse:
     def __init__(self, tables: AsyncTablesResource) -> None:
@@ -332,3 +360,7 @@ class AsyncTablesResourceWithStreamingResponse:
     @cached_property
     def records(self) -> AsyncRecordsResourceWithStreamingResponse:
         return AsyncRecordsResourceWithStreamingResponse(self._tables.records)
+
+    @cached_property
+    def summaries(self) -> AsyncSummariesResourceWithStreamingResponse:
+        return AsyncSummariesResourceWithStreamingResponse(self._tables.summaries)

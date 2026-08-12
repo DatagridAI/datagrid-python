@@ -60,6 +60,18 @@ Methods:
 
 - <code title="get /tables/{table_id}/records">client.knowledge.tables.records.<a href="./src/datagrid_ai/resources/knowledge/tables/records.py">list</a>(table_id, \*\*<a href="src/datagrid_ai/types/knowledge/tables/record_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/knowledge/tables/record.py">SyncCursorPage[Record]</a></code>
 
+### Summaries
+
+Types:
+
+```python
+from datagrid_ai.types.knowledge.tables import Summary
+```
+
+Methods:
+
+- <code title="get /tables/{table_id}/summaries">client.knowledge.tables.summaries.<a href="./src/datagrid_ai/resources/knowledge/tables/summaries.py">list</a>(table_id, \*\*<a href="src/datagrid_ai/types/knowledge/tables/summary_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/knowledge/tables/summary.py">SyncCursorPage[Summary]</a></code>
+
 # Connections
 
 Types:
