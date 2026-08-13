@@ -16,14 +16,6 @@ from .automations import (
     AutomationsResourceWithStreamingResponse,
     AsyncAutomationsResourceWithStreamingResponse,
 )
-from .event_triggers import (
-    EventTriggersResource,
-    AsyncEventTriggersResource,
-    EventTriggersResourceWithRawResponse,
-    AsyncEventTriggersResourceWithRawResponse,
-    EventTriggersResourceWithStreamingResponse,
-    AsyncEventTriggersResourceWithStreamingResponse,
-)
 
 __all__ = [
     "AutomationsResource",
@@ -32,12 +24,6 @@ __all__ = [
     "AsyncAutomationsResourceWithRawResponse",
     "AutomationsResourceWithStreamingResponse",
     "AsyncAutomationsResourceWithStreamingResponse",
-    "EventTriggersResource",
-    "AsyncEventTriggersResource",
-    "EventTriggersResourceWithRawResponse",
-    "AsyncEventTriggersResourceWithRawResponse",
-    "EventTriggersResourceWithStreamingResponse",
-    "AsyncEventTriggersResourceWithStreamingResponse",
     "AgentsResource",
     "AsyncAgentsResource",
     "AgentsResourceWithRawResponse",

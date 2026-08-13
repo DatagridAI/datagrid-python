@@ -16,14 +16,6 @@ from .records import (
     RecordsResourceWithStreamingResponse,
     AsyncRecordsResourceWithStreamingResponse,
 )
-from .summaries import (
-    SummariesResource,
-    AsyncSummariesResource,
-    SummariesResourceWithRawResponse,
-    AsyncSummariesResourceWithRawResponse,
-    SummariesResourceWithStreamingResponse,
-    AsyncSummariesResourceWithStreamingResponse,
-)
 
 __all__ = [
     "RecordsResource",
@@ -32,12 +24,6 @@ __all__ = [
     "AsyncRecordsResourceWithRawResponse",
     "RecordsResourceWithStreamingResponse",
     "AsyncRecordsResourceWithStreamingResponse",
-    "SummariesResource",
-    "AsyncSummariesResource",
-    "SummariesResourceWithRawResponse",
-    "AsyncSummariesResourceWithRawResponse",
-    "SummariesResourceWithStreamingResponse",
-    "AsyncSummariesResourceWithStreamingResponse",
     "TablesResource",
     "AsyncTablesResource",
     "TablesResourceWithRawResponse",

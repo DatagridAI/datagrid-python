@@ -60,18 +60,6 @@ Methods:
 
 - <code title="get /tables/{table_id}/records">client.knowledge.tables.records.<a href="./src/datagrid_ai/resources/knowledge/tables/records.py">list</a>(table_id, \*\*<a href="src/datagrid_ai/types/knowledge/tables/record_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/knowledge/tables/record.py">SyncCursorPage[Record]</a></code>
 
-### Summaries
-
-Types:
-
-```python
-from datagrid_ai.types.knowledge.tables import Summary
-```
-
-Methods:
-
-- <code title="get /tables/{table_id}/summaries">client.knowledge.tables.summaries.<a href="./src/datagrid_ai/resources/knowledge/tables/summaries.py">list</a>(table_id, \*\*<a href="src/datagrid_ai/types/knowledge/tables/summary_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/knowledge/tables/summary.py">SyncCursorPage[Summary]</a></code>
-
 # Connections
 
 Types:
@@ -249,26 +237,6 @@ Methods:
 - <code title="patch /agents/{agent_id}/automations/{automation_id}">client.agents.automations.<a href="./src/datagrid_ai/resources/agents/automations.py">update</a>(automation_id, \*, agent_id, \*\*<a href="src/datagrid_ai/types/agents/automation_update_params.py">params</a>) -> <a href="./src/datagrid_ai/types/agents/automation.py">Automation</a></code>
 - <code title="get /agents/{agent_id}/automations">client.agents.automations.<a href="./src/datagrid_ai/resources/agents/automations.py">list</a>(agent_id, \*\*<a href="src/datagrid_ai/types/agents/automation_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/agents/automation.py">SyncCursorIDPage[Automation]</a></code>
 - <code title="delete /agents/{agent_id}/automations/{automation_id}">client.agents.automations.<a href="./src/datagrid_ai/resources/agents/automations.py">delete</a>(automation_id, \*, agent_id) -> None</code>
-
-## EventTriggers
-
-Types:
-
-```python
-from datagrid_ai.types.agents import (
-    AgentEventTrigger,
-    EventTriggerCreateResponse,
-    EventTriggerUpdateResponse,
-    EventTriggerListResponse,
-)
-```
-
-Methods:
-
-- <code title="post /agents/{agent_id}/event-triggers">client.agents.event_triggers.<a href="./src/datagrid_ai/resources/agents/event_triggers.py">create</a>(agent_id, \*\*<a href="src/datagrid_ai/types/agents/event_trigger_create_params.py">params</a>) -> <a href="./src/datagrid_ai/types/agents/event_trigger_create_response.py">EventTriggerCreateResponse</a></code>
-- <code title="patch /agents/{agent_id}/event-triggers/{trigger_id}">client.agents.event_triggers.<a href="./src/datagrid_ai/resources/agents/event_triggers.py">update</a>(trigger_id, \*, agent_id, \*\*<a href="src/datagrid_ai/types/agents/event_trigger_update_params.py">params</a>) -> <a href="./src/datagrid_ai/types/agents/event_trigger_update_response.py">EventTriggerUpdateResponse</a></code>
-- <code title="get /agents/{agent_id}/event-triggers">client.agents.event_triggers.<a href="./src/datagrid_ai/resources/agents/event_triggers.py">list</a>(agent_id) -> <a href="./src/datagrid_ai/types/agents/event_trigger_list_response.py">EventTriggerListResponse</a></code>
-- <code title="delete /agents/{agent_id}/event-triggers/{trigger_id}">client.agents.event_triggers.<a href="./src/datagrid_ai/resources/agents/event_triggers.py">delete</a>(trigger_id, \*, agent_id) -> None</code>
 
 # Identity
 
@@ -537,4 +505,3 @@ Methods:
 - <code title="get /voice-orchestrator/tasks/{task_id}">client.voice.orchestrator_tasks.<a href="./src/datagrid_ai/resources/voice/orchestrator_tasks.py">retrieve</a>(task_id) -> <a href="./src/datagrid_ai/types/voice/voice_orchestrator_task.py">VoiceOrchestratorTask</a></code>
 - <code title="get /voice-orchestrator/tasks">client.voice.orchestrator_tasks.<a href="./src/datagrid_ai/resources/voice/orchestrator_tasks.py">list</a>(\*\*<a href="src/datagrid_ai/types/voice/orchestrator_task_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/voice/voice_orchestrator_task_list.py">VoiceOrchestratorTaskList</a></code>
 - <code title="patch /voice-orchestrator/tasks/{task_id}/acknowledge">client.voice.orchestrator_tasks.<a href="./src/datagrid_ai/resources/voice/orchestrator_tasks.py">acknowledge</a>(task_id) -> <a href="./src/datagrid_ai/types/voice/voice_orchestrator_task.py">VoiceOrchestratorTask</a></code>
-- <code title="patch /voice-orchestrator/tasks/{task_id}/cancel">client.voice.orchestrator_tasks.<a href="./src/datagrid_ai/resources/voice/orchestrator_tasks.py">cancel</a>(task_id) -> <a href="./src/datagrid_ai/types/voice/voice_orchestrator_task.py">VoiceOrchestratorTask</a></code>

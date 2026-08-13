@@ -35,14 +35,6 @@ from .automations import (
 from ...pagination import SyncCursorIDPage, AsyncCursorIDPage
 from ...types.agent import Agent
 from ..._base_client import AsyncPaginator, make_request_options
-from .event_triggers import (
-    EventTriggersResource,
-    AsyncEventTriggersResource,
-    EventTriggersResourceWithRawResponse,
-    AsyncEventTriggersResourceWithRawResponse,
-    EventTriggersResourceWithStreamingResponse,
-    AsyncEventTriggersResourceWithStreamingResponse,
-)
 from ...types.agent_claim_response import AgentClaimResponse
 from ...types.agent_generate_response import AgentGenerateResponse
 
@@ -53,10 +45,6 @@ class AgentsResource(SyncAPIResource):
     @cached_property
     def automations(self) -> AutomationsResource:
         return AutomationsResource(self._client)
-
-    @cached_property
-    def event_triggers(self) -> EventTriggersResource:
-        return EventTriggersResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> AgentsResourceWithRawResponse:
@@ -757,10 +745,6 @@ class AsyncAgentsResource(AsyncAPIResource):
     @cached_property
     def automations(self) -> AsyncAutomationsResource:
         return AsyncAutomationsResource(self._client)
-
-    @cached_property
-    def event_triggers(self) -> AsyncEventTriggersResource:
-        return AsyncEventTriggersResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> AsyncAgentsResourceWithRawResponse:
@@ -1487,10 +1471,6 @@ class AgentsResourceWithRawResponse:
     def automations(self) -> AutomationsResourceWithRawResponse:
         return AutomationsResourceWithRawResponse(self._agents.automations)
 
-    @cached_property
-    def event_triggers(self) -> EventTriggersResourceWithRawResponse:
-        return EventTriggersResourceWithRawResponse(self._agents.event_triggers)
-
 
 class AsyncAgentsResourceWithRawResponse:
     def __init__(self, agents: AsyncAgentsResource) -> None:
@@ -1521,10 +1501,6 @@ class AsyncAgentsResourceWithRawResponse:
     @cached_property
     def automations(self) -> AsyncAutomationsResourceWithRawResponse:
         return AsyncAutomationsResourceWithRawResponse(self._agents.automations)
-
-    @cached_property
-    def event_triggers(self) -> AsyncEventTriggersResourceWithRawResponse:
-        return AsyncEventTriggersResourceWithRawResponse(self._agents.event_triggers)
 
 
 class AgentsResourceWithStreamingResponse:
@@ -1557,10 +1533,6 @@ class AgentsResourceWithStreamingResponse:
     def automations(self) -> AutomationsResourceWithStreamingResponse:
         return AutomationsResourceWithStreamingResponse(self._agents.automations)
 
-    @cached_property
-    def event_triggers(self) -> EventTriggersResourceWithStreamingResponse:
-        return EventTriggersResourceWithStreamingResponse(self._agents.event_triggers)
-
 
 class AsyncAgentsResourceWithStreamingResponse:
     def __init__(self, agents: AsyncAgentsResource) -> None:
@@ -1591,7 +1563,3 @@ class AsyncAgentsResourceWithStreamingResponse:
     @cached_property
     def automations(self) -> AsyncAutomationsResourceWithStreamingResponse:
         return AsyncAutomationsResourceWithStreamingResponse(self._agents.automations)
-
-    @cached_property
-    def event_triggers(self) -> AsyncEventTriggersResourceWithStreamingResponse:
-        return AsyncEventTriggersResourceWithStreamingResponse(self._agents.event_triggers)
