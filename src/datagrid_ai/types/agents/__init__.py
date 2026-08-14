@@ -3,6 +3,12 @@
 from __future__ import annotations
 
 from .automation import Automation as Automation
+from .agent_event_trigger import AgentEventTrigger as AgentEventTrigger
 from .automation_list_params import AutomationListParams as AutomationListParams
 from .automation_create_params import AutomationCreateParams as AutomationCreateParams
 from .automation_update_params import AutomationUpdateParams as AutomationUpdateParams
+from .event_trigger_create_params import EventTriggerCreateParams as EventTriggerCreateParams
+from .event_trigger_list_response import EventTriggerListResponse as EventTriggerListResponse
+from .event_trigger_update_params import EventTriggerUpdateParams as EventTriggerUpdateParams
+from .event_trigger_create_response import EventTriggerCreateResponse as EventTriggerCreateResponse
+from .event_trigger_update_response import EventTriggerUpdateResponse as EventTriggerUpdateResponse
