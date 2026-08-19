@@ -16,12 +16,7 @@ class Record(BaseModel):
     """The record identifier, which can be referenced in the API endpoints."""
 
     created_at: datetime
-    """The ISO string for when the record was created.
-
-    For Procore datasets, each upsert resets this value to the ingestion time
-    because Procore ingestion does not preserve the original value across updates.
-    Do not use it as the record's original Procore creation time.
-    """
+    """The ISO string for when the record was created."""
 
     data: Dict[str, object]
     """The actual record data as a JSON object."""
