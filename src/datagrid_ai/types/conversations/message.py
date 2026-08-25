@@ -71,27 +71,14 @@ class CitationSource(BaseModel):
     type label (RFI, Submittal, Observation, …) without parsing the deep-link URL.
     """
 
-    page_number: Optional[int] = None
-    """pdf_page only.
-
-    1-based page number within the source document. Omitted when the page is
-    unknown; never `0`.
-    """
-
     source_id: Optional[str] = None
-    """
-    Id of the source when Datagrid holds one (dataset id, or data-lake item id for
-    file-backed `pdf_page`). Omitted for `pdf_page` sources with no Datagrid-backed
-    file.
-    """
+    """Id of the source."""
 
     source_uri: Optional[str] = None
     """URI of the source.
 
     For file-backed sources this is the in-app target (signed Datagrid file URI when
-    available); use `external_url` for the origin-system deep-link. For `pdf_page`
-    sources with no Datagrid file, this is the origin-system deep-link and matches
-    `external_url`; locate the page with `page_number`.
+    available); use `external_url` for the origin-system deep-link.
     """
 
     status: Optional[str] = None
@@ -203,27 +190,14 @@ class ContentMessageContentVoiceTimelineEventCitationSource(BaseModel):
     type label (RFI, Submittal, Observation, …) without parsing the deep-link URL.
     """
 
-    page_number: Optional[int] = None
-    """pdf_page only.
-
-    1-based page number within the source document. Omitted when the page is
-    unknown; never `0`.
-    """
-
     source_id: Optional[str] = None
-    """
-    Id of the source when Datagrid holds one (dataset id, or data-lake item id for
-    file-backed `pdf_page`). Omitted for `pdf_page` sources with no Datagrid-backed
-    file.
-    """
+    """Id of the source."""
 
     source_uri: Optional[str] = None
     """URI of the source.
 
     For file-backed sources this is the in-app target (signed Datagrid file URI when
-    available); use `external_url` for the origin-system deep-link. For `pdf_page`
-    sources with no Datagrid file, this is the origin-system deep-link and matches
-    `external_url`; locate the page with `page_number`.
+    available); use `external_url` for the origin-system deep-link.
     """
 
     status: Optional[str] = None
