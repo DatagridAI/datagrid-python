@@ -22,10 +22,7 @@ class EventTriggerCreateParams(TypedDict, total=False):
     """
 
     trigger_source: Required[Literal["procore"]]
-    """The external provider that emits the event.
-
-    Currently only Procore is supported.
-    """
+    """The external provider that emits the event."""
 
     description: Optional[str]
     """Optional description of what the App Event automation does."""
