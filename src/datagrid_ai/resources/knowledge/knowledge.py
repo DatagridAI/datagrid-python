@@ -77,6 +77,7 @@ class KnowledgeResource(SyncAPIResource):
         files: SequenceNotStr[FileTypes],
         name: Optional[str] | Omit = omit,
         parent: Optional[knowledge_create_params.Parent] | Omit = omit,
+        semantic_indexing_enabled: Optional[bool] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -100,6 +101,9 @@ class KnowledgeResource(SyncAPIResource):
           parent: The parent page to nest this knowledge under. If not provided, knowledge will be
               created at the root level.
 
+          semantic_indexing_enabled: Whether semantic indexing is enabled for tables created under this knowledge.
+              Set to `false` to keep records SQL-queryable without vector indexing.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -115,6 +119,7 @@ class KnowledgeResource(SyncAPIResource):
                 "files": files,
                 "name": name,
                 "parent": parent,
+                "semantic_indexing_enabled": semantic_indexing_enabled,
             },
             [["files", "<array>"]],
         )
@@ -453,6 +458,7 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         files: SequenceNotStr[FileTypes],
         name: Optional[str] | Omit = omit,
         parent: Optional[knowledge_create_params.Parent] | Omit = omit,
+        semantic_indexing_enabled: Optional[bool] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -476,6 +482,9 @@ class AsyncKnowledgeResource(AsyncAPIResource):
           parent: The parent page to nest this knowledge under. If not provided, knowledge will be
               created at the root level.
 
+          semantic_indexing_enabled: Whether semantic indexing is enabled for tables created under this knowledge.
+              Set to `false` to keep records SQL-queryable without vector indexing.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -491,6 +500,7 @@ class AsyncKnowledgeResource(AsyncAPIResource):
                 "files": files,
                 "name": name,
                 "parent": parent,
+                "semantic_indexing_enabled": semantic_indexing_enabled,
             },
             [["files", "<array>"]],
         )
