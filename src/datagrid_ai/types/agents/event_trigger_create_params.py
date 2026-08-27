@@ -21,7 +21,7 @@ class EventTriggerCreateParams(TypedDict, total=False):
     `"Tasks:create"`). Required even when `enabled` is `false`.
     """
 
-    trigger_source: Required[Literal["procore"]]
+    trigger_source: Required[Literal["procore", "sharepoint"]]
     """The external provider that emits the event."""
 
     description: Optional[str]
