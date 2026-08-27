@@ -506,6 +506,18 @@ Methods:
 
 # Beta
 
+## Converse
+
+Types:
+
+```python
+from datagrid_ai.types.beta import BetaConverseRequest
+```
+
+Methods:
+
+- <code title="post /beta/converse">client.beta.converse.<a href="./src/datagrid_ai/resources/beta/converse.py">converse</a>(\*\*<a href="src/datagrid_ai/types/beta/converse_converse_params.py">params</a>) -> <a href="./src/datagrid_ai/types/converse_response.py">ConverseResponse</a></code>
+
 ## Rewrite
 
 Types:
