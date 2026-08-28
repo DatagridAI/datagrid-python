@@ -18,16 +18,9 @@ from ..._response import (
     async_to_streamed_response_wrapper,
 )
 from ..._base_client import make_request_options
-from ...types.organization import (
-    mcp_server_create_params,
-    mcp_server_update_params,
-    mcp_server_start_oauth_params,
-    mcp_server_handle_oauth_callback_params,
-)
+from ...types.organization import mcp_server_create_params, mcp_server_update_params
 from ...types.organization.mcp_server import McpServer
-from ...types.organization.start_mcp_oauth_response import StartMcpOAuthResponse
 from ...types.organization.list_mcp_servers_response import ListMcpServersResponse
-from ...types.organization.handle_mcp_oauth_callback_response import HandleMcpOAuthCallbackResponse
 
 __all__ = ["McpServersResource", "AsyncMcpServersResource"]
 
@@ -260,103 +253,6 @@ class McpServersResource(SyncAPIResource):
             cast_to=NoneType,
         )
 
-    def handle_oauth_callback(
-        self,
-        server_id: str,
-        *,
-        code: str,
-        redirect_uri: str,
-        state: str,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> HandleMcpOAuthCallbackResponse:
-        """
-        Complete an OAuth authorization flow for a registered MCP server by exchanging
-        the authorization code returned from the OAuth provider. Requires a user-scoped
-        API key (`dg_live_`); service keys (`dg_svc_`) are rejected with
-        `mcp_oauth_requires_user_principal`.
-
-        Args:
-          code: Authorization code returned by the OAuth authorization server on the callback.
-
-          redirect_uri: The same `redirect_uri` passed to `start-oauth`. HTTPS is required except for
-              loopback (`http://localhost`, `http://127.0.0.1`, `http://[::1]`).
-
-          state: The `state` value the OAuth authorization server echoed on the callback. Must
-              match the value returned from `start-oauth`.
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not server_id:
-            raise ValueError(f"Expected a non-empty value for `server_id` but received {server_id!r}")
-        return self._post(
-            path_template("/organization/mcp-servers/{server_id}/oauth-callback", server_id=server_id),
-            body=maybe_transform(
-                {
-                    "code": code,
-                    "redirect_uri": redirect_uri,
-                    "state": state,
-                },
-                mcp_server_handle_oauth_callback_params.McpServerHandleOAuthCallbackParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=HandleMcpOAuthCallbackResponse,
-        )
-
-    def start_oauth(
-        self,
-        server_id: str,
-        *,
-        redirect_uri: str,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> StartMcpOAuthResponse:
-        """
-        Start an OAuth authorization flow for a registered MCP server and return the URL
-        to redirect the end user to. Requires a user-scoped API key (`dg_live_`);
-        service keys (`dg_svc_`) are rejected with `mcp_oauth_requires_user_principal`.
-
-        Args:
-          redirect_uri: OAuth redirect URI. HTTPS is required except for loopback (`http://localhost`,
-              `http://127.0.0.1`, `http://[::1]`).
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not server_id:
-            raise ValueError(f"Expected a non-empty value for `server_id` but received {server_id!r}")
-        return self._post(
-            path_template("/organization/mcp-servers/{server_id}/start-oauth", server_id=server_id),
-            body=maybe_transform(
-                {"redirect_uri": redirect_uri}, mcp_server_start_oauth_params.McpServerStartOAuthParams
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=StartMcpOAuthResponse,
-        )
-
 
 class AsyncMcpServersResource(AsyncAPIResource):
     @cached_property
@@ -586,103 +482,6 @@ class AsyncMcpServersResource(AsyncAPIResource):
             cast_to=NoneType,
         )
 
-    async def handle_oauth_callback(
-        self,
-        server_id: str,
-        *,
-        code: str,
-        redirect_uri: str,
-        state: str,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> HandleMcpOAuthCallbackResponse:
-        """
-        Complete an OAuth authorization flow for a registered MCP server by exchanging
-        the authorization code returned from the OAuth provider. Requires a user-scoped
-        API key (`dg_live_`); service keys (`dg_svc_`) are rejected with
-        `mcp_oauth_requires_user_principal`.
-
-        Args:
-          code: Authorization code returned by the OAuth authorization server on the callback.
-
-          redirect_uri: The same `redirect_uri` passed to `start-oauth`. HTTPS is required except for
-              loopback (`http://localhost`, `http://127.0.0.1`, `http://[::1]`).
-
-          state: The `state` value the OAuth authorization server echoed on the callback. Must
-              match the value returned from `start-oauth`.
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not server_id:
-            raise ValueError(f"Expected a non-empty value for `server_id` but received {server_id!r}")
-        return await self._post(
-            path_template("/organization/mcp-servers/{server_id}/oauth-callback", server_id=server_id),
-            body=await async_maybe_transform(
-                {
-                    "code": code,
-                    "redirect_uri": redirect_uri,
-                    "state": state,
-                },
-                mcp_server_handle_oauth_callback_params.McpServerHandleOAuthCallbackParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=HandleMcpOAuthCallbackResponse,
-        )
-
-    async def start_oauth(
-        self,
-        server_id: str,
-        *,
-        redirect_uri: str,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> StartMcpOAuthResponse:
-        """
-        Start an OAuth authorization flow for a registered MCP server and return the URL
-        to redirect the end user to. Requires a user-scoped API key (`dg_live_`);
-        service keys (`dg_svc_`) are rejected with `mcp_oauth_requires_user_principal`.
-
-        Args:
-          redirect_uri: OAuth redirect URI. HTTPS is required except for loopback (`http://localhost`,
-              `http://127.0.0.1`, `http://[::1]`).
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not server_id:
-            raise ValueError(f"Expected a non-empty value for `server_id` but received {server_id!r}")
-        return await self._post(
-            path_template("/organization/mcp-servers/{server_id}/start-oauth", server_id=server_id),
-            body=await async_maybe_transform(
-                {"redirect_uri": redirect_uri}, mcp_server_start_oauth_params.McpServerStartOAuthParams
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=StartMcpOAuthResponse,
-        )
-
 
 class McpServersResourceWithRawResponse:
     def __init__(self, mcp_servers: McpServersResource) -> None:
@@ -702,12 +501,6 @@ class McpServersResourceWithRawResponse:
         )
         self.delete = to_raw_response_wrapper(
             mcp_servers.delete,
-        )
-        self.handle_oauth_callback = to_raw_response_wrapper(
-            mcp_servers.handle_oauth_callback,
-        )
-        self.start_oauth = to_raw_response_wrapper(
-            mcp_servers.start_oauth,
         )
 
 
@@ -730,12 +523,6 @@ class AsyncMcpServersResourceWithRawResponse:
         self.delete = async_to_raw_response_wrapper(
             mcp_servers.delete,
         )
-        self.handle_oauth_callback = async_to_raw_response_wrapper(
-            mcp_servers.handle_oauth_callback,
-        )
-        self.start_oauth = async_to_raw_response_wrapper(
-            mcp_servers.start_oauth,
-        )
 
 
 class McpServersResourceWithStreamingResponse:
@@ -757,12 +544,6 @@ class McpServersResourceWithStreamingResponse:
         self.delete = to_streamed_response_wrapper(
             mcp_servers.delete,
         )
-        self.handle_oauth_callback = to_streamed_response_wrapper(
-            mcp_servers.handle_oauth_callback,
-        )
-        self.start_oauth = to_streamed_response_wrapper(
-            mcp_servers.start_oauth,
-        )
 
 
 class AsyncMcpServersResourceWithStreamingResponse:
@@ -783,10 +564,4 @@ class AsyncMcpServersResourceWithStreamingResponse:
         )
         self.delete = async_to_streamed_response_wrapper(
             mcp_servers.delete,
-        )
-        self.handle_oauth_callback = async_to_streamed_response_wrapper(
-            mcp_servers.handle_oauth_callback,
-        )
-        self.start_oauth = async_to_streamed_response_wrapper(
-            mcp_servers.start_oauth,
         )

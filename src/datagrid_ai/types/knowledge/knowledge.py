@@ -125,13 +125,6 @@ class Knowledge(BaseModel):
     the full lifetime spend.
     """
 
-    default_indexing_quality: Optional[Literal["none"]] = None
-    """The knowledge-level indexing override.
-
-    `none` means semantic indexing is disabled; `null` means Datagrid uses its
-    normal indexing defaults.
-    """
-
     last_error: Optional[LastError] = None
     """The last terminal processing error for this knowledge, if any.
 

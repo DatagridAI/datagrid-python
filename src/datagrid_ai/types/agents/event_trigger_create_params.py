@@ -21,8 +21,11 @@ class EventTriggerCreateParams(TypedDict, total=False):
     `"Tasks:create"`). Required even when `enabled` is `false`.
     """
 
-    trigger_source: Required[Literal["procore", "sharepoint"]]
-    """The external provider that emits the event."""
+    trigger_source: Required[Literal["procore"]]
+    """The external provider that emits the event.
+
+    Currently only Procore is supported.
+    """
 
     description: Optional[str]
     """Optional description of what the App Event automation does."""
