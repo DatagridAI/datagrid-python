@@ -51,7 +51,7 @@ class AgentEventTrigger(BaseModel):
     `"Tasks:create"`, `"Project Users:update"`).
     """
 
-    trigger_source: Literal["procore", "sharepoint"]
+    trigger_source: Literal["procore", "sharepoint", "egnyte"]
     """The external provider that emits the event."""
 
     updated_at: datetime
