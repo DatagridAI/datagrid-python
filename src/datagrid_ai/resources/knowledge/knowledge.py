@@ -77,6 +77,7 @@ class KnowledgeResource(SyncAPIResource):
         files: SequenceNotStr[FileTypes],
         name: Optional[str] | Omit = omit,
         parent: Optional[knowledge_create_params.Parent] | Omit = omit,
+        semantic_indexing_enabled: Optional[bool] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -100,6 +101,9 @@ class KnowledgeResource(SyncAPIResource):
           parent: The parent page to nest this knowledge under. If not provided, knowledge will be
               created at the root level.
 
+          semantic_indexing_enabled: Whether semantic indexing is enabled for tables created under this knowledge.
+              Set to `false` to keep records SQL-queryable without vector indexing.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -115,6 +119,7 @@ class KnowledgeResource(SyncAPIResource):
                 "files": files,
                 "name": name,
                 "parent": parent,
+                "semantic_indexing_enabled": semantic_indexing_enabled,
             },
             [["files", "<array>"]],
         )
@@ -174,6 +179,7 @@ class KnowledgeResource(SyncAPIResource):
         name: Optional[str] | Omit = omit,
         parent: Optional[knowledge_update_params.Parent] | Omit = omit,
         scope: Optional[Literal["teamspace", "organization"]] | Omit = omit,
+        semantic_indexing_enabled: Optional[bool] | Omit = omit,
         sync: Optional[knowledge_update_params.Sync] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -185,12 +191,20 @@ class KnowledgeResource(SyncAPIResource):
         """Update a knowledge's attributes.
 
         Each request can include either `files` or
-        `sync`, but not both. When `files` are provided, all existing data is replaced
-        and a re-processing pipeline runs asynchronously — this consumes credits based
-        on the volume of data processed. Metadata-only and sync-only updates do not
-        consume credits and are not blocked by credit eligibility checks. If the
-        asynchronous processing run later fails, subsequent retrievals surface that
-        terminal state through `status` and `last_error`.
+        `sync`, but not both, and `files` cannot be combined with
+        `semantic_indexing_enabled: true` — upload files first, then enable indexing in
+        a separate request. When `files` are provided, all existing data is replaced and
+        a re-processing pipeline runs asynchronously — this consumes credits based on
+        the volume of data processed. Setting `semantic_indexing_enabled` to `true` on
+        SQL-only knowledge is a one-way upgrade: it enables semantic indexing, consumes
+        credits, and triggers an asynchronous backfill of existing records. If the
+        upgrade is persisted but the backfill fails to start, the request returns `503`
+        — retry the backfill with `POST /v1/knowledge/{knowledge_id}/reindex` (repeating
+        the PATCH will not re-trigger it, because indexing is already enabled).
+        Metadata-only and sync-only updates do not consume credits and are not blocked
+        by credit eligibility checks. If the asynchronous processing run later fails,
+        subsequent retrievals surface that terminal state through `status` and
+        `last_error`.
 
         Args:
           files: The files to replace existing knowledge. When provided, all existing data will
@@ -205,6 +219,12 @@ class KnowledgeResource(SyncAPIResource):
           scope: The visibility scope of the knowledge. 'teamspace' means visible only within the
               owning teamspace. 'organization' means visible across all teamspaces in the same
               organization.
+
+          semantic_indexing_enabled: Whether semantic indexing is enabled for this knowledge. Set to `true` to
+              upgrade SQL-only knowledge so existing and future records are semantically
+              indexed. This transition is one-way: setting `false` is rejected, as is
+              combining it with `files`. Omitted leaves indexing unchanged. Already-indexed
+              knowledge is a no-op.
 
           sync: Sync configuration updates for knowledge created from a connection. Note: For
               multipart/form-data, this should be sent as a JSON string. Cannot be used
@@ -226,6 +246,7 @@ class KnowledgeResource(SyncAPIResource):
                 "name": name,
                 "parent": parent,
                 "scope": scope,
+                "semantic_indexing_enabled": semantic_indexing_enabled,
                 "sync": sync,
             },
             [["files", "<array>"]],
@@ -453,6 +474,7 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         files: SequenceNotStr[FileTypes],
         name: Optional[str] | Omit = omit,
         parent: Optional[knowledge_create_params.Parent] | Omit = omit,
+        semantic_indexing_enabled: Optional[bool] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -476,6 +498,9 @@ class AsyncKnowledgeResource(AsyncAPIResource):
           parent: The parent page to nest this knowledge under. If not provided, knowledge will be
               created at the root level.
 
+          semantic_indexing_enabled: Whether semantic indexing is enabled for tables created under this knowledge.
+              Set to `false` to keep records SQL-queryable without vector indexing.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -491,6 +516,7 @@ class AsyncKnowledgeResource(AsyncAPIResource):
                 "files": files,
                 "name": name,
                 "parent": parent,
+                "semantic_indexing_enabled": semantic_indexing_enabled,
             },
             [["files", "<array>"]],
         )
@@ -550,6 +576,7 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         name: Optional[str] | Omit = omit,
         parent: Optional[knowledge_update_params.Parent] | Omit = omit,
         scope: Optional[Literal["teamspace", "organization"]] | Omit = omit,
+        semantic_indexing_enabled: Optional[bool] | Omit = omit,
         sync: Optional[knowledge_update_params.Sync] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -561,12 +588,20 @@ class AsyncKnowledgeResource(AsyncAPIResource):
         """Update a knowledge's attributes.
 
         Each request can include either `files` or
-        `sync`, but not both. When `files` are provided, all existing data is replaced
-        and a re-processing pipeline runs asynchronously — this consumes credits based
-        on the volume of data processed. Metadata-only and sync-only updates do not
-        consume credits and are not blocked by credit eligibility checks. If the
-        asynchronous processing run later fails, subsequent retrievals surface that
-        terminal state through `status` and `last_error`.
+        `sync`, but not both, and `files` cannot be combined with
+        `semantic_indexing_enabled: true` — upload files first, then enable indexing in
+        a separate request. When `files` are provided, all existing data is replaced and
+        a re-processing pipeline runs asynchronously — this consumes credits based on
+        the volume of data processed. Setting `semantic_indexing_enabled` to `true` on
+        SQL-only knowledge is a one-way upgrade: it enables semantic indexing, consumes
+        credits, and triggers an asynchronous backfill of existing records. If the
+        upgrade is persisted but the backfill fails to start, the request returns `503`
+        — retry the backfill with `POST /v1/knowledge/{knowledge_id}/reindex` (repeating
+        the PATCH will not re-trigger it, because indexing is already enabled).
+        Metadata-only and sync-only updates do not consume credits and are not blocked
+        by credit eligibility checks. If the asynchronous processing run later fails,
+        subsequent retrievals surface that terminal state through `status` and
+        `last_error`.
 
         Args:
           files: The files to replace existing knowledge. When provided, all existing data will
@@ -581,6 +616,12 @@ class AsyncKnowledgeResource(AsyncAPIResource):
           scope: The visibility scope of the knowledge. 'teamspace' means visible only within the
               owning teamspace. 'organization' means visible across all teamspaces in the same
               organization.
+
+          semantic_indexing_enabled: Whether semantic indexing is enabled for this knowledge. Set to `true` to
+              upgrade SQL-only knowledge so existing and future records are semantically
+              indexed. This transition is one-way: setting `false` is rejected, as is
+              combining it with `files`. Omitted leaves indexing unchanged. Already-indexed
+              knowledge is a no-op.
 
           sync: Sync configuration updates for knowledge created from a connection. Note: For
               multipart/form-data, this should be sent as a JSON string. Cannot be used
@@ -602,6 +643,7 @@ class AsyncKnowledgeResource(AsyncAPIResource):
                 "name": name,
                 "parent": parent,
                 "scope": scope,
+                "semantic_indexing_enabled": semantic_indexing_enabled,
                 "sync": sync,
             },
             [["files", "<array>"]],

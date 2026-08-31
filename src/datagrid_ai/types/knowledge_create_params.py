@@ -27,6 +27,12 @@ class KnowledgeCreateParams(TypedDict, total=False):
     If not provided, knowledge will be created at the root level.
     """
 
+    semantic_indexing_enabled: Optional[bool]
+    """Whether semantic indexing is enabled for tables created under this knowledge.
+
+    Set to `false` to keep records SQL-queryable without vector indexing.
+    """
+
 
 class ParentParentPage(TypedDict, total=False):
     """The parent page reference, indicating where this page is nested"""

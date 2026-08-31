@@ -410,8 +410,12 @@ Types:
 ```python
 from datagrid_ai.types.organization import (
     CreateMcpServerRequest,
+    HandleMcpOAuthCallbackRequest,
+    HandleMcpOAuthCallbackResponse,
     ListMcpServersResponse,
     McpServer,
+    StartMcpOAuthRequest,
+    StartMcpOAuthResponse,
     UpdateMcpServerRequest,
 )
 ```
@@ -423,6 +427,8 @@ Methods:
 - <code title="patch /organization/mcp-servers/{server_id}">client.organization.mcp_servers.<a href="./src/datagrid_ai/resources/organization/mcp_servers.py">update</a>(server_id, \*\*<a href="src/datagrid_ai/types/organization/mcp_server_update_params.py">params</a>) -> <a href="./src/datagrid_ai/types/organization/mcp_server.py">McpServer</a></code>
 - <code title="get /organization/mcp-servers">client.organization.mcp_servers.<a href="./src/datagrid_ai/resources/organization/mcp_servers.py">list</a>() -> <a href="./src/datagrid_ai/types/organization/list_mcp_servers_response.py">ListMcpServersResponse</a></code>
 - <code title="delete /organization/mcp-servers/{server_id}">client.organization.mcp_servers.<a href="./src/datagrid_ai/resources/organization/mcp_servers.py">delete</a>(server_id) -> None</code>
+- <code title="post /organization/mcp-servers/{server_id}/oauth-callback">client.organization.mcp_servers.<a href="./src/datagrid_ai/resources/organization/mcp_servers.py">handle_oauth_callback</a>(server_id, \*\*<a href="src/datagrid_ai/types/organization/mcp_server_handle_oauth_callback_params.py">params</a>) -> <a href="./src/datagrid_ai/types/organization/handle_mcp_oauth_callback_response.py">HandleMcpOAuthCallbackResponse</a></code>
+- <code title="post /organization/mcp-servers/{server_id}/start-oauth">client.organization.mcp_servers.<a href="./src/datagrid_ai/resources/organization/mcp_servers.py">start_oauth</a>(server_id, \*\*<a href="src/datagrid_ai/types/organization/mcp_server_start_oauth_params.py">params</a>) -> <a href="./src/datagrid_ai/types/organization/start_mcp_oauth_response.py">StartMcpOAuthResponse</a></code>
 
 ## Credits
 
@@ -499,6 +505,18 @@ Methods:
 - <code title="get /data-views/service-accounts/{service_account_id}/credentials">client.data_views.service_accounts.<a href="./src/datagrid_ai/resources/data_views/service_accounts.py">credentials</a>(service_account_id) -> <a href="./src/datagrid_ai/types/data_views/service_account_credentials.py">ServiceAccountCredentials</a></code>
 
 # Beta
+
+## Converse
+
+Types:
+
+```python
+from datagrid_ai.types.beta import BetaConverseRequest
+```
+
+Methods:
+
+- <code title="post /beta/converse">client.beta.converse.<a href="./src/datagrid_ai/resources/beta/converse.py">converse</a>(\*\*<a href="src/datagrid_ai/types/beta/converse_converse_params.py">params</a>) -> <a href="./src/datagrid_ai/types/converse_response.py">ConverseResponse</a></code>
 
 ## Rewrite
 

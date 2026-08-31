@@ -51,11 +51,8 @@ class AgentEventTrigger(BaseModel):
     `"Tasks:create"`, `"Project Users:update"`).
     """
 
-    trigger_source: Literal["procore"]
-    """The external provider that emits the event.
-
-    Currently only Procore is supported.
-    """
+    trigger_source: Literal["procore", "sharepoint"]
+    """The external provider that emits the event."""
 
     updated_at: datetime
     """ISO 8601 timestamp of the last modification to the event trigger."""
