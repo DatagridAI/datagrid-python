@@ -16,22 +16,8 @@ from .rewrite import (
     RewriteResourceWithStreamingResponse,
     AsyncRewriteResourceWithStreamingResponse,
 )
-from .converse import (
-    ConverseResource,
-    AsyncConverseResource,
-    ConverseResourceWithRawResponse,
-    AsyncConverseResourceWithRawResponse,
-    ConverseResourceWithStreamingResponse,
-    AsyncConverseResourceWithStreamingResponse,
-)
 
 __all__ = [
-    "ConverseResource",
-    "AsyncConverseResource",
-    "ConverseResourceWithRawResponse",
-    "AsyncConverseResourceWithRawResponse",
-    "ConverseResourceWithStreamingResponse",
-    "AsyncConverseResourceWithStreamingResponse",
     "RewriteResource",
     "AsyncRewriteResource",
     "RewriteResourceWithRawResponse",

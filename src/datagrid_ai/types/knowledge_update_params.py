@@ -33,15 +33,6 @@ class KnowledgeUpdateParams(TypedDict, total=False):
     visible across all teamspaces in the same organization.
     """
 
-    semantic_indexing_enabled: Optional[bool]
-    """Whether semantic indexing is enabled for this knowledge.
-
-    Set to `true` to upgrade SQL-only knowledge so existing and future records are
-    semantically indexed. This transition is one-way: setting `false` is rejected,
-    as is combining it with `files`. Omitted leaves indexing unchanged.
-    Already-indexed knowledge is a no-op.
-    """
-
     sync: Optional[Sync]
     """Sync configuration updates for knowledge created from a connection.
 

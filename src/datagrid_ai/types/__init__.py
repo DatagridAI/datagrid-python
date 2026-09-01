@@ -6,7 +6,6 @@ from .page import Page as Page
 from .tool import Tool as Tool
 from .agent import Agent as Agent
 from .secret import Secret as Secret
-from .channel import Channel as Channel
 from .webhook import Webhook as Webhook
 from .identity import Identity as Identity
 from .tool_def import ToolDef as ToolDef
@@ -20,10 +19,7 @@ from .tool_param import ToolParam as ToolParam
 from .file_object import FileObject as FileObject
 from .conversation import Conversation as Conversation
 from .row_metadata import RowMetadata as RowMetadata
-from .channel_member import ChannelMember as ChannelMember
-from .channel_thread import ChannelThread as ChannelThread
 from .table_metadata import TableMetadata as TableMetadata
-from .channel_message import ChannelMessage as ChannelMessage
 from .problem_details import ProblemDetails as ProblemDetails
 from .batch_prediction import BatchPrediction as BatchPrediction
 from .file_list_params import FileListParams as FileListParams
@@ -47,15 +43,12 @@ from .secret_list_params import SecretListParams as SecretListParams
 from .agent_create_params import AgentCreateParams as AgentCreateParams
 from .agent_update_params import AgentUpdateParams as AgentUpdateParams
 from .attachment_metadata import AttachmentMetadata as AttachmentMetadata
-from .channel_list_params import ChannelListParams as ChannelListParams
 from .connection_provider import ConnectionProvider as ConnectionProvider
 from .webhook_list_params import WebhookListParams as WebhookListParams
 from .agent_claim_response import AgentClaimResponse as AgentClaimResponse
 from .search_search_params import SearchSearchParams as SearchSearchParams
 from .secret_create_params import SecretCreateParams as SecretCreateParams
 from .agent_generate_params import AgentGenerateParams as AgentGenerateParams
-from .channel_create_params import ChannelCreateParams as ChannelCreateParams
-from .channel_update_params import ChannelUpdateParams as ChannelUpdateParams
 from .connector_list_params import ConnectorListParams as ConnectorListParams
 from .data_view_list_params import DataViewListParams as DataViewListParams
 from .knowledge_list_params import KnowledgeListParams as KnowledgeListParams
@@ -81,26 +74,17 @@ from .conversation_list_params import ConversationListParams as ConversationList
 from .knowledge_connect_params import KnowledgeConnectParams as KnowledgeConnectParams
 from .data_view_create_response import DataViewCreateResponse as DataViewCreateResponse
 from .search_search_tree_params import SearchSearchTreeParams as SearchSearchTreeParams
-from .channel_add_members_params import ChannelAddMembersParams as ChannelAddMembersParams
 from .conversation_create_params import ConversationCreateParams as ConversationCreateParams
 from .conversation_update_params import ConversationUpdateParams as ConversationUpdateParams
 from .voice_start_session_params import VoiceStartSessionParams as VoiceStartSessionParams
-from .channel_add_reaction_params import ChannelAddReactionParams as ChannelAddReactionParams
-from .channel_list_members_params import ChannelListMembersParams as ChannelListMembersParams
-from .channel_list_threads_params import ChannelListThreadsParams as ChannelListThreadsParams
 from .search_result_resource_type import SearchResultResourceType as SearchResultResourceType
 from .batch_prediction_list_params import BatchPredictionListParams as BatchPredictionListParams
 from .batch_prediction_result_line import BatchPredictionResultLine as BatchPredictionResultLine
-from .channel_add_members_response import ChannelAddMembersResponse as ChannelAddMembersResponse
-from .channel_list_messages_params import ChannelListMessagesParams as ChannelListMessagesParams
-from .channel_create_message_params import ChannelCreateMessageParams as ChannelCreateMessageParams
 from .batch_prediction_create_params import BatchPredictionCreateParams as BatchPredictionCreateParams
 from .batch_prediction_request_counts import BatchPredictionRequestCounts as BatchPredictionRequestCounts
 from .connection_provider_list_params import ConnectionProviderListParams as ConnectionProviderListParams
 from .connection_provider_create_params import ConnectionProviderCreateParams as ConnectionProviderCreateParams
 from .connection_provider_update_params import ConnectionProviderUpdateParams as ConnectionProviderUpdateParams
-from .channel_list_thread_messages_params import ChannelListThreadMessagesParams as ChannelListThreadMessagesParams
-from .channel_create_thread_message_params import ChannelCreateThreadMessageParams as ChannelCreateThreadMessageParams
 from .webhook_list_active_for_event_params import WebhookListActiveForEventParams as WebhookListActiveForEventParams
 from .webhook_list_active_for_event_response import (
     WebhookListActiveForEventResponse as WebhookListActiveForEventResponse,

@@ -72,14 +72,6 @@ from .secrets import (
     SecretsResourceWithStreamingResponse,
     AsyncSecretsResourceWithStreamingResponse,
 )
-from .channels import (
-    ChannelsResource,
-    AsyncChannelsResource,
-    ChannelsResourceWithRawResponse,
-    AsyncChannelsResourceWithRawResponse,
-    ChannelsResourceWithStreamingResponse,
-    AsyncChannelsResourceWithStreamingResponse,
-)
 from .identity import (
     IdentityResource,
     AsyncIdentityResource,
@@ -222,12 +214,6 @@ __all__ = [
     "AsyncAgentsResourceWithRawResponse",
     "AgentsResourceWithStreamingResponse",
     "AsyncAgentsResourceWithStreamingResponse",
-    "ChannelsResource",
-    "AsyncChannelsResource",
-    "ChannelsResourceWithRawResponse",
-    "AsyncChannelsResourceWithRawResponse",
-    "ChannelsResourceWithStreamingResponse",
-    "AsyncChannelsResourceWithStreamingResponse",
     "IdentityResource",
     "AsyncIdentityResource",
     "IdentityResourceWithRawResponse",
