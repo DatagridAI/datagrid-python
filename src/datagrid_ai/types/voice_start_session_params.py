@@ -17,6 +17,12 @@ class VoiceStartSessionParams(TypedDict, total=False):
     Ignored when voice_mode is orchestrator.
     """
 
+    allow_delegation: Optional[bool]
+    """
+    Orchestrator sessions only: set false to disable specialist delegation tools for
+    the session. Ignored for direct-agent sessions.
+    """
+
     config: Optional[Config]
     """
     Override the agent config for this voice session. Only prompt overrides are
