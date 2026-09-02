@@ -1,0 +1,366 @@
+# File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+
+from typing import List, Union, Optional
+from datetime import datetime
+from typing_extensions import Literal, Annotated, TypeAlias
+
+from pydantic import Field as FieldInfo
+
+from .._utils import PropertyInfo
+from .._models import BaseModel
+
+__all__ = [
+    "ChannelMessage",
+    "Citation",
+    "CitationSource",
+    "CitationSourceField",
+    "Content",
+    "ContentMessageContentText",
+    "ContentMessageContentJson",
+    "ContentMessageContentVoice",
+    "ContentMessageContentVoiceAudioClip",
+    "ContentMessageContentVoiceAudioClipParticipant",
+    "ContentMessageContentVoiceTimelineEvent",
+    "ContentMessageContentVoiceTimelineEventCitation",
+    "ContentMessageContentVoiceTimelineEventCitationSource",
+    "ContentMessageContentVoiceTimelineEventCitationSourceField",
+    "ContentMessageContentFile",
+    "Credits",
+    "Reaction",
+    "ReactionUser",
+]
+
+
+class CitationSourceField(BaseModel):
+    label: str
+    """Human-readable field label (e.g. "Due Date")."""
+
+    value: str
+    """Human-readable field value (e.g. "2025-09-14")."""
+
+
+class CitationSource(BaseModel):
+    confirmations: List[str]
+    """An array of text snippets from the source that confirm the citation."""
+
+    source_name: str
+    """Name of the source."""
+
+    type: Literal["image", "pdf_page", "record", "web_search", "sql_query_result", "action"]
+
+    external_url: Optional[str] = None
+    """Origin-system deep-link for the source (e.g.
+
+    an `app.procore.com` universal link), when one exists. Unlike `source_uri`, it
+    is never overridden by the signed Datagrid file URI, so clients can offer an
+    "open in source" action.
+    """
+
+    fields: Optional[List[CitationSourceField]] = None
+    """record only.
+
+    Backend-normalized, render-ready structured fields promoted from the record row
+    (due date, ball-in-court, assignee, revision, type, vendor, scope, …). Excludes
+    `status`, which is surfaced on its own.
+    """
+
+    item_type: Optional[str] = None
+    """record / pdf_page only.
+
+    Procore tool type of the underlying record (e.g. "rfi_headers",
+    "submittal_logs"), read from the indexed Procore item type on the source row;
+    present only for sources ingested from Procore. Lets clients render a reliable
+    type label (RFI, Submittal, Observation, …) without parsing the deep-link URL.
+    """
+
+    page_number: Optional[int] = None
+    """pdf_page only.
+
+    1-based page number within the source document. Omitted when the page is
+    unknown; never `0`.
+    """
+
+    source_id: Optional[str] = None
+    """
+    Id of the source when Datagrid holds one (dataset id, or data-lake item id for
+    file-backed `pdf_page`). Omitted for `pdf_page` sources with no Datagrid-backed
+    file.
+    """
+
+    source_uri: Optional[str] = None
+    """URI of the source.
+
+    For file-backed sources this is the in-app target (signed Datagrid file URI when
+    available); use `external_url` for the origin-system deep-link. For `pdf_page`
+    sources with no Datagrid file, this is the origin-system deep-link and matches
+    `external_url`; locate the page with `page_number`.
+    """
+
+    status: Optional[str] = None
+    """record only.
+
+    Primary status value for the record (e.g. "Open", "Pending Review"), surfaced
+    separately from `fields` so clients can render a status chip.
+    """
+
+
+class Citation(BaseModel):
+    citation: str
+    """The text snippet from the response that is being cited."""
+
+    sources: List[CitationSource]
+    """Array of sources that support this citation."""
+
+
+class ContentMessageContentText(BaseModel):
+    """Text content for a message."""
+
+    text: str
+    """The text content of the message."""
+
+    type: Literal["text"]
+
+
+class ContentMessageContentJson(BaseModel):
+    """JSON content for structured-output responses."""
+
+    json_: object = FieldInfo(alias="json")
+    """The JSON value produced by the agent."""
+
+    type: Literal["json"]
+
+
+class ContentMessageContentVoiceAudioClipParticipant(BaseModel):
+    """Participant who spoke in this clip."""
+
+    id: str
+
+    type: Literal["user", "agent"]
+
+
+class ContentMessageContentVoiceAudioClip(BaseModel):
+    """A single audio clip from a voice message."""
+
+    id: str
+    """Unique identifier for the audio clip file.
+
+    Use this ID with the files API to download the audio content.
+    """
+
+    audio_uri: str
+    """Datagrid file URI for the audio file (WAV format)."""
+
+    duration_ms: float
+    """Duration of this audio clip in milliseconds."""
+
+    participant: ContentMessageContentVoiceAudioClipParticipant
+    """Participant who spoke in this clip."""
+
+    start_time_ms: float
+    """
+    Start time of this clip relative to the beginning of the voice message, in
+    milliseconds.
+    """
+
+
+class ContentMessageContentVoiceTimelineEventCitationSourceField(BaseModel):
+    label: str
+    """Human-readable field label (e.g. "Due Date")."""
+
+    value: str
+    """Human-readable field value (e.g. "2025-09-14")."""
+
+
+class ContentMessageContentVoiceTimelineEventCitationSource(BaseModel):
+    confirmations: List[str]
+    """An array of text snippets from the source that confirm the citation."""
+
+    source_name: str
+    """Name of the source."""
+
+    type: Literal["image", "pdf_page", "record", "web_search", "sql_query_result", "action"]
+
+    external_url: Optional[str] = None
+    """Origin-system deep-link for the source (e.g.
+
+    an `app.procore.com` universal link), when one exists. Unlike `source_uri`, it
+    is never overridden by the signed Datagrid file URI, so clients can offer an
+    "open in source" action.
+    """
+
+    fields: Optional[List[ContentMessageContentVoiceTimelineEventCitationSourceField]] = None
+    """record only.
+
+    Backend-normalized, render-ready structured fields promoted from the record row
+    (due date, ball-in-court, assignee, revision, type, vendor, scope, …). Excludes
+    `status`, which is surfaced on its own.
+    """
+
+    item_type: Optional[str] = None
+    """record / pdf_page only.
+
+    Procore tool type of the underlying record (e.g. "rfi_headers",
+    "submittal_logs"), read from the indexed Procore item type on the source row;
+    present only for sources ingested from Procore. Lets clients render a reliable
+    type label (RFI, Submittal, Observation, …) without parsing the deep-link URL.
+    """
+
+    page_number: Optional[int] = None
+    """pdf_page only.
+
+    1-based page number within the source document. Omitted when the page is
+    unknown; never `0`.
+    """
+
+    source_id: Optional[str] = None
+    """
+    Id of the source when Datagrid holds one (dataset id, or data-lake item id for
+    file-backed `pdf_page`). Omitted for `pdf_page` sources with no Datagrid-backed
+    file.
+    """
+
+    source_uri: Optional[str] = None
+    """URI of the source.
+
+    For file-backed sources this is the in-app target (signed Datagrid file URI when
+    available); use `external_url` for the origin-system deep-link. For `pdf_page`
+    sources with no Datagrid file, this is the origin-system deep-link and matches
+    `external_url`; locate the page with `page_number`.
+    """
+
+    status: Optional[str] = None
+    """record only.
+
+    Primary status value for the record (e.g. "Open", "Pending Review"), surfaced
+    separately from `fields` so clients can render a status chip.
+    """
+
+
+class ContentMessageContentVoiceTimelineEventCitation(BaseModel):
+    citation: str
+    """The text snippet from the response that is being cited."""
+
+    sources: List[ContentMessageContentVoiceTimelineEventCitationSource]
+    """Array of sources that support this citation."""
+
+
+class ContentMessageContentVoiceTimelineEvent(BaseModel):
+    """
+    A single event from a voice session timeline, representing a transcript turn, citation, or tool-call status update.
+    """
+
+    timestamp_ms: float
+    """Timestamp offset from the start of the voice session, in milliseconds."""
+
+    type: Literal["transcript", "citation", "tool_call_status"]
+    """The type of timeline event."""
+
+    citations: Optional[List[ContentMessageContentVoiceTimelineEventCitation]] = None
+    """Citations for this event. Present when type is 'citation'."""
+
+    role: Optional[Literal["user", "agent"]] = None
+    """The role of the participant for this event."""
+
+    status: Optional[Literal["started", "completed", "failed"]] = None
+    """Tool-call status for this event. Present when type is 'tool_call_status'."""
+
+    text: Optional[str] = None
+    """Plain text transcript for this turn. Present when type is 'transcript'."""
+
+    tool_name: Optional[str] = None
+    """Name of the tool whose status changed. Present when type is 'tool_call_status'."""
+
+
+class ContentMessageContentVoice(BaseModel):
+    """Voice content for a message."""
+
+    audio_clips: List[ContentMessageContentVoiceAudioClip]
+    """Array of audio clips with timestamps for synchronized playback."""
+
+    duration_ms: Optional[float] = None
+    """Total duration of the voice message in milliseconds."""
+
+    transcript: str
+    """User transcript of the voice message."""
+
+    type: Literal["voice"]
+
+    agent_transcript: Optional[str] = None
+    """Agent transcript of the voice message (for agent role messages)."""
+
+    timeline_events: Optional[List[ContentMessageContentVoiceTimelineEvent]] = None
+    """
+    Per-turn transcript, citation, and tool-call status events in chronological
+    order. Each entry includes a timestamp offset from the start of the voice
+    session. Present only for voice sessions that recorded timeline data.
+    """
+
+
+class ContentMessageContentFile(BaseModel):
+    """File attachment content for a message.
+
+    Represents a file that was uploaded as part of the user's message.
+    """
+
+    file_id: str
+    """The ID of the attached file.
+
+    Use this ID with the files API to download the file content.
+    """
+
+    type: Literal["input_file"]
+
+
+Content: TypeAlias = Annotated[
+    Union[ContentMessageContentText, ContentMessageContentJson, ContentMessageContentVoice, ContentMessageContentFile],
+    PropertyInfo(discriminator="type"),
+]
+
+
+class Credits(BaseModel):
+    consumed: float
+    """The number of credits consumed by the operation."""
+
+
+class ReactionUser(BaseModel):
+    created_at: datetime
+
+    user_id: str
+
+
+class Reaction(BaseModel):
+    reaction: str
+    """Emoji shortcode or unicode emoji."""
+
+    users: List[ReactionUser]
+
+
+class ChannelMessage(BaseModel):
+    id: str
+
+    agent_id: str
+
+    channel_id: str
+
+    citations: Optional[List[Citation]] = None
+    """Array of citations that provide sources for factual statements in the response.
+
+    Each citation includes the referenced text and its sources.
+    """
+
+    content: List[Content]
+
+    created_at: datetime
+
+    credits: Optional[Credits] = None
+
+    object: Literal["channel.message"]
+
+    reactions: List[Reaction]
+    """Reactions grouped by emoji, ordered by first reaction time."""
+
+    reply_count: int
+
+    role: Literal["user", "agent"]
+
+    thread_id: Optional[str] = None

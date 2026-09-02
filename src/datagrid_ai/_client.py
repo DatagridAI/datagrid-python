@@ -64,6 +64,7 @@ if TYPE_CHECKING:
         memory,
         search,
         secrets,
+        channels,
         identity,
         webhooks,
         knowledge,
@@ -80,6 +81,7 @@ if TYPE_CHECKING:
     from .resources.tools import ToolsResource, AsyncToolsResource
     from .resources.search import SearchResource, AsyncSearchResource
     from .resources.secrets import SecretsResource, AsyncSecretsResource
+    from .resources.channels import ChannelsResource, AsyncChannelsResource
     from .resources.identity import IdentityResource, AsyncIdentityResource
     from .resources.webhooks import WebhooksResource, AsyncWebhooksResource
     from .resources.beta.beta import BetaResource, AsyncBetaResource
@@ -238,6 +240,12 @@ class Datagrid(SyncAPIClient):
         from .resources.agents import AgentsResource
 
         return AgentsResource(self)
+
+    @cached_property
+    def channels(self) -> ChannelsResource:
+        from .resources.channels import ChannelsResource
+
+        return ChannelsResource(self)
 
     @cached_property
     def identity(self) -> IdentityResource:
@@ -754,6 +762,12 @@ class AsyncDatagrid(AsyncAPIClient):
         return AsyncAgentsResource(self)
 
     @cached_property
+    def channels(self) -> AsyncChannelsResource:
+        from .resources.channels import AsyncChannelsResource
+
+        return AsyncChannelsResource(self)
+
+    @cached_property
     def identity(self) -> AsyncIdentityResource:
         from .resources.identity import AsyncIdentityResource
 
@@ -1206,6 +1220,12 @@ class DatagridWithRawResponse:
         return AgentsResourceWithRawResponse(self._client.agents)
 
     @cached_property
+    def channels(self) -> channels.ChannelsResourceWithRawResponse:
+        from .resources.channels import ChannelsResourceWithRawResponse
+
+        return ChannelsResourceWithRawResponse(self._client.channels)
+
+    @cached_property
     def identity(self) -> identity.IdentityResourceWithRawResponse:
         from .resources.identity import IdentityResourceWithRawResponse
 
@@ -1329,6 +1349,12 @@ class AsyncDatagridWithRawResponse:
         from .resources.agents import AsyncAgentsResourceWithRawResponse
 
         return AsyncAgentsResourceWithRawResponse(self._client.agents)
+
+    @cached_property
+    def channels(self) -> channels.AsyncChannelsResourceWithRawResponse:
+        from .resources.channels import AsyncChannelsResourceWithRawResponse
+
+        return AsyncChannelsResourceWithRawResponse(self._client.channels)
 
     @cached_property
     def identity(self) -> identity.AsyncIdentityResourceWithRawResponse:
@@ -1456,6 +1482,12 @@ class DatagridWithStreamedResponse:
         return AgentsResourceWithStreamingResponse(self._client.agents)
 
     @cached_property
+    def channels(self) -> channels.ChannelsResourceWithStreamingResponse:
+        from .resources.channels import ChannelsResourceWithStreamingResponse
+
+        return ChannelsResourceWithStreamingResponse(self._client.channels)
+
+    @cached_property
     def identity(self) -> identity.IdentityResourceWithStreamingResponse:
         from .resources.identity import IdentityResourceWithStreamingResponse
 
@@ -1579,6 +1611,12 @@ class AsyncDatagridWithStreamedResponse:
         from .resources.agents import AsyncAgentsResourceWithStreamingResponse
 
         return AsyncAgentsResourceWithStreamingResponse(self._client.agents)
+
+    @cached_property
+    def channels(self) -> channels.AsyncChannelsResourceWithStreamingResponse:
+        from .resources.channels import AsyncChannelsResourceWithStreamingResponse
+
+        return AsyncChannelsResourceWithStreamingResponse(self._client.channels)
 
     @cached_property
     def identity(self) -> identity.AsyncIdentityResourceWithStreamingResponse:

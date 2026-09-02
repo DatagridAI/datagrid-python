@@ -52,7 +52,7 @@ class EventTriggersResource(SyncAPIResource):
         *,
         enabled: bool,
         trigger_event: str,
-        trigger_source: Literal["procore"],
+        trigger_source: Literal["procore", "sharepoint", "egnyte"],
         description: Optional[str] | Omit = omit,
         name: Optional[str] | Omit = omit,
         response_thread: Optional[Literal["create_new_thread_each_time"]] | Omit = omit,
@@ -79,7 +79,7 @@ class EventTriggersResource(SyncAPIResource):
           trigger_event: The event that fires the agent, in `"ResourceName:eventType"` format (e.g.
               `"Tasks:create"`). Required even when `enabled` is `false`.
 
-          trigger_source: The external provider that emits the event. Currently only Procore is supported.
+          trigger_source: The external provider that emits the event.
 
           description: Optional description of what the App Event automation does.
 
@@ -299,7 +299,7 @@ class AsyncEventTriggersResource(AsyncAPIResource):
         *,
         enabled: bool,
         trigger_event: str,
-        trigger_source: Literal["procore"],
+        trigger_source: Literal["procore", "sharepoint", "egnyte"],
         description: Optional[str] | Omit = omit,
         name: Optional[str] | Omit = omit,
         response_thread: Optional[Literal["create_new_thread_each_time"]] | Omit = omit,
@@ -326,7 +326,7 @@ class AsyncEventTriggersResource(AsyncAPIResource):
           trigger_event: The event that fires the agent, in `"ResourceName:eventType"` format (e.g.
               `"Tasks:create"`). Required even when `enabled` is `false`.
 
-          trigger_source: The external provider that emits the event. Currently only Procore is supported.
+          trigger_source: The external provider that emits the event.
 
           description: Optional description of what the App Event automation does.
 
