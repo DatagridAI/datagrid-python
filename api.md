@@ -489,6 +489,18 @@ Methods:
 
 - <code title="get /organization/reports/user-credits-consumption">client.organization.reports.user_credits_consumption.<a href="./src/datagrid_ai/resources/organization/reports/user_credits_consumption.py">list</a>(\*\*<a href="src/datagrid_ai/types/organization/reports/user_credits_consumption_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/organization/reports/user_credit_consumption_list.py">UserCreditConsumptionList</a></code>
 
+### ConsumptionBreakdown
+
+Types:
+
+```python
+from datagrid_ai.types.organization.reports import ConsumptionBreakdown, ConsumptionBreakdownList
+```
+
+Methods:
+
+- <code title="get /organization/reports/consumption-breakdown">client.organization.reports.consumption_breakdown.<a href="./src/datagrid_ai/resources/organization/reports/consumption_breakdown.py">list</a>(\*\*<a href="src/datagrid_ai/types/organization/reports/consumption_breakdown_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/organization/reports/consumption_breakdown_list.py">ConsumptionBreakdownList</a></code>
+
 # Conversations
 
 Types:

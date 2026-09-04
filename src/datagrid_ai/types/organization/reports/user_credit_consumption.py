@@ -16,8 +16,11 @@ class UserCreditConsumption(BaseModel):
     created_at: datetime
     """When the consumption occurred."""
 
-    credits: int
-    """Credits consumed by this row."""
+    credits: float
+    """Credits consumed by this row.
+
+    Fractional — the row is a sum of decimal ledger amounts.
+    """
 
     object: Literal["user_credit_consumption"]
     """Object type discriminator."""

@@ -8,6 +8,14 @@ from .reports import (
     ReportsResourceWithStreamingResponse,
     AsyncReportsResourceWithStreamingResponse,
 )
+from .consumption_breakdown import (
+    ConsumptionBreakdownResource,
+    AsyncConsumptionBreakdownResource,
+    ConsumptionBreakdownResourceWithRawResponse,
+    AsyncConsumptionBreakdownResourceWithRawResponse,
+    ConsumptionBreakdownResourceWithStreamingResponse,
+    AsyncConsumptionBreakdownResourceWithStreamingResponse,
+)
 from .user_credits_consumption import (
     UserCreditsConsumptionResource,
     AsyncUserCreditsConsumptionResource,
@@ -24,6 +32,12 @@ __all__ = [
     "AsyncUserCreditsConsumptionResourceWithRawResponse",
     "UserCreditsConsumptionResourceWithStreamingResponse",
     "AsyncUserCreditsConsumptionResourceWithStreamingResponse",
+    "ConsumptionBreakdownResource",
+    "AsyncConsumptionBreakdownResource",
+    "ConsumptionBreakdownResourceWithRawResponse",
+    "AsyncConsumptionBreakdownResourceWithRawResponse",
+    "ConsumptionBreakdownResourceWithStreamingResponse",
+    "AsyncConsumptionBreakdownResourceWithStreamingResponse",
     "ReportsResource",
     "AsyncReportsResource",
     "ReportsResourceWithRawResponse",

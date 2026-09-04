@@ -4,6 +4,14 @@ from __future__ import annotations
 
 from ...._compat import cached_property
 from ...._resource import SyncAPIResource, AsyncAPIResource
+from .consumption_breakdown import (
+    ConsumptionBreakdownResource,
+    AsyncConsumptionBreakdownResource,
+    ConsumptionBreakdownResourceWithRawResponse,
+    AsyncConsumptionBreakdownResourceWithRawResponse,
+    ConsumptionBreakdownResourceWithStreamingResponse,
+    AsyncConsumptionBreakdownResourceWithStreamingResponse,
+)
 from .user_credits_consumption import (
     UserCreditsConsumptionResource,
     AsyncUserCreditsConsumptionResource,
@@ -20,6 +28,10 @@ class ReportsResource(SyncAPIResource):
     @cached_property
     def user_credits_consumption(self) -> UserCreditsConsumptionResource:
         return UserCreditsConsumptionResource(self._client)
+
+    @cached_property
+    def consumption_breakdown(self) -> ConsumptionBreakdownResource:
+        return ConsumptionBreakdownResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> ReportsResourceWithRawResponse:
@@ -45,6 +57,10 @@ class AsyncReportsResource(AsyncAPIResource):
     @cached_property
     def user_credits_consumption(self) -> AsyncUserCreditsConsumptionResource:
         return AsyncUserCreditsConsumptionResource(self._client)
+
+    @cached_property
+    def consumption_breakdown(self) -> AsyncConsumptionBreakdownResource:
+        return AsyncConsumptionBreakdownResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> AsyncReportsResourceWithRawResponse:
@@ -74,6 +90,10 @@ class ReportsResourceWithRawResponse:
     def user_credits_consumption(self) -> UserCreditsConsumptionResourceWithRawResponse:
         return UserCreditsConsumptionResourceWithRawResponse(self._reports.user_credits_consumption)
 
+    @cached_property
+    def consumption_breakdown(self) -> ConsumptionBreakdownResourceWithRawResponse:
+        return ConsumptionBreakdownResourceWithRawResponse(self._reports.consumption_breakdown)
+
 
 class AsyncReportsResourceWithRawResponse:
     def __init__(self, reports: AsyncReportsResource) -> None:
@@ -82,6 +102,10 @@ class AsyncReportsResourceWithRawResponse:
     @cached_property
     def user_credits_consumption(self) -> AsyncUserCreditsConsumptionResourceWithRawResponse:
         return AsyncUserCreditsConsumptionResourceWithRawResponse(self._reports.user_credits_consumption)
+
+    @cached_property
+    def consumption_breakdown(self) -> AsyncConsumptionBreakdownResourceWithRawResponse:
+        return AsyncConsumptionBreakdownResourceWithRawResponse(self._reports.consumption_breakdown)
 
 
 class ReportsResourceWithStreamingResponse:
@@ -92,6 +116,10 @@ class ReportsResourceWithStreamingResponse:
     def user_credits_consumption(self) -> UserCreditsConsumptionResourceWithStreamingResponse:
         return UserCreditsConsumptionResourceWithStreamingResponse(self._reports.user_credits_consumption)
 
+    @cached_property
+    def consumption_breakdown(self) -> ConsumptionBreakdownResourceWithStreamingResponse:
+        return ConsumptionBreakdownResourceWithStreamingResponse(self._reports.consumption_breakdown)
+
 
 class AsyncReportsResourceWithStreamingResponse:
     def __init__(self, reports: AsyncReportsResource) -> None:
@@ -100,3 +128,7 @@ class AsyncReportsResourceWithStreamingResponse:
     @cached_property
     def user_credits_consumption(self) -> AsyncUserCreditsConsumptionResourceWithStreamingResponse:
         return AsyncUserCreditsConsumptionResourceWithStreamingResponse(self._reports.user_credits_consumption)
+
+    @cached_property
+    def consumption_breakdown(self) -> AsyncConsumptionBreakdownResourceWithStreamingResponse:
+        return AsyncConsumptionBreakdownResourceWithStreamingResponse(self._reports.consumption_breakdown)

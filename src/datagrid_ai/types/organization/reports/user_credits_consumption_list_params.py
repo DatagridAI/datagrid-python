@@ -15,7 +15,8 @@ class UserCreditsConsumptionListParams(TypedDict, total=False):
     end_date: Required[Annotated[Union[str, datetime], PropertyInfo(format="iso8601")]]
     """Inclusive end of the report window (ISO 8601 date or date-time).
 
-    Date-only values are UTC midnight.
+    A date-only value covers that entire UTC day; a date-time is used exactly as
+    given.
     """
 
     start_date: Required[Annotated[Union[str, datetime], PropertyInfo(format="iso8601")]]

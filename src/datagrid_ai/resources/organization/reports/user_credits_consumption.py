@@ -62,13 +62,15 @@ class UserCreditsConsumptionResource(SyncAPIResource):
         """
         Return Control Tower user credit consumption rows for the authenticated
         organization. The date window is measured in UTC calendar days and must not
-        exceed 90 days. Date-only values are interpreted as UTC midnight. Pagination
-        uses opaque `after` / `before` cursors from `first_id` / `last_id` (encoded
-        offsets). Dollar `amount` is not included.
+        exceed 90 days. A date-only `start_date` begins at UTC midnight and a date-only
+        `end_date` covers that whole UTC day. Pagination uses opaque `after` / `before`
+        cursors from `first_id` / `last_id`. The cursors encode a position in the result
+        set, not a record id, so rows written between two page requests can shift the
+        window. Dollar `amount` is not included.
 
         Args:
-          end_date: Inclusive end of the report window (ISO 8601 date or date-time). Date-only
-              values are UTC midnight.
+          end_date: Inclusive end of the report window (ISO 8601 date or date-time). A date-only
+              value covers that entire UTC day; a date-time is used exactly as given.
 
           start_date: Inclusive start of the report window (ISO 8601 date or date-time). Date-only
               values are UTC midnight.
@@ -153,13 +155,15 @@ class AsyncUserCreditsConsumptionResource(AsyncAPIResource):
         """
         Return Control Tower user credit consumption rows for the authenticated
         organization. The date window is measured in UTC calendar days and must not
-        exceed 90 days. Date-only values are interpreted as UTC midnight. Pagination
-        uses opaque `after` / `before` cursors from `first_id` / `last_id` (encoded
-        offsets). Dollar `amount` is not included.
+        exceed 90 days. A date-only `start_date` begins at UTC midnight and a date-only
+        `end_date` covers that whole UTC day. Pagination uses opaque `after` / `before`
+        cursors from `first_id` / `last_id`. The cursors encode a position in the result
+        set, not a record id, so rows written between two page requests can shift the
+        window. Dollar `amount` is not included.
 
         Args:
-          end_date: Inclusive end of the report window (ISO 8601 date or date-time). Date-only
-              values are UTC midnight.
+          end_date: Inclusive end of the report window (ISO 8601 date or date-time). A date-only
+              value covers that entire UTC day; a date-time is used exactly as given.
 
           start_date: Inclusive start of the report window (ISO 8601 date or date-time). Date-only
               values are UTC midnight.
