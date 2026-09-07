@@ -1,0 +1,1282 @@
+# File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+
+from __future__ import annotations
+
+from typing import Optional
+from typing_extensions import Literal
+
+import httpx
+
+from ..types import skill_list_params, skill_create_params, skill_update_params
+from .._types import Body, Omit, Query, Headers, NoneType, NotGiven, SequenceNotStr, omit, not_given
+from .._utils import path_template, maybe_transform, async_maybe_transform
+from .._compat import cached_property
+from .._resource import SyncAPIResource, AsyncAPIResource
+from .._response import (
+    to_raw_response_wrapper,
+    to_streamed_response_wrapper,
+    async_to_raw_response_wrapper,
+    async_to_streamed_response_wrapper,
+)
+from ..pagination import SyncCursorIDPage, AsyncCursorIDPage
+from ..types.skill import Skill
+from .._base_client import AsyncPaginator, make_request_options
+from ..types.skill_list_builtins_response import SkillListBuiltinsResponse
+
+__all__ = ["SkillsResource", "AsyncSkillsResource"]
+
+
+class SkillsResource(SyncAPIResource):
+    @cached_property
+    def with_raw_response(self) -> SkillsResourceWithRawResponse:
+        """
+        This property can be used as a prefix for any HTTP method call to return
+        the raw response object instead of the parsed content.
+
+        For more information, see https://www.github.com/DatagridAI/datagrid-python#accessing-raw-response-data-eg-headers
+        """
+        return SkillsResourceWithRawResponse(self)
+
+    @cached_property
+    def with_streaming_response(self) -> SkillsResourceWithStreamingResponse:
+        """
+        An alternative to `.with_raw_response` that doesn't eagerly read the response body.
+
+        For more information, see https://www.github.com/DatagridAI/datagrid-python#with_streaming_response
+        """
+        return SkillsResourceWithStreamingResponse(self)
+
+    def create(
+        self,
+        *,
+        category: Literal[
+            "document_analysis",
+            "construction_project_management",
+            "financial_analysis",
+            "estimation",
+            "quality_and_safety",
+            "scheduling",
+            "contracts_and_legal",
+            "data_and_reporting",
+            "research",
+            "communication",
+            "general_productivity",
+        ],
+        instructions: str,
+        name: str,
+        slash_key: str,
+        description: Optional[str] | Omit = omit,
+        enabled: Optional[bool] | Omit = omit,
+        preferred_tools: Optional[SequenceNotStr[str]] | Omit = omit,
+        required_tools: Optional[SequenceNotStr[str]] | Omit = omit,
+        scope: Optional[Literal["user", "account"]] | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> Skill:
+        """Create a skill.
+
+        Defaults to company-owned (`account`) scope. Pass `scope: user`
+        to create a private skill that can later be promoted. Account-scope slash keys
+        must not collide with a built-in; use the override endpoint for that.
+
+        Args:
+          category: Category bucket.
+
+          instructions: The full instructions / system prompt for this skill.
+
+          name: Display name of the skill.
+
+          slash_key: The slash command key (e.g. `budget-check`). Must be unique within the scope.
+
+          description: Short description. When omitted, an AI-generated description is produced from
+              the instructions.
+
+          enabled: Whether the skill is active. Defaults to `true`.
+
+          preferred_tools: Tool identifiers preferred by this skill.
+
+          required_tools: Tool identifiers required by this skill.
+
+          scope: Ownership of the new skill. Defaults to `account` (company-owned). Pass `user`
+              for a private skill that can later be promoted.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return self._post(
+            "/skills",
+            body=maybe_transform(
+                {
+                    "category": category,
+                    "instructions": instructions,
+                    "name": name,
+                    "slash_key": slash_key,
+                    "description": description,
+                    "enabled": enabled,
+                    "preferred_tools": preferred_tools,
+                    "required_tools": required_tools,
+                    "scope": scope,
+                },
+                skill_create_params.SkillCreateParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=Skill,
+        )
+
+    def retrieve(
+        self,
+        skill_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> Skill:
+        """
+        Get details of a specific skill.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not skill_id:
+            raise ValueError(f"Expected a non-empty value for `skill_id` but received {skill_id!r}")
+        return self._get(
+            path_template("/skills/{skill_id}", skill_id=skill_id),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=Skill,
+        )
+
+    def update(
+        self,
+        skill_id: str,
+        *,
+        category: Optional[
+            Literal[
+                "document_analysis",
+                "construction_project_management",
+                "financial_analysis",
+                "estimation",
+                "quality_and_safety",
+                "scheduling",
+                "contracts_and_legal",
+                "data_and_reporting",
+                "research",
+                "communication",
+                "general_productivity",
+            ]
+        ]
+        | Omit = omit,
+        description: Optional[str] | Omit = omit,
+        enabled: Optional[bool] | Omit = omit,
+        instructions: Optional[str] | Omit = omit,
+        name: Optional[str] | Omit = omit,
+        preferred_tools: Optional[SequenceNotStr[str]] | Omit = omit,
+        required_tools: Optional[SequenceNotStr[str]] | Omit = omit,
+        slash_key: Optional[str] | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> Skill:
+        """Update a skill.
+
+        Requires an API key with `ep:skills:write` whose user
+        administers skills in the account. A shared (`account`-scope) skill may be
+        updated by any skill administrator; a private (`user`-scope) skill only by its
+        author. Built-in skills and company overrides of them cannot have their content
+        edited; `enabled` may still be toggled on an override.
+
+        Args:
+          category: Category bucket.
+
+          description: Short description. Pass an empty string to clear it and re-enable AI generation.
+
+          enabled: Whether the skill is active.
+
+          instructions: The full instructions / system prompt.
+
+          name: Display name of the skill.
+
+          preferred_tools: Tool identifiers preferred by this skill.
+
+          required_tools: Tool identifiers required by this skill.
+
+          slash_key: The slash command key. Must be unique within the scope.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not skill_id:
+            raise ValueError(f"Expected a non-empty value for `skill_id` but received {skill_id!r}")
+        return self._patch(
+            path_template("/skills/{skill_id}", skill_id=skill_id),
+            body=maybe_transform(
+                {
+                    "category": category,
+                    "description": description,
+                    "enabled": enabled,
+                    "instructions": instructions,
+                    "name": name,
+                    "preferred_tools": preferred_tools,
+                    "required_tools": required_tools,
+                    "slash_key": slash_key,
+                },
+                skill_update_params.SkillUpdateParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=Skill,
+        )
+
+    def list(
+        self,
+        *,
+        after: str | Omit = omit,
+        before: str | Omit = omit,
+        enabled: bool | Omit = omit,
+        limit: int | Omit = omit,
+        scope: Literal["user", "account", "builtin"] | Omit = omit,
+        search: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> SyncCursorIDPage[Skill]:
+        """List skills reachable by the authenticated organization.
+
+        Returns built-in
+        skills, company (account) skills, and the caller's private skills. Removed
+        built-in overrides are excluded.
+
+        Args:
+          after: A cursor to use in pagination. `after` is an object ID that defines your place
+              in the list. For example, if you make a list request and receive 100 objects,
+              ending with `obj_foo`, your subsequent call can include `after=obj_foo` to fetch
+              the next page of the list.
+
+          before: A cursor to use in pagination. `before` is an object ID that defines your place
+              in the list. For example, if you make a list request and receive 100 objects,
+              starting with `obj_bar`, your subsequent call can include `before=obj_bar` to
+              fetch the previous page of the list.
+
+          enabled: Filter by enabled status.
+
+          limit: The limit on the number of objects to return, ranging between 1 and 100.
+
+          scope: Return only skills of this scope. `user` is the caller's own private skills,
+              `account` the company's shared skills, and `builtin` the global catalogue. Omit
+              to return everything the caller can reach.
+
+          search: Optional search string to filter skills by name or slash key. Case-insensitive
+              partial match.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return self._get_api_list(
+            "/skills",
+            page=SyncCursorIDPage[Skill],
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform(
+                    {
+                        "after": after,
+                        "before": before,
+                        "enabled": enabled,
+                        "limit": limit,
+                        "scope": scope,
+                        "search": search,
+                    },
+                    skill_list_params.SkillListParams,
+                ),
+            ),
+            model=Skill,
+        )
+
+    def delete(
+        self,
+        skill_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> None:
+        """Delete a skill.
+
+        For company-owned built-in overrides this marks the override as
+        removed (hidden from the library) rather than hard-deleting it, so the canonical
+        built-in is suppressed. Requires an API key with `ep:skills:delete` whose user
+        administers skills in the account.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not skill_id:
+            raise ValueError(f"Expected a non-empty value for `skill_id` but received {skill_id!r}")
+        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
+        return self._delete(
+            path_template("/skills/{skill_id}", skill_id=skill_id),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=NoneType,
+        )
+
+    def clone(
+        self,
+        skill_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> Skill:
+        """Create a private copy of any reachable skill, owned by the key's subject.
+
+        Clone
+        is deliberately `user`-scope even when `POST /v1/skills` defaults to `account`:
+        it is 'make my own copy', not another company skill. Requires `ep:skills:write`.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not skill_id:
+            raise ValueError(f"Expected a non-empty value for `skill_id` but received {skill_id!r}")
+        return self._post(
+            path_template("/skills/{skill_id}/clone", skill_id=skill_id),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=Skill,
+        )
+
+    def demote(
+        self,
+        skill_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> Skill:
+        """Demote a company (account-scope) skill back to private.
+
+        The caller must be the
+        skill's original author and administer skills in the account. Built-in overrides
+        cannot be demoted; use `/reset` instead. Requires `ep:skills:write`.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not skill_id:
+            raise ValueError(f"Expected a non-empty value for `skill_id` but received {skill_id!r}")
+        return self._post(
+            path_template("/skills/{skill_id}/demote", skill_id=skill_id),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=Skill,
+        )
+
+    def list_builtins(
+        self,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> SkillListBuiltinsResponse:
+        """Return the full in-memory built-in catalogue shipped with Datagrid.
+
+        The
+        catalogue is small and not cursor-paginated (`has_more` is always `false`);
+        adding pagination later would be a breaking SDK change. Use
+        `POST /skills/builtin/{builtin_key}/override` to customize one for your company.
+        Requires `ep:skills:read`.
+        """
+        return self._get(
+            "/skills/builtin",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=SkillListBuiltinsResponse,
+        )
+
+    def override_builtin(
+        self,
+        builtin_key: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> Skill:
+        """
+        Create (or restore) a company-owned copy of a built-in skill that shadows the
+        global default for your organization. Idempotent: if an override already exists
+        it is returned unchanged; if it was previously removed it is restored. Requires
+        `ep:skills:write` (account admin).
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not builtin_key:
+            raise ValueError(f"Expected a non-empty value for `builtin_key` but received {builtin_key!r}")
+        return self._post(
+            path_template("/skills/builtin/{builtin_key}/override", builtin_key=builtin_key),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=Skill,
+        )
+
+    def promote(
+        self,
+        skill_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> Skill:
+        """Promote a private (user-scope) skill to company scope.
+
+        The caller must be the
+        skill's author and an account admin. Requires `ep:skills:write`.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not skill_id:
+            raise ValueError(f"Expected a non-empty value for `skill_id` but received {skill_id!r}")
+        return self._post(
+            path_template("/skills/{skill_id}/promote", skill_id=skill_id),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=Skill,
+        )
+
+    def reset_builtin_override(
+        self,
+        builtin_key: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> None:
+        """
+        Remove the company's override of a built-in skill, reverting all members back to
+        the global default. Idempotent: no-op when no override exists. Requires
+        `ep:skills:write` (account admin).
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not builtin_key:
+            raise ValueError(f"Expected a non-empty value for `builtin_key` but received {builtin_key!r}")
+        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
+        return self._post(
+            path_template("/skills/builtin/{builtin_key}/reset", builtin_key=builtin_key),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=NoneType,
+        )
+
+
+class AsyncSkillsResource(AsyncAPIResource):
+    @cached_property
+    def with_raw_response(self) -> AsyncSkillsResourceWithRawResponse:
+        """
+        This property can be used as a prefix for any HTTP method call to return
+        the raw response object instead of the parsed content.
+
+        For more information, see https://www.github.com/DatagridAI/datagrid-python#accessing-raw-response-data-eg-headers
+        """
+        return AsyncSkillsResourceWithRawResponse(self)
+
+    @cached_property
+    def with_streaming_response(self) -> AsyncSkillsResourceWithStreamingResponse:
+        """
+        An alternative to `.with_raw_response` that doesn't eagerly read the response body.
+
+        For more information, see https://www.github.com/DatagridAI/datagrid-python#with_streaming_response
+        """
+        return AsyncSkillsResourceWithStreamingResponse(self)
+
+    async def create(
+        self,
+        *,
+        category: Literal[
+            "document_analysis",
+            "construction_project_management",
+            "financial_analysis",
+            "estimation",
+            "quality_and_safety",
+            "scheduling",
+            "contracts_and_legal",
+            "data_and_reporting",
+            "research",
+            "communication",
+            "general_productivity",
+        ],
+        instructions: str,
+        name: str,
+        slash_key: str,
+        description: Optional[str] | Omit = omit,
+        enabled: Optional[bool] | Omit = omit,
+        preferred_tools: Optional[SequenceNotStr[str]] | Omit = omit,
+        required_tools: Optional[SequenceNotStr[str]] | Omit = omit,
+        scope: Optional[Literal["user", "account"]] | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> Skill:
+        """Create a skill.
+
+        Defaults to company-owned (`account`) scope. Pass `scope: user`
+        to create a private skill that can later be promoted. Account-scope slash keys
+        must not collide with a built-in; use the override endpoint for that.
+
+        Args:
+          category: Category bucket.
+
+          instructions: The full instructions / system prompt for this skill.
+
+          name: Display name of the skill.
+
+          slash_key: The slash command key (e.g. `budget-check`). Must be unique within the scope.
+
+          description: Short description. When omitted, an AI-generated description is produced from
+              the instructions.
+
+          enabled: Whether the skill is active. Defaults to `true`.
+
+          preferred_tools: Tool identifiers preferred by this skill.
+
+          required_tools: Tool identifiers required by this skill.
+
+          scope: Ownership of the new skill. Defaults to `account` (company-owned). Pass `user`
+              for a private skill that can later be promoted.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return await self._post(
+            "/skills",
+            body=await async_maybe_transform(
+                {
+                    "category": category,
+                    "instructions": instructions,
+                    "name": name,
+                    "slash_key": slash_key,
+                    "description": description,
+                    "enabled": enabled,
+                    "preferred_tools": preferred_tools,
+                    "required_tools": required_tools,
+                    "scope": scope,
+                },
+                skill_create_params.SkillCreateParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=Skill,
+        )
+
+    async def retrieve(
+        self,
+        skill_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> Skill:
+        """
+        Get details of a specific skill.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not skill_id:
+            raise ValueError(f"Expected a non-empty value for `skill_id` but received {skill_id!r}")
+        return await self._get(
+            path_template("/skills/{skill_id}", skill_id=skill_id),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=Skill,
+        )
+
+    async def update(
+        self,
+        skill_id: str,
+        *,
+        category: Optional[
+            Literal[
+                "document_analysis",
+                "construction_project_management",
+                "financial_analysis",
+                "estimation",
+                "quality_and_safety",
+                "scheduling",
+                "contracts_and_legal",
+                "data_and_reporting",
+                "research",
+                "communication",
+                "general_productivity",
+            ]
+        ]
+        | Omit = omit,
+        description: Optional[str] | Omit = omit,
+        enabled: Optional[bool] | Omit = omit,
+        instructions: Optional[str] | Omit = omit,
+        name: Optional[str] | Omit = omit,
+        preferred_tools: Optional[SequenceNotStr[str]] | Omit = omit,
+        required_tools: Optional[SequenceNotStr[str]] | Omit = omit,
+        slash_key: Optional[str] | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> Skill:
+        """Update a skill.
+
+        Requires an API key with `ep:skills:write` whose user
+        administers skills in the account. A shared (`account`-scope) skill may be
+        updated by any skill administrator; a private (`user`-scope) skill only by its
+        author. Built-in skills and company overrides of them cannot have their content
+        edited; `enabled` may still be toggled on an override.
+
+        Args:
+          category: Category bucket.
+
+          description: Short description. Pass an empty string to clear it and re-enable AI generation.
+
+          enabled: Whether the skill is active.
+
+          instructions: The full instructions / system prompt.
+
+          name: Display name of the skill.
+
+          preferred_tools: Tool identifiers preferred by this skill.
+
+          required_tools: Tool identifiers required by this skill.
+
+          slash_key: The slash command key. Must be unique within the scope.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not skill_id:
+            raise ValueError(f"Expected a non-empty value for `skill_id` but received {skill_id!r}")
+        return await self._patch(
+            path_template("/skills/{skill_id}", skill_id=skill_id),
+            body=await async_maybe_transform(
+                {
+                    "category": category,
+                    "description": description,
+                    "enabled": enabled,
+                    "instructions": instructions,
+                    "name": name,
+                    "preferred_tools": preferred_tools,
+                    "required_tools": required_tools,
+                    "slash_key": slash_key,
+                },
+                skill_update_params.SkillUpdateParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=Skill,
+        )
+
+    def list(
+        self,
+        *,
+        after: str | Omit = omit,
+        before: str | Omit = omit,
+        enabled: bool | Omit = omit,
+        limit: int | Omit = omit,
+        scope: Literal["user", "account", "builtin"] | Omit = omit,
+        search: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> AsyncPaginator[Skill, AsyncCursorIDPage[Skill]]:
+        """List skills reachable by the authenticated organization.
+
+        Returns built-in
+        skills, company (account) skills, and the caller's private skills. Removed
+        built-in overrides are excluded.
+
+        Args:
+          after: A cursor to use in pagination. `after` is an object ID that defines your place
+              in the list. For example, if you make a list request and receive 100 objects,
+              ending with `obj_foo`, your subsequent call can include `after=obj_foo` to fetch
+              the next page of the list.
+
+          before: A cursor to use in pagination. `before` is an object ID that defines your place
+              in the list. For example, if you make a list request and receive 100 objects,
+              starting with `obj_bar`, your subsequent call can include `before=obj_bar` to
+              fetch the previous page of the list.
+
+          enabled: Filter by enabled status.
+
+          limit: The limit on the number of objects to return, ranging between 1 and 100.
+
+          scope: Return only skills of this scope. `user` is the caller's own private skills,
+              `account` the company's shared skills, and `builtin` the global catalogue. Omit
+              to return everything the caller can reach.
+
+          search: Optional search string to filter skills by name or slash key. Case-insensitive
+              partial match.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return self._get_api_list(
+            "/skills",
+            page=AsyncCursorIDPage[Skill],
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform(
+                    {
+                        "after": after,
+                        "before": before,
+                        "enabled": enabled,
+                        "limit": limit,
+                        "scope": scope,
+                        "search": search,
+                    },
+                    skill_list_params.SkillListParams,
+                ),
+            ),
+            model=Skill,
+        )
+
+    async def delete(
+        self,
+        skill_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> None:
+        """Delete a skill.
+
+        For company-owned built-in overrides this marks the override as
+        removed (hidden from the library) rather than hard-deleting it, so the canonical
+        built-in is suppressed. Requires an API key with `ep:skills:delete` whose user
+        administers skills in the account.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not skill_id:
+            raise ValueError(f"Expected a non-empty value for `skill_id` but received {skill_id!r}")
+        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
+        return await self._delete(
+            path_template("/skills/{skill_id}", skill_id=skill_id),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=NoneType,
+        )
+
+    async def clone(
+        self,
+        skill_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> Skill:
+        """Create a private copy of any reachable skill, owned by the key's subject.
+
+        Clone
+        is deliberately `user`-scope even when `POST /v1/skills` defaults to `account`:
+        it is 'make my own copy', not another company skill. Requires `ep:skills:write`.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not skill_id:
+            raise ValueError(f"Expected a non-empty value for `skill_id` but received {skill_id!r}")
+        return await self._post(
+            path_template("/skills/{skill_id}/clone", skill_id=skill_id),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=Skill,
+        )
+
+    async def demote(
+        self,
+        skill_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> Skill:
+        """Demote a company (account-scope) skill back to private.
+
+        The caller must be the
+        skill's original author and administer skills in the account. Built-in overrides
+        cannot be demoted; use `/reset` instead. Requires `ep:skills:write`.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not skill_id:
+            raise ValueError(f"Expected a non-empty value for `skill_id` but received {skill_id!r}")
+        return await self._post(
+            path_template("/skills/{skill_id}/demote", skill_id=skill_id),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=Skill,
+        )
+
+    async def list_builtins(
+        self,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> SkillListBuiltinsResponse:
+        """Return the full in-memory built-in catalogue shipped with Datagrid.
+
+        The
+        catalogue is small and not cursor-paginated (`has_more` is always `false`);
+        adding pagination later would be a breaking SDK change. Use
+        `POST /skills/builtin/{builtin_key}/override` to customize one for your company.
+        Requires `ep:skills:read`.
+        """
+        return await self._get(
+            "/skills/builtin",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=SkillListBuiltinsResponse,
+        )
+
+    async def override_builtin(
+        self,
+        builtin_key: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> Skill:
+        """
+        Create (or restore) a company-owned copy of a built-in skill that shadows the
+        global default for your organization. Idempotent: if an override already exists
+        it is returned unchanged; if it was previously removed it is restored. Requires
+        `ep:skills:write` (account admin).
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not builtin_key:
+            raise ValueError(f"Expected a non-empty value for `builtin_key` but received {builtin_key!r}")
+        return await self._post(
+            path_template("/skills/builtin/{builtin_key}/override", builtin_key=builtin_key),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=Skill,
+        )
+
+    async def promote(
+        self,
+        skill_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> Skill:
+        """Promote a private (user-scope) skill to company scope.
+
+        The caller must be the
+        skill's author and an account admin. Requires `ep:skills:write`.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not skill_id:
+            raise ValueError(f"Expected a non-empty value for `skill_id` but received {skill_id!r}")
+        return await self._post(
+            path_template("/skills/{skill_id}/promote", skill_id=skill_id),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=Skill,
+        )
+
+    async def reset_builtin_override(
+        self,
+        builtin_key: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> None:
+        """
+        Remove the company's override of a built-in skill, reverting all members back to
+        the global default. Idempotent: no-op when no override exists. Requires
+        `ep:skills:write` (account admin).
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not builtin_key:
+            raise ValueError(f"Expected a non-empty value for `builtin_key` but received {builtin_key!r}")
+        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
+        return await self._post(
+            path_template("/skills/builtin/{builtin_key}/reset", builtin_key=builtin_key),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=NoneType,
+        )
+
+
+class SkillsResourceWithRawResponse:
+    def __init__(self, skills: SkillsResource) -> None:
+        self._skills = skills
+
+        self.create = to_raw_response_wrapper(
+            skills.create,
+        )
+        self.retrieve = to_raw_response_wrapper(
+            skills.retrieve,
+        )
+        self.update = to_raw_response_wrapper(
+            skills.update,
+        )
+        self.list = to_raw_response_wrapper(
+            skills.list,
+        )
+        self.delete = to_raw_response_wrapper(
+            skills.delete,
+        )
+        self.clone = to_raw_response_wrapper(
+            skills.clone,
+        )
+        self.demote = to_raw_response_wrapper(
+            skills.demote,
+        )
+        self.list_builtins = to_raw_response_wrapper(
+            skills.list_builtins,
+        )
+        self.override_builtin = to_raw_response_wrapper(
+            skills.override_builtin,
+        )
+        self.promote = to_raw_response_wrapper(
+            skills.promote,
+        )
+        self.reset_builtin_override = to_raw_response_wrapper(
+            skills.reset_builtin_override,
+        )
+
+
+class AsyncSkillsResourceWithRawResponse:
+    def __init__(self, skills: AsyncSkillsResource) -> None:
+        self._skills = skills
+
+        self.create = async_to_raw_response_wrapper(
+            skills.create,
+        )
+        self.retrieve = async_to_raw_response_wrapper(
+            skills.retrieve,
+        )
+        self.update = async_to_raw_response_wrapper(
+            skills.update,
+        )
+        self.list = async_to_raw_response_wrapper(
+            skills.list,
+        )
+        self.delete = async_to_raw_response_wrapper(
+            skills.delete,
+        )
+        self.clone = async_to_raw_response_wrapper(
+            skills.clone,
+        )
+        self.demote = async_to_raw_response_wrapper(
+            skills.demote,
+        )
+        self.list_builtins = async_to_raw_response_wrapper(
+            skills.list_builtins,
+        )
+        self.override_builtin = async_to_raw_response_wrapper(
+            skills.override_builtin,
+        )
+        self.promote = async_to_raw_response_wrapper(
+            skills.promote,
+        )
+        self.reset_builtin_override = async_to_raw_response_wrapper(
+            skills.reset_builtin_override,
+        )
+
+
+class SkillsResourceWithStreamingResponse:
+    def __init__(self, skills: SkillsResource) -> None:
+        self._skills = skills
+
+        self.create = to_streamed_response_wrapper(
+            skills.create,
+        )
+        self.retrieve = to_streamed_response_wrapper(
+            skills.retrieve,
+        )
+        self.update = to_streamed_response_wrapper(
+            skills.update,
+        )
+        self.list = to_streamed_response_wrapper(
+            skills.list,
+        )
+        self.delete = to_streamed_response_wrapper(
+            skills.delete,
+        )
+        self.clone = to_streamed_response_wrapper(
+            skills.clone,
+        )
+        self.demote = to_streamed_response_wrapper(
+            skills.demote,
+        )
+        self.list_builtins = to_streamed_response_wrapper(
+            skills.list_builtins,
+        )
+        self.override_builtin = to_streamed_response_wrapper(
+            skills.override_builtin,
+        )
+        self.promote = to_streamed_response_wrapper(
+            skills.promote,
+        )
+        self.reset_builtin_override = to_streamed_response_wrapper(
+            skills.reset_builtin_override,
+        )
+
+
+class AsyncSkillsResourceWithStreamingResponse:
+    def __init__(self, skills: AsyncSkillsResource) -> None:
+        self._skills = skills
+
+        self.create = async_to_streamed_response_wrapper(
+            skills.create,
+        )
+        self.retrieve = async_to_streamed_response_wrapper(
+            skills.retrieve,
+        )
+        self.update = async_to_streamed_response_wrapper(
+            skills.update,
+        )
+        self.list = async_to_streamed_response_wrapper(
+            skills.list,
+        )
+        self.delete = async_to_streamed_response_wrapper(
+            skills.delete,
+        )
+        self.clone = async_to_streamed_response_wrapper(
+            skills.clone,
+        )
+        self.demote = async_to_streamed_response_wrapper(
+            skills.demote,
+        )
+        self.list_builtins = async_to_streamed_response_wrapper(
+            skills.list_builtins,
+        )
+        self.override_builtin = async_to_streamed_response_wrapper(
+            skills.override_builtin,
+        )
+        self.promote = async_to_streamed_response_wrapper(
+            skills.promote,
+        )
+        self.reset_builtin_override = async_to_streamed_response_wrapper(
+            skills.reset_builtin_override,
+        )
