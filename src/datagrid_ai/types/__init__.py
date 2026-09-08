@@ -5,7 +5,6 @@ from __future__ import annotations
 from .page import Page as Page
 from .tool import Tool as Tool
 from .agent import Agent as Agent
-from .skill import Skill as Skill
 from .secret import Secret as Secret
 from .channel import Channel as Channel
 from .webhook import Webhook as Webhook
@@ -19,10 +18,8 @@ from .tool_name import ToolName as ToolName
 from .connection import Connection as Connection
 from .tool_param import ToolParam as ToolParam
 from .file_object import FileObject as FileObject
-from .skill_draft import SkillDraft as SkillDraft
 from .conversation import Conversation as Conversation
 from .row_metadata import RowMetadata as RowMetadata
-from .builtin_skill import BuiltinSkill as BuiltinSkill
 from .channel_member import ChannelMember as ChannelMember
 from .channel_thread import ChannelThread as ChannelThread
 from .table_metadata import TableMetadata as TableMetadata
@@ -36,7 +33,6 @@ from .search_ai_result import SearchAIResult as SearchAIResult
 from .tool_list_params import ToolListParams as ToolListParams
 from .agent_list_params import AgentListParams as AgentListParams
 from .converse_response import ConverseResponse as ConverseResponse
-from .skill_list_params import SkillListParams as SkillListParams
 from .agent_claim_params import AgentClaimParams as AgentClaimParams
 from .file_create_params import FileCreateParams as FileCreateParams
 from .file_update_params import FileUpdateParams as FileUpdateParams
@@ -53,8 +49,6 @@ from .agent_update_params import AgentUpdateParams as AgentUpdateParams
 from .attachment_metadata import AttachmentMetadata as AttachmentMetadata
 from .channel_list_params import ChannelListParams as ChannelListParams
 from .connection_provider import ConnectionProvider as ConnectionProvider
-from .skill_create_params import SkillCreateParams as SkillCreateParams
-from .skill_update_params import SkillUpdateParams as SkillUpdateParams
 from .webhook_list_params import WebhookListParams as WebhookListParams
 from .agent_claim_response import AgentClaimResponse as AgentClaimResponse
 from .search_search_params import SearchSearchParams as SearchSearchParams
@@ -66,7 +60,6 @@ from .connector_list_params import ConnectorListParams as ConnectorListParams
 from .data_view_list_params import DataViewListParams as DataViewListParams
 from .knowledge_list_params import KnowledgeListParams as KnowledgeListParams
 from .redirect_url_response import RedirectURLResponse as RedirectURLResponse
-from .skill_generate_params import SkillGenerateParams as SkillGenerateParams
 from .webhook_create_params import WebhookCreateParams as WebhookCreateParams
 from .webhook_update_params import WebhookUpdateParams as WebhookUpdateParams
 from .client_converse_params import ClientConverseParams as ClientConverseParams
@@ -81,7 +74,6 @@ from .data_view_list_response import DataViewListResponse as DataViewListRespons
 from .knowledge_create_params import KnowledgeCreateParams as KnowledgeCreateParams
 from .knowledge_update_params import KnowledgeUpdateParams as KnowledgeUpdateParams
 from .search_search_ai_params import SearchSearchAIParams as SearchSearchAIParams
-from .skill_generate_response import SkillGenerateResponse as SkillGenerateResponse
 from .webhook_create_response import WebhookCreateResponse as WebhookCreateResponse
 from .connection_create_params import ConnectionCreateParams as ConnectionCreateParams
 from .connection_update_params import ConnectionUpdateParams as ConnectionUpdateParams
@@ -101,7 +93,6 @@ from .batch_prediction_list_params import BatchPredictionListParams as BatchPred
 from .batch_prediction_result_line import BatchPredictionResultLine as BatchPredictionResultLine
 from .channel_add_members_response import ChannelAddMembersResponse as ChannelAddMembersResponse
 from .channel_list_messages_params import ChannelListMessagesParams as ChannelListMessagesParams
-from .skill_list_builtins_response import SkillListBuiltinsResponse as SkillListBuiltinsResponse
 from .channel_create_message_params import ChannelCreateMessageParams as ChannelCreateMessageParams
 from .batch_prediction_create_params import BatchPredictionCreateParams as BatchPredictionCreateParams
 from .batch_prediction_request_counts import BatchPredictionRequestCounts as BatchPredictionRequestCounts

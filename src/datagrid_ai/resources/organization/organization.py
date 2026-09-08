@@ -28,14 +28,6 @@ from .mcp_servers import (
     McpServersResourceWithStreamingResponse,
     AsyncMcpServersResourceWithStreamingResponse,
 )
-from .reports.reports import (
-    ReportsResource,
-    AsyncReportsResource,
-    ReportsResourceWithRawResponse,
-    AsyncReportsResourceWithRawResponse,
-    ReportsResourceWithStreamingResponse,
-    AsyncReportsResourceWithStreamingResponse,
-)
 from .teamspaces.teamspaces import (
     TeamspacesResource,
     AsyncTeamspacesResource,
@@ -64,10 +56,6 @@ class OrganizationResource(SyncAPIResource):
     @cached_property
     def credits(self) -> CreditsResource:
         return CreditsResource(self._client)
-
-    @cached_property
-    def reports(self) -> ReportsResource:
-        return ReportsResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> OrganizationResourceWithRawResponse:
@@ -105,10 +93,6 @@ class AsyncOrganizationResource(AsyncAPIResource):
     @cached_property
     def credits(self) -> AsyncCreditsResource:
         return AsyncCreditsResource(self._client)
-
-    @cached_property
-    def reports(self) -> AsyncReportsResource:
-        return AsyncReportsResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> AsyncOrganizationResourceWithRawResponse:
@@ -150,10 +134,6 @@ class OrganizationResourceWithRawResponse:
     def credits(self) -> CreditsResourceWithRawResponse:
         return CreditsResourceWithRawResponse(self._organization.credits)
 
-    @cached_property
-    def reports(self) -> ReportsResourceWithRawResponse:
-        return ReportsResourceWithRawResponse(self._organization.reports)
-
 
 class AsyncOrganizationResourceWithRawResponse:
     def __init__(self, organization: AsyncOrganizationResource) -> None:
@@ -174,10 +154,6 @@ class AsyncOrganizationResourceWithRawResponse:
     @cached_property
     def credits(self) -> AsyncCreditsResourceWithRawResponse:
         return AsyncCreditsResourceWithRawResponse(self._organization.credits)
-
-    @cached_property
-    def reports(self) -> AsyncReportsResourceWithRawResponse:
-        return AsyncReportsResourceWithRawResponse(self._organization.reports)
 
 
 class OrganizationResourceWithStreamingResponse:
@@ -200,10 +176,6 @@ class OrganizationResourceWithStreamingResponse:
     def credits(self) -> CreditsResourceWithStreamingResponse:
         return CreditsResourceWithStreamingResponse(self._organization.credits)
 
-    @cached_property
-    def reports(self) -> ReportsResourceWithStreamingResponse:
-        return ReportsResourceWithStreamingResponse(self._organization.reports)
-
 
 class AsyncOrganizationResourceWithStreamingResponse:
     def __init__(self, organization: AsyncOrganizationResource) -> None:
@@ -224,7 +196,3 @@ class AsyncOrganizationResourceWithStreamingResponse:
     @cached_property
     def credits(self) -> AsyncCreditsResourceWithStreamingResponse:
         return AsyncCreditsResourceWithStreamingResponse(self._organization.credits)
-
-    @cached_property
-    def reports(self) -> AsyncReportsResourceWithStreamingResponse:
-        return AsyncReportsResourceWithStreamingResponse(self._organization.reports)

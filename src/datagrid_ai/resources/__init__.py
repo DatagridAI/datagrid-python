@@ -64,14 +64,6 @@ from .search import (
     SearchResourceWithStreamingResponse,
     AsyncSearchResourceWithStreamingResponse,
 )
-from .skills import (
-    SkillsResource,
-    AsyncSkillsResource,
-    SkillsResourceWithRawResponse,
-    AsyncSkillsResourceWithRawResponse,
-    SkillsResourceWithStreamingResponse,
-    AsyncSkillsResourceWithStreamingResponse,
-)
 from .secrets import (
     SecretsResource,
     AsyncSecretsResource,
@@ -224,12 +216,6 @@ __all__ = [
     "AsyncSearchResourceWithRawResponse",
     "SearchResourceWithStreamingResponse",
     "AsyncSearchResourceWithStreamingResponse",
-    "SkillsResource",
-    "AsyncSkillsResource",
-    "SkillsResourceWithRawResponse",
-    "AsyncSkillsResourceWithRawResponse",
-    "SkillsResourceWithStreamingResponse",
-    "AsyncSkillsResourceWithStreamingResponse",
     "AgentsResource",
     "AsyncAgentsResource",
     "AgentsResourceWithRawResponse",
