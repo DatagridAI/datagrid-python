@@ -63,6 +63,7 @@ if TYPE_CHECKING:
         agents,
         memory,
         search,
+        skills,
         secrets,
         channels,
         identity,
@@ -80,6 +81,7 @@ if TYPE_CHECKING:
     from .resources.pages import PagesResource, AsyncPagesResource
     from .resources.tools import ToolsResource, AsyncToolsResource
     from .resources.search import SearchResource, AsyncSearchResource
+    from .resources.skills import SkillsResource, AsyncSkillsResource
     from .resources.secrets import SecretsResource, AsyncSecretsResource
     from .resources.channels import ChannelsResource, AsyncChannelsResource
     from .resources.identity import IdentityResource, AsyncIdentityResource
@@ -234,6 +236,12 @@ class Datagrid(SyncAPIClient):
         from .resources.search import SearchResource
 
         return SearchResource(self)
+
+    @cached_property
+    def skills(self) -> SkillsResource:
+        from .resources.skills import SkillsResource
+
+        return SkillsResource(self)
 
     @cached_property
     def agents(self) -> AgentsResource:
@@ -756,6 +764,12 @@ class AsyncDatagrid(AsyncAPIClient):
         return AsyncSearchResource(self)
 
     @cached_property
+    def skills(self) -> AsyncSkillsResource:
+        from .resources.skills import AsyncSkillsResource
+
+        return AsyncSkillsResource(self)
+
+    @cached_property
     def agents(self) -> AsyncAgentsResource:
         from .resources.agents import AsyncAgentsResource
 
@@ -1214,6 +1228,12 @@ class DatagridWithRawResponse:
         return SearchResourceWithRawResponse(self._client.search)
 
     @cached_property
+    def skills(self) -> skills.SkillsResourceWithRawResponse:
+        from .resources.skills import SkillsResourceWithRawResponse
+
+        return SkillsResourceWithRawResponse(self._client.skills)
+
+    @cached_property
     def agents(self) -> agents.AgentsResourceWithRawResponse:
         from .resources.agents import AgentsResourceWithRawResponse
 
@@ -1343,6 +1363,12 @@ class AsyncDatagridWithRawResponse:
         from .resources.search import AsyncSearchResourceWithRawResponse
 
         return AsyncSearchResourceWithRawResponse(self._client.search)
+
+    @cached_property
+    def skills(self) -> skills.AsyncSkillsResourceWithRawResponse:
+        from .resources.skills import AsyncSkillsResourceWithRawResponse
+
+        return AsyncSkillsResourceWithRawResponse(self._client.skills)
 
     @cached_property
     def agents(self) -> agents.AsyncAgentsResourceWithRawResponse:
@@ -1476,6 +1502,12 @@ class DatagridWithStreamedResponse:
         return SearchResourceWithStreamingResponse(self._client.search)
 
     @cached_property
+    def skills(self) -> skills.SkillsResourceWithStreamingResponse:
+        from .resources.skills import SkillsResourceWithStreamingResponse
+
+        return SkillsResourceWithStreamingResponse(self._client.skills)
+
+    @cached_property
     def agents(self) -> agents.AgentsResourceWithStreamingResponse:
         from .resources.agents import AgentsResourceWithStreamingResponse
 
@@ -1605,6 +1637,12 @@ class AsyncDatagridWithStreamedResponse:
         from .resources.search import AsyncSearchResourceWithStreamingResponse
 
         return AsyncSearchResourceWithStreamingResponse(self._client.search)
+
+    @cached_property
+    def skills(self) -> skills.AsyncSkillsResourceWithStreamingResponse:
+        from .resources.skills import AsyncSkillsResourceWithStreamingResponse
+
+        return AsyncSkillsResourceWithStreamingResponse(self._client.skills)
 
     @cached_property
     def agents(self) -> agents.AsyncAgentsResourceWithStreamingResponse:
