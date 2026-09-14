@@ -60,6 +60,7 @@ class VoiceResource(SyncAPIResource):
         self,
         *,
         agent_id: Optional[str] | Omit = omit,
+        allow_delegation: Optional[bool] | Omit = omit,
         config: Optional[voice_start_session_params.Config] | Omit = omit,
         conversation_id: Optional[str] | Omit = omit,
         discard_if_empty: Optional[bool] | Omit = omit,
@@ -115,6 +116,9 @@ class VoiceResource(SyncAPIResource):
         Args:
           agent_id: The ID of the agent to use for a direct-agent voice conversation. Ignored when
               voice_mode is orchestrator.
+
+          allow_delegation: Orchestrator sessions only: set false to disable specialist delegation tools for
+              the session. Ignored for direct-agent sessions.
 
           config: Override the agent config for this voice session. Only prompt overrides are
               supported — voice sessions always use Gemini Live, so LLM model, agent model,
@@ -171,6 +175,7 @@ class VoiceResource(SyncAPIResource):
             body=maybe_transform(
                 {
                     "agent_id": agent_id,
+                    "allow_delegation": allow_delegation,
                     "config": config,
                     "conversation_id": conversation_id,
                     "discard_if_empty": discard_if_empty,
@@ -222,6 +227,7 @@ class AsyncVoiceResource(AsyncAPIResource):
         self,
         *,
         agent_id: Optional[str] | Omit = omit,
+        allow_delegation: Optional[bool] | Omit = omit,
         config: Optional[voice_start_session_params.Config] | Omit = omit,
         conversation_id: Optional[str] | Omit = omit,
         discard_if_empty: Optional[bool] | Omit = omit,
@@ -278,6 +284,9 @@ class AsyncVoiceResource(AsyncAPIResource):
           agent_id: The ID of the agent to use for a direct-agent voice conversation. Ignored when
               voice_mode is orchestrator.
 
+          allow_delegation: Orchestrator sessions only: set false to disable specialist delegation tools for
+              the session. Ignored for direct-agent sessions.
+
           config: Override the agent config for this voice session. Only prompt overrides are
               supported — voice sessions always use Gemini Live, so LLM model, agent model,
               planning prompt, and tool settings are not applicable. Prompt overrides fully
@@ -333,6 +342,7 @@ class AsyncVoiceResource(AsyncAPIResource):
             body=await async_maybe_transform(
                 {
                     "agent_id": agent_id,
+                    "allow_delegation": allow_delegation,
                     "config": config,
                     "conversation_id": conversation_id,
                     "discard_if_empty": discard_if_empty,

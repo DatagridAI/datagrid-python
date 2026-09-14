@@ -37,6 +37,7 @@ class TestKnowledge:
                 "page_id": "page_id",
                 "type": "page",
             },
+            semantic_indexing_enabled=True,
         )
         assert_matches_type(Knowledge, knowledge, path=["response"])
 
@@ -120,6 +121,7 @@ class TestKnowledge:
                 "type": "page",
             },
             scope="teamspace",
+            semantic_indexing_enabled=True,
             sync={
                 "enabled": True,
                 "trigger": {
@@ -330,6 +332,7 @@ class TestAsyncKnowledge:
                 "page_id": "page_id",
                 "type": "page",
             },
+            semantic_indexing_enabled=True,
         )
         assert_matches_type(Knowledge, knowledge, path=["response"])
 
@@ -413,6 +416,7 @@ class TestAsyncKnowledge:
                 "type": "page",
             },
             scope="teamspace",
+            semantic_indexing_enabled=True,
             sync={
                 "enabled": True,
                 "trigger": {

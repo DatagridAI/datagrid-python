@@ -10,6 +10,14 @@ from .rewrite import (
     RewriteResourceWithStreamingResponse,
     AsyncRewriteResourceWithStreamingResponse,
 )
+from .converse import (
+    ConverseResource,
+    AsyncConverseResource,
+    ConverseResourceWithRawResponse,
+    AsyncConverseResourceWithRawResponse,
+    ConverseResourceWithStreamingResponse,
+    AsyncConverseResourceWithStreamingResponse,
+)
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
 
@@ -17,6 +25,10 @@ __all__ = ["BetaResource", "AsyncBetaResource"]
 
 
 class BetaResource(SyncAPIResource):
+    @cached_property
+    def converse(self) -> ConverseResource:
+        return ConverseResource(self._client)
+
     @cached_property
     def rewrite(self) -> RewriteResource:
         return RewriteResource(self._client)
@@ -42,6 +54,10 @@ class BetaResource(SyncAPIResource):
 
 
 class AsyncBetaResource(AsyncAPIResource):
+    @cached_property
+    def converse(self) -> AsyncConverseResource:
+        return AsyncConverseResource(self._client)
+
     @cached_property
     def rewrite(self) -> AsyncRewriteResource:
         return AsyncRewriteResource(self._client)
@@ -71,6 +87,10 @@ class BetaResourceWithRawResponse:
         self._beta = beta
 
     @cached_property
+    def converse(self) -> ConverseResourceWithRawResponse:
+        return ConverseResourceWithRawResponse(self._beta.converse)
+
+    @cached_property
     def rewrite(self) -> RewriteResourceWithRawResponse:
         return RewriteResourceWithRawResponse(self._beta.rewrite)
 
@@ -78,6 +98,10 @@ class BetaResourceWithRawResponse:
 class AsyncBetaResourceWithRawResponse:
     def __init__(self, beta: AsyncBetaResource) -> None:
         self._beta = beta
+
+    @cached_property
+    def converse(self) -> AsyncConverseResourceWithRawResponse:
+        return AsyncConverseResourceWithRawResponse(self._beta.converse)
 
     @cached_property
     def rewrite(self) -> AsyncRewriteResourceWithRawResponse:
@@ -89,6 +113,10 @@ class BetaResourceWithStreamingResponse:
         self._beta = beta
 
     @cached_property
+    def converse(self) -> ConverseResourceWithStreamingResponse:
+        return ConverseResourceWithStreamingResponse(self._beta.converse)
+
+    @cached_property
     def rewrite(self) -> RewriteResourceWithStreamingResponse:
         return RewriteResourceWithStreamingResponse(self._beta.rewrite)
 
@@ -96,6 +124,10 @@ class BetaResourceWithStreamingResponse:
 class AsyncBetaResourceWithStreamingResponse:
     def __init__(self, beta: AsyncBetaResource) -> None:
         self._beta = beta
+
+    @cached_property
+    def converse(self) -> AsyncConverseResourceWithStreamingResponse:
+        return AsyncConverseResourceWithStreamingResponse(self._beta.converse)
 
     @cached_property
     def rewrite(self) -> AsyncRewriteResourceWithStreamingResponse:

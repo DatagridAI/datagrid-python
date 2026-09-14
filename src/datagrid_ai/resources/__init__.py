@@ -64,6 +64,14 @@ from .search import (
     SearchResourceWithStreamingResponse,
     AsyncSearchResourceWithStreamingResponse,
 )
+from .skills import (
+    SkillsResource,
+    AsyncSkillsResource,
+    SkillsResourceWithRawResponse,
+    AsyncSkillsResourceWithRawResponse,
+    SkillsResourceWithStreamingResponse,
+    AsyncSkillsResourceWithStreamingResponse,
+)
 from .secrets import (
     SecretsResource,
     AsyncSecretsResource,
@@ -71,6 +79,14 @@ from .secrets import (
     AsyncSecretsResourceWithRawResponse,
     SecretsResourceWithStreamingResponse,
     AsyncSecretsResourceWithStreamingResponse,
+)
+from .channels import (
+    ChannelsResource,
+    AsyncChannelsResource,
+    ChannelsResourceWithRawResponse,
+    AsyncChannelsResourceWithRawResponse,
+    ChannelsResourceWithStreamingResponse,
+    AsyncChannelsResourceWithStreamingResponse,
 )
 from .identity import (
     IdentityResource,
@@ -208,12 +224,24 @@ __all__ = [
     "AsyncSearchResourceWithRawResponse",
     "SearchResourceWithStreamingResponse",
     "AsyncSearchResourceWithStreamingResponse",
+    "SkillsResource",
+    "AsyncSkillsResource",
+    "SkillsResourceWithRawResponse",
+    "AsyncSkillsResourceWithRawResponse",
+    "SkillsResourceWithStreamingResponse",
+    "AsyncSkillsResourceWithStreamingResponse",
     "AgentsResource",
     "AsyncAgentsResource",
     "AgentsResourceWithRawResponse",
     "AsyncAgentsResourceWithRawResponse",
     "AgentsResourceWithStreamingResponse",
     "AsyncAgentsResourceWithStreamingResponse",
+    "ChannelsResource",
+    "AsyncChannelsResource",
+    "ChannelsResourceWithRawResponse",
+    "AsyncChannelsResourceWithRawResponse",
+    "ChannelsResourceWithStreamingResponse",
+    "AsyncChannelsResourceWithStreamingResponse",
     "IdentityResource",
     "AsyncIdentityResource",
     "IdentityResourceWithRawResponse",

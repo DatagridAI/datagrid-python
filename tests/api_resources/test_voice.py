@@ -26,6 +26,7 @@ class TestVoice:
     def test_method_start_session_with_all_params(self, client: Datagrid) -> None:
         voice = client.voice.start_session(
             agent_id="agent_id",
+            allow_delegation=True,
             config={
                 "custom_prompt": "custom_prompt",
                 "system_prompt": "system_prompt",
@@ -94,6 +95,7 @@ class TestAsyncVoice:
     async def test_method_start_session_with_all_params(self, async_client: AsyncDatagrid) -> None:
         voice = await async_client.voice.start_session(
             agent_id="agent_id",
+            allow_delegation=True,
             config={
                 "custom_prompt": "custom_prompt",
                 "system_prompt": "system_prompt",
