@@ -1,0 +1,65 @@
+# Promotes the staging repo (ToricLabs/datagrid-python-staging) to the public
+# prod repo (DatagridAI/datagrid-python) by force-pushing main.
+#
+# After the push lands on the public repo, release-please will open (or update)
+# a release PR. Merging that PR creates a GitHub Release, which triggers
+# publish-pypi.yml in the public repo and publishes to PyPI.
+#
+# Prerequisites (one-time setup):
+#   1. Create a GitHub PAT with `contents: write` access to DatagridAI/datagrid-python.
+#   2. Store it as secret DATAGRID_PROD_REPO_TOKEN on ToricLabs/datagrid-python-staging.
+name: Promote to Prod
+
+on:
+  # Manual trigger — the default path for promoting a tested staging cut.
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry run — print what would be pushed without pushing"
+        type: boolean
+        default: false
+
+  # Automatic trigger — promote whenever a release commit lands on main.
+  # A release commit is authored by release-please and starts with "release:".
+  push:
+    branches:
+      - main
+
+jobs:
+  promote:
+    name: Promote staging → prod
+    runs-on: ubuntu-latest
+    # For the push trigger, only run on release commits to avoid promoting
+    # every intermediate SDK regen commit.
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      startsWith(github.event.head_commit.message, 'release:')
+
+    steps:
+      - name: Checkout staging repo
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
+
+      - name: Configure git identity
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Add prod remote
+        run: |
+          git remote add prod \
+            "https://x-access-token:${{ secrets.DATAGRID_PROD_REPO_TOKEN }}@github.com/DatagridAI/datagrid-python.git"
+
+      - name: Dry run — show what would be pushed
+        if: ${{ inputs.dry_run == true }}
+        run: |
+          echo "DRY RUN — would push:"
+          git fetch prod main --no-tags
+          git log prod/main..HEAD --oneline
+
+      - name: Push main to prod repo
+        if: ${{ inputs.dry_run != true }}
+        run: |
+          git push prod HEAD:refs/heads/main --force-with-lease
+          echo "✅ Pushed $(git rev-parse --short HEAD) to DatagridAI/datagrid-python main"
