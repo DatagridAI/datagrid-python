@@ -7,9 +7,9 @@ from typing_extensions import Literal
 
 import httpx
 
-from ..types import skill_list_params, skill_create_params, skill_update_params, skill_generate_params
+from ..types import skill_list_params, skill_create_params, skill_update_params
 from .._types import Body, Omit, Query, Headers, NoneType, NotGiven, SequenceNotStr, omit, not_given
-from .._utils import is_given, path_template, maybe_transform, async_maybe_transform
+from .._utils import path_template, maybe_transform, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
 from .._response import (
@@ -18,11 +18,9 @@ from .._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from .._constants import DEFAULT_TIMEOUT
 from ..pagination import SyncCursorIDPage, AsyncCursorIDPage
 from ..types.skill import Skill
 from .._base_client import AsyncPaginator, make_request_options
-from ..types.skill_generate_response import SkillGenerateResponse
 from ..types.skill_list_builtins_response import SkillListBuiltinsResponse
 
 __all__ = ["SkillsResource", "AsyncSkillsResource"]
@@ -442,57 +440,6 @@ class SkillsResource(SyncAPIResource):
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=Skill,
-        )
-
-    def generate(
-        self,
-        *,
-        file_ids: SequenceNotStr[str] | Omit = omit,
-        prompt: str | Omit = omit,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> SkillGenerateResponse:
-        """
-        Generate one or more skill drafts from a natural-language prompt and/or
-        previously uploaded SOP files (`POST /v1/files`). Drafts are returned as a list
-        and are **not** persisted — use `POST /v1/skills` to create each draft you want
-        to keep. Requires `ep:skills:write`.
-
-        Args:
-          file_ids: IDs of previously uploaded files to use as source material (e.g. SOP documents).
-              Obtain file IDs via `POST /v1/files`. At least one of `prompt` or `file_ids`
-              must be non-empty.
-
-          prompt: Natural-language description of the skill(s) to generate. At least one of
-              `prompt` or `file_ids` must be non-empty.
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
-            timeout = 180
-        return self._post(
-            "/skills/generate",
-            body=maybe_transform(
-                {
-                    "file_ids": file_ids,
-                    "prompt": prompt,
-                },
-                skill_generate_params.SkillGenerateParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=SkillGenerateResponse,
         )
 
     def list_builtins(
@@ -1045,57 +992,6 @@ class AsyncSkillsResource(AsyncAPIResource):
             cast_to=Skill,
         )
 
-    async def generate(
-        self,
-        *,
-        file_ids: SequenceNotStr[str] | Omit = omit,
-        prompt: str | Omit = omit,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> SkillGenerateResponse:
-        """
-        Generate one or more skill drafts from a natural-language prompt and/or
-        previously uploaded SOP files (`POST /v1/files`). Drafts are returned as a list
-        and are **not** persisted — use `POST /v1/skills` to create each draft you want
-        to keep. Requires `ep:skills:write`.
-
-        Args:
-          file_ids: IDs of previously uploaded files to use as source material (e.g. SOP documents).
-              Obtain file IDs via `POST /v1/files`. At least one of `prompt` or `file_ids`
-              must be non-empty.
-
-          prompt: Natural-language description of the skill(s) to generate. At least one of
-              `prompt` or `file_ids` must be non-empty.
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
-            timeout = 180
-        return await self._post(
-            "/skills/generate",
-            body=await async_maybe_transform(
-                {
-                    "file_ids": file_ids,
-                    "prompt": prompt,
-                },
-                skill_generate_params.SkillGenerateParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=SkillGenerateResponse,
-        )
-
     async def list_builtins(
         self,
         *,
@@ -1255,9 +1151,6 @@ class SkillsResourceWithRawResponse:
         self.demote = to_raw_response_wrapper(
             skills.demote,
         )
-        self.generate = to_raw_response_wrapper(
-            skills.generate,
-        )
         self.list_builtins = to_raw_response_wrapper(
             skills.list_builtins,
         )
@@ -1296,9 +1189,6 @@ class AsyncSkillsResourceWithRawResponse:
         )
         self.demote = async_to_raw_response_wrapper(
             skills.demote,
-        )
-        self.generate = async_to_raw_response_wrapper(
-            skills.generate,
         )
         self.list_builtins = async_to_raw_response_wrapper(
             skills.list_builtins,
@@ -1339,9 +1229,6 @@ class SkillsResourceWithStreamingResponse:
         self.demote = to_streamed_response_wrapper(
             skills.demote,
         )
-        self.generate = to_streamed_response_wrapper(
-            skills.generate,
-        )
         self.list_builtins = to_streamed_response_wrapper(
             skills.list_builtins,
         )
@@ -1380,9 +1267,6 @@ class AsyncSkillsResourceWithStreamingResponse:
         )
         self.demote = async_to_streamed_response_wrapper(
             skills.demote,
-        )
-        self.generate = async_to_streamed_response_wrapper(
-            skills.generate,
         )
         self.list_builtins = async_to_streamed_response_wrapper(
             skills.list_builtins,
