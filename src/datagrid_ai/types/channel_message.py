@@ -103,6 +103,30 @@ class CitationSource(BaseModel):
     separately from `fields` so clients can render a status chip.
     """
 
+    status_category: Optional[Literal["open", "closed", "in_progress", "custom"]] = None
+    """record only.
+
+    Locale-stable status bucket from the source mapped field (`mapped_to_status`),
+    never parsed from the display `status` string. `open`, `closed`, and
+    `in_progress` map to semantic fills; `custom` and omission both mean a default
+    gray fill.
+    """
+
+    status_color: Optional[str] = None
+    """record only.
+
+    Source-system color for the record status (hex or named token), when the indexed
+    row carries one. Omitted when absent. Clients must not invent a color from
+    `status`.
+    """
+
+    thumbnail_url: Optional[str] = None
+    """record only.
+
+    Preview image URL from the indexed row (e.g. a Drawings thumbnail). Omitted when
+    the row has none.
+    """
+
 
 class Citation(BaseModel):
     citation: str
@@ -235,6 +259,30 @@ class ContentMessageContentVoiceTimelineEventCitationSource(BaseModel):
     separately from `fields` so clients can render a status chip.
     """
 
+    status_category: Optional[Literal["open", "closed", "in_progress", "custom"]] = None
+    """record only.
+
+    Locale-stable status bucket from the source mapped field (`mapped_to_status`),
+    never parsed from the display `status` string. `open`, `closed`, and
+    `in_progress` map to semantic fills; `custom` and omission both mean a default
+    gray fill.
+    """
+
+    status_color: Optional[str] = None
+    """record only.
+
+    Source-system color for the record status (hex or named token), when the indexed
+    row carries one. Omitted when absent. Clients must not invent a color from
+    `status`.
+    """
+
+    thumbnail_url: Optional[str] = None
+    """record only.
+
+    Preview image URL from the indexed row (e.g. a Drawings thumbnail). Omitted when
+    the row has none.
+    """
+
 
 class ContentMessageContentVoiceTimelineEventCitation(BaseModel):
     citation: str
@@ -246,17 +294,37 @@ class ContentMessageContentVoiceTimelineEventCitation(BaseModel):
 
 class ContentMessageContentVoiceTimelineEvent(BaseModel):
     """
-    A single event from a voice session timeline, representing a transcript turn, citation, or tool-call status update.
+    A single event from a voice session timeline, representing a transcript turn, citation, tool-call status update, or an attached file.
     """
 
     timestamp_ms: float
     """Timestamp offset from the start of the voice session, in milliseconds."""
 
-    type: Literal["transcript", "citation", "tool_call_status"]
+    type: Literal["transcript", "citation", "tool_call_status", "attachment"]
     """The type of timeline event."""
 
     citations: Optional[List[ContentMessageContentVoiceTimelineEventCitation]] = None
     """Citations for this event. Present when type is 'citation'."""
+
+    file_id: Optional[str] = None
+    """Identifier of the attached file, as returned by the files endpoint.
+
+    Retrieve its bytes from `/v1/files/{file_id}/content`. Present when type is
+    'attachment'.
+    """
+
+    filename: Optional[str] = None
+    """Original name of the attached file.
+
+    Present when type is 'attachment', and only when the file was uploaded with a
+    name.
+    """
+
+    media_type: Optional[str] = None
+    """Media type of the attached file, for example `image/jpeg`.
+
+    Present when type is 'attachment'.
+    """
 
     role: Optional[Literal["user", "agent"]] = None
     """The role of the participant for this event."""
@@ -290,9 +358,9 @@ class ContentMessageContentVoice(BaseModel):
 
     timeline_events: Optional[List[ContentMessageContentVoiceTimelineEvent]] = None
     """
-    Per-turn transcript, citation, and tool-call status events in chronological
-    order. Each entry includes a timestamp offset from the start of the voice
-    session. Present only for voice sessions that recorded timeline data.
+    Per-turn transcript, citation, tool-call status, and attachment events in
+    chronological order. Each entry includes a timestamp offset from the start of
+    the voice session. Present only for voice sessions that recorded timeline data.
     """
 
 
