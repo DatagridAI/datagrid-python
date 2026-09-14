@@ -404,6 +404,8 @@ class Datagrid(SyncAPIClient):
         include_steps: Optional[bool] | Omit = omit,
         reference_date: Union[str, date, None] | Omit = omit,
         secret_ids: Optional[SequenceNotStr[str]] | Omit = omit,
+        skill_ids: Optional[SequenceNotStr[str]] | Omit = omit,
+        slash_keys: Optional[SequenceNotStr[str]] | Omit = omit,
         stream: Optional[bool] | Omit = omit,
         text: Optional[client_converse_params.Text] | Omit = omit,
         user: Optional[client_converse_params.User] | Omit = omit,
@@ -468,6 +470,18 @@ class Datagrid(SyncAPIClient):
           secret_ids: Array of secret ID's to be included in the context. The secret value will be
               appended to the prompt but not stored in conversation history.
 
+          skill_ids: Array of skill IDs to force-activate for this turn. Each ID must refer to an
+              account-shared or builtin skill reachable by the API key's teamspace.
+              User-scoped (private) skills are not accessible from API keys. Deduped and
+              merged with `slash_keys` before the turn begins. Maximum 32 entries. Returns 400
+              if any ID is unresolved, disabled, or out of scope.
+
+          slash_keys: Array of slash-key tokens (e.g. `"budget-check"` or `"/rfi-triage"`) to
+              force-activate for this turn. Leading slashes are stripped. Resolved
+              account-shared → builtin in precedence order. Deduped and merged with
+              `skill_ids` before the turn begins. Maximum 32 entries. Returns 400 if any token
+              cannot be resolved to an enabled, reachable skill.
+
           stream: Determines the response type of the converse. Response is the Server-Sent Events
               if stream is set to true.
 
@@ -504,6 +518,8 @@ class Datagrid(SyncAPIClient):
                     "include_steps": include_steps,
                     "reference_date": reference_date,
                     "secret_ids": secret_ids,
+                    "skill_ids": skill_ids,
+                    "slash_keys": slash_keys,
                     "stream": stream,
                     "text": text,
                     "user": user,
@@ -845,6 +861,8 @@ class AsyncDatagrid(AsyncAPIClient):
         include_steps: Optional[bool] | Omit = omit,
         reference_date: Union[str, date, None] | Omit = omit,
         secret_ids: Optional[SequenceNotStr[str]] | Omit = omit,
+        skill_ids: Optional[SequenceNotStr[str]] | Omit = omit,
+        slash_keys: Optional[SequenceNotStr[str]] | Omit = omit,
         stream: Optional[bool] | Omit = omit,
         text: Optional[client_converse_params.Text] | Omit = omit,
         user: Optional[client_converse_params.User] | Omit = omit,
@@ -909,6 +927,18 @@ class AsyncDatagrid(AsyncAPIClient):
           secret_ids: Array of secret ID's to be included in the context. The secret value will be
               appended to the prompt but not stored in conversation history.
 
+          skill_ids: Array of skill IDs to force-activate for this turn. Each ID must refer to an
+              account-shared or builtin skill reachable by the API key's teamspace.
+              User-scoped (private) skills are not accessible from API keys. Deduped and
+              merged with `slash_keys` before the turn begins. Maximum 32 entries. Returns 400
+              if any ID is unresolved, disabled, or out of scope.
+
+          slash_keys: Array of slash-key tokens (e.g. `"budget-check"` or `"/rfi-triage"`) to
+              force-activate for this turn. Leading slashes are stripped. Resolved
+              account-shared → builtin in precedence order. Deduped and merged with
+              `skill_ids` before the turn begins. Maximum 32 entries. Returns 400 if any token
+              cannot be resolved to an enabled, reachable skill.
+
           stream: Determines the response type of the converse. Response is the Server-Sent Events
               if stream is set to true.
 
@@ -945,6 +975,8 @@ class AsyncDatagrid(AsyncAPIClient):
                     "include_steps": include_steps,
                     "reference_date": reference_date,
                     "secret_ids": secret_ids,
+                    "skill_ids": skill_ids,
+                    "slash_keys": slash_keys,
                     "stream": stream,
                     "text": text,
                     "user": user,
