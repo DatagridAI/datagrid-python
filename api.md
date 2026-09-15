@@ -221,7 +221,13 @@ Methods:
 Types:
 
 ```python
-from datagrid_ai.types import BuiltinSkill, Skill, SkillListBuiltinsResponse
+from datagrid_ai.types import (
+    BuiltinSkill,
+    Skill,
+    SkillDraft,
+    SkillGenerateResponse,
+    SkillListBuiltinsResponse,
+)
 ```
 
 Methods:
@@ -233,6 +239,7 @@ Methods:
 - <code title="delete /skills/{skill_id}">client.skills.<a href="./src/datagrid_ai/resources/skills.py">delete</a>(skill_id) -> None</code>
 - <code title="post /skills/{skill_id}/clone">client.skills.<a href="./src/datagrid_ai/resources/skills.py">clone</a>(skill_id) -> <a href="./src/datagrid_ai/types/skill.py">Skill</a></code>
 - <code title="post /skills/{skill_id}/demote">client.skills.<a href="./src/datagrid_ai/resources/skills.py">demote</a>(skill_id) -> <a href="./src/datagrid_ai/types/skill.py">Skill</a></code>
+- <code title="post /skills/generate">client.skills.<a href="./src/datagrid_ai/resources/skills.py">generate</a>(\*\*<a href="src/datagrid_ai/types/skill_generate_params.py">params</a>) -> <a href="./src/datagrid_ai/types/skill_generate_response.py">SkillGenerateResponse</a></code>
 - <code title="get /skills/builtin">client.skills.<a href="./src/datagrid_ai/resources/skills.py">list_builtins</a>() -> <a href="./src/datagrid_ai/types/skill_list_builtins_response.py">SkillListBuiltinsResponse</a></code>
 - <code title="post /skills/builtin/{builtin_key}/override">client.skills.<a href="./src/datagrid_ai/resources/skills.py">override_builtin</a>(builtin_key) -> <a href="./src/datagrid_ai/types/skill.py">Skill</a></code>
 - <code title="post /skills/{skill_id}/promote">client.skills.<a href="./src/datagrid_ai/resources/skills.py">promote</a>(skill_id) -> <a href="./src/datagrid_ai/types/skill.py">Skill</a></code>
