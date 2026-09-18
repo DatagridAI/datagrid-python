@@ -19,6 +19,7 @@ from .tool_name import ToolName as ToolName
 from .connection import Connection as Connection
 from .tool_param import ToolParam as ToolParam
 from .file_object import FileObject as FileObject
+from .skill_draft import SkillDraft as SkillDraft
 from .conversation import Conversation as Conversation
 from .row_metadata import RowMetadata as RowMetadata
 from .builtin_skill import BuiltinSkill as BuiltinSkill
@@ -65,6 +66,7 @@ from .connector_list_params import ConnectorListParams as ConnectorListParams
 from .data_view_list_params import DataViewListParams as DataViewListParams
 from .knowledge_list_params import KnowledgeListParams as KnowledgeListParams
 from .redirect_url_response import RedirectURLResponse as RedirectURLResponse
+from .skill_generate_params import SkillGenerateParams as SkillGenerateParams
 from .webhook_create_params import WebhookCreateParams as WebhookCreateParams
 from .webhook_update_params import WebhookUpdateParams as WebhookUpdateParams
 from .client_converse_params import ClientConverseParams as ClientConverseParams
@@ -79,6 +81,7 @@ from .data_view_list_response import DataViewListResponse as DataViewListRespons
 from .knowledge_create_params import KnowledgeCreateParams as KnowledgeCreateParams
 from .knowledge_update_params import KnowledgeUpdateParams as KnowledgeUpdateParams
 from .search_search_ai_params import SearchSearchAIParams as SearchSearchAIParams
+from .skill_generate_response import SkillGenerateResponse as SkillGenerateResponse
 from .webhook_create_response import WebhookCreateResponse as WebhookCreateResponse
 from .connection_create_params import ConnectionCreateParams as ConnectionCreateParams
 from .connection_update_params import ConnectionUpdateParams as ConnectionUpdateParams

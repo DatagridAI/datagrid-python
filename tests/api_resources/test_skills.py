@@ -11,6 +11,7 @@ from datagrid_ai import Datagrid, AsyncDatagrid
 from tests.utils import assert_matches_type
 from datagrid_ai.types import (
     Skill,
+    SkillGenerateResponse,
     SkillListBuiltinsResponse,
 )
 from datagrid_ai.pagination import SyncCursorIDPage, AsyncCursorIDPage
@@ -317,6 +318,39 @@ class TestSkills:
             client.skills.with_raw_response.demote(
                 "",
             )
+
+    @parametrize
+    def test_method_generate(self, client: Datagrid) -> None:
+        skill = client.skills.generate()
+        assert_matches_type(SkillGenerateResponse, skill, path=["response"])
+
+    @parametrize
+    def test_method_generate_with_all_params(self, client: Datagrid) -> None:
+        skill = client.skills.generate(
+            file_ids=["string"],
+            prompt="prompt",
+        )
+        assert_matches_type(SkillGenerateResponse, skill, path=["response"])
+
+    @parametrize
+    def test_raw_response_generate(self, client: Datagrid) -> None:
+        response = client.skills.with_raw_response.generate()
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        skill = response.parse()
+        assert_matches_type(SkillGenerateResponse, skill, path=["response"])
+
+    @parametrize
+    def test_streaming_response_generate(self, client: Datagrid) -> None:
+        with client.skills.with_streaming_response.generate() as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            skill = response.parse()
+            assert_matches_type(SkillGenerateResponse, skill, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
 
     @parametrize
     def test_method_list_builtins(self, client: Datagrid) -> None:
@@ -759,6 +793,39 @@ class TestAsyncSkills:
             await async_client.skills.with_raw_response.demote(
                 "",
             )
+
+    @parametrize
+    async def test_method_generate(self, async_client: AsyncDatagrid) -> None:
+        skill = await async_client.skills.generate()
+        assert_matches_type(SkillGenerateResponse, skill, path=["response"])
+
+    @parametrize
+    async def test_method_generate_with_all_params(self, async_client: AsyncDatagrid) -> None:
+        skill = await async_client.skills.generate(
+            file_ids=["string"],
+            prompt="prompt",
+        )
+        assert_matches_type(SkillGenerateResponse, skill, path=["response"])
+
+    @parametrize
+    async def test_raw_response_generate(self, async_client: AsyncDatagrid) -> None:
+        response = await async_client.skills.with_raw_response.generate()
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        skill = await response.parse()
+        assert_matches_type(SkillGenerateResponse, skill, path=["response"])
+
+    @parametrize
+    async def test_streaming_response_generate(self, async_client: AsyncDatagrid) -> None:
+        async with async_client.skills.with_streaming_response.generate() as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            skill = await response.parse()
+            assert_matches_type(SkillGenerateResponse, skill, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
 
     @parametrize
     async def test_method_list_builtins(self, async_client: AsyncDatagrid) -> None:
