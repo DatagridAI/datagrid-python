@@ -60,9 +60,7 @@ class ConverseResource(SyncAPIResource):
         include_steps: Optional[bool] | Omit = omit,
         reference_date: Union[str, date, None] | Omit = omit,
         secret_ids: Optional[SequenceNotStr[str]] | Omit = omit,
-        skill_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         skills: Iterable[converse_converse_params.Skill] | Omit = omit,
-        slash_keys: Optional[SequenceNotStr[str]] | Omit = omit,
         stream: Optional[bool] | Omit = omit,
         text: Optional[converse_converse_params.Text] | Omit = omit,
         user: Optional[converse_converse_params.User] | Omit = omit,
@@ -89,10 +87,6 @@ class ConverseResource(SyncAPIResource):
 
         The request body is the stable Converse body plus the optional top-level
         `skills` array; all other behavior matches `POST /converse`.
-
-        Because inline `skills` replace the stored catalogue for the turn, they cannot
-        be combined with `skill_ids` or `slash_keys`, which name stored skills.
-        Supplying both returns a `400`.
 
         Args:
           prompt: A text prompt to send to the agent.
@@ -145,12 +139,6 @@ class ConverseResource(SyncAPIResource):
           secret_ids: Array of secret ID's to be included in the context. The secret value will be
               appended to the prompt but not stored in conversation history.
 
-          skill_ids: Array of skill IDs to force-activate for this turn. Each ID must refer to an
-              account-shared or builtin skill reachable by the API key's teamspace.
-              User-scoped (private) skills are not accessible from API keys. Deduped and
-              merged with `slash_keys` before the turn begins. Maximum 32 entries. Returns 400
-              if any ID is unresolved, disabled, or out of scope.
-
           skills: Request-scoped skills made available to the agent for this turn only. They form
               the turn's skill catalogue and are selected by the agent (Magpie 2.5 planner) or
               read from its workspace (Magpie 3.0) — they are not force-applied, so supplying
@@ -162,12 +150,6 @@ class ConverseResource(SyncAPIResource):
               Omitting `skills` keeps the agent's account-scoped skill catalogue. An empty
               array (`[]`) isolates the turn — no skills. A non-empty array uses only the
               supplied inline skills.
-
-          slash_keys: Array of slash-key tokens (e.g. `"budget-check"` or `"/rfi-triage"`) to
-              force-activate for this turn. Leading slashes are stripped. Resolved
-              account-shared → builtin in precedence order. Deduped and merged with
-              `skill_ids` before the turn begins. Maximum 32 entries. Returns 400 if any token
-              cannot be resolved to an enabled, reachable skill.
 
           stream: Determines the response type of the converse. Response is the Server-Sent Events
               if stream is set to true.
@@ -205,9 +187,7 @@ class ConverseResource(SyncAPIResource):
                     "include_steps": include_steps,
                     "reference_date": reference_date,
                     "secret_ids": secret_ids,
-                    "skill_ids": skill_ids,
                     "skills": skills,
-                    "slash_keys": slash_keys,
                     "stream": stream,
                     "text": text,
                     "user": user,
@@ -256,9 +236,7 @@ class AsyncConverseResource(AsyncAPIResource):
         include_steps: Optional[bool] | Omit = omit,
         reference_date: Union[str, date, None] | Omit = omit,
         secret_ids: Optional[SequenceNotStr[str]] | Omit = omit,
-        skill_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         skills: Iterable[converse_converse_params.Skill] | Omit = omit,
-        slash_keys: Optional[SequenceNotStr[str]] | Omit = omit,
         stream: Optional[bool] | Omit = omit,
         text: Optional[converse_converse_params.Text] | Omit = omit,
         user: Optional[converse_converse_params.User] | Omit = omit,
@@ -285,10 +263,6 @@ class AsyncConverseResource(AsyncAPIResource):
 
         The request body is the stable Converse body plus the optional top-level
         `skills` array; all other behavior matches `POST /converse`.
-
-        Because inline `skills` replace the stored catalogue for the turn, they cannot
-        be combined with `skill_ids` or `slash_keys`, which name stored skills.
-        Supplying both returns a `400`.
 
         Args:
           prompt: A text prompt to send to the agent.
@@ -341,12 +315,6 @@ class AsyncConverseResource(AsyncAPIResource):
           secret_ids: Array of secret ID's to be included in the context. The secret value will be
               appended to the prompt but not stored in conversation history.
 
-          skill_ids: Array of skill IDs to force-activate for this turn. Each ID must refer to an
-              account-shared or builtin skill reachable by the API key's teamspace.
-              User-scoped (private) skills are not accessible from API keys. Deduped and
-              merged with `slash_keys` before the turn begins. Maximum 32 entries. Returns 400
-              if any ID is unresolved, disabled, or out of scope.
-
           skills: Request-scoped skills made available to the agent for this turn only. They form
               the turn's skill catalogue and are selected by the agent (Magpie 2.5 planner) or
               read from its workspace (Magpie 3.0) — they are not force-applied, so supplying
@@ -358,12 +326,6 @@ class AsyncConverseResource(AsyncAPIResource):
               Omitting `skills` keeps the agent's account-scoped skill catalogue. An empty
               array (`[]`) isolates the turn — no skills. A non-empty array uses only the
               supplied inline skills.
-
-          slash_keys: Array of slash-key tokens (e.g. `"budget-check"` or `"/rfi-triage"`) to
-              force-activate for this turn. Leading slashes are stripped. Resolved
-              account-shared → builtin in precedence order. Deduped and merged with
-              `skill_ids` before the turn begins. Maximum 32 entries. Returns 400 if any token
-              cannot be resolved to an enabled, reachable skill.
 
           stream: Determines the response type of the converse. Response is the Server-Sent Events
               if stream is set to true.
@@ -401,9 +363,7 @@ class AsyncConverseResource(AsyncAPIResource):
                     "include_steps": include_steps,
                     "reference_date": reference_date,
                     "secret_ids": secret_ids,
-                    "skill_ids": skill_ids,
                     "skills": skills,
-                    "slash_keys": slash_keys,
                     "stream": stream,
                     "text": text,
                     "user": user,

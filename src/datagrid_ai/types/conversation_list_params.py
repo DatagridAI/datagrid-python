@@ -40,15 +40,6 @@ class ConversationListParams(TypedDict, total=False):
     pagination sequence.
     """
 
-    has_voice_messages: bool
-    """
-    When true, restricts the list to conversations that contain at least one voice
-    message. Defaults to false, returning conversations regardless of modality.
-    Changing this value between requests that reuse the same `before`/`after` cursor
-    is not supported — the cursor was computed against a different result set, so
-    pass a consistent value for the lifetime of a given pagination sequence.
-    """
-
     limit: int
     """The limit on the number of objects to return, ranging between 1 and 100."""
 

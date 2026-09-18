@@ -184,7 +184,6 @@ class ConversationsResource(SyncAPIResource):
         before: str | Omit = omit,
         direction: Literal["asc", "desc"] | Omit = omit,
         has_messages: bool | Omit = omit,
-        has_voice_messages: bool | Omit = omit,
         limit: int | Omit = omit,
         sort: ConversationSortField | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -217,12 +216,6 @@ class ConversationsResource(SyncAPIResource):
               cursor is not supported — the cursor was computed against a different result
               set, so pass a consistent value for the lifetime of a given pagination sequence.
 
-          has_voice_messages: When true, restricts the list to conversations that contain at least one voice
-              message. Defaults to false, returning conversations regardless of modality.
-              Changing this value between requests that reuse the same `before`/`after` cursor
-              is not supported — the cursor was computed against a different result set, so
-              pass a consistent value for the lifetime of a given pagination sequence.
-
           limit: The limit on the number of objects to return, ranging between 1 and 100.
 
           sort: The field to sort the conversations by.
@@ -249,7 +242,6 @@ class ConversationsResource(SyncAPIResource):
                         "before": before,
                         "direction": direction,
                         "has_messages": has_messages,
-                        "has_voice_messages": has_voice_messages,
                         "limit": limit,
                         "sort": sort,
                     },
@@ -439,7 +431,6 @@ class AsyncConversationsResource(AsyncAPIResource):
         before: str | Omit = omit,
         direction: Literal["asc", "desc"] | Omit = omit,
         has_messages: bool | Omit = omit,
-        has_voice_messages: bool | Omit = omit,
         limit: int | Omit = omit,
         sort: ConversationSortField | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -472,12 +463,6 @@ class AsyncConversationsResource(AsyncAPIResource):
               cursor is not supported — the cursor was computed against a different result
               set, so pass a consistent value for the lifetime of a given pagination sequence.
 
-          has_voice_messages: When true, restricts the list to conversations that contain at least one voice
-              message. Defaults to false, returning conversations regardless of modality.
-              Changing this value between requests that reuse the same `before`/`after` cursor
-              is not supported — the cursor was computed against a different result set, so
-              pass a consistent value for the lifetime of a given pagination sequence.
-
           limit: The limit on the number of objects to return, ranging between 1 and 100.
 
           sort: The field to sort the conversations by.
@@ -504,7 +489,6 @@ class AsyncConversationsResource(AsyncAPIResource):
                         "before": before,
                         "direction": direction,
                         "has_messages": has_messages,
-                        "has_voice_messages": has_voice_messages,
                         "limit": limit,
                         "sort": sort,
                     },

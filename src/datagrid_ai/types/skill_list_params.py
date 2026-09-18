@@ -31,12 +31,12 @@ class SkillListParams(TypedDict, total=False):
     limit: int
     """The limit on the number of objects to return, ranging between 1 and 100."""
 
-    scope: Literal["user", "account", "teamspace", "builtin"]
+    scope: Literal["user", "account", "builtin"]
     """Return only skills of this scope.
 
-    `user` is the caller's own private skills, `account` company-owned skills
-    invocable here, `teamspace` skills assigned to the caller's teamspace, and
-    `builtin` the global catalogue. Omit to return everything the caller can invoke.
+    `user` is the caller's own private skills, `account` the company's shared
+    skills, and `builtin` the global catalogue. Omit to return everything the caller
+    can reach.
     """
 
     search: str

@@ -81,11 +81,9 @@ class SkillsResource(SyncAPIResource):
     ) -> Skill:
         """Create a skill.
 
-        Defaults to company-owned (`account`) scope, then assigns the
-        API key's teamspace so the created skill is returned as `teamspace`. Pass
-        `scope: user` to create a private skill that can later be promoted.
-        Account-scope slash keys must not collide with a built-in; use the override
-        endpoint for that.
+        Defaults to company-owned (`account`) scope. Pass `scope: user`
+        to create a private skill that can later be promoted. Account-scope slash keys
+        must not collide with a built-in; use the override endpoint for that.
 
         Args:
           category: Category bucket.
@@ -268,7 +266,7 @@ class SkillsResource(SyncAPIResource):
         before: str | Omit = omit,
         enabled: bool | Omit = omit,
         limit: int | Omit = omit,
-        scope: Literal["user", "account", "teamspace", "builtin"] | Omit = omit,
+        scope: Literal["user", "account", "builtin"] | Omit = omit,
         search: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -277,12 +275,11 @@ class SkillsResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SyncCursorIDPage[Skill]:
-        """List skills invocable by the authenticated organization.
+        """List skills reachable by the authenticated organization.
 
         Returns built-in
-        skills, skills assigned to the caller's teamspace, and the caller's private
-        skills. Unassigned custom company skills are omitted. Removed built-in overrides
-        are excluded.
+        skills, company (account) skills, and the caller's private skills. Removed
+        built-in overrides are excluded.
 
         Args:
           after: A cursor to use in pagination. `after` is an object ID that defines your place
@@ -300,9 +297,8 @@ class SkillsResource(SyncAPIResource):
           limit: The limit on the number of objects to return, ranging between 1 and 100.
 
           scope: Return only skills of this scope. `user` is the caller's own private skills,
-              `account` company-owned skills invocable here, `teamspace` skills assigned to
-              the caller's teamspace, and `builtin` the global catalogue. Omit to return
-              everything the caller can invoke.
+              `account` the company's shared skills, and `builtin` the global catalogue. Omit
+              to return everything the caller can reach.
 
           search: Optional search string to filter skills by name or slash key. Case-insensitive
               partial match.
@@ -686,11 +682,9 @@ class AsyncSkillsResource(AsyncAPIResource):
     ) -> Skill:
         """Create a skill.
 
-        Defaults to company-owned (`account`) scope, then assigns the
-        API key's teamspace so the created skill is returned as `teamspace`. Pass
-        `scope: user` to create a private skill that can later be promoted.
-        Account-scope slash keys must not collide with a built-in; use the override
-        endpoint for that.
+        Defaults to company-owned (`account`) scope. Pass `scope: user`
+        to create a private skill that can later be promoted. Account-scope slash keys
+        must not collide with a built-in; use the override endpoint for that.
 
         Args:
           category: Category bucket.
@@ -873,7 +867,7 @@ class AsyncSkillsResource(AsyncAPIResource):
         before: str | Omit = omit,
         enabled: bool | Omit = omit,
         limit: int | Omit = omit,
-        scope: Literal["user", "account", "teamspace", "builtin"] | Omit = omit,
+        scope: Literal["user", "account", "builtin"] | Omit = omit,
         search: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -882,12 +876,11 @@ class AsyncSkillsResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> AsyncPaginator[Skill, AsyncCursorIDPage[Skill]]:
-        """List skills invocable by the authenticated organization.
+        """List skills reachable by the authenticated organization.
 
         Returns built-in
-        skills, skills assigned to the caller's teamspace, and the caller's private
-        skills. Unassigned custom company skills are omitted. Removed built-in overrides
-        are excluded.
+        skills, company (account) skills, and the caller's private skills. Removed
+        built-in overrides are excluded.
 
         Args:
           after: A cursor to use in pagination. `after` is an object ID that defines your place
@@ -905,9 +898,8 @@ class AsyncSkillsResource(AsyncAPIResource):
           limit: The limit on the number of objects to return, ranging between 1 and 100.
 
           scope: Return only skills of this scope. `user` is the caller's own private skills,
-              `account` company-owned skills invocable here, `teamspace` skills assigned to
-              the caller's teamspace, and `builtin` the global catalogue. Omit to return
-              everything the caller can invoke.
+              `account` the company's shared skills, and `builtin` the global catalogue. Omit
+              to return everything the caller can reach.
 
           search: Optional search string to filter skills by name or slash key. Case-insensitive
               partial match.
