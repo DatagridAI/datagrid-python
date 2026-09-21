@@ -131,6 +131,15 @@ class ConverseConverseParams(TypedDict, total=False):
     history.
     """
 
+    skill_ids: Optional[SequenceNotStr[str]]
+    """Array of skill IDs to force-activate for this turn.
+
+    Each ID must refer to an account-shared or builtin skill reachable by the API
+    key's teamspace. User-scoped (private) skills are not accessible from API keys.
+    Deduped and merged with `slash_keys` before the turn begins. Maximum 32 entries.
+    Returns 400 if any ID is unresolved, disabled, or out of scope.
+    """
+
     skills: Iterable[Skill]
     """Request-scoped skills made available to the agent for this turn only.
 
@@ -144,6 +153,15 @@ class ConverseConverseParams(TypedDict, total=False):
     Omitting `skills` keeps the agent's account-scoped skill catalogue. An empty
     array (`[]`) isolates the turn — no skills. A non-empty array uses only the
     supplied inline skills.
+    """
+
+    slash_keys: Optional[SequenceNotStr[str]]
+    """Array of slash-key tokens (e.g.
+
+    `"budget-check"` or `"/rfi-triage"`) to force-activate for this turn. Leading
+    slashes are stripped. Resolved account-shared → builtin in precedence order.
+    Deduped and merged with `skill_ids` before the turn begins. Maximum 32 entries.
+    Returns 400 if any token cannot be resolved to an enabled, reachable skill.
     """
 
     stream: Optional[bool]
