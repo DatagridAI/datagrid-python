@@ -50,8 +50,4 @@ class SkillUpdateParams(TypedDict, total=False):
     """Tool identifiers required by this skill."""
 
     slash_key: Optional[str]
-    """The slash command key.
-
-    Must use lowercase letters, digits, and single dashes, start with a letter, end
-    with a letter or digit, and be unique within the scope.
-    """
+    """The slash command key. Must be unique within the scope."""

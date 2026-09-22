@@ -336,16 +336,6 @@ class ContentMessageContentVoiceTimelineEvent(BaseModel):
     tool_name: Optional[str] = None
     """Name of the tool whose status changed. Present when type is 'tool_call_status'."""
 
-    turn_index: Optional[float] = None
-    """Identifies the conversational turn this event belongs to.
-
-    Every 'transcript' and 'citation' event produced by the same turn shares one
-    value, so a citation can be grouped with the transcripts it came from without
-    relying on the order events appear in. Absent on events recorded before this
-    field existed, and on the 'tool_call_status' and 'attachment' types; fall back
-    to event order in those cases.
-    """
-
 
 class ContentMessageContentVoice(BaseModel):
     """Voice content for a message."""
