@@ -2,13 +2,10 @@
 
 from __future__ import annotations
 
-from typing import Optional
-from typing_extensions import Literal
-
 import httpx
 
-from ..._types import Body, Omit, Query, Headers, NoneType, NotGiven, omit, not_given
-from ..._utils import path_template, maybe_transform, async_maybe_transform
+from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
+from ..._utils import path_template, maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from ..._response import (
@@ -19,7 +16,7 @@ from ..._response import (
 )
 from ...pagination import SyncCursorIDPage, AsyncCursorIDPage
 from ..._base_client import AsyncPaginator, make_request_options
-from ...types.conversations import message_list_params, message_submit_feedback_params
+from ...types.conversations import message_list_params
 from ...types.conversations.message import Message
 
 __all__ = ["MessagesResource", "AsyncMessagesResource"]
@@ -145,66 +142,6 @@ class MessagesResource(SyncAPIResource):
             model=Message,
         )
 
-    def submit_feedback(
-        self,
-        message_id: str,
-        *,
-        conversation_id: str,
-        like: Literal[1, -1],
-        feedback: Optional[str] | Omit = omit,
-        ui_surface: Optional[Literal["datagrid_web", "procore_embed", "field_ai_mobile"]] | Omit = omit,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> None:
-        """Record a like or dislike on a conversation message.
-
-        When the user has consented
-        to data sharing, the associated trace is donated for troubleshooting.
-
-        Args:
-          like: `1` for thumbs up, `-1` for thumbs down.
-
-          feedback: Optional free-text comment.
-
-          ui_surface: Client surface where the user submitted feedback.
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not conversation_id:
-            raise ValueError(f"Expected a non-empty value for `conversation_id` but received {conversation_id!r}")
-        if not message_id:
-            raise ValueError(f"Expected a non-empty value for `message_id` but received {message_id!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return self._post(
-            path_template(
-                "/conversations/{conversation_id}/messages/{message_id}",
-                conversation_id=conversation_id,
-                message_id=message_id,
-            ),
-            body=maybe_transform(
-                {
-                    "like": like,
-                    "feedback": feedback,
-                    "ui_surface": ui_surface,
-                },
-                message_submit_feedback_params.MessageSubmitFeedbackParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=NoneType,
-        )
-
 
 class AsyncMessagesResource(AsyncAPIResource):
     @cached_property
@@ -326,66 +263,6 @@ class AsyncMessagesResource(AsyncAPIResource):
             model=Message,
         )
 
-    async def submit_feedback(
-        self,
-        message_id: str,
-        *,
-        conversation_id: str,
-        like: Literal[1, -1],
-        feedback: Optional[str] | Omit = omit,
-        ui_surface: Optional[Literal["datagrid_web", "procore_embed", "field_ai_mobile"]] | Omit = omit,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> None:
-        """Record a like or dislike on a conversation message.
-
-        When the user has consented
-        to data sharing, the associated trace is donated for troubleshooting.
-
-        Args:
-          like: `1` for thumbs up, `-1` for thumbs down.
-
-          feedback: Optional free-text comment.
-
-          ui_surface: Client surface where the user submitted feedback.
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not conversation_id:
-            raise ValueError(f"Expected a non-empty value for `conversation_id` but received {conversation_id!r}")
-        if not message_id:
-            raise ValueError(f"Expected a non-empty value for `message_id` but received {message_id!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return await self._post(
-            path_template(
-                "/conversations/{conversation_id}/messages/{message_id}",
-                conversation_id=conversation_id,
-                message_id=message_id,
-            ),
-            body=await async_maybe_transform(
-                {
-                    "like": like,
-                    "feedback": feedback,
-                    "ui_surface": ui_surface,
-                },
-                message_submit_feedback_params.MessageSubmitFeedbackParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=NoneType,
-        )
-
 
 class MessagesResourceWithRawResponse:
     def __init__(self, messages: MessagesResource) -> None:
@@ -396,9 +273,6 @@ class MessagesResourceWithRawResponse:
         )
         self.list = to_raw_response_wrapper(
             messages.list,
-        )
-        self.submit_feedback = to_raw_response_wrapper(
-            messages.submit_feedback,
         )
 
 
@@ -412,9 +286,6 @@ class AsyncMessagesResourceWithRawResponse:
         self.list = async_to_raw_response_wrapper(
             messages.list,
         )
-        self.submit_feedback = async_to_raw_response_wrapper(
-            messages.submit_feedback,
-        )
 
 
 class MessagesResourceWithStreamingResponse:
@@ -427,9 +298,6 @@ class MessagesResourceWithStreamingResponse:
         self.list = to_streamed_response_wrapper(
             messages.list,
         )
-        self.submit_feedback = to_streamed_response_wrapper(
-            messages.submit_feedback,
-        )
 
 
 class AsyncMessagesResourceWithStreamingResponse:
@@ -441,7 +309,4 @@ class AsyncMessagesResourceWithStreamingResponse:
         )
         self.list = async_to_streamed_response_wrapper(
             messages.list,
-        )
-        self.submit_feedback = async_to_streamed_response_wrapper(
-            messages.submit_feedback,
         )

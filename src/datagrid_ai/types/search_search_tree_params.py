@@ -12,14 +12,6 @@ class SearchSearchTreeParams(TypedDict, total=False):
     query: Required[str]
     """The natural language search query."""
 
-    display_type: Literal["dataset", "document", "image", "channel"]
-    """Filter results to one display type (dataset, document, image, or channel).
-
-    Applied before pagination, so pages cover the full filtered result pool. When
-    omitted, all display types are returned. Honored when paginated search is
-    enabled for the teamspace (Gen Search phase 3).
-    """
-
     limit: int
     """The limit on the number of objects to return, ranging between 1 and 100."""
 

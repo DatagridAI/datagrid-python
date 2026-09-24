@@ -82,11 +82,8 @@ class TestSearch:
     def test_method_search_ai_with_all_params(self, client: Datagrid) -> None:
         search = client.search.search_ai(
             query="query",
-            display_type="dataset",
             limit=0,
-            offset=0,
             record_types=["rows"],
-            skip_ai_generation=True,
         )
         assert_matches_type(SearchAIResult, search, path=["response"])
 
@@ -125,7 +122,6 @@ class TestSearch:
     def test_method_search_tree_with_all_params(self, client: Datagrid) -> None:
         search = client.search.search_tree(
             query="query",
-            display_type="dataset",
             limit=1,
             next="next",
             record_types=["rows"],
@@ -221,11 +217,8 @@ class TestAsyncSearch:
     async def test_method_search_ai_with_all_params(self, async_client: AsyncDatagrid) -> None:
         search = await async_client.search.search_ai(
             query="query",
-            display_type="dataset",
             limit=0,
-            offset=0,
             record_types=["rows"],
-            skip_ai_generation=True,
         )
         assert_matches_type(SearchAIResult, search, path=["response"])
 
@@ -264,7 +257,6 @@ class TestAsyncSearch:
     async def test_method_search_tree_with_all_params(self, async_client: AsyncDatagrid) -> None:
         search = await async_client.search.search_tree(
             query="query",
-            display_type="dataset",
             limit=1,
             next="next",
             record_types=["rows"],
