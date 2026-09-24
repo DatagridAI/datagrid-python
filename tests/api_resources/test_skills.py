@@ -28,7 +28,7 @@ class TestSkills:
             category="document_analysis",
             instructions="instructions",
             name="name",
-            slash_key="slash_key",
+            slash_key="xx",
         )
         assert_matches_type(Skill, skill, path=["response"])
 
@@ -38,7 +38,7 @@ class TestSkills:
             category="document_analysis",
             instructions="instructions",
             name="name",
-            slash_key="slash_key",
+            slash_key="xx",
             description="description",
             enabled=True,
             preferred_tools=["string"],
@@ -53,7 +53,7 @@ class TestSkills:
             category="document_analysis",
             instructions="instructions",
             name="name",
-            slash_key="slash_key",
+            slash_key="xx",
         )
 
         assert response.is_closed is True
@@ -67,7 +67,7 @@ class TestSkills:
             category="document_analysis",
             instructions="instructions",
             name="name",
-            slash_key="slash_key",
+            slash_key="xx",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -133,7 +133,7 @@ class TestSkills:
             name="name",
             preferred_tools=["string"],
             required_tools=["string"],
-            slash_key="slash_key",
+            slash_key="xx",
         )
         assert_matches_type(Skill, skill, path=["response"])
 
@@ -503,7 +503,7 @@ class TestAsyncSkills:
             category="document_analysis",
             instructions="instructions",
             name="name",
-            slash_key="slash_key",
+            slash_key="xx",
         )
         assert_matches_type(Skill, skill, path=["response"])
 
@@ -513,7 +513,7 @@ class TestAsyncSkills:
             category="document_analysis",
             instructions="instructions",
             name="name",
-            slash_key="slash_key",
+            slash_key="xx",
             description="description",
             enabled=True,
             preferred_tools=["string"],
@@ -528,7 +528,7 @@ class TestAsyncSkills:
             category="document_analysis",
             instructions="instructions",
             name="name",
-            slash_key="slash_key",
+            slash_key="xx",
         )
 
         assert response.is_closed is True
@@ -542,7 +542,7 @@ class TestAsyncSkills:
             category="document_analysis",
             instructions="instructions",
             name="name",
-            slash_key="slash_key",
+            slash_key="xx",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -608,7 +608,7 @@ class TestAsyncSkills:
             name="name",
             preferred_tools=["string"],
             required_tools=["string"],
-            slash_key="slash_key",
+            slash_key="xx",
         )
         assert_matches_type(Skill, skill, path=["response"])
 
