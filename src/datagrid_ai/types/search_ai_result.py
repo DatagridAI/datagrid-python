@@ -23,11 +23,11 @@ class Credits(BaseModel):
 class SearchAIResult(BaseModel):
     """AI-generated answer with source citations and the underlying search results."""
 
-    answer: str
+    answer: Optional[str] = None
     """AI-generated natural language answer based on the search results.
 
     Contains numbered citations like [1], [2] that reference entries in the
-    `sources` array.
+    `sources` array. Null when the request set `skip_ai_generation: true`.
     """
 
     credits: Optional[Credits] = None

@@ -76,11 +76,12 @@ class Skill(BaseModel):
     required_tools: List[str]
     """Tool identifiers that this skill requires to function."""
 
-    scope: Literal["user", "account", "builtin"]
+    scope: Literal["user", "account", "teamspace", "builtin"]
     """Ownership scope.
 
-    `user` = private (author only), `account` = company-owned, `builtin` = global
-    default.
+    `user` = private (author only), `account` = company-owned, `teamspace` =
+    assigned to selected teamspaces, `builtin` = global default. A default public
+    create is assigned to the API key's teamspace and returned as `teamspace`.
     """
 
     slash_key: str
