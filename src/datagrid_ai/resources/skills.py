@@ -94,8 +94,8 @@ class SkillsResource(SyncAPIResource):
 
           name: Display name of the skill.
 
-          slash_key: The slash command key (e.g. `budget-check`). Must use lowercase letters, digits,
-              and single dashes, start with a letter, end with a letter or digit, and be
+          slash_key: The slash command key (e.g. `budget-check`, `3d-review`). Must use lowercase
+              letters, digits, and single dashes, start and end with a letter or digit, and be
               unique within the scope.
 
           description: Short description. When omitted, an AI-generated description is produced from
@@ -231,7 +231,7 @@ class SkillsResource(SyncAPIResource):
           required_tools: Tool identifiers required by this skill.
 
           slash_key: The slash command key. Must use lowercase letters, digits, and single dashes,
-              start with a letter, end with a letter or digit, and be unique within the scope.
+              start and end with a letter or digit, and be unique within the scope.
 
           extra_headers: Send extra headers
 
@@ -702,8 +702,8 @@ class AsyncSkillsResource(AsyncAPIResource):
 
           name: Display name of the skill.
 
-          slash_key: The slash command key (e.g. `budget-check`). Must use lowercase letters, digits,
-              and single dashes, start with a letter, end with a letter or digit, and be
+          slash_key: The slash command key (e.g. `budget-check`, `3d-review`). Must use lowercase
+              letters, digits, and single dashes, start and end with a letter or digit, and be
               unique within the scope.
 
           description: Short description. When omitted, an AI-generated description is produced from
@@ -839,7 +839,7 @@ class AsyncSkillsResource(AsyncAPIResource):
           required_tools: Tool identifiers required by this skill.
 
           slash_key: The slash command key. Must use lowercase letters, digits, and single dashes,
-              start with a letter, end with a letter or digit, and be unique within the scope.
+              start and end with a letter or digit, and be unique within the scope.
 
           extra_headers: Send extra headers
 

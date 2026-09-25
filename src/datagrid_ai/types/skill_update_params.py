@@ -52,6 +52,6 @@ class SkillUpdateParams(TypedDict, total=False):
     slash_key: Optional[str]
     """The slash command key.
 
-    Must use lowercase letters, digits, and single dashes, start with a letter, end
-    with a letter or digit, and be unique within the scope.
+    Must use lowercase letters, digits, and single dashes, start and end with a
+    letter or digit, and be unique within the scope.
     """
