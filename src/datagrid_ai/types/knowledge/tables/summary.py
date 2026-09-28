@@ -50,6 +50,21 @@ class Summary(BaseModel):
     `null` for records that have not finished indexing.
     """
 
+    file_id: Optional[str] = None
+    """The id of the source file for a file or page summary.
+
+    All pages of a file share its file summary's `file_id`, and it can be passed to
+    `GET /files/{file_id}`. `null` for row and table summaries, and for file or page
+    records indexed before file ids were recorded.
+    """
+
+    page_number: Optional[int] = None
+    """The 1-based page number within the source file for a page summary.
+
+    `null` for row, table, and file summaries, and for page records indexed before
+    page numbers were recorded.
+    """
+
     primary_key: Optional[str] = None
     """The primary key of the source row for a row summary.
 
