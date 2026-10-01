@@ -182,6 +182,13 @@ class VoiceConfig(TypedDict, total=False):
     Disabled by default.
     """
 
+    turn_end_mode: Optional[Literal["server", "client"]]
+    """Controls how user audio turns close.
+
+    'server' uses the existing RMS and silence timer. 'client' disables that timer
+    and requires an explicit end_turn message after each utterance.
+    """
+
     voice_preset: Optional[str]
     """Voice preset to use (e.g., 'sage', 'nova', 'spark').
 

@@ -109,7 +109,7 @@ class VoiceResource(SyncAPIResource):
 
         **Message Types:**
 
-        - Client: `start`, `audio`, `stop`, `interrupt`, `text`
+        - Client: `start`, `audio`, `stop`, `interrupt`, `end_turn`, `text`
         - Server: `started`, `ready`, `audio`, `tool_call`, `interrupted`, `error`,
           `transcript`, `citation`, `ended`
 
@@ -276,7 +276,7 @@ class AsyncVoiceResource(AsyncAPIResource):
 
         **Message Types:**
 
-        - Client: `start`, `audio`, `stop`, `interrupt`, `text`
+        - Client: `start`, `audio`, `stop`, `interrupt`, `end_turn`, `text`
         - Server: `started`, `ready`, `audio`, `tool_call`, `interrupted`, `error`,
           `transcript`, `citation`, `ended`
 
