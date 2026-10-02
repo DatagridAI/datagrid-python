@@ -45,7 +45,7 @@ class TestConverse:
                 "disabled_agent_tools": ["string"],
                 "disabled_tools": ["string"],
                 "knowledge_ids": ["string"],
-                "llm_model": "gemini-3.5-flash",
+                "llm_model": "gemini-3.8-flash",
                 "mcp_servers": [
                     {
                         "server_id": "server_id",
@@ -144,7 +144,7 @@ class TestAsyncConverse:
                 "disabled_agent_tools": ["string"],
                 "disabled_tools": ["string"],
                 "knowledge_ids": ["string"],
-                "llm_model": "gemini-3.5-flash",
+                "llm_model": "gemini-3.8-flash",
                 "mcp_servers": [
                     {
                         "server_id": "server_id",
