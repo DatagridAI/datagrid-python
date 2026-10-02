@@ -50,7 +50,7 @@ class SummariesResource(SyncAPIResource):
         *,
         limit: int | Omit = omit,
         next: str | Omit = omit,
-        record_type: Literal["row", "table"] | Omit = omit,
+        record_type: Literal["row", "table", "file", "page"] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -58,12 +58,13 @@ class SummariesResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SyncCursorPage[Summary]:
-        """Returns a list of AI-generated summary records for a knowledge table.
+        """Returns indexed summary content for a knowledge table.
 
-        Use
-        `record_type=row` (the default) for per-row summaries, or `record_type=table`
-        for the single table-level summary. This endpoint reflects the current index
-        state and does not consume AI credits.
+        Use `record_type=row`
+        (the default) for per-row summaries, `record_type=table` for the table-level
+        summary, `record_type=file` for file-level overviews, or `record_type=page` for
+        page extraction bodies. This endpoint reflects the current index state and does
+        not consume AI credits.
 
         Args:
           limit: The limit on the number of objects to return, ranging between 1 and 1000.
@@ -72,8 +73,9 @@ class SummariesResource(SyncAPIResource):
               This is automatically added when the request has more results to fetch.
 
           record_type: Which summary variant to return. `row` (default) returns one summary per source
-              row. `table` returns the single table-level summary. Matches `record_type` on
-              each Summary in the response.
+              row. `table` returns the table-level summary. `file` returns file-level
+              overviews. `page` returns page extraction bodies. Matches `record_type` on each
+              Summary in the response.
 
           extra_headers: Send extra headers
 
@@ -132,7 +134,7 @@ class AsyncSummariesResource(AsyncAPIResource):
         *,
         limit: int | Omit = omit,
         next: str | Omit = omit,
-        record_type: Literal["row", "table"] | Omit = omit,
+        record_type: Literal["row", "table", "file", "page"] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -140,12 +142,13 @@ class AsyncSummariesResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> AsyncPaginator[Summary, AsyncCursorPage[Summary]]:
-        """Returns a list of AI-generated summary records for a knowledge table.
+        """Returns indexed summary content for a knowledge table.
 
-        Use
-        `record_type=row` (the default) for per-row summaries, or `record_type=table`
-        for the single table-level summary. This endpoint reflects the current index
-        state and does not consume AI credits.
+        Use `record_type=row`
+        (the default) for per-row summaries, `record_type=table` for the table-level
+        summary, `record_type=file` for file-level overviews, or `record_type=page` for
+        page extraction bodies. This endpoint reflects the current index state and does
+        not consume AI credits.
 
         Args:
           limit: The limit on the number of objects to return, ranging between 1 and 1000.
@@ -154,8 +157,9 @@ class AsyncSummariesResource(AsyncAPIResource):
               This is automatically added when the request has more results to fetch.
 
           record_type: Which summary variant to return. `row` (default) returns one summary per source
-              row. `table` returns the single table-level summary. Matches `record_type` on
-              each Summary in the response.
+              row. `table` returns the table-level summary. `file` returns file-level
+              overviews. `page` returns page extraction bodies. Matches `record_type` on each
+              Summary in the response.
 
           extra_headers: Send extra headers
 

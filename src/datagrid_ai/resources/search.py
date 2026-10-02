@@ -114,8 +114,11 @@ class SearchResource(SyncAPIResource):
         self,
         *,
         query: str,
+        display_type: Optional[Literal["dataset", "document", "image", "channel"]] | Omit = omit,
         limit: Optional[int] | Omit = omit,
+        offset: Optional[int] | Omit = omit,
         record_types: Optional[List[Literal["rows", "tables", "files", "pages", "cells"]]] | Omit = omit,
+        skip_ai_generation: Optional[bool] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -134,10 +137,25 @@ class SearchResource(SyncAPIResource):
           query: The natural language search query. The AI will search your indexed knowledge and
               generate an answer.
 
+          display_type: Product-facing grouping of one result card, aligned with the result tabs in the
+              Datagrid web app. Derived from the card's structure and media type: tables and
+              records are `dataset`, files with an `image/*` media type are `image`, other
+              files and pages are `document`, and channels are `channel`.
+
           limit: Maximum number of search results to consider when generating the answer.
+
+          offset: Number of results to skip before the returned page, for paginating search
+              results. Combine with `skip_ai_generation: true` to fetch subsequent pages
+              without regenerating the AI answer. Honored when paginated search is enabled for
+              the teamspace (Gen Search phase 3).
 
           record_types: Optional filter to restrict search to specific record types (rows, tables,
               files, pages, cells).
+
+          skip_ai_generation: When true, returns the requested page of search results without generating an AI
+              answer (`answer` is null and `sources` is empty). Cannot be combined with
+              streaming. Honored when paginated search is enabled for the teamspace (Gen
+              Search phase 3).
 
           extra_headers: Send extra headers
 
@@ -152,8 +170,11 @@ class SearchResource(SyncAPIResource):
             body=maybe_transform(
                 {
                     "query": query,
+                    "display_type": display_type,
                     "limit": limit,
+                    "offset": offset,
                     "record_types": record_types,
+                    "skip_ai_generation": skip_ai_generation,
                 },
                 search_search_ai_params.SearchSearchAIParams,
             ),
@@ -167,6 +188,7 @@ class SearchResource(SyncAPIResource):
         self,
         *,
         query: str,
+        display_type: Literal["dataset", "document", "image", "channel"] | Omit = omit,
         limit: int | Omit = omit,
         next: str | Omit = omit,
         record_types: List[Literal["rows", "tables", "files", "pages", "cells"]] | Omit = omit,
@@ -186,6 +208,11 @@ class SearchResource(SyncAPIResource):
 
         Args:
           query: The natural language search query.
+
+          display_type: Filter results to one display type (dataset, document, image, or channel).
+              Applied before pagination, so pages cover the full filtered result pool. When
+              omitted, all display types are returned. Honored when paginated search is
+              enabled for the teamspace (Gen Search phase 3).
 
           limit: The limit on the number of objects to return, ranging between 1 and 100.
 
@@ -213,6 +240,7 @@ class SearchResource(SyncAPIResource):
                 query=maybe_transform(
                     {
                         "query": query,
+                        "display_type": display_type,
                         "limit": limit,
                         "next": next,
                         "record_types": record_types,
@@ -311,8 +339,11 @@ class AsyncSearchResource(AsyncAPIResource):
         self,
         *,
         query: str,
+        display_type: Optional[Literal["dataset", "document", "image", "channel"]] | Omit = omit,
         limit: Optional[int] | Omit = omit,
+        offset: Optional[int] | Omit = omit,
         record_types: Optional[List[Literal["rows", "tables", "files", "pages", "cells"]]] | Omit = omit,
+        skip_ai_generation: Optional[bool] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -331,10 +362,25 @@ class AsyncSearchResource(AsyncAPIResource):
           query: The natural language search query. The AI will search your indexed knowledge and
               generate an answer.
 
+          display_type: Product-facing grouping of one result card, aligned with the result tabs in the
+              Datagrid web app. Derived from the card's structure and media type: tables and
+              records are `dataset`, files with an `image/*` media type are `image`, other
+              files and pages are `document`, and channels are `channel`.
+
           limit: Maximum number of search results to consider when generating the answer.
+
+          offset: Number of results to skip before the returned page, for paginating search
+              results. Combine with `skip_ai_generation: true` to fetch subsequent pages
+              without regenerating the AI answer. Honored when paginated search is enabled for
+              the teamspace (Gen Search phase 3).
 
           record_types: Optional filter to restrict search to specific record types (rows, tables,
               files, pages, cells).
+
+          skip_ai_generation: When true, returns the requested page of search results without generating an AI
+              answer (`answer` is null and `sources` is empty). Cannot be combined with
+              streaming. Honored when paginated search is enabled for the teamspace (Gen
+              Search phase 3).
 
           extra_headers: Send extra headers
 
@@ -349,8 +395,11 @@ class AsyncSearchResource(AsyncAPIResource):
             body=await async_maybe_transform(
                 {
                     "query": query,
+                    "display_type": display_type,
                     "limit": limit,
+                    "offset": offset,
                     "record_types": record_types,
+                    "skip_ai_generation": skip_ai_generation,
                 },
                 search_search_ai_params.SearchSearchAIParams,
             ),
@@ -364,6 +413,7 @@ class AsyncSearchResource(AsyncAPIResource):
         self,
         *,
         query: str,
+        display_type: Literal["dataset", "document", "image", "channel"] | Omit = omit,
         limit: int | Omit = omit,
         next: str | Omit = omit,
         record_types: List[Literal["rows", "tables", "files", "pages", "cells"]] | Omit = omit,
@@ -383,6 +433,11 @@ class AsyncSearchResource(AsyncAPIResource):
 
         Args:
           query: The natural language search query.
+
+          display_type: Filter results to one display type (dataset, document, image, or channel).
+              Applied before pagination, so pages cover the full filtered result pool. When
+              omitted, all display types are returned. Honored when paginated search is
+              enabled for the teamspace (Gen Search phase 3).
 
           limit: The limit on the number of objects to return, ranging between 1 and 100.
 
@@ -410,6 +465,7 @@ class AsyncSearchResource(AsyncAPIResource):
                 query=await async_maybe_transform(
                     {
                         "query": query,
+                        "display_type": display_type,
                         "limit": limit,
                         "next": next,
                         "record_types": record_types,
