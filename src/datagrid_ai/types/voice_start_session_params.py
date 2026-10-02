@@ -35,7 +35,9 @@ class VoiceStartSessionParams(TypedDict, total=False):
     conversation_id: Optional[str]
     """The ID of an existing conversation to continue.
 
-    If not provided, a new conversation will be created.
+    If not provided, a new conversation will be created. If the id cannot be
+    resolved, the session start fails with the `conversation_not_found` error code
+    rather than silently creating a new conversation.
     """
 
     discard_if_empty: Optional[bool]
@@ -180,6 +182,13 @@ class VoiceConfig(TypedDict, total=False):
     """When true, skip the launch greeting and start directly in listening mode.
 
     Disabled by default.
+    """
+
+    turn_end_mode: Optional[Literal["server", "client"]]
+    """Controls how user audio turns close.
+
+    'server' uses the existing RMS and silence timer. 'client' disables that timer
+    and requires an explicit end_turn message after each utterance.
     """
 
     voice_preset: Optional[str]

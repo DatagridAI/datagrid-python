@@ -5,7 +5,14 @@ from typing_extensions import Literal
 
 from .._models import BaseModel
 
-__all__ = ["SearchTreeResult", "Credits", "CountsByDisplayType", "DisplayItem", "DisplayItemChannelData"]
+__all__ = [
+    "SearchTreeResult",
+    "Credits",
+    "CountsByDisplayType",
+    "DisplayItem",
+    "DisplayItemChannelData",
+    "DisplayItemParentRecord",
+]
 
 
 class Credits(BaseModel):
@@ -57,6 +64,19 @@ class DisplayItemChannelData(BaseModel):
 
     people_count: int
     """Number of human members."""
+
+
+class DisplayItemParentRecord(BaseModel):
+    """The record (row) a file or page search result is attached to."""
+
+    id: str
+    """Document identifier of the record."""
+
+    body: Optional[str] = None
+    """Record summary text."""
+
+    title: Optional[str] = None
+    """Record title."""
 
 
 class DisplayItem(BaseModel):
@@ -123,6 +143,9 @@ class DisplayItem(BaseModel):
 
     page_url: Optional[str] = None
     """Datagrid file URI scoped to this page, for `page` items."""
+
+    parent_record: Optional[DisplayItemParentRecord] = None
+    """The record (row) a file or page search result is attached to."""
 
     score: Optional[float] = None
     """Relevance score of the result, between 0 and 1."""
