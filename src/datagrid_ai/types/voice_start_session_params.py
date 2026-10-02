@@ -35,7 +35,9 @@ class VoiceStartSessionParams(TypedDict, total=False):
     conversation_id: Optional[str]
     """The ID of an existing conversation to continue.
 
-    If not provided, a new conversation will be created.
+    If not provided, a new conversation will be created. If the id cannot be
+    resolved, the session start fails with the `conversation_not_found` error code
+    rather than silently creating a new conversation.
     """
 
     discard_if_empty: Optional[bool]

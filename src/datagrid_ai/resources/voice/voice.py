@@ -127,7 +127,9 @@ class VoiceResource(SyncAPIResource):
               empty or whitespace-only values are treated as omitted.
 
           conversation_id: The ID of an existing conversation to continue. If not provided, a new
-              conversation will be created.
+              conversation will be created. If the id cannot be resolved, the session start
+              fails with the `conversation_not_found` error code rather than silently creating
+              a new conversation.
 
           discard_if_empty: When true and this session creates a brand-new conversation (no conversation_id
               was provided), that conversation is discarded if the session ends without any
@@ -294,7 +296,9 @@ class AsyncVoiceResource(AsyncAPIResource):
               empty or whitespace-only values are treated as omitted.
 
           conversation_id: The ID of an existing conversation to continue. If not provided, a new
-              conversation will be created.
+              conversation will be created. If the id cannot be resolved, the session start
+              fails with the `conversation_not_found` error code rather than silently creating
+              a new conversation.
 
           discard_if_empty: When true and this session creates a brand-new conversation (no conversation_id
               was provided), that conversation is discarded if the session ends without any
