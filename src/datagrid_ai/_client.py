@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import os
-from typing import TYPE_CHECKING, Any, Union, Mapping, Iterable, Optional
+from typing import TYPE_CHECKING, Any, Union, Mapping, Iterable, Optional, overload
 from datetime import date
 from typing_extensions import Self, Literal, override
 
@@ -11,6 +11,7 @@ import httpx
 
 from . import _exceptions
 from ._qs import Querystring
+from .lib import sse_converse
 from .types import client_converse_params
 from ._types import (
     Body,
@@ -44,6 +45,7 @@ from ._response import (
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
 from ._exceptions import DatagridError, APIStatusError
 from ._base_client import (
+    DEFAULT_TIMEOUT,
     DEFAULT_MAX_RETRIES,
     SyncAPIClient,
     AsyncAPIClient,
@@ -389,6 +391,7 @@ class Datagrid(SyncAPIClient):
     # client.with_options(timeout=10).foo.create(...)
     with_options = copy
 
+    @overload
     def converse(
         self,
         *,
@@ -415,7 +418,93 @@ class Datagrid(SyncAPIClient):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> ConverseResponse:
+    ) -> ConverseResponse: ...
+
+    @overload
+    def converse(
+        self,
+        *,
+        prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
+        agent_id: Optional[str] | Omit = omit,
+        agent_routing: Optional[client_converse_params.AgentRouting] | Omit = omit,
+        chat_mode: Optional[Literal["auto", "full_agent", "light_agent", "llm_router"]] | Omit = omit,
+        config: Optional[client_converse_params.Config] | Omit = omit,
+        conversation_id: Optional[str] | Omit = omit,
+        current_view_content: Optional[str] | Omit = omit,
+        generate_citations: Optional[bool] | Omit = omit,
+        generate_title: Optional[bool] | Omit = omit,
+        include_steps: Optional[bool] | Omit = omit,
+        reference_date: Union[str, date, None] | Omit = omit,
+        secret_ids: Optional[SequenceNotStr[str]] | Omit = omit,
+        skill_ids: Optional[SequenceNotStr[str]] | Omit = omit,
+        slash_keys: Optional[SequenceNotStr[str]] | Omit = omit,
+        stream: Literal[True],
+        text: Optional[client_converse_params.Text] | Omit = omit,
+        user: Optional[client_converse_params.User] | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> Stream[sse_converse.AgentStreamEvent]: ...
+
+    @overload
+    def converse(
+        self,
+        *,
+        prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
+        agent_id: Optional[str] | Omit = omit,
+        agent_routing: Optional[client_converse_params.AgentRouting] | Omit = omit,
+        chat_mode: Optional[Literal["auto", "full_agent", "light_agent", "llm_router"]] | Omit = omit,
+        config: Optional[client_converse_params.Config] | Omit = omit,
+        conversation_id: Optional[str] | Omit = omit,
+        current_view_content: Optional[str] | Omit = omit,
+        generate_citations: Optional[bool] | Omit = omit,
+        generate_title: Optional[bool] | Omit = omit,
+        include_steps: Optional[bool] | Omit = omit,
+        reference_date: Union[str, date, None] | Omit = omit,
+        secret_ids: Optional[SequenceNotStr[str]] | Omit = omit,
+        skill_ids: Optional[SequenceNotStr[str]] | Omit = omit,
+        slash_keys: Optional[SequenceNotStr[str]] | Omit = omit,
+        stream: bool,
+        text: Optional[client_converse_params.Text] | Omit = omit,
+        user: Optional[client_converse_params.User] | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> ConverseResponse | Stream[sse_converse.AgentStreamEvent]: ...
+
+    def converse(
+        self,
+        *,
+        prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
+        agent_id: Optional[str] | Omit = omit,
+        agent_routing: Optional[client_converse_params.AgentRouting] | Omit = omit,
+        chat_mode: Optional[Literal["auto", "full_agent", "light_agent", "llm_router"]] | Omit = omit,
+        config: Optional[client_converse_params.Config] | Omit = omit,
+        conversation_id: Optional[str] | Omit = omit,
+        current_view_content: Optional[str] | Omit = omit,
+        generate_citations: Optional[bool] | Omit = omit,
+        generate_title: Optional[bool] | Omit = omit,
+        include_steps: Optional[bool] | Omit = omit,
+        reference_date: Union[str, date, None] | Omit = omit,
+        secret_ids: Optional[SequenceNotStr[str]] | Omit = omit,
+        skill_ids: Optional[SequenceNotStr[str]] | Omit = omit,
+        slash_keys: Optional[SequenceNotStr[str]] | Omit = omit,
+        stream: Optional[bool] | Omit = omit,
+        text: Optional[client_converse_params.Text] | Omit = omit,
+        user: Optional[client_converse_params.User] | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> ConverseResponse | Stream[sse_converse.AgentStreamEvent]:
         """
         Converse with an AI Agent
 
@@ -502,6 +591,8 @@ class Datagrid(SyncAPIClient):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
+        if not is_given(timeout) and self.timeout == DEFAULT_TIMEOUT:
+            timeout = 1800
         return self.post(
             "/converse",
             body=maybe_transform(
@@ -530,6 +621,8 @@ class Datagrid(SyncAPIClient):
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=ConverseResponse,
+            stream=stream or False,
+            stream_cls=Stream[sse_converse.AgentStreamEvent],
         )
 
     @override
@@ -846,6 +939,93 @@ class AsyncDatagrid(AsyncAPIClient):
     # client.with_options(timeout=10).foo.create(...)
     with_options = copy
 
+    @overload
+    async def converse(
+        self,
+        *,
+        prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
+        agent_id: Optional[str] | Omit = omit,
+        agent_routing: Optional[client_converse_params.AgentRouting] | Omit = omit,
+        chat_mode: Optional[Literal["auto", "full_agent", "light_agent", "llm_router"]] | Omit = omit,
+        config: Optional[client_converse_params.Config] | Omit = omit,
+        conversation_id: Optional[str] | Omit = omit,
+        current_view_content: Optional[str] | Omit = omit,
+        generate_citations: Optional[bool] | Omit = omit,
+        generate_title: Optional[bool] | Omit = omit,
+        include_steps: Optional[bool] | Omit = omit,
+        reference_date: Union[str, date, None] | Omit = omit,
+        secret_ids: Optional[SequenceNotStr[str]] | Omit = omit,
+        skill_ids: Optional[SequenceNotStr[str]] | Omit = omit,
+        slash_keys: Optional[SequenceNotStr[str]] | Omit = omit,
+        stream: Literal[False] | Omit = omit,
+        text: Optional[client_converse_params.Text] | Omit = omit,
+        user: Optional[client_converse_params.User] | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> ConverseResponse: ...
+
+    @overload
+    async def converse(
+        self,
+        *,
+        prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
+        agent_id: Optional[str] | Omit = omit,
+        agent_routing: Optional[client_converse_params.AgentRouting] | Omit = omit,
+        chat_mode: Optional[Literal["auto", "full_agent", "light_agent", "llm_router"]] | Omit = omit,
+        config: Optional[client_converse_params.Config] | Omit = omit,
+        conversation_id: Optional[str] | Omit = omit,
+        current_view_content: Optional[str] | Omit = omit,
+        generate_citations: Optional[bool] | Omit = omit,
+        generate_title: Optional[bool] | Omit = omit,
+        include_steps: Optional[bool] | Omit = omit,
+        reference_date: Union[str, date, None] | Omit = omit,
+        secret_ids: Optional[SequenceNotStr[str]] | Omit = omit,
+        skill_ids: Optional[SequenceNotStr[str]] | Omit = omit,
+        slash_keys: Optional[SequenceNotStr[str]] | Omit = omit,
+        stream: Literal[True],
+        text: Optional[client_converse_params.Text] | Omit = omit,
+        user: Optional[client_converse_params.User] | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> AsyncStream[sse_converse.AgentStreamEvent]: ...
+
+    @overload
+    async def converse(
+        self,
+        *,
+        prompt: Union[str, Iterable[client_converse_params.PromptInputItemList]],
+        agent_id: Optional[str] | Omit = omit,
+        agent_routing: Optional[client_converse_params.AgentRouting] | Omit = omit,
+        chat_mode: Optional[Literal["auto", "full_agent", "light_agent", "llm_router"]] | Omit = omit,
+        config: Optional[client_converse_params.Config] | Omit = omit,
+        conversation_id: Optional[str] | Omit = omit,
+        current_view_content: Optional[str] | Omit = omit,
+        generate_citations: Optional[bool] | Omit = omit,
+        generate_title: Optional[bool] | Omit = omit,
+        include_steps: Optional[bool] | Omit = omit,
+        reference_date: Union[str, date, None] | Omit = omit,
+        secret_ids: Optional[SequenceNotStr[str]] | Omit = omit,
+        skill_ids: Optional[SequenceNotStr[str]] | Omit = omit,
+        slash_keys: Optional[SequenceNotStr[str]] | Omit = omit,
+        stream: bool,
+        text: Optional[client_converse_params.Text] | Omit = omit,
+        user: Optional[client_converse_params.User] | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> ConverseResponse | AsyncStream[sse_converse.AgentStreamEvent]: ...
+
     async def converse(
         self,
         *,
@@ -872,7 +1052,7 @@ class AsyncDatagrid(AsyncAPIClient):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> ConverseResponse:
+    ) -> ConverseResponse | AsyncStream[sse_converse.AgentStreamEvent]:
         """
         Converse with an AI Agent
 
@@ -959,6 +1139,8 @@ class AsyncDatagrid(AsyncAPIClient):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
+        if not is_given(timeout) and self.timeout == DEFAULT_TIMEOUT:
+            timeout = 1800
         return await self.post(
             "/converse",
             body=await async_maybe_transform(
@@ -987,6 +1169,8 @@ class AsyncDatagrid(AsyncAPIClient):
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=ConverseResponse,
+            stream=stream or False,
+            stream_cls=AsyncStream[sse_converse.AgentStreamEvent],
         )
 
     @override
