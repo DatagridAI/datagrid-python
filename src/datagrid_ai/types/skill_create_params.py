@@ -35,7 +35,11 @@ class SkillCreateParams(TypedDict, total=False):
     """Display name of the skill."""
 
     slash_key: Required[str]
-    """The slash command key (e.g. `budget-check`). Must be unique within the scope."""
+    """The slash command key (e.g.
+
+    `budget-check`, `3d-review`). Must use lowercase letters, digits, and single
+    dashes, start and end with a letter or digit, and be unique within the scope.
+    """
 
     description: Optional[str]
     """Short description.

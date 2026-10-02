@@ -17,9 +17,10 @@ class SummaryListParams(TypedDict, total=False):
     This is automatically added when the request has more results to fetch.
     """
 
-    record_type: Literal["row", "table"]
+    record_type: Literal["row", "table", "file", "page"]
     """Which summary variant to return.
 
-    `row` (default) returns one summary per source row. `table` returns the single
-    table-level summary. Matches `record_type` on each Summary in the response.
+    `row` (default) returns one summary per source row. `table` returns the
+    table-level summary. `file` returns file-level overviews. `page` returns page
+    extraction bodies. Matches `record_type` on each Summary in the response.
     """

@@ -114,6 +114,70 @@ class TestMessages:
                 conversation_id="",
             )
 
+    @parametrize
+    def test_method_submit_feedback(self, client: Datagrid) -> None:
+        message = client.conversations.messages.submit_feedback(
+            message_id="message_id",
+            conversation_id="conversation_id",
+            like=1,
+        )
+        assert message is None
+
+    @parametrize
+    def test_method_submit_feedback_with_all_params(self, client: Datagrid) -> None:
+        message = client.conversations.messages.submit_feedback(
+            message_id="message_id",
+            conversation_id="conversation_id",
+            like=1,
+            feedback="feedback",
+            ui_surface="datagrid_web",
+        )
+        assert message is None
+
+    @parametrize
+    def test_raw_response_submit_feedback(self, client: Datagrid) -> None:
+        response = client.conversations.messages.with_raw_response.submit_feedback(
+            message_id="message_id",
+            conversation_id="conversation_id",
+            like=1,
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        message = response.parse()
+        assert message is None
+
+    @parametrize
+    def test_streaming_response_submit_feedback(self, client: Datagrid) -> None:
+        with client.conversations.messages.with_streaming_response.submit_feedback(
+            message_id="message_id",
+            conversation_id="conversation_id",
+            like=1,
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            message = response.parse()
+            assert message is None
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    def test_path_params_submit_feedback(self, client: Datagrid) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `conversation_id` but received ''"):
+            client.conversations.messages.with_raw_response.submit_feedback(
+                message_id="message_id",
+                conversation_id="",
+                like=1,
+            )
+
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `message_id` but received ''"):
+            client.conversations.messages.with_raw_response.submit_feedback(
+                message_id="",
+                conversation_id="conversation_id",
+                like=1,
+            )
+
 
 class TestAsyncMessages:
     parametrize = pytest.mark.parametrize(
@@ -214,4 +278,68 @@ class TestAsyncMessages:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `conversation_id` but received ''"):
             await async_client.conversations.messages.with_raw_response.list(
                 conversation_id="",
+            )
+
+    @parametrize
+    async def test_method_submit_feedback(self, async_client: AsyncDatagrid) -> None:
+        message = await async_client.conversations.messages.submit_feedback(
+            message_id="message_id",
+            conversation_id="conversation_id",
+            like=1,
+        )
+        assert message is None
+
+    @parametrize
+    async def test_method_submit_feedback_with_all_params(self, async_client: AsyncDatagrid) -> None:
+        message = await async_client.conversations.messages.submit_feedback(
+            message_id="message_id",
+            conversation_id="conversation_id",
+            like=1,
+            feedback="feedback",
+            ui_surface="datagrid_web",
+        )
+        assert message is None
+
+    @parametrize
+    async def test_raw_response_submit_feedback(self, async_client: AsyncDatagrid) -> None:
+        response = await async_client.conversations.messages.with_raw_response.submit_feedback(
+            message_id="message_id",
+            conversation_id="conversation_id",
+            like=1,
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        message = await response.parse()
+        assert message is None
+
+    @parametrize
+    async def test_streaming_response_submit_feedback(self, async_client: AsyncDatagrid) -> None:
+        async with async_client.conversations.messages.with_streaming_response.submit_feedback(
+            message_id="message_id",
+            conversation_id="conversation_id",
+            like=1,
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            message = await response.parse()
+            assert message is None
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    async def test_path_params_submit_feedback(self, async_client: AsyncDatagrid) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `conversation_id` but received ''"):
+            await async_client.conversations.messages.with_raw_response.submit_feedback(
+                message_id="message_id",
+                conversation_id="",
+                like=1,
+            )
+
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `message_id` but received ''"):
+            await async_client.conversations.messages.with_raw_response.submit_feedback(
+                message_id="",
+                conversation_id="conversation_id",
+                like=1,
             )
