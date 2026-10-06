@@ -43,6 +43,7 @@ from .event_triggers import (
     EventTriggersResourceWithStreamingResponse,
     AsyncEventTriggersResourceWithStreamingResponse,
 )
+from ...types.agent_list_item import AgentListItem
 from ...types.agent_claim_response import AgentClaimResponse
 from ...types.agent_generate_response import AgentGenerateResponse
 
@@ -321,8 +322,10 @@ class AgentsResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> Agent:
-        """
-        Get details of a specific agent
+        """Get one agent, including its `corpus` and `knowledge_ids`.
+
+        The list endpoint
+        omits those fields.
 
         Args:
           extra_headers: Send extra headers
@@ -596,9 +599,11 @@ class AgentsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> SyncCursorIDPage[Agent]:
-        """
-        List all agents for the authenticated organization
+    ) -> SyncCursorIDPage[AgentListItem]:
+        """List agents for the authenticated organization.
+
+        Each agent omits `corpus` and
+        `knowledge_ids`; retrieve an agent to read its knowledge scope.
 
         Args:
           after: A cursor to use in pagination. `after` is an object ID that defines your place
@@ -625,7 +630,7 @@ class AgentsResource(SyncAPIResource):
         """
         return self._get_api_list(
             "/agents",
-            page=SyncCursorIDPage[Agent],
+            page=SyncCursorIDPage[AgentListItem],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -641,7 +646,7 @@ class AgentsResource(SyncAPIResource):
                     agent_list_params.AgentListParams,
                 ),
             ),
-            model=Agent,
+            model=AgentListItem,
         )
 
     def delete(
@@ -1027,8 +1032,10 @@ class AsyncAgentsResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> Agent:
-        """
-        Get details of a specific agent
+        """Get one agent, including its `corpus` and `knowledge_ids`.
+
+        The list endpoint
+        omits those fields.
 
         Args:
           extra_headers: Send extra headers
@@ -1302,9 +1309,11 @@ class AsyncAgentsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> AsyncPaginator[Agent, AsyncCursorIDPage[Agent]]:
-        """
-        List all agents for the authenticated organization
+    ) -> AsyncPaginator[AgentListItem, AsyncCursorIDPage[AgentListItem]]:
+        """List agents for the authenticated organization.
+
+        Each agent omits `corpus` and
+        `knowledge_ids`; retrieve an agent to read its knowledge scope.
 
         Args:
           after: A cursor to use in pagination. `after` is an object ID that defines your place
@@ -1331,7 +1340,7 @@ class AsyncAgentsResource(AsyncAPIResource):
         """
         return self._get_api_list(
             "/agents",
-            page=AsyncCursorIDPage[Agent],
+            page=AsyncCursorIDPage[AgentListItem],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -1347,7 +1356,7 @@ class AsyncAgentsResource(AsyncAPIResource):
                     agent_list_params.AgentListParams,
                 ),
             ),
-            model=Agent,
+            model=AgentListItem,
         )
 
     async def delete(

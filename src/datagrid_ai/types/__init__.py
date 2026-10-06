@@ -26,6 +26,7 @@ from .builtin_skill import BuiltinSkill as BuiltinSkill
 from .channel_member import ChannelMember as ChannelMember
 from .channel_thread import ChannelThread as ChannelThread
 from .table_metadata import TableMetadata as TableMetadata
+from .agent_list_item import AgentListItem as AgentListItem
 from .channel_message import ChannelMessage as ChannelMessage
 from .problem_details import ProblemDetails as ProblemDetails
 from .batch_prediction import BatchPrediction as BatchPrediction
