@@ -2,12 +2,31 @@
 
 from typing import List, Union, Optional
 from datetime import datetime
-from typing_extensions import Literal
+from typing_extensions import Literal, TypeAlias
 
 from .tool import Tool
 from .._models import BaseModel
 
-__all__ = ["AgentListItem", "McpServer", "ManagedByApp"]
+__all__ = ["AgentListItem", "Corpus", "CorpusCorpusKnowledgeItem", "CorpusCorpusPageItem", "McpServer", "ManagedByApp"]
+
+
+class CorpusCorpusKnowledgeItem(BaseModel):
+    knowledge_id: str
+    """The ID of the knowledge to include in the corpus."""
+
+    type: Literal["knowledge"]
+    """The type of the corpus item. Always 'knowledge' for knowledge items."""
+
+
+class CorpusCorpusPageItem(BaseModel):
+    page_id: str
+    """The ID of the page to include in the corpus."""
+
+    type: Literal["page"]
+    """The type of the corpus item. Always 'page' for page items."""
+
+
+Corpus: TypeAlias = Union[CorpusCorpusKnowledgeItem, CorpusCorpusPageItem]
 
 
 class McpServer(BaseModel):
@@ -39,7 +58,7 @@ class ManagedByApp(BaseModel):
 class AgentListItem(BaseModel):
     """An agent as returned by List agents.
 
-    `corpus` and `knowledge_ids` are omitted; retrieve the agent to read its knowledge scope.
+    `corpus` and `knowledge_ids` are deprecated on this endpoint and still returned. Null means all knowledge. Retrieve the agent to read knowledge scope after they are removed from list.
     """
 
     id: str
@@ -79,6 +98,14 @@ class AgentListItem(BaseModel):
     Can also accept any custom string value for future model versions.
     """
 
+    corpus: Optional[List[Corpus]] = None
+    """Deprecated on list.
+
+    Still returned from the agent's stored selectors, without expanding tenant
+    knowledge. Null means all knowledge. Retrieve the agent to read knowledge scope
+    after this field is removed from list.
+    """
+
     created_at: datetime
     """The ISO string for when the agent was created"""
 
@@ -90,6 +117,12 @@ class AgentListItem(BaseModel):
 
     emoji: Optional[str] = None
     """The emoji of the agent"""
+
+    knowledge_ids: Optional[List[str]] = None
+    """Deprecated on list, and deprecated in favor of `corpus`.
+
+    Still returned. Null means all knowledge.
+    """
 
     llm_model: Union[
         Literal[

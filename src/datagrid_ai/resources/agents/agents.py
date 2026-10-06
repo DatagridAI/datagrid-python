@@ -324,8 +324,8 @@ class AgentsResource(SyncAPIResource):
     ) -> Agent:
         """Get one agent, including its `corpus` and `knowledge_ids`.
 
-        The list endpoint
-        omits those fields.
+        List still returns
+        those fields, marked deprecated.
 
         Args:
           extra_headers: Send extra headers
@@ -602,8 +602,11 @@ class AgentsResource(SyncAPIResource):
     ) -> SyncCursorIDPage[AgentListItem]:
         """List agents for the authenticated organization.
 
-        Each agent omits `corpus` and
-        `knowledge_ids`; retrieve an agent to read its knowledge scope.
+        `corpus` and `knowledge_ids` are
+        deprecated on this endpoint and still returned from the agent's stored
+        selectors. Null means all knowledge. They do not expand tenant datasets and
+        tables. Retrieve an agent to read knowledge scope after they are removed from
+        list.
 
         Args:
           after: A cursor to use in pagination. `after` is an object ID that defines your place
@@ -1034,8 +1037,8 @@ class AsyncAgentsResource(AsyncAPIResource):
     ) -> Agent:
         """Get one agent, including its `corpus` and `knowledge_ids`.
 
-        The list endpoint
-        omits those fields.
+        List still returns
+        those fields, marked deprecated.
 
         Args:
           extra_headers: Send extra headers
@@ -1312,8 +1315,11 @@ class AsyncAgentsResource(AsyncAPIResource):
     ) -> AsyncPaginator[AgentListItem, AsyncCursorIDPage[AgentListItem]]:
         """List agents for the authenticated organization.
 
-        Each agent omits `corpus` and
-        `knowledge_ids`; retrieve an agent to read its knowledge scope.
+        `corpus` and `knowledge_ids` are
+        deprecated on this endpoint and still returned from the agent's stored
+        selectors. Null means all knowledge. They do not expand tenant datasets and
+        tables. Retrieve an agent to read knowledge scope after they are removed from
+        list.
 
         Args:
           after: A cursor to use in pagination. `after` is an object ID that defines your place
