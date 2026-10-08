@@ -185,6 +185,7 @@ class ConversationsResource(SyncAPIResource):
         direction: Literal["asc", "desc"] | Omit = omit,
         has_messages: bool | Omit = omit,
         has_voice_messages: bool | Omit = omit,
+        has_voice_or_mobile_messages: bool | Omit = omit,
         limit: int | Omit = omit,
         sort: ConversationSortField | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -223,6 +224,15 @@ class ConversationsResource(SyncAPIResource):
               is not supported — the cursor was computed against a different result set, so
               pass a consistent value for the lifetime of a given pagination sequence.
 
+          has_voice_or_mobile_messages: When true, restricts the list to conversations that contain at least one voice
+              message or had a message sent from the Datagrid mobile app. Defaults to false,
+              returning conversations regardless of modality or client. Combined with
+              `has_voice_messages=true`, both filters apply and only voice conversations are
+              returned. Changing this value between requests that reuse the same
+              `before`/`after` cursor is not supported — the cursor was computed against a
+              different result set, so pass a consistent value for the lifetime of a given
+              pagination sequence.
+
           limit: The limit on the number of objects to return, ranging between 1 and 100.
 
           sort: The field to sort the conversations by.
@@ -250,6 +260,7 @@ class ConversationsResource(SyncAPIResource):
                         "direction": direction,
                         "has_messages": has_messages,
                         "has_voice_messages": has_voice_messages,
+                        "has_voice_or_mobile_messages": has_voice_or_mobile_messages,
                         "limit": limit,
                         "sort": sort,
                     },
@@ -440,6 +451,7 @@ class AsyncConversationsResource(AsyncAPIResource):
         direction: Literal["asc", "desc"] | Omit = omit,
         has_messages: bool | Omit = omit,
         has_voice_messages: bool | Omit = omit,
+        has_voice_or_mobile_messages: bool | Omit = omit,
         limit: int | Omit = omit,
         sort: ConversationSortField | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -478,6 +490,15 @@ class AsyncConversationsResource(AsyncAPIResource):
               is not supported — the cursor was computed against a different result set, so
               pass a consistent value for the lifetime of a given pagination sequence.
 
+          has_voice_or_mobile_messages: When true, restricts the list to conversations that contain at least one voice
+              message or had a message sent from the Datagrid mobile app. Defaults to false,
+              returning conversations regardless of modality or client. Combined with
+              `has_voice_messages=true`, both filters apply and only voice conversations are
+              returned. Changing this value between requests that reuse the same
+              `before`/`after` cursor is not supported — the cursor was computed against a
+              different result set, so pass a consistent value for the lifetime of a given
+              pagination sequence.
+
           limit: The limit on the number of objects to return, ranging between 1 and 100.
 
           sort: The field to sort the conversations by.
@@ -505,6 +526,7 @@ class AsyncConversationsResource(AsyncAPIResource):
                         "direction": direction,
                         "has_messages": has_messages,
                         "has_voice_messages": has_voice_messages,
+                        "has_voice_or_mobile_messages": has_voice_or_mobile_messages,
                         "limit": limit,
                         "sort": sort,
                     },

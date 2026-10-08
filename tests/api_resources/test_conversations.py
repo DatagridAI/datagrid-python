@@ -150,6 +150,7 @@ class TestConversations:
             direction="asc",
             has_messages=True,
             has_voice_messages=True,
+            has_voice_or_mobile_messages=True,
             limit=1,
             sort="created_at",
         )
@@ -349,6 +350,7 @@ class TestAsyncConversations:
             direction="asc",
             has_messages=True,
             has_voice_messages=True,
+            has_voice_or_mobile_messages=True,
             limit=1,
             sort="created_at",
         )
