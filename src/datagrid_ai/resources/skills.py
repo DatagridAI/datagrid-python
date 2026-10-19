@@ -81,11 +81,11 @@ class SkillsResource(SyncAPIResource):
     ) -> Skill:
         """Create a skill.
 
-        Defaults to company-owned (`account`) scope, then assigns the
-        API key's teamspace so the created skill is returned as `teamspace`. Pass
-        `scope: user` to create a private skill that can later be promoted.
-        Account-scope slash keys must not collide with a built-in; use the override
-        endpoint for that.
+        Defaults to Public (`account`) privacy with an initial
+        invocation assignment to the API key's teamspace; creation and assignment are
+        atomic, and the returned scope remains `account`. Pass `scope: user` to create a
+        Private skill without an initial assignment. Public slash keys must not collide
+        with a built-in; use the override endpoint for that.
 
         Args:
           category: Category bucket.
@@ -280,12 +280,12 @@ class SkillsResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SyncCursorIDPage[Skill]:
-        """List skills invocable by the authenticated organization.
+        """List skills invocable in the authenticated teamspace.
 
-        Returns built-in
-        skills, skills assigned to the caller's teamspace, and the caller's private
-        skills. Unassigned custom company skills are omitted. Removed built-in overrides
-        are excluded.
+        Returns built-ins, Public
+        custom skills that are unrestricted or assigned here, and the API-key subject's
+        own Private skills assigned here. Other users' Private skills, unassigned
+        Private skills, and removed built-in overrides are excluded.
 
         Args:
           after: A cursor to use in pagination. `after` is an object ID that defines your place
@@ -302,10 +302,12 @@ class SkillsResource(SyncAPIResource):
 
           limit: The limit on the number of objects to return, ranging between 1 and 100.
 
-          scope: Return only skills of this scope. `user` is the caller's own private skills,
-              `account` company-owned skills invocable here, `teamspace` skills assigned to
-              the caller's teamspace, and `builtin` the global catalogue. Omit to return
-              everything the caller can invoke.
+          scope: Return only skills of this scope. `user` returns the API-key subject's own
+              Private skills assigned to the authenticated teamspace; `account` returns Public
+              custom skills invocable here; `teamspace` is a deprecated legacy Public value
+              that remains assignment-required until normalized by a privacy or assignment
+              action; and `builtin` is the global catalogue. Omit to return everything the
+              caller can invoke.
 
           search: Optional search string to filter skills by name or slash key. Case-insensitive
               partial match.
@@ -426,11 +428,12 @@ class SkillsResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> Skill:
-        """Demote a company (account-scope) skill back to private.
-
-        The caller must be the
-        skill's original author and administer skills in the account. Built-in overrides
-        cannot be demoted; use `/reset` instead. Requires `ep:skills:write`.
+        """
+        Convert a Public (`account`) skill or deprecated legacy `teamspace` skill to
+        Private (`user`) scope. Existing teamspace assignments are preserved. The caller
+        must be the skill's original author and administer skills in the account.
+        Built-in overrides cannot be demoted; use `/reset` instead. Requires
+        `ep:skills:write`.
 
         Args:
           extra_headers: Send extra headers
@@ -575,10 +578,11 @@ class SkillsResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> Skill:
-        """Promote a private (user-scope) skill to company scope.
-
-        The caller must be the
-        skill's author and an account admin. Requires `ep:skills:write`.
+        """
+        Convert a Private (`user`) skill or deprecated legacy `teamspace` skill to
+        Public (`account`) scope. Existing teamspace assignments are preserved. The
+        caller must be the skill's author and an account admin. Requires
+        `ep:skills:write`.
 
         Args:
           extra_headers: Send extra headers
@@ -689,11 +693,11 @@ class AsyncSkillsResource(AsyncAPIResource):
     ) -> Skill:
         """Create a skill.
 
-        Defaults to company-owned (`account`) scope, then assigns the
-        API key's teamspace so the created skill is returned as `teamspace`. Pass
-        `scope: user` to create a private skill that can later be promoted.
-        Account-scope slash keys must not collide with a built-in; use the override
-        endpoint for that.
+        Defaults to Public (`account`) privacy with an initial
+        invocation assignment to the API key's teamspace; creation and assignment are
+        atomic, and the returned scope remains `account`. Pass `scope: user` to create a
+        Private skill without an initial assignment. Public slash keys must not collide
+        with a built-in; use the override endpoint for that.
 
         Args:
           category: Category bucket.
@@ -888,12 +892,12 @@ class AsyncSkillsResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> AsyncPaginator[Skill, AsyncCursorIDPage[Skill]]:
-        """List skills invocable by the authenticated organization.
+        """List skills invocable in the authenticated teamspace.
 
-        Returns built-in
-        skills, skills assigned to the caller's teamspace, and the caller's private
-        skills. Unassigned custom company skills are omitted. Removed built-in overrides
-        are excluded.
+        Returns built-ins, Public
+        custom skills that are unrestricted or assigned here, and the API-key subject's
+        own Private skills assigned here. Other users' Private skills, unassigned
+        Private skills, and removed built-in overrides are excluded.
 
         Args:
           after: A cursor to use in pagination. `after` is an object ID that defines your place
@@ -910,10 +914,12 @@ class AsyncSkillsResource(AsyncAPIResource):
 
           limit: The limit on the number of objects to return, ranging between 1 and 100.
 
-          scope: Return only skills of this scope. `user` is the caller's own private skills,
-              `account` company-owned skills invocable here, `teamspace` skills assigned to
-              the caller's teamspace, and `builtin` the global catalogue. Omit to return
-              everything the caller can invoke.
+          scope: Return only skills of this scope. `user` returns the API-key subject's own
+              Private skills assigned to the authenticated teamspace; `account` returns Public
+              custom skills invocable here; `teamspace` is a deprecated legacy Public value
+              that remains assignment-required until normalized by a privacy or assignment
+              action; and `builtin` is the global catalogue. Omit to return everything the
+              caller can invoke.
 
           search: Optional search string to filter skills by name or slash key. Case-insensitive
               partial match.
@@ -1034,11 +1040,12 @@ class AsyncSkillsResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> Skill:
-        """Demote a company (account-scope) skill back to private.
-
-        The caller must be the
-        skill's original author and administer skills in the account. Built-in overrides
-        cannot be demoted; use `/reset` instead. Requires `ep:skills:write`.
+        """
+        Convert a Public (`account`) skill or deprecated legacy `teamspace` skill to
+        Private (`user`) scope. Existing teamspace assignments are preserved. The caller
+        must be the skill's original author and administer skills in the account.
+        Built-in overrides cannot be demoted; use `/reset` instead. Requires
+        `ep:skills:write`.
 
         Args:
           extra_headers: Send extra headers
@@ -1183,10 +1190,11 @@ class AsyncSkillsResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> Skill:
-        """Promote a private (user-scope) skill to company scope.
-
-        The caller must be the
-        skill's author and an account admin. Requires `ep:skills:write`.
+        """
+        Convert a Private (`user`) skill or deprecated legacy `teamspace` skill to
+        Public (`account`) scope. Existing teamspace assignments are preserved. The
+        caller must be the skill's author and an account admin. Requires
+        `ep:skills:write`.
 
         Args:
           extra_headers: Send extra headers

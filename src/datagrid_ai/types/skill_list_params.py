@@ -34,9 +34,11 @@ class SkillListParams(TypedDict, total=False):
     scope: Literal["user", "account", "teamspace", "builtin"]
     """Return only skills of this scope.
 
-    `user` is the caller's own private skills, `account` company-owned skills
-    invocable here, `teamspace` skills assigned to the caller's teamspace, and
-    `builtin` the global catalogue. Omit to return everything the caller can invoke.
+    `user` returns the API-key subject's own Private skills assigned to the
+    authenticated teamspace; `account` returns Public custom skills invocable here;
+    `teamspace` is a deprecated legacy Public value that remains assignment-required
+    until normalized by a privacy or assignment action; and `builtin` is the global
+    catalogue. Omit to return everything the caller can invoke.
     """
 
     search: str

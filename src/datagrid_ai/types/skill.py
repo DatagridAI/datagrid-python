@@ -77,11 +77,12 @@ class Skill(BaseModel):
     """Tool identifiers that this skill requires to function."""
 
     scope: Literal["user", "account", "teamspace", "builtin"]
-    """Ownership scope.
+    """Privacy scope.
 
-    `user` = private (author only), `account` = company-owned, `teamspace` =
-    assigned to selected teamspaces, `builtin` = global default. A default public
-    create is assigned to the API key's teamspace and returned as `teamspace`.
+    `user` = Private (author only), `account` = Public within the company,
+    `teamspace` = deprecated legacy Public value retained only for compatibility,
+    and `builtin` = global default. New skills never use `teamspace`; changing its
+    privacy or assignments normalizes it.
     """
 
     slash_key: str
