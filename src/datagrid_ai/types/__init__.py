@@ -5,6 +5,7 @@ from __future__ import annotations
 from .page import Page as Page
 from .tool import Tool as Tool
 from .agent import Agent as Agent
+from .model import Model as Model
 from .skill import Skill as Skill
 from .secret import Secret as Secret
 from .channel import Channel as Channel
@@ -54,6 +55,7 @@ from .agent_update_params import AgentUpdateParams as AgentUpdateParams
 from .attachment_metadata import AttachmentMetadata as AttachmentMetadata
 from .channel_list_params import ChannelListParams as ChannelListParams
 from .connection_provider import ConnectionProvider as ConnectionProvider
+from .model_list_response import ModelListResponse as ModelListResponse
 from .skill_create_params import SkillCreateParams as SkillCreateParams
 from .skill_update_params import SkillUpdateParams as SkillUpdateParams
 from .webhook_list_params import WebhookListParams as WebhookListParams

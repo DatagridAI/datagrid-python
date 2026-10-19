@@ -373,6 +373,18 @@ Methods:
 - <code title="get /tools/{tool_name}">client.tools.<a href="./src/datagrid_ai/resources/tools.py">retrieve</a>(tool_name) -> <a href="./src/datagrid_ai/types/tool_def.py">ToolDef</a></code>
 - <code title="get /tools">client.tools.<a href="./src/datagrid_ai/resources/tools.py">list</a>(\*\*<a href="src/datagrid_ai/types/tool_list_params.py">params</a>) -> <a href="./src/datagrid_ai/types/tool_def.py">SyncCursorNamePage[ToolDef]</a></code>
 
+# Models
+
+Types:
+
+```python
+from datagrid_ai.types import Model, ModelListResponse
+```
+
+Methods:
+
+- <code title="get /models">client.models.<a href="./src/datagrid_ai/resources/models.py">list</a>() -> <a href="./src/datagrid_ai/types/model_list_response.py">ModelListResponse</a></code>
+
 # Memory
 
 ## User

@@ -56,6 +56,14 @@ from .memory import (
     MemoryResourceWithStreamingResponse,
     AsyncMemoryResourceWithStreamingResponse,
 )
+from .models import (
+    ModelsResource,
+    AsyncModelsResource,
+    ModelsResourceWithRawResponse,
+    AsyncModelsResourceWithRawResponse,
+    ModelsResourceWithStreamingResponse,
+    AsyncModelsResourceWithStreamingResponse,
+)
 from .search import (
     SearchResource,
     AsyncSearchResource,
@@ -260,6 +268,12 @@ __all__ = [
     "AsyncToolsResourceWithRawResponse",
     "ToolsResourceWithStreamingResponse",
     "AsyncToolsResourceWithStreamingResponse",
+    "ModelsResource",
+    "AsyncModelsResource",
+    "ModelsResourceWithRawResponse",
+    "AsyncModelsResourceWithRawResponse",
+    "ModelsResourceWithStreamingResponse",
+    "AsyncModelsResourceWithStreamingResponse",
     "MemoryResource",
     "AsyncMemoryResource",
     "MemoryResourceWithRawResponse",

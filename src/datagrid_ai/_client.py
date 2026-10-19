@@ -62,6 +62,7 @@ if TYPE_CHECKING:
         voice,
         agents,
         memory,
+        models,
         search,
         skills,
         secrets,
@@ -80,6 +81,7 @@ if TYPE_CHECKING:
     from .resources.files import FilesResource, AsyncFilesResource
     from .resources.pages import PagesResource, AsyncPagesResource
     from .resources.tools import ToolsResource, AsyncToolsResource
+    from .resources.models import ModelsResource, AsyncModelsResource
     from .resources.search import SearchResource, AsyncSearchResource
     from .resources.skills import SkillsResource, AsyncSkillsResource
     from .resources.secrets import SecretsResource, AsyncSecretsResource
@@ -272,6 +274,12 @@ class Datagrid(SyncAPIClient):
         from .resources.tools import ToolsResource
 
         return ToolsResource(self)
+
+    @cached_property
+    def models(self) -> ModelsResource:
+        from .resources.models import ModelsResource
+
+        return ModelsResource(self)
 
     @cached_property
     def memory(self) -> MemoryResource:
@@ -822,6 +830,12 @@ class AsyncDatagrid(AsyncAPIClient):
         return AsyncToolsResource(self)
 
     @cached_property
+    def models(self) -> AsyncModelsResource:
+        from .resources.models import AsyncModelsResource
+
+        return AsyncModelsResource(self)
+
+    @cached_property
     def memory(self) -> AsyncMemoryResource:
         from .resources.memory import AsyncMemoryResource
 
@@ -1308,6 +1322,12 @@ class DatagridWithRawResponse:
         return ToolsResourceWithRawResponse(self._client.tools)
 
     @cached_property
+    def models(self) -> models.ModelsResourceWithRawResponse:
+        from .resources.models import ModelsResourceWithRawResponse
+
+        return ModelsResourceWithRawResponse(self._client.models)
+
+    @cached_property
     def memory(self) -> memory.MemoryResourceWithRawResponse:
         from .resources.memory import MemoryResourceWithRawResponse
 
@@ -1443,6 +1463,12 @@ class AsyncDatagridWithRawResponse:
         from .resources.tools import AsyncToolsResourceWithRawResponse
 
         return AsyncToolsResourceWithRawResponse(self._client.tools)
+
+    @cached_property
+    def models(self) -> models.AsyncModelsResourceWithRawResponse:
+        from .resources.models import AsyncModelsResourceWithRawResponse
+
+        return AsyncModelsResourceWithRawResponse(self._client.models)
 
     @cached_property
     def memory(self) -> memory.AsyncMemoryResourceWithRawResponse:
@@ -1582,6 +1608,12 @@ class DatagridWithStreamedResponse:
         return ToolsResourceWithStreamingResponse(self._client.tools)
 
     @cached_property
+    def models(self) -> models.ModelsResourceWithStreamingResponse:
+        from .resources.models import ModelsResourceWithStreamingResponse
+
+        return ModelsResourceWithStreamingResponse(self._client.models)
+
+    @cached_property
     def memory(self) -> memory.MemoryResourceWithStreamingResponse:
         from .resources.memory import MemoryResourceWithStreamingResponse
 
@@ -1717,6 +1749,12 @@ class AsyncDatagridWithStreamedResponse:
         from .resources.tools import AsyncToolsResourceWithStreamingResponse
 
         return AsyncToolsResourceWithStreamingResponse(self._client.tools)
+
+    @cached_property
+    def models(self) -> models.AsyncModelsResourceWithStreamingResponse:
+        from .resources.models import AsyncModelsResourceWithStreamingResponse
+
+        return AsyncModelsResourceWithStreamingResponse(self._client.models)
 
     @cached_property
     def memory(self) -> memory.AsyncMemoryResourceWithStreamingResponse:
