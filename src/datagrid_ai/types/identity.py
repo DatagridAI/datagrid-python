@@ -1,9 +1,10 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import List
+from typing import List, Optional
 from typing_extensions import Literal
 
 from .._models import BaseModel
+from .identity_procore import IdentityProcore
 from .identity_teamspace import IdentityTeamspace
 
 __all__ = ["Identity"]
@@ -35,3 +36,9 @@ class Identity(BaseModel):
 
     user_id: str
     """The ID of the authenticated user."""
+
+    procore: Optional[IdentityProcore] = None
+    """The Procore company and project the current teamspace is bound to.
+
+    Omitted when the teamspace's account is not linked to a Procore company.
+    """

@@ -65,6 +65,7 @@ if TYPE_CHECKING:
         models,
         search,
         skills,
+        procore,
         secrets,
         channels,
         identity,
@@ -84,6 +85,7 @@ if TYPE_CHECKING:
     from .resources.models import ModelsResource, AsyncModelsResource
     from .resources.search import SearchResource, AsyncSearchResource
     from .resources.skills import SkillsResource, AsyncSkillsResource
+    from .resources.procore import ProcoreResource, AsyncProcoreResource
     from .resources.secrets import SecretsResource, AsyncSecretsResource
     from .resources.channels import ChannelsResource, AsyncChannelsResource
     from .resources.identity import IdentityResource, AsyncIdentityResource
@@ -262,6 +264,12 @@ class Datagrid(SyncAPIClient):
         from .resources.identity import IdentityResource
 
         return IdentityResource(self)
+
+    @cached_property
+    def procore(self) -> ProcoreResource:
+        from .resources.procore import ProcoreResource
+
+        return ProcoreResource(self)
 
     @cached_property
     def pages(self) -> PagesResource:
@@ -818,6 +826,12 @@ class AsyncDatagrid(AsyncAPIClient):
         return AsyncIdentityResource(self)
 
     @cached_property
+    def procore(self) -> AsyncProcoreResource:
+        from .resources.procore import AsyncProcoreResource
+
+        return AsyncProcoreResource(self)
+
+    @cached_property
     def pages(self) -> AsyncPagesResource:
         from .resources.pages import AsyncPagesResource
 
@@ -1310,6 +1324,12 @@ class DatagridWithRawResponse:
         return IdentityResourceWithRawResponse(self._client.identity)
 
     @cached_property
+    def procore(self) -> procore.ProcoreResourceWithRawResponse:
+        from .resources.procore import ProcoreResourceWithRawResponse
+
+        return ProcoreResourceWithRawResponse(self._client.procore)
+
+    @cached_property
     def pages(self) -> pages.PagesResourceWithRawResponse:
         from .resources.pages import PagesResourceWithRawResponse
 
@@ -1451,6 +1471,12 @@ class AsyncDatagridWithRawResponse:
         from .resources.identity import AsyncIdentityResourceWithRawResponse
 
         return AsyncIdentityResourceWithRawResponse(self._client.identity)
+
+    @cached_property
+    def procore(self) -> procore.AsyncProcoreResourceWithRawResponse:
+        from .resources.procore import AsyncProcoreResourceWithRawResponse
+
+        return AsyncProcoreResourceWithRawResponse(self._client.procore)
 
     @cached_property
     def pages(self) -> pages.AsyncPagesResourceWithRawResponse:
@@ -1596,6 +1622,12 @@ class DatagridWithStreamedResponse:
         return IdentityResourceWithStreamingResponse(self._client.identity)
 
     @cached_property
+    def procore(self) -> procore.ProcoreResourceWithStreamingResponse:
+        from .resources.procore import ProcoreResourceWithStreamingResponse
+
+        return ProcoreResourceWithStreamingResponse(self._client.procore)
+
+    @cached_property
     def pages(self) -> pages.PagesResourceWithStreamingResponse:
         from .resources.pages import PagesResourceWithStreamingResponse
 
@@ -1737,6 +1769,12 @@ class AsyncDatagridWithStreamedResponse:
         from .resources.identity import AsyncIdentityResourceWithStreamingResponse
 
         return AsyncIdentityResourceWithStreamingResponse(self._client.identity)
+
+    @cached_property
+    def procore(self) -> procore.AsyncProcoreResourceWithStreamingResponse:
+        from .resources.procore import AsyncProcoreResourceWithStreamingResponse
+
+        return AsyncProcoreResourceWithStreamingResponse(self._client.procore)
 
     @cached_property
     def pages(self) -> pages.AsyncPagesResourceWithStreamingResponse:

@@ -80,6 +80,14 @@ from .skills import (
     SkillsResourceWithStreamingResponse,
     AsyncSkillsResourceWithStreamingResponse,
 )
+from .procore import (
+    ProcoreResource,
+    AsyncProcoreResource,
+    ProcoreResourceWithRawResponse,
+    AsyncProcoreResourceWithRawResponse,
+    ProcoreResourceWithStreamingResponse,
+    AsyncProcoreResourceWithStreamingResponse,
+)
 from .secrets import (
     SecretsResource,
     AsyncSecretsResource,
@@ -256,6 +264,12 @@ __all__ = [
     "AsyncIdentityResourceWithRawResponse",
     "IdentityResourceWithStreamingResponse",
     "AsyncIdentityResourceWithStreamingResponse",
+    "ProcoreResource",
+    "AsyncProcoreResource",
+    "ProcoreResourceWithRawResponse",
+    "AsyncProcoreResourceWithRawResponse",
+    "ProcoreResourceWithStreamingResponse",
+    "AsyncProcoreResourceWithStreamingResponse",
     "PagesResource",
     "AsyncPagesResource",
     "PagesResourceWithRawResponse",

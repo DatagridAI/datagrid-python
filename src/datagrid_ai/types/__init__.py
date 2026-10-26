@@ -30,8 +30,11 @@ from .table_metadata import TableMetadata as TableMetadata
 from .agent_list_item import AgentListItem as AgentListItem
 from .channel_message import ChannelMessage as ChannelMessage
 from .problem_details import ProblemDetails as ProblemDetails
+from .procore_company import ProcoreCompany as ProcoreCompany
+from .procore_project import ProcoreProject as ProcoreProject
 from .batch_prediction import BatchPrediction as BatchPrediction
 from .file_list_params import FileListParams as FileListParams
+from .identity_procore import IdentityProcore as IdentityProcore
 from .message_metadata import MessageMetadata as MessageMetadata
 from .page_list_params import PageListParams as PageListParams
 from .search_ai_result import SearchAIResult as SearchAIResult
@@ -60,6 +63,8 @@ from .skill_create_params import SkillCreateParams as SkillCreateParams
 from .skill_update_params import SkillUpdateParams as SkillUpdateParams
 from .webhook_list_params import WebhookListParams as WebhookListParams
 from .agent_claim_response import AgentClaimResponse as AgentClaimResponse
+from .procore_company_list import ProcoreCompanyList as ProcoreCompanyList
+from .procore_project_list import ProcoreProjectList as ProcoreProjectList
 from .search_search_params import SearchSearchParams as SearchSearchParams
 from .secret_create_params import SecretCreateParams as SecretCreateParams
 from .agent_generate_params import AgentGenerateParams as AgentGenerateParams
@@ -104,8 +109,10 @@ from .batch_prediction_list_params import BatchPredictionListParams as BatchPred
 from .batch_prediction_result_line import BatchPredictionResultLine as BatchPredictionResultLine
 from .channel_add_members_response import ChannelAddMembersResponse as ChannelAddMembersResponse
 from .channel_list_messages_params import ChannelListMessagesParams as ChannelListMessagesParams
+from .procore_list_projects_params import ProcoreListProjectsParams as ProcoreListProjectsParams
 from .skill_list_builtins_response import SkillListBuiltinsResponse as SkillListBuiltinsResponse
 from .channel_create_message_params import ChannelCreateMessageParams as ChannelCreateMessageParams
+from .procore_list_companies_params import ProcoreListCompaniesParams as ProcoreListCompaniesParams
 from .batch_prediction_create_params import BatchPredictionCreateParams as BatchPredictionCreateParams
 from .batch_prediction_request_counts import BatchPredictionRequestCounts as BatchPredictionRequestCounts
 from .connection_provider_list_params import ConnectionProviderListParams as ConnectionProviderListParams
