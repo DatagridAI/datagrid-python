@@ -20,9 +20,9 @@ class Skill(BaseModel):
     """
 
     builtin_key: Optional[str] = None
-    """
-    For company overrides of built-in skills: the identifier of the underlying
-    built-in. `null` for user-authored skills.
+    """For built-in skills and company copies of them: the identifier of the built-in.
+
+    `null` for user-authored skills.
     """
 
     category: Literal[
@@ -53,7 +53,10 @@ class Skill(BaseModel):
     """Short description shown in the skill picker."""
 
     enabled: bool
-    """Whether the skill is active and available for selection."""
+    """Whether the skill is active and available for selection.
+
+    For a built-in skill, `false` when your company disabled it.
+    """
 
     instructions: str
     """The full instructions / system prompt for this skill."""
