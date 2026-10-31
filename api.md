@@ -349,13 +349,20 @@ Methods:
 Types:
 
 ```python
-from datagrid_ai.types import ProcoreCompany, ProcoreCompanyList, ProcoreProject, ProcoreProjectList
+from datagrid_ai.types import (
+    ProcoreCompany,
+    ProcoreCompanyList,
+    ProcoreProject,
+    ProcoreProjectConnection,
+    ProcoreProjectList,
+)
 ```
 
 Methods:
 
 - <code title="get /procore/companies">client.procore.<a href="./src/datagrid_ai/resources/procore.py">list_companies</a>(\*\*<a href="src/datagrid_ai/types/procore_list_companies_params.py">params</a>) -> <a href="./src/datagrid_ai/types/procore_company_list.py">ProcoreCompanyList</a></code>
 - <code title="get /procore/companies/{company_id}/projects">client.procore.<a href="./src/datagrid_ai/resources/procore.py">list_projects</a>(company_id, \*\*<a href="src/datagrid_ai/types/procore_list_projects_params.py">params</a>) -> <a href="./src/datagrid_ai/types/procore_project_list.py">ProcoreProjectList</a></code>
+- <code title="get /procore/companies/{company_id}/projects/{project_id}/connection">client.procore.<a href="./src/datagrid_ai/resources/procore.py">retrieve_project_connection</a>(project_id, \*, company_id) -> <a href="./src/datagrid_ai/types/procore_project_connection.py">ProcoreProjectConnection</a></code>
 
 # Pages
 

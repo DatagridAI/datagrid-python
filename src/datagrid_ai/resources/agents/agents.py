@@ -82,7 +82,15 @@ class AgentsResource(SyncAPIResource):
         self,
         *,
         agent_model: Union[
-            Literal["magpie-1.1", "magpie-1.1-flash", "magpie-2.0", "magpie-2.5", "magpie-2.5-flash", "llm-only"],
+            Literal[
+                "magpie-1.1",
+                "magpie-1.1-flash",
+                "magpie-2.0",
+                "magpie-2.5",
+                "magpie-2.5-flash",
+                "magpie-3.0",
+                "llm-only",
+            ],
             str,
             None,
         ]
@@ -208,6 +216,11 @@ class AgentsResource(SyncAPIResource):
 
               - `llm-only` — Runs a direct LLM conversation with no planning or tool calls. A
                 400 error will be returned if tools are specified.
+
+              **BETA**: Magpie 3.0. Behavior and schema may change.
+
+              - `magpie-3.0` — **BETA**. Available on the public Converse API. In-app rollout
+                flags do not apply to this request.
 
               Can also accept any custom string value for future model versions.
 
@@ -383,7 +396,15 @@ class AgentsResource(SyncAPIResource):
         agent_id: str,
         *,
         agent_model: Union[
-            Literal["magpie-1.1", "magpie-1.1-flash", "magpie-2.0", "magpie-2.5", "magpie-2.5-flash", "llm-only"],
+            Literal[
+                "magpie-1.1",
+                "magpie-1.1-flash",
+                "magpie-2.0",
+                "magpie-2.5",
+                "magpie-2.5-flash",
+                "magpie-3.0",
+                "llm-only",
+            ],
             str,
             None,
         ]
@@ -510,6 +531,11 @@ class AgentsResource(SyncAPIResource):
 
               - `llm-only` — Runs a direct LLM conversation with no planning or tool calls. A
                 400 error will be returned if tools are specified.
+
+              **BETA**: Magpie 3.0. Behavior and schema may change.
+
+              - `magpie-3.0` — **BETA**. Available on the public Converse API. In-app rollout
+                flags do not apply to this request.
 
               Can also accept any custom string value for future model versions.
 
@@ -859,7 +885,15 @@ class AsyncAgentsResource(AsyncAPIResource):
         self,
         *,
         agent_model: Union[
-            Literal["magpie-1.1", "magpie-1.1-flash", "magpie-2.0", "magpie-2.5", "magpie-2.5-flash", "llm-only"],
+            Literal[
+                "magpie-1.1",
+                "magpie-1.1-flash",
+                "magpie-2.0",
+                "magpie-2.5",
+                "magpie-2.5-flash",
+                "magpie-3.0",
+                "llm-only",
+            ],
             str,
             None,
         ]
@@ -985,6 +1019,11 @@ class AsyncAgentsResource(AsyncAPIResource):
 
               - `llm-only` — Runs a direct LLM conversation with no planning or tool calls. A
                 400 error will be returned if tools are specified.
+
+              **BETA**: Magpie 3.0. Behavior and schema may change.
+
+              - `magpie-3.0` — **BETA**. Available on the public Converse API. In-app rollout
+                flags do not apply to this request.
 
               Can also accept any custom string value for future model versions.
 
@@ -1160,7 +1199,15 @@ class AsyncAgentsResource(AsyncAPIResource):
         agent_id: str,
         *,
         agent_model: Union[
-            Literal["magpie-1.1", "magpie-1.1-flash", "magpie-2.0", "magpie-2.5", "magpie-2.5-flash", "llm-only"],
+            Literal[
+                "magpie-1.1",
+                "magpie-1.1-flash",
+                "magpie-2.0",
+                "magpie-2.5",
+                "magpie-2.5-flash",
+                "magpie-3.0",
+                "llm-only",
+            ],
             str,
             None,
         ]
@@ -1287,6 +1334,11 @@ class AsyncAgentsResource(AsyncAPIResource):
 
               - `llm-only` — Runs a direct LLM conversation with no planning or tool calls. A
                 400 error will be returned if tools are specified.
+
+              **BETA**: Magpie 3.0. Behavior and schema may change.
+
+              - `magpie-3.0` — **BETA**. Available on the public Converse API. In-app rollout
+                flags do not apply to this request.
 
               Can also accept any custom string value for future model versions.
 

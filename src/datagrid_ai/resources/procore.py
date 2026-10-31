@@ -18,6 +18,7 @@ from .._response import (
 from .._base_client import make_request_options
 from ..types.procore_company_list import ProcoreCompanyList
 from ..types.procore_project_list import ProcoreProjectList
+from ..types.procore_project_connection import ProcoreProjectConnection
 
 __all__ = ["ProcoreResource", "AsyncProcoreResource"]
 
@@ -106,8 +107,10 @@ class ProcoreResource(SyncAPIResource):
     ) -> ProcoreProjectList:
         """
         Lists the Procore projects the authenticated user's own Procore session can
-        access in one company, including inactive projects. Pages with `page` /
-        `per_page`, passed through to Procore.
+        access in one company, including inactive projects. Each project has
+        `connected`: true when Procore AI has bound a Datagrid teamspace to that
+        project, false when the project is visible in Procore and no such teamspace
+        exists. Pages with `page` / `per_page`, passed through to Procore.
 
         Args:
           page: 1-based page number. Values below 1 are treated as 1.
@@ -140,6 +143,51 @@ class ProcoreResource(SyncAPIResource):
                 ),
             ),
             cast_to=ProcoreProjectList,
+        )
+
+    def retrieve_project_connection(
+        self,
+        project_id: str,
+        *,
+        company_id: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> ProcoreProjectConnection:
+        """Reports whether Procore AI has a Datagrid teamspace bound to one Procore
+        project.
+
+        The caller must be able to open the project in Procore. `connected`
+        uses the same rule as the project list: true when a non-deleted teamspace under
+        the company's Datagrid account is bound to the project, false when the project
+        is visible and no such teamspace exists.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not company_id:
+            raise ValueError(f"Expected a non-empty value for `company_id` but received {company_id!r}")
+        if not project_id:
+            raise ValueError(f"Expected a non-empty value for `project_id` but received {project_id!r}")
+        return self._get(
+            path_template(
+                "/procore/companies/{company_id}/projects/{project_id}/connection",
+                company_id=company_id,
+                project_id=project_id,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=ProcoreProjectConnection,
         )
 
 
@@ -227,8 +275,10 @@ class AsyncProcoreResource(AsyncAPIResource):
     ) -> ProcoreProjectList:
         """
         Lists the Procore projects the authenticated user's own Procore session can
-        access in one company, including inactive projects. Pages with `page` /
-        `per_page`, passed through to Procore.
+        access in one company, including inactive projects. Each project has
+        `connected`: true when Procore AI has bound a Datagrid teamspace to that
+        project, false when the project is visible in Procore and no such teamspace
+        exists. Pages with `page` / `per_page`, passed through to Procore.
 
         Args:
           page: 1-based page number. Values below 1 are treated as 1.
@@ -263,6 +313,51 @@ class AsyncProcoreResource(AsyncAPIResource):
             cast_to=ProcoreProjectList,
         )
 
+    async def retrieve_project_connection(
+        self,
+        project_id: str,
+        *,
+        company_id: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> ProcoreProjectConnection:
+        """Reports whether Procore AI has a Datagrid teamspace bound to one Procore
+        project.
+
+        The caller must be able to open the project in Procore. `connected`
+        uses the same rule as the project list: true when a non-deleted teamspace under
+        the company's Datagrid account is bound to the project, false when the project
+        is visible and no such teamspace exists.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not company_id:
+            raise ValueError(f"Expected a non-empty value for `company_id` but received {company_id!r}")
+        if not project_id:
+            raise ValueError(f"Expected a non-empty value for `project_id` but received {project_id!r}")
+        return await self._get(
+            path_template(
+                "/procore/companies/{company_id}/projects/{project_id}/connection",
+                company_id=company_id,
+                project_id=project_id,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=ProcoreProjectConnection,
+        )
+
 
 class ProcoreResourceWithRawResponse:
     def __init__(self, procore: ProcoreResource) -> None:
@@ -273,6 +368,9 @@ class ProcoreResourceWithRawResponse:
         )
         self.list_projects = to_raw_response_wrapper(
             procore.list_projects,
+        )
+        self.retrieve_project_connection = to_raw_response_wrapper(
+            procore.retrieve_project_connection,
         )
 
 
@@ -286,6 +384,9 @@ class AsyncProcoreResourceWithRawResponse:
         self.list_projects = async_to_raw_response_wrapper(
             procore.list_projects,
         )
+        self.retrieve_project_connection = async_to_raw_response_wrapper(
+            procore.retrieve_project_connection,
+        )
 
 
 class ProcoreResourceWithStreamingResponse:
@@ -298,6 +399,9 @@ class ProcoreResourceWithStreamingResponse:
         self.list_projects = to_streamed_response_wrapper(
             procore.list_projects,
         )
+        self.retrieve_project_connection = to_streamed_response_wrapper(
+            procore.retrieve_project_connection,
+        )
 
 
 class AsyncProcoreResourceWithStreamingResponse:
@@ -309,4 +413,7 @@ class AsyncProcoreResourceWithStreamingResponse:
         )
         self.list_projects = async_to_streamed_response_wrapper(
             procore.list_projects,
+        )
+        self.retrieve_project_connection = async_to_streamed_response_wrapper(
+            procore.retrieve_project_connection,
         )
