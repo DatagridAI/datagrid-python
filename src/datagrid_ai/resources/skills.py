@@ -547,14 +547,11 @@ class SkillsResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> Skill:
-        """Restore a built-in skill your company removed.
-
-        Clears only the removal, so a
-        built-in that was disabled before it was removed comes back disabled. No copy of
-        the built-in is created: the response is the skill your company now gets — the
-        global built-in (its `id` is the built-in's) with your company's state applied,
-        or your company's own copy if it has one. Idempotent: returns the same skill
-        when nothing was removed. Requires `ep:skills:write` (account admin).
+        """
+        Create (or restore) a company-owned copy of a built-in skill that shadows the
+        global default for your organization. Idempotent: if an override already exists
+        it is returned unchanged; if it was previously removed it is restored. Requires
+        `ep:skills:write` (account admin).
 
         Args:
           extra_headers: Send extra headers
@@ -1168,14 +1165,11 @@ class AsyncSkillsResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> Skill:
-        """Restore a built-in skill your company removed.
-
-        Clears only the removal, so a
-        built-in that was disabled before it was removed comes back disabled. No copy of
-        the built-in is created: the response is the skill your company now gets — the
-        global built-in (its `id` is the built-in's) with your company's state applied,
-        or your company's own copy if it has one. Idempotent: returns the same skill
-        when nothing was removed. Requires `ep:skills:write` (account admin).
+        """
+        Create (or restore) a company-owned copy of a built-in skill that shadows the
+        global default for your organization. Idempotent: if an override already exists
+        it is returned unchanged; if it was previously removed it is restored. Requires
+        `ep:skills:write` (account admin).
 
         Args:
           extra_headers: Send extra headers
