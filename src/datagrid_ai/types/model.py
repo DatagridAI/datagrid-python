@@ -1,5 +1,6 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
+from typing import Optional
 from typing_extensions import Literal
 
 from .._models import BaseModel
@@ -20,6 +21,13 @@ class Model(BaseModel):
     """Whether the model runs as requested for the current user and teamspace.
 
     When `false`, the request is still accepted but a default model is used instead.
+    """
+
+    family: Optional[str] = None
+    """The model line this LLM belongs to across versions, as a snake_case token, e.g.
+
+    `claude_opus` or `gemini_pro`. The same family is shared by a model served on
+    different platforms. Always `null` for `agent` models.
     """
 
     name: str
