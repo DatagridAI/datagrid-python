@@ -14,6 +14,13 @@ class ProcoreProject(BaseModel):
     company_id: str
     """The Procore company ID the project belongs to."""
 
+    connected: bool
+    """Whether Procore AI has connected this project to a Datagrid teamspace.
+
+    True when a non-deleted teamspace under the company's Datagrid account is bound
+    to this Procore project.
+    """
+
     name: str
     """The project name in Procore."""
 
