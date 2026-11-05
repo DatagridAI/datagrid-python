@@ -110,10 +110,7 @@ class ProcoreResource(SyncAPIResource):
         access in one company, including inactive projects. Each project has
         `connected`: true when Procore AI has bound a Datagrid teamspace to that
         project, false when the project is visible in Procore and no such teamspace
-        exists. Pages with `page` / `per_page`, the same way the companies route does:
-        Procore returns the whole list for this endpoint, so the page is cut here. A
-        page never holds more than `per_page` projects, and `next_page` is null once the
-        last project has been returned.
+        exists. Pages with `page` / `per_page`, passed through to Procore.
 
         Args:
           page: 1-based page number. Values below 1 are treated as 1.
@@ -281,10 +278,7 @@ class AsyncProcoreResource(AsyncAPIResource):
         access in one company, including inactive projects. Each project has
         `connected`: true when Procore AI has bound a Datagrid teamspace to that
         project, false when the project is visible in Procore and no such teamspace
-        exists. Pages with `page` / `per_page`, the same way the companies route does:
-        Procore returns the whole list for this endpoint, so the page is cut here. A
-        page never holds more than `per_page` projects, and `next_page` is null once the
-        last project has been returned.
+        exists. Pages with `page` / `per_page`, passed through to Procore.
 
         Args:
           page: 1-based page number. Values below 1 are treated as 1.
