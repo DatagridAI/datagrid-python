@@ -7,7 +7,7 @@ from .._models import BaseModel
 from .tool_def import ToolDef
 from .conversations.message import Message
 
-__all__ = ["ConverseResponse", "ConverseResponseReasoning", "ConverseResponseToolCall"]
+__all__ = ["ConverseResponse", "ConverseResponseReasoning", "ConverseResponseSkill", "ConverseResponseToolCall"]
 
 
 class ConverseResponseReasoning(BaseModel):
@@ -36,6 +36,26 @@ class ConverseResponseReasoning(BaseModel):
     """The task description for this reasoning step."""
 
 
+class ConverseResponseSkill(BaseModel):
+    """A skill that was force-activated for this turn."""
+
+    id: str
+    """The unique identifier of the skill."""
+
+    name: str
+    """The human-readable name of the skill."""
+
+    scope: Literal["account", "builtin"]
+    """The visibility scope of the skill.
+
+    `user` (private) never appears here: `skill_ids` and `slash_keys` can only name
+    account-shared or builtin skills.
+    """
+
+    slash_key: str
+    """The slash key used to invoke the skill (without leading slash)."""
+
+
 class ConverseResponseToolCall(BaseModel):
     id: str
     """The ID of the tool call."""
@@ -60,8 +80,8 @@ class ConverseResponse(Message):
     chat_mode: Optional[Literal["full_agent", "light_agent", "llm_router"]] = None
     """
     The chat mode used for this response (web app: Execute = full_agent, Extended =
-    light_agent, Ask = llm_router). For Auto mode conversations, this is the mode
-    selected by the router for this turn.
+    light_agent, Ask = llm_router). Auto mode currently runs and reports as Execute
+    (full_agent).
     """
 
     generated_title: Optional[str] = None
@@ -74,6 +94,13 @@ class ConverseResponse(Message):
     """Array of reasoning steps that occurred during this response.
 
     Only includes steps with status completed or failed.
+    """
+
+    skills: Optional[List[ConverseResponseSkill]] = None
+    """
+    Array of skills that were force-activated for this turn via `skill_ids` or
+    `slash_keys`. Null when no skills were explicitly requested, or when none of the
+    requested skills survived resolution for this turn.
     """
 
     tool_calls: Optional[List[ConverseResponseToolCall]] = None

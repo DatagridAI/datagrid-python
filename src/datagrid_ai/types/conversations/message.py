@@ -4,6 +4,8 @@ from typing import List, Union, Optional
 from datetime import datetime
 from typing_extensions import Literal, Annotated, TypeAlias
 
+from pydantic import Field as FieldInfo
+
 from ..._utils import PropertyInfo
 from ..._models import BaseModel
 
@@ -11,17 +13,28 @@ __all__ = [
     "Message",
     "Citation",
     "CitationSource",
+    "CitationSourceField",
     "Content",
     "ContentMessageContentText",
+    "ContentMessageContentJson",
     "ContentMessageContentVoice",
     "ContentMessageContentVoiceAudioClip",
     "ContentMessageContentVoiceAudioClipParticipant",
     "ContentMessageContentVoiceTimelineEvent",
     "ContentMessageContentVoiceTimelineEventCitation",
     "ContentMessageContentVoiceTimelineEventCitationSource",
+    "ContentMessageContentVoiceTimelineEventCitationSourceField",
     "ContentMessageContentFile",
     "Credits",
 ]
+
+
+class CitationSourceField(BaseModel):
+    label: str
+    """Human-readable field label (e.g. "Due Date")."""
+
+    value: str
+    """Human-readable field value (e.g. "2025-09-14")."""
 
 
 class CitationSource(BaseModel):
@@ -33,11 +46,84 @@ class CitationSource(BaseModel):
 
     type: Literal["image", "pdf_page", "record", "web_search", "sql_query_result", "action"]
 
+    external_url: Optional[str] = None
+    """Origin-system deep-link for the source (e.g.
+
+    an `app.procore.com` universal link), when one exists. Unlike `source_uri`, it
+    is never overridden by the signed Datagrid file URI, so clients can offer an
+    "open in source" action.
+    """
+
+    fields: Optional[List[CitationSourceField]] = None
+    """record only.
+
+    Backend-normalized, render-ready structured fields promoted from the record row
+    (due date, ball-in-court, assignee, revision, type, vendor, scope, …). Excludes
+    `status`, which is surfaced on its own.
+    """
+
+    item_type: Optional[str] = None
+    """record / pdf_page only.
+
+    Procore tool type of the underlying record (e.g. "rfi_headers",
+    "submittal_logs"), read from the indexed Procore item type on the source row;
+    present only for sources ingested from Procore. Lets clients render a reliable
+    type label (RFI, Submittal, Observation, …) without parsing the deep-link URL.
+    """
+
+    page_number: Optional[int] = None
+    """pdf_page only.
+
+    1-based page number within the source document. Omitted when the page is
+    unknown; never `0`.
+    """
+
     source_id: Optional[str] = None
-    """Id of the source."""
+    """
+    Id of the source when Datagrid holds one (dataset id, or data-lake item id for
+    file-backed `pdf_page`). Omitted for `pdf_page` sources with no Datagrid-backed
+    file.
+    """
 
     source_uri: Optional[str] = None
-    """URI of the source."""
+    """URI of the source.
+
+    For file-backed sources this is the in-app target (signed Datagrid file URI when
+    available); use `external_url` for the origin-system deep-link. For `pdf_page`
+    sources with no Datagrid file, this is the origin-system deep-link and matches
+    `external_url`; locate the page with `page_number`.
+    """
+
+    status: Optional[str] = None
+    """record only.
+
+    Primary status value for the record (e.g. "Open", "Pending Review"), surfaced
+    separately from `fields` so clients can render a status chip.
+    """
+
+    status_category: Optional[Literal["open", "closed", "in_progress", "custom"]] = None
+    """record only.
+
+    Locale-stable status bucket from the source mapped field (`mapped_to_status`),
+    never parsed from the display `status` string. `open`, `closed`, and
+    `in_progress` map to semantic fills; `custom` and omission both mean a default
+    gray fill.
+    """
+
+    status_color: Optional[str] = None
+    """record only.
+
+    Source-system color for the record status (hex or named token), when the indexed
+    row carries one. Omitted when absent. Clients must not invent a color from
+    `status`.
+    """
+
+    thumbnail_url: Optional[str] = None
+    """record only.
+
+    Preview image URL from the indexed row (e.g. a Drawings thumbnail). Omitted when
+    the row has none.
+    """
 
 
 class Citation(BaseModel):
@@ -55,6 +141,15 @@ class ContentMessageContentText(BaseModel):
     """The text content of the message."""
 
     type: Literal["text"]
+
+
+class ContentMessageContentJson(BaseModel):
+    """JSON content for structured-output responses."""
+
+    json_: object = FieldInfo(alias="json")
+    """The JSON value produced by the agent."""
+
+    type: Literal["json"]
 
 
 class ContentMessageContentVoiceAudioClipParticipant(BaseModel):
@@ -90,6 +185,14 @@ class ContentMessageContentVoiceAudioClip(BaseModel):
     """
 
 
+class ContentMessageContentVoiceTimelineEventCitationSourceField(BaseModel):
+    label: str
+    """Human-readable field label (e.g. "Due Date")."""
+
+    value: str
+    """Human-readable field value (e.g. "2025-09-14")."""
+
+
 class ContentMessageContentVoiceTimelineEventCitationSource(BaseModel):
     confirmations: List[str]
     """An array of text snippets from the source that confirm the citation."""
@@ -99,11 +202,84 @@ class ContentMessageContentVoiceTimelineEventCitationSource(BaseModel):
 
     type: Literal["image", "pdf_page", "record", "web_search", "sql_query_result", "action"]
 
+    external_url: Optional[str] = None
+    """Origin-system deep-link for the source (e.g.
+
+    an `app.procore.com` universal link), when one exists. Unlike `source_uri`, it
+    is never overridden by the signed Datagrid file URI, so clients can offer an
+    "open in source" action.
+    """
+
+    fields: Optional[List[ContentMessageContentVoiceTimelineEventCitationSourceField]] = None
+    """record only.
+
+    Backend-normalized, render-ready structured fields promoted from the record row
+    (due date, ball-in-court, assignee, revision, type, vendor, scope, …). Excludes
+    `status`, which is surfaced on its own.
+    """
+
+    item_type: Optional[str] = None
+    """record / pdf_page only.
+
+    Procore tool type of the underlying record (e.g. "rfi_headers",
+    "submittal_logs"), read from the indexed Procore item type on the source row;
+    present only for sources ingested from Procore. Lets clients render a reliable
+    type label (RFI, Submittal, Observation, …) without parsing the deep-link URL.
+    """
+
+    page_number: Optional[int] = None
+    """pdf_page only.
+
+    1-based page number within the source document. Omitted when the page is
+    unknown; never `0`.
+    """
+
     source_id: Optional[str] = None
-    """Id of the source."""
+    """
+    Id of the source when Datagrid holds one (dataset id, or data-lake item id for
+    file-backed `pdf_page`). Omitted for `pdf_page` sources with no Datagrid-backed
+    file.
+    """
 
     source_uri: Optional[str] = None
-    """URI of the source."""
+    """URI of the source.
+
+    For file-backed sources this is the in-app target (signed Datagrid file URI when
+    available); use `external_url` for the origin-system deep-link. For `pdf_page`
+    sources with no Datagrid file, this is the origin-system deep-link and matches
+    `external_url`; locate the page with `page_number`.
+    """
+
+    status: Optional[str] = None
+    """record only.
+
+    Primary status value for the record (e.g. "Open", "Pending Review"), surfaced
+    separately from `fields` so clients can render a status chip.
+    """
+
+    status_category: Optional[Literal["open", "closed", "in_progress", "custom"]] = None
+    """record only.
+
+    Locale-stable status bucket from the source mapped field (`mapped_to_status`),
+    never parsed from the display `status` string. `open`, `closed`, and
+    `in_progress` map to semantic fills; `custom` and omission both mean a default
+    gray fill.
+    """
+
+    status_color: Optional[str] = None
+    """record only.
+
+    Source-system color for the record status (hex or named token), when the indexed
+    row carries one. Omitted when absent. Clients must not invent a color from
+    `status`.
+    """
+
+    thumbnail_url: Optional[str] = None
+    """record only.
+
+    Preview image URL from the indexed row (e.g. a Drawings thumbnail). Omitted when
+    the row has none.
+    """
 
 
 class ContentMessageContentVoiceTimelineEventCitation(BaseModel):
@@ -116,17 +292,37 @@ class ContentMessageContentVoiceTimelineEventCitation(BaseModel):
 
 class ContentMessageContentVoiceTimelineEvent(BaseModel):
     """
-    A single event from a voice session timeline, representing a transcript turn, citation, or tool-call status update.
+    A single event from a voice session timeline, representing a transcript turn, citation, tool-call status update, or an attached file.
     """
 
     timestamp_ms: float
     """Timestamp offset from the start of the voice session, in milliseconds."""
 
-    type: Literal["transcript", "citation", "tool_call_status"]
+    type: Literal["transcript", "citation", "tool_call_status", "attachment"]
     """The type of timeline event."""
 
     citations: Optional[List[ContentMessageContentVoiceTimelineEventCitation]] = None
     """Citations for this event. Present when type is 'citation'."""
+
+    file_id: Optional[str] = None
+    """Identifier of the attached file, as returned by the files endpoint.
+
+    Retrieve its bytes from `/v1/files/{file_id}/content`. Present when type is
+    'attachment'.
+    """
+
+    filename: Optional[str] = None
+    """Original name of the attached file.
+
+    Present when type is 'attachment', and only when the file was uploaded with a
+    name.
+    """
+
+    media_type: Optional[str] = None
+    """Media type of the attached file, for example `image/jpeg`.
+
+    Present when type is 'attachment'.
+    """
 
     role: Optional[Literal["user", "agent"]] = None
     """The role of the participant for this event."""
@@ -137,8 +333,26 @@ class ContentMessageContentVoiceTimelineEvent(BaseModel):
     text: Optional[str] = None
     """Plain text transcript for this turn. Present when type is 'transcript'."""
 
+    tool_call_id: Optional[str] = None
+    """
+    Server-generated id shared by the started, completed, and failed events of one
+    call. Present when type is 'tool_call_status'. Optional on events recorded
+    before this field existed.
+    """
+
     tool_name: Optional[str] = None
     """Name of the tool whose status changed. Present when type is 'tool_call_status'."""
+
+    turn_index: Optional[float] = None
+    """Identifies the conversational turn this event belongs to.
+
+    Every 'transcript' and 'citation' event produced by the same turn shares one
+    value, so a citation can be grouped with the transcripts it came from without
+    relying on the order events appear in. On 'tool_call_status', this is the turn
+    the call started in; a later completed or failed event keeps that value even if
+    the session has moved on. Absent on events recorded before this field existed,
+    and on the 'attachment' type; fall back to event order in those cases.
+    """
 
 
 class ContentMessageContentVoice(BaseModel):
@@ -160,9 +374,9 @@ class ContentMessageContentVoice(BaseModel):
 
     timeline_events: Optional[List[ContentMessageContentVoiceTimelineEvent]] = None
     """
-    Per-turn transcript, citation, and tool-call status events in chronological
-    order. Each entry includes a timestamp offset from the start of the voice
-    session. Present only for voice sessions that recorded timeline data.
+    Per-turn transcript, citation, tool-call status, and attachment events in
+    chronological order. Each entry includes a timestamp offset from the start of
+    the voice session. Present only for voice sessions that recorded timeline data.
     """
 
 
@@ -182,7 +396,7 @@ class ContentMessageContentFile(BaseModel):
 
 
 Content: TypeAlias = Annotated[
-    Union[ContentMessageContentText, ContentMessageContentVoice, ContentMessageContentFile],
+    Union[ContentMessageContentText, ContentMessageContentJson, ContentMessageContentVoice, ContentMessageContentFile],
     PropertyInfo(discriminator="type"),
 ]
 

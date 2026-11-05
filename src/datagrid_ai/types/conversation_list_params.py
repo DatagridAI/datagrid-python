@@ -30,6 +30,37 @@ class ConversationListParams(TypedDict, total=False):
     direction: Literal["asc", "desc"]
     """The direction to sort the results."""
 
+    has_messages: bool
+    """When true, excludes conversations that never had a message sent (e.g.
+
+    abandoned sessions). Defaults to false, returning every conversation regardless
+    of message count. Changing this value between requests that reuse the same
+    `before`/`after` cursor is not supported — the cursor was computed against a
+    different result set, so pass a consistent value for the lifetime of a given
+    pagination sequence.
+    """
+
+    has_voice_messages: bool
+    """
+    When true, restricts the list to conversations that contain at least one voice
+    message. Defaults to false, returning conversations regardless of modality.
+    Changing this value between requests that reuse the same `before`/`after` cursor
+    is not supported — the cursor was computed against a different result set, so
+    pass a consistent value for the lifetime of a given pagination sequence.
+    """
+
+    has_voice_or_mobile_messages: bool
+    """
+    When true, restricts the list to conversations that contain at least one voice
+    message or had a message sent from the Datagrid mobile app. Defaults to false,
+    returning conversations regardless of modality or client. Combined with
+    `has_voice_messages=true`, both filters apply and only voice conversations are
+    returned. Changing this value between requests that reuse the same
+    `before`/`after` cursor is not supported — the cursor was computed against a
+    different result set, so pass a consistent value for the lifetime of a given
+    pagination sequence.
+    """
+
     limit: int
     """The limit on the number of objects to return, ranging between 1 and 100."""
 

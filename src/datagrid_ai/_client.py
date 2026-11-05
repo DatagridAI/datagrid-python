@@ -42,7 +42,6 @@ from ._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from ._constants import DEFAULT_TIMEOUT
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
 from ._exceptions import DatagridError, APIStatusError
 from ._base_client import (
@@ -63,8 +62,12 @@ if TYPE_CHECKING:
         voice,
         agents,
         memory,
+        models,
         search,
+        skills,
+        procore,
         secrets,
+        channels,
         identity,
         webhooks,
         knowledge,
@@ -79,15 +82,19 @@ if TYPE_CHECKING:
     from .resources.files import FilesResource, AsyncFilesResource
     from .resources.pages import PagesResource, AsyncPagesResource
     from .resources.tools import ToolsResource, AsyncToolsResource
-    from .resources.agents import AgentsResource, AsyncAgentsResource
+    from .resources.models import ModelsResource, AsyncModelsResource
     from .resources.search import SearchResource, AsyncSearchResource
+    from .resources.skills import SkillsResource, AsyncSkillsResource
+    from .resources.procore import ProcoreResource, AsyncProcoreResource
     from .resources.secrets import SecretsResource, AsyncSecretsResource
+    from .resources.channels import ChannelsResource, AsyncChannelsResource
     from .resources.identity import IdentityResource, AsyncIdentityResource
     from .resources.webhooks import WebhooksResource, AsyncWebhooksResource
     from .resources.beta.beta import BetaResource, AsyncBetaResource
     from .resources.connectors import ConnectorsResource, AsyncConnectorsResource
     from .resources.connections import ConnectionsResource, AsyncConnectionsResource
     from .resources.voice.voice import VoiceResource, AsyncVoiceResource
+    from .resources.agents.agents import AgentsResource, AsyncAgentsResource
     from .resources.memory.memory import MemoryResource, AsyncMemoryResource
     from .resources.batch_predictions import BatchPredictionsResource, AsyncBatchPredictionsResource
     from .resources.knowledge.knowledge import KnowledgeResource, AsyncKnowledgeResource
@@ -235,16 +242,34 @@ class Datagrid(SyncAPIClient):
         return SearchResource(self)
 
     @cached_property
+    def skills(self) -> SkillsResource:
+        from .resources.skills import SkillsResource
+
+        return SkillsResource(self)
+
+    @cached_property
     def agents(self) -> AgentsResource:
         from .resources.agents import AgentsResource
 
         return AgentsResource(self)
 
     @cached_property
+    def channels(self) -> ChannelsResource:
+        from .resources.channels import ChannelsResource
+
+        return ChannelsResource(self)
+
+    @cached_property
     def identity(self) -> IdentityResource:
         from .resources.identity import IdentityResource
 
         return IdentityResource(self)
+
+    @cached_property
+    def procore(self) -> ProcoreResource:
+        from .resources.procore import ProcoreResource
+
+        return ProcoreResource(self)
 
     @cached_property
     def pages(self) -> PagesResource:
@@ -257,6 +282,12 @@ class Datagrid(SyncAPIClient):
         from .resources.tools import ToolsResource
 
         return ToolsResource(self)
+
+    @cached_property
+    def models(self) -> ModelsResource:
+        from .resources.models import ModelsResource
+
+        return ModelsResource(self)
 
     @cached_property
     def memory(self) -> MemoryResource:
@@ -392,6 +423,8 @@ class Datagrid(SyncAPIClient):
         include_steps: Optional[bool] | Omit = omit,
         reference_date: Union[str, date, None] | Omit = omit,
         secret_ids: Optional[SequenceNotStr[str]] | Omit = omit,
+        skill_ids: Optional[SequenceNotStr[str]] | Omit = omit,
+        slash_keys: Optional[SequenceNotStr[str]] | Omit = omit,
         stream: Optional[bool] | Omit = omit,
         text: Optional[client_converse_params.Text] | Omit = omit,
         user: Optional[client_converse_params.User] | Omit = omit,
@@ -419,6 +452,8 @@ class Datagrid(SyncAPIClient):
         include_steps: Optional[bool] | Omit = omit,
         reference_date: Union[str, date, None] | Omit = omit,
         secret_ids: Optional[SequenceNotStr[str]] | Omit = omit,
+        skill_ids: Optional[SequenceNotStr[str]] | Omit = omit,
+        slash_keys: Optional[SequenceNotStr[str]] | Omit = omit,
         stream: Literal[True],
         text: Optional[client_converse_params.Text] | Omit = omit,
         user: Optional[client_converse_params.User] | Omit = omit,
@@ -446,6 +481,8 @@ class Datagrid(SyncAPIClient):
         include_steps: Optional[bool] | Omit = omit,
         reference_date: Union[str, date, None] | Omit = omit,
         secret_ids: Optional[SequenceNotStr[str]] | Omit = omit,
+        skill_ids: Optional[SequenceNotStr[str]] | Omit = omit,
+        slash_keys: Optional[SequenceNotStr[str]] | Omit = omit,
         stream: bool,
         text: Optional[client_converse_params.Text] | Omit = omit,
         user: Optional[client_converse_params.User] | Omit = omit,
@@ -472,6 +509,8 @@ class Datagrid(SyncAPIClient):
         include_steps: Optional[bool] | Omit = omit,
         reference_date: Union[str, date, None] | Omit = omit,
         secret_ids: Optional[SequenceNotStr[str]] | Omit = omit,
+        skill_ids: Optional[SequenceNotStr[str]] | Omit = omit,
+        slash_keys: Optional[SequenceNotStr[str]] | Omit = omit,
         stream: Optional[bool] | Omit = omit,
         text: Optional[client_converse_params.Text] | Omit = omit,
         user: Optional[client_converse_params.User] | Omit = omit,
@@ -497,10 +536,15 @@ class Datagrid(SyncAPIClient):
 
           chat_mode: Controls how the agent processes the request for this turn. Matches the chat
               mode selector in the Datagrid web app: **Execute** (`full_agent`), **Extended**
-              (`light_agent`), **Ask** (`llm_router`). When set to `auto`, the router jointly
-              predicts the best agent and concrete mode (`full_agent` / `light_agent` /
-              `llm_router`) per message. When set to a concrete mode, that mode is used
-              directly. When omitted, the mode is determined by the `agent_model` in `config`.
+              (`light_agent`), **Ask** (`llm_router`). Ask uses the agent path with Magpie 2.5
+              and Ask-specific prompt guidance. When omitted, the request inherits the
+              conversation's persisted `chat_mode`; new conversations default to **Execute**
+              (`full_agent`). When set to `auto`, the request also runs as **Execute**
+              (`full_agent`); Auto is currently accepted for compatibility but does not
+              predict Ask, Extended, or Execute per message. When set to a concrete mode, that
+              concrete mode is used directly. The default `agent_model` for Execute is
+              `magpie-2.5` unless `config.agent_model` explicitly sets another supported
+              model.
 
           config: Override the agent config for this converse call. This is applied as a partial
               override.
@@ -531,13 +575,26 @@ class Datagrid(SyncAPIClient):
           secret_ids: Array of secret ID's to be included in the context. The secret value will be
               appended to the prompt but not stored in conversation history.
 
+          skill_ids: Array of skill IDs to force-activate for this turn. Each ID must refer to an
+              account-shared or builtin skill reachable by the API key's teamspace.
+              User-scoped (private) skills are not accessible from API keys. Deduped and
+              merged with `slash_keys` before the turn begins. Maximum 32 entries. Returns 400
+              if any ID is unresolved, disabled, or out of scope.
+
+          slash_keys: Array of slash-key tokens (e.g. `"budget-check"` or `"/rfi-triage"`) to
+              force-activate for this turn. Leading slashes are stripped. Resolved
+              account-shared → builtin in precedence order. Deduped and merged with
+              `skill_ids` before the turn begins. Maximum 32 entries. Returns 400 if any token
+              cannot be resolved to an enabled, reachable skill.
+
           stream: Determines the response type of the converse. Response is the Server-Sent Events
               if stream is set to true.
 
           text: Contains the format property used to specify the structured output schema
               (`text.format`). Structured output is supported for all `agent_model` values and
               `chat_mode` settings when `text.format` is provided (same JSON Schema mechanism
-              everywhere). **Ask** in the web app maps to `chat_mode` `magpie-2.5-flash`;.
+              everywhere). **Ask** in the web app maps to `chat_mode: llm_router`; `auto`
+              currently maps to **Execute** (`full_agent`).
 
           user: User information override for converse calls. All fields are optional - only
               provided fields will override the default user information.
@@ -568,6 +625,8 @@ class Datagrid(SyncAPIClient):
                     "include_steps": include_steps,
                     "reference_date": reference_date,
                     "secret_ids": secret_ids,
+                    "skill_ids": skill_ids,
+                    "slash_keys": slash_keys,
                     "stream": stream,
                     "text": text,
                     "user": user,
@@ -743,16 +802,34 @@ class AsyncDatagrid(AsyncAPIClient):
         return AsyncSearchResource(self)
 
     @cached_property
+    def skills(self) -> AsyncSkillsResource:
+        from .resources.skills import AsyncSkillsResource
+
+        return AsyncSkillsResource(self)
+
+    @cached_property
     def agents(self) -> AsyncAgentsResource:
         from .resources.agents import AsyncAgentsResource
 
         return AsyncAgentsResource(self)
 
     @cached_property
+    def channels(self) -> AsyncChannelsResource:
+        from .resources.channels import AsyncChannelsResource
+
+        return AsyncChannelsResource(self)
+
+    @cached_property
     def identity(self) -> AsyncIdentityResource:
         from .resources.identity import AsyncIdentityResource
 
         return AsyncIdentityResource(self)
+
+    @cached_property
+    def procore(self) -> AsyncProcoreResource:
+        from .resources.procore import AsyncProcoreResource
+
+        return AsyncProcoreResource(self)
 
     @cached_property
     def pages(self) -> AsyncPagesResource:
@@ -765,6 +842,12 @@ class AsyncDatagrid(AsyncAPIClient):
         from .resources.tools import AsyncToolsResource
 
         return AsyncToolsResource(self)
+
+    @cached_property
+    def models(self) -> AsyncModelsResource:
+        from .resources.models import AsyncModelsResource
+
+        return AsyncModelsResource(self)
 
     @cached_property
     def memory(self) -> AsyncMemoryResource:
@@ -900,6 +983,8 @@ class AsyncDatagrid(AsyncAPIClient):
         include_steps: Optional[bool] | Omit = omit,
         reference_date: Union[str, date, None] | Omit = omit,
         secret_ids: Optional[SequenceNotStr[str]] | Omit = omit,
+        skill_ids: Optional[SequenceNotStr[str]] | Omit = omit,
+        slash_keys: Optional[SequenceNotStr[str]] | Omit = omit,
         stream: Literal[False] | Omit = omit,
         text: Optional[client_converse_params.Text] | Omit = omit,
         user: Optional[client_converse_params.User] | Omit = omit,
@@ -927,6 +1012,8 @@ class AsyncDatagrid(AsyncAPIClient):
         include_steps: Optional[bool] | Omit = omit,
         reference_date: Union[str, date, None] | Omit = omit,
         secret_ids: Optional[SequenceNotStr[str]] | Omit = omit,
+        skill_ids: Optional[SequenceNotStr[str]] | Omit = omit,
+        slash_keys: Optional[SequenceNotStr[str]] | Omit = omit,
         stream: Literal[True],
         text: Optional[client_converse_params.Text] | Omit = omit,
         user: Optional[client_converse_params.User] | Omit = omit,
@@ -954,6 +1041,8 @@ class AsyncDatagrid(AsyncAPIClient):
         include_steps: Optional[bool] | Omit = omit,
         reference_date: Union[str, date, None] | Omit = omit,
         secret_ids: Optional[SequenceNotStr[str]] | Omit = omit,
+        skill_ids: Optional[SequenceNotStr[str]] | Omit = omit,
+        slash_keys: Optional[SequenceNotStr[str]] | Omit = omit,
         stream: bool,
         text: Optional[client_converse_params.Text] | Omit = omit,
         user: Optional[client_converse_params.User] | Omit = omit,
@@ -980,6 +1069,8 @@ class AsyncDatagrid(AsyncAPIClient):
         include_steps: Optional[bool] | Omit = omit,
         reference_date: Union[str, date, None] | Omit = omit,
         secret_ids: Optional[SequenceNotStr[str]] | Omit = omit,
+        skill_ids: Optional[SequenceNotStr[str]] | Omit = omit,
+        slash_keys: Optional[SequenceNotStr[str]] | Omit = omit,
         stream: Optional[bool] | Omit = omit,
         text: Optional[client_converse_params.Text] | Omit = omit,
         user: Optional[client_converse_params.User] | Omit = omit,
@@ -1005,10 +1096,15 @@ class AsyncDatagrid(AsyncAPIClient):
 
           chat_mode: Controls how the agent processes the request for this turn. Matches the chat
               mode selector in the Datagrid web app: **Execute** (`full_agent`), **Extended**
-              (`light_agent`), **Ask** (`llm_router`). When set to `auto`, the router jointly
-              predicts the best agent and concrete mode (`full_agent` / `light_agent` /
-              `llm_router`) per message. When set to a concrete mode, that mode is used
-              directly. When omitted, the mode is determined by the `agent_model` in `config`.
+              (`light_agent`), **Ask** (`llm_router`). Ask uses the agent path with Magpie 2.5
+              and Ask-specific prompt guidance. When omitted, the request inherits the
+              conversation's persisted `chat_mode`; new conversations default to **Execute**
+              (`full_agent`). When set to `auto`, the request also runs as **Execute**
+              (`full_agent`); Auto is currently accepted for compatibility but does not
+              predict Ask, Extended, or Execute per message. When set to a concrete mode, that
+              concrete mode is used directly. The default `agent_model` for Execute is
+              `magpie-2.5` unless `config.agent_model` explicitly sets another supported
+              model.
 
           config: Override the agent config for this converse call. This is applied as a partial
               override.
@@ -1039,13 +1135,26 @@ class AsyncDatagrid(AsyncAPIClient):
           secret_ids: Array of secret ID's to be included in the context. The secret value will be
               appended to the prompt but not stored in conversation history.
 
+          skill_ids: Array of skill IDs to force-activate for this turn. Each ID must refer to an
+              account-shared or builtin skill reachable by the API key's teamspace.
+              User-scoped (private) skills are not accessible from API keys. Deduped and
+              merged with `slash_keys` before the turn begins. Maximum 32 entries. Returns 400
+              if any ID is unresolved, disabled, or out of scope.
+
+          slash_keys: Array of slash-key tokens (e.g. `"budget-check"` or `"/rfi-triage"`) to
+              force-activate for this turn. Leading slashes are stripped. Resolved
+              account-shared → builtin in precedence order. Deduped and merged with
+              `skill_ids` before the turn begins. Maximum 32 entries. Returns 400 if any token
+              cannot be resolved to an enabled, reachable skill.
+
           stream: Determines the response type of the converse. Response is the Server-Sent Events
               if stream is set to true.
 
           text: Contains the format property used to specify the structured output schema
               (`text.format`). Structured output is supported for all `agent_model` values and
               `chat_mode` settings when `text.format` is provided (same JSON Schema mechanism
-              everywhere). **Ask** in the web app maps to `chat_mode` `magpie-2.5-flash`;.
+              everywhere). **Ask** in the web app maps to `chat_mode: llm_router`; `auto`
+              currently maps to **Execute** (`full_agent`).
 
           user: User information override for converse calls. All fields are optional - only
               provided fields will override the default user information.
@@ -1076,6 +1185,8 @@ class AsyncDatagrid(AsyncAPIClient):
                     "include_steps": include_steps,
                     "reference_date": reference_date,
                     "secret_ids": secret_ids,
+                    "skill_ids": skill_ids,
+                    "slash_keys": slash_keys,
                     "stream": stream,
                     "text": text,
                     "user": user,
@@ -1189,16 +1300,34 @@ class DatagridWithRawResponse:
         return SearchResourceWithRawResponse(self._client.search)
 
     @cached_property
+    def skills(self) -> skills.SkillsResourceWithRawResponse:
+        from .resources.skills import SkillsResourceWithRawResponse
+
+        return SkillsResourceWithRawResponse(self._client.skills)
+
+    @cached_property
     def agents(self) -> agents.AgentsResourceWithRawResponse:
         from .resources.agents import AgentsResourceWithRawResponse
 
         return AgentsResourceWithRawResponse(self._client.agents)
 
     @cached_property
+    def channels(self) -> channels.ChannelsResourceWithRawResponse:
+        from .resources.channels import ChannelsResourceWithRawResponse
+
+        return ChannelsResourceWithRawResponse(self._client.channels)
+
+    @cached_property
     def identity(self) -> identity.IdentityResourceWithRawResponse:
         from .resources.identity import IdentityResourceWithRawResponse
 
         return IdentityResourceWithRawResponse(self._client.identity)
+
+    @cached_property
+    def procore(self) -> procore.ProcoreResourceWithRawResponse:
+        from .resources.procore import ProcoreResourceWithRawResponse
+
+        return ProcoreResourceWithRawResponse(self._client.procore)
 
     @cached_property
     def pages(self) -> pages.PagesResourceWithRawResponse:
@@ -1211,6 +1340,12 @@ class DatagridWithRawResponse:
         from .resources.tools import ToolsResourceWithRawResponse
 
         return ToolsResourceWithRawResponse(self._client.tools)
+
+    @cached_property
+    def models(self) -> models.ModelsResourceWithRawResponse:
+        from .resources.models import ModelsResourceWithRawResponse
+
+        return ModelsResourceWithRawResponse(self._client.models)
 
     @cached_property
     def memory(self) -> memory.MemoryResourceWithRawResponse:
@@ -1314,16 +1449,34 @@ class AsyncDatagridWithRawResponse:
         return AsyncSearchResourceWithRawResponse(self._client.search)
 
     @cached_property
+    def skills(self) -> skills.AsyncSkillsResourceWithRawResponse:
+        from .resources.skills import AsyncSkillsResourceWithRawResponse
+
+        return AsyncSkillsResourceWithRawResponse(self._client.skills)
+
+    @cached_property
     def agents(self) -> agents.AsyncAgentsResourceWithRawResponse:
         from .resources.agents import AsyncAgentsResourceWithRawResponse
 
         return AsyncAgentsResourceWithRawResponse(self._client.agents)
 
     @cached_property
+    def channels(self) -> channels.AsyncChannelsResourceWithRawResponse:
+        from .resources.channels import AsyncChannelsResourceWithRawResponse
+
+        return AsyncChannelsResourceWithRawResponse(self._client.channels)
+
+    @cached_property
     def identity(self) -> identity.AsyncIdentityResourceWithRawResponse:
         from .resources.identity import AsyncIdentityResourceWithRawResponse
 
         return AsyncIdentityResourceWithRawResponse(self._client.identity)
+
+    @cached_property
+    def procore(self) -> procore.AsyncProcoreResourceWithRawResponse:
+        from .resources.procore import AsyncProcoreResourceWithRawResponse
+
+        return AsyncProcoreResourceWithRawResponse(self._client.procore)
 
     @cached_property
     def pages(self) -> pages.AsyncPagesResourceWithRawResponse:
@@ -1336,6 +1489,12 @@ class AsyncDatagridWithRawResponse:
         from .resources.tools import AsyncToolsResourceWithRawResponse
 
         return AsyncToolsResourceWithRawResponse(self._client.tools)
+
+    @cached_property
+    def models(self) -> models.AsyncModelsResourceWithRawResponse:
+        from .resources.models import AsyncModelsResourceWithRawResponse
+
+        return AsyncModelsResourceWithRawResponse(self._client.models)
 
     @cached_property
     def memory(self) -> memory.AsyncMemoryResourceWithRawResponse:
@@ -1439,16 +1598,34 @@ class DatagridWithStreamedResponse:
         return SearchResourceWithStreamingResponse(self._client.search)
 
     @cached_property
+    def skills(self) -> skills.SkillsResourceWithStreamingResponse:
+        from .resources.skills import SkillsResourceWithStreamingResponse
+
+        return SkillsResourceWithStreamingResponse(self._client.skills)
+
+    @cached_property
     def agents(self) -> agents.AgentsResourceWithStreamingResponse:
         from .resources.agents import AgentsResourceWithStreamingResponse
 
         return AgentsResourceWithStreamingResponse(self._client.agents)
 
     @cached_property
+    def channels(self) -> channels.ChannelsResourceWithStreamingResponse:
+        from .resources.channels import ChannelsResourceWithStreamingResponse
+
+        return ChannelsResourceWithStreamingResponse(self._client.channels)
+
+    @cached_property
     def identity(self) -> identity.IdentityResourceWithStreamingResponse:
         from .resources.identity import IdentityResourceWithStreamingResponse
 
         return IdentityResourceWithStreamingResponse(self._client.identity)
+
+    @cached_property
+    def procore(self) -> procore.ProcoreResourceWithStreamingResponse:
+        from .resources.procore import ProcoreResourceWithStreamingResponse
+
+        return ProcoreResourceWithStreamingResponse(self._client.procore)
 
     @cached_property
     def pages(self) -> pages.PagesResourceWithStreamingResponse:
@@ -1461,6 +1638,12 @@ class DatagridWithStreamedResponse:
         from .resources.tools import ToolsResourceWithStreamingResponse
 
         return ToolsResourceWithStreamingResponse(self._client.tools)
+
+    @cached_property
+    def models(self) -> models.ModelsResourceWithStreamingResponse:
+        from .resources.models import ModelsResourceWithStreamingResponse
+
+        return ModelsResourceWithStreamingResponse(self._client.models)
 
     @cached_property
     def memory(self) -> memory.MemoryResourceWithStreamingResponse:
@@ -1564,16 +1747,34 @@ class AsyncDatagridWithStreamedResponse:
         return AsyncSearchResourceWithStreamingResponse(self._client.search)
 
     @cached_property
+    def skills(self) -> skills.AsyncSkillsResourceWithStreamingResponse:
+        from .resources.skills import AsyncSkillsResourceWithStreamingResponse
+
+        return AsyncSkillsResourceWithStreamingResponse(self._client.skills)
+
+    @cached_property
     def agents(self) -> agents.AsyncAgentsResourceWithStreamingResponse:
         from .resources.agents import AsyncAgentsResourceWithStreamingResponse
 
         return AsyncAgentsResourceWithStreamingResponse(self._client.agents)
 
     @cached_property
+    def channels(self) -> channels.AsyncChannelsResourceWithStreamingResponse:
+        from .resources.channels import AsyncChannelsResourceWithStreamingResponse
+
+        return AsyncChannelsResourceWithStreamingResponse(self._client.channels)
+
+    @cached_property
     def identity(self) -> identity.AsyncIdentityResourceWithStreamingResponse:
         from .resources.identity import AsyncIdentityResourceWithStreamingResponse
 
         return AsyncIdentityResourceWithStreamingResponse(self._client.identity)
+
+    @cached_property
+    def procore(self) -> procore.AsyncProcoreResourceWithStreamingResponse:
+        from .resources.procore import AsyncProcoreResourceWithStreamingResponse
+
+        return AsyncProcoreResourceWithStreamingResponse(self._client.procore)
 
     @cached_property
     def pages(self) -> pages.AsyncPagesResourceWithStreamingResponse:
@@ -1586,6 +1787,12 @@ class AsyncDatagridWithStreamedResponse:
         from .resources.tools import AsyncToolsResourceWithStreamingResponse
 
         return AsyncToolsResourceWithStreamingResponse(self._client.tools)
+
+    @cached_property
+    def models(self) -> models.AsyncModelsResourceWithStreamingResponse:
+        from .resources.models import AsyncModelsResourceWithStreamingResponse
+
+        return AsyncModelsResourceWithStreamingResponse(self._client.models)
 
     @cached_property
     def memory(self) -> memory.AsyncMemoryResourceWithStreamingResponse:

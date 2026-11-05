@@ -60,8 +60,10 @@ class VoiceResource(SyncAPIResource):
         self,
         *,
         agent_id: Optional[str] | Omit = omit,
+        allow_delegation: Optional[bool] | Omit = omit,
         config: Optional[voice_start_session_params.Config] | Omit = omit,
         conversation_id: Optional[str] | Omit = omit,
+        discard_if_empty: Optional[bool] | Omit = omit,
         ephemeral: Optional[bool] | Omit = omit,
         file_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         initial_context: Optional[str] | Omit = omit,
@@ -107,7 +109,7 @@ class VoiceResource(SyncAPIResource):
 
         **Message Types:**
 
-        - Client: `start`, `audio`, `stop`, `interrupt`, `text`
+        - Client: `start`, `audio`, `stop`, `interrupt`, `end_turn`, `text`
         - Server: `started`, `ready`, `audio`, `tool_call`, `interrupted`, `error`,
           `transcript`, `citation`, `ended`
 
@@ -115,12 +117,24 @@ class VoiceResource(SyncAPIResource):
           agent_id: The ID of the agent to use for a direct-agent voice conversation. Ignored when
               voice_mode is orchestrator.
 
+          allow_delegation: Orchestrator sessions only: set false to disable specialist delegation tools for
+              the session. Ignored for direct-agent sessions.
+
           config: Override the agent config for this voice session. Only prompt overrides are
               supported — voice sessions always use Gemini Live, so LLM model, agent model,
-              planning prompt, and tool settings are not applicable.
+              planning prompt, and tool settings are not applicable. Prompt overrides fully
+              replace the agent's stored values for this session only and are never persisted;
+              empty or whitespace-only values are treated as omitted.
 
           conversation_id: The ID of an existing conversation to continue. If not provided, a new
-              conversation will be created.
+              conversation will be created. If the id cannot be resolved, the session start
+              fails with the `conversation_not_found` error code rather than silently creating
+              a new conversation.
+
+          discard_if_empty: When true and this session creates a brand-new conversation (no conversation_id
+              was provided), that conversation is discarded if the session ends without any
+              message ever being sent. Has no effect when continuing an existing conversation.
+              Disabled by default.
 
           ephemeral: When true, the session is ephemeral and will not save messages to conversation
               history.
@@ -163,8 +177,10 @@ class VoiceResource(SyncAPIResource):
             body=maybe_transform(
                 {
                     "agent_id": agent_id,
+                    "allow_delegation": allow_delegation,
                     "config": config,
                     "conversation_id": conversation_id,
+                    "discard_if_empty": discard_if_empty,
                     "ephemeral": ephemeral,
                     "file_ids": file_ids,
                     "initial_context": initial_context,
@@ -213,8 +229,10 @@ class AsyncVoiceResource(AsyncAPIResource):
         self,
         *,
         agent_id: Optional[str] | Omit = omit,
+        allow_delegation: Optional[bool] | Omit = omit,
         config: Optional[voice_start_session_params.Config] | Omit = omit,
         conversation_id: Optional[str] | Omit = omit,
+        discard_if_empty: Optional[bool] | Omit = omit,
         ephemeral: Optional[bool] | Omit = omit,
         file_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         initial_context: Optional[str] | Omit = omit,
@@ -260,7 +278,7 @@ class AsyncVoiceResource(AsyncAPIResource):
 
         **Message Types:**
 
-        - Client: `start`, `audio`, `stop`, `interrupt`, `text`
+        - Client: `start`, `audio`, `stop`, `interrupt`, `end_turn`, `text`
         - Server: `started`, `ready`, `audio`, `tool_call`, `interrupted`, `error`,
           `transcript`, `citation`, `ended`
 
@@ -268,12 +286,24 @@ class AsyncVoiceResource(AsyncAPIResource):
           agent_id: The ID of the agent to use for a direct-agent voice conversation. Ignored when
               voice_mode is orchestrator.
 
+          allow_delegation: Orchestrator sessions only: set false to disable specialist delegation tools for
+              the session. Ignored for direct-agent sessions.
+
           config: Override the agent config for this voice session. Only prompt overrides are
               supported — voice sessions always use Gemini Live, so LLM model, agent model,
-              planning prompt, and tool settings are not applicable.
+              planning prompt, and tool settings are not applicable. Prompt overrides fully
+              replace the agent's stored values for this session only and are never persisted;
+              empty or whitespace-only values are treated as omitted.
 
           conversation_id: The ID of an existing conversation to continue. If not provided, a new
-              conversation will be created.
+              conversation will be created. If the id cannot be resolved, the session start
+              fails with the `conversation_not_found` error code rather than silently creating
+              a new conversation.
+
+          discard_if_empty: When true and this session creates a brand-new conversation (no conversation_id
+              was provided), that conversation is discarded if the session ends without any
+              message ever being sent. Has no effect when continuing an existing conversation.
+              Disabled by default.
 
           ephemeral: When true, the session is ephemeral and will not save messages to conversation
               history.
@@ -316,8 +346,10 @@ class AsyncVoiceResource(AsyncAPIResource):
             body=await async_maybe_transform(
                 {
                     "agent_id": agent_id,
+                    "allow_delegation": allow_delegation,
                     "config": config,
                     "conversation_id": conversation_id,
+                    "discard_if_empty": discard_if_empty,
                     "ephemeral": ephemeral,
                     "file_ids": file_ids,
                     "initial_context": initial_context,

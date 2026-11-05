@@ -26,11 +26,14 @@ class TestVoice:
     def test_method_start_session_with_all_params(self, client: Datagrid) -> None:
         voice = client.voice.start_session(
             agent_id="agent_id",
+            allow_delegation=True,
             config={
                 "custom_prompt": "custom_prompt",
                 "system_prompt": "system_prompt",
+                "voice_prompt": "voice_prompt",
             },
             conversation_id="conversation_id",
+            discard_if_empty=True,
             ephemeral=True,
             file_ids=["string"],
             initial_context="initial_context",
@@ -45,12 +48,14 @@ class TestVoice:
             },
             voice_config={
                 "input_transcription": True,
+                "language": "language",
                 "output_transcription": True,
                 "segment_max_duration_ms": 0,
                 "silence_commit_ms": 0,
                 "silence_discard_ratio": 0,
                 "silence_timeout": True,
                 "silent_start": True,
+                "turn_end_mode": "server",
                 "voice_preset": "voice_preset",
             },
             voice_mode="orchestrator",
@@ -92,11 +97,14 @@ class TestAsyncVoice:
     async def test_method_start_session_with_all_params(self, async_client: AsyncDatagrid) -> None:
         voice = await async_client.voice.start_session(
             agent_id="agent_id",
+            allow_delegation=True,
             config={
                 "custom_prompt": "custom_prompt",
                 "system_prompt": "system_prompt",
+                "voice_prompt": "voice_prompt",
             },
             conversation_id="conversation_id",
+            discard_if_empty=True,
             ephemeral=True,
             file_ids=["string"],
             initial_context="initial_context",
@@ -111,12 +119,14 @@ class TestAsyncVoice:
             },
             voice_config={
                 "input_transcription": True,
+                "language": "language",
                 "output_transcription": True,
                 "segment_max_duration_ms": 0,
                 "silence_commit_ms": 0,
                 "silence_discard_ratio": 0,
                 "silence_timeout": True,
                 "silent_start": True,
+                "turn_end_mode": "server",
                 "voice_preset": "voice_preset",
             },
             voice_mode="orchestrator",

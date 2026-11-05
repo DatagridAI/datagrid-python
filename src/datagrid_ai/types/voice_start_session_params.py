@@ -17,17 +17,35 @@ class VoiceStartSessionParams(TypedDict, total=False):
     Ignored when voice_mode is orchestrator.
     """
 
+    allow_delegation: Optional[bool]
+    """
+    Orchestrator sessions only: set false to disable specialist delegation tools for
+    the session. Ignored for direct-agent sessions.
+    """
+
     config: Optional[Config]
     """
     Override the agent config for this voice session. Only prompt overrides are
     supported — voice sessions always use Gemini Live, so LLM model, agent model,
-    planning prompt, and tool settings are not applicable.
+    planning prompt, and tool settings are not applicable. Prompt overrides fully
+    replace the agent's stored values for this session only and are never persisted;
+    empty or whitespace-only values are treated as omitted.
     """
 
     conversation_id: Optional[str]
     """The ID of an existing conversation to continue.
 
-    If not provided, a new conversation will be created.
+    If not provided, a new conversation will be created. If the id cannot be
+    resolved, the session start fails with the `conversation_not_found` error code
+    rather than silently creating a new conversation.
+    """
+
+    discard_if_empty: Optional[bool]
+    """
+    When true and this session creates a brand-new conversation (no conversation_id
+    was provided), that conversation is discarded if the session ends without any
+    message ever being sent. Has no effect when continuing an existing conversation.
+    Disabled by default.
     """
 
     ephemeral: Optional[bool]
@@ -88,13 +106,25 @@ class Config(TypedDict, total=False):
     Override the agent config for this voice session.
     Only prompt overrides are supported — voice sessions always use Gemini Live,
     so LLM model, agent model, planning prompt, and tool settings are not applicable.
+    Prompt overrides fully replace the agent's stored values for this session only
+    and are never persisted; empty or whitespace-only values are treated as omitted.
     """
 
     custom_prompt: Optional[str]
     """Custom instructions for the AI Agent during the voice session."""
 
     system_prompt: Optional[str]
-    """Directs your AI Agent's operational behavior during the voice session."""
+    """Directs your AI Agent's operational behavior during the voice session.
+
+    Replaces the agent's stored system prompt for this session only.
+    """
+
+    voice_prompt: Optional[str]
+    """Voice-specific instructions (tone, pacing, speaking style).
+
+    Replaces the agent's stored voice instructions for this session only. Not
+    persisted.
+    """
 
 
 class User(TypedDict, total=False):
@@ -118,6 +148,15 @@ class VoiceConfig(TypedDict, total=False):
 
     input_transcription: Optional[bool]
     """Enable transcription of user input audio. Default: true."""
+
+    language: Optional[str]
+    """BCP-47 tag for the client's locale (e.g.
+
+    'en-US'). Used as the transcription language hint when the agent has no
+    configured language; without it the provider detects the language per utterance
+    and can transcribe speech in an unexpected script. The agent's configured
+    language takes precedence.
+    """
 
     output_transcription: Optional[bool]
     """Enable transcription of agent output audio. Default: true."""
@@ -152,6 +191,13 @@ class VoiceConfig(TypedDict, total=False):
     """When true, skip the launch greeting and start directly in listening mode.
 
     Disabled by default.
+    """
+
+    turn_end_mode: Optional[Literal["server", "client"]]
+    """Controls how user audio turns close.
+
+    'server' uses the existing RMS and silence timer. 'client' disables that timer
+    and requires an explicit end_turn message after each utterance.
     """
 
     voice_preset: Optional[str]

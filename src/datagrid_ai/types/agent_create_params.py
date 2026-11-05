@@ -22,7 +22,11 @@ __all__ = [
 
 class AgentCreateParams(TypedDict, total=False):
     agent_model: Union[
-        Literal["magpie-1.1", "magpie-1.1-flash", "magpie-2.0", "magpie-2.5", "magpie-2.5-flash", "llm-only"], str, None
+        Literal[
+            "magpie-1.1", "magpie-1.1-flash", "magpie-2.0", "magpie-2.5", "magpie-2.5-flash", "magpie-3.0", "llm-only"
+        ],
+        str,
+        None,
     ]
     """The agent model determines the processing mode for Converse requests.
 
@@ -34,9 +38,8 @@ class AgentCreateParams(TypedDict, total=False):
     **Execute** (full tool use, planning, and multi-step reasoning; aligns with
     **Execute** in the web app / `full_agent`):
 
-    - `magpie-2.0` — Default. Full agent model with proactive planning and
-      reasoning.
-    - `magpie-2.5` — Beta. Latest full-agent model — faster, more adaptable, and
+    - `magpie-2.0` — Legacy full-agent model with proactive planning and reasoning.
+    - `magpie-2.5` — Default. Latest full-agent model — faster, more adaptable, and
       built to handle a broader range of real-world tasks.
     - `magpie-1.1` — Previous-generation full agent model.
 
@@ -52,6 +55,11 @@ class AgentCreateParams(TypedDict, total=False):
 
     - `llm-only` — Runs a direct LLM conversation with no planning or tool calls. A
       400 error will be returned if tools are specified.
+
+    **BETA**: Magpie 3.0. Behavior and schema may change.
+
+    - `magpie-3.0` — **BETA**. Available on the public Converse API. In-app rollout
+      flags do not apply to this request.
 
     Can also accept any custom string value for future model versions.
     """
@@ -86,48 +94,69 @@ class AgentCreateParams(TypedDict, total=False):
 
     llm_model: Union[
         Literal[
-            "gemini-3.5-flash",
-            "gemini-3.1-flash-lite",
-            "gemini-3-pro-preview",
-            "gemini-3.1-pro-preview",
-            "gemini-3-flash-preview",
-            "gemini-2.5-pro",
-            "gemini-2.5-pro-preview-05-06",
-            "gemini-2.5-flash",
-            "gemini-2.5-flash-preview-04-17",
-            "gemini-2.5-flash-native-audio-preview-12-2025",
-            "gemini-2.5-flash-lite",
-            "gpt-5",
-            "gpt-5.1",
-            "gemini-2.0-flash-001",
             "gemini-2.0-flash",
+            "gemini-2.5-flash",
+            "gemini-2.5-flash-lite",
+            "gemini-2.5-pro",
+            "gemini-3-flash-preview",
+            "gemini-3-pro-preview",
+            "gemini-3.1-flash-lite",
+            "gemini-3.1-pro-preview",
+            "gemini-3.5-flash",
+            "gemini-3.5-flash-lite",
+            "gemini-3.6-flash",
+            "gemini-3.8-flash",
+            "gemini-live-2.5-flash-native-audio",
+            "gemini-1.5-flash-001",
+            "gemini-1.5-flash-002",
+            "gemini-2.0-flash-001",
+            "gemini-2.5-flash-preview-04-17",
             "gemini-1.5-pro-001",
             "gemini-1.5-pro-002",
-            "gemini-1.5-flash-002",
-            "gemini-1.5-flash-001",
-            "chatgpt-4o-latest",
-            "gpt-4o",
-            "gpt-4",
-            "gpt-4-turbo",
-            "gpt-4o-mini",
+            "gemini-2.5-pro-preview-05-06",
             "claude-haiku-4-5@20251001",
             "claude-sonnet-4-6@default",
             "claude-opus-4-6@default",
             "claude-opus-4-7",
             "claude-opus-4-8",
+            "claude-sonnet-5",
+            "claude-opus-5",
+            "claude-opus-5-5",
             "anthropic.claude-haiku-4-5-20251001-v1:0",
+            "anthropic.claude-sonnet-4-5-20250929-v1:0",
             "anthropic.claude-sonnet-4-6",
+            "anthropic.claude-opus-4-5-20251101-v1:0",
             "anthropic.claude-opus-4-6-v1",
             "anthropic.claude-opus-4-7",
             "anthropic.claude-opus-4-8",
+            "anthropic.claude-sonnet-5",
+            "anthropic.claude-opus-5",
+            "anthropic.claude-opus-5-5",
+            "gpt-4o-mini",
+            "gpt-4o",
+            "gpt-4.1-mini",
+            "gpt-4.1",
+            "gpt-5-mini",
+            "gpt-5",
+            "gpt-5.1",
+            "chatgpt-4o-latest",
+            "gpt-4-turbo",
+            "gpt-4",
+            "openai.gpt-5.5",
+            "openai.gpt-5.6-luna",
+            "openai.gpt-5.6-sol",
+            "openai.gpt-5.6-terra",
+            "amazon.nova-2-lite-v1:0",
         ],
         str,
         None,
     ]
     """The LLM used to generate responses.
 
-    Deprecated Gemini 2.0 Flash ids are accepted for backward compatibility and
-    automatically run as gemini-3.1-flash-lite.
+    Any id returned by `GET /v1/models` with `type: llm` is accepted; the enum lists
+    the ids known when this spec was generated. Deprecated Gemini 2.x Flash ids are
+    accepted for backward compatibility and automatically run as
+    gemini-3.1-flash-lite.
     """
 
     mcp_servers: Optional[Iterable[McpServer]]
@@ -159,7 +188,11 @@ class AgentCreateParams(TypedDict, total=False):
     a tool, it will use that specific connection instead of the default one.
 
     **Structured outputs (Converse):** All `agent_model` values support JSON Schema
-    constrained responses via **`text.format`** on the Converse request.
+    constrained responses via **`text.format`** on the Converse request. Responses
+    are validated server-side against the schema and returned as a `json` content
+    item; output that cannot be made schema-valid is rejected with a deterministic
+    `structured_output_generation_failed` error instead of being returned as a
+    success.
 
     **Tool availability by agent model** (aligned with in-app **Execute** /
     **Extended** / direct LLM; see Converse `chat_mode` for **Ask** vs

@@ -125,6 +125,13 @@ class Knowledge(BaseModel):
     the full lifetime spend.
     """
 
+    default_indexing_quality: Optional[Literal["none"]] = None
+    """The knowledge-level indexing override.
+
+    `none` means semantic indexing is disabled; `null` means Datagrid uses its
+    normal indexing defaults.
+    """
+
     last_error: Optional[LastError] = None
     """The last terminal processing error for this knowledge, if any.
 
@@ -155,14 +162,16 @@ class Knowledge(BaseModel):
     status: Literal["pending", "partial", "ready", "failed"]
     """The current knowledge status.
 
-    `pending` indicates that processing has started but no rows have been learned
-    yet. `partial` indicates that some rows are available, but processing is either
-    still running or ended with incomplete results. `ready` indicates that
-    processing finished successfully and the knowledge is fully available. `failed`
-    indicates that no rows are currently available and the knowledge reached a
-    terminal failure state, either because the latest asynchronous processing or
-    re-index run ended unsuccessfully before any rows became available, or because
-    every row ended in a persistent failed state.
+    `pending` indicates that processing has started but no rows have reached a
+    terminal state yet (none learned, none failed). `partial` indicates that
+    processing has not finished for every row — some rows may already be learned or
+    failed while others are still being processed. `ready` indicates that processing
+    has finished and the knowledge is available for use; some individual rows may
+    have failed to process, so check `row_counts.failed`. `failed` indicates that no
+    rows are currently available and the knowledge reached a terminal failure state,
+    either because the latest asynchronous processing or re-index run ended
+    unsuccessfully before any rows became available, or because every row ended in a
+    persistent failed state.
     """
 
     sync: Optional[Sync] = None

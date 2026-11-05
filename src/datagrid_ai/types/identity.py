@@ -1,9 +1,10 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import List
+from typing import List, Optional
 from typing_extensions import Literal
 
 from .._models import BaseModel
+from .identity_procore import IdentityProcore
 from .identity_teamspace import IdentityTeamspace
 
 __all__ = ["Identity"]
@@ -15,12 +16,15 @@ class Identity(BaseModel):
 
     Resolution depends on the caller type:
 
-    - **Org-scoped API keys** (default): always the teamspace the key was minted in.
-      The `Datagrid-Teamspace` header is ignored.
-    - **Account-scoped API keys** (`scopeLevel: "account"`): the teamspace selected
-      by the `Datagrid-Teamspace` header, when that teamspace lives under the same
-      account as the key. Falls back to the key's home teamspace when the header is
-      absent.
+    - **API keys with "All Teamspaces" access** (`scopeLevel: "account"`): the
+      teamspace selected by the `Datagrid-Teamspace` header, when that teamspace
+      lives under the same account as the key's home teamspace.
+    - **API keys with "Selected Teamspaces" access** (`scopeLevel: "org"`): the
+      teamspace selected by the `Datagrid-Teamspace` header, when it is on the key's
+      teamspace list. A key whose list holds only its home teamspace ignores the
+      header.
+    - For either kind of key, the key's home teamspace (the one it was created in)
+      when the header is absent.
     - **JWT callers**: the `Datagrid-Teamspace` header when present (and the user is
       a member), otherwise the user's default teamspace.
     """
@@ -32,3 +36,9 @@ class Identity(BaseModel):
 
     user_id: str
     """The ID of the authenticated user."""
+
+    procore: Optional[IdentityProcore] = None
+    """The Procore company and project the current teamspace is bound to.
+
+    Omitted when the teamspace's account is not linked to a Procore company.
+    """

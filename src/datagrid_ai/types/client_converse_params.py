@@ -64,11 +64,15 @@ class ClientConverseParams(TypedDict, total=False):
     """Controls how the agent processes the request for this turn.
 
     Matches the chat mode selector in the Datagrid web app: **Execute**
-    (`full_agent`), **Extended** (`light_agent`), **Ask** (`llm_router`). When set
-    to `auto`, the router jointly predicts the best agent and concrete mode
-    (`full_agent` / `light_agent` / `llm_router`) per message. When set to a
-    concrete mode, that mode is used directly. When omitted, the mode is determined
-    by the `agent_model` in `config`.
+    (`full_agent`), **Extended** (`light_agent`), **Ask** (`llm_router`). Ask uses
+    the agent path with Magpie 2.5 and Ask-specific prompt guidance. When omitted,
+    the request inherits the conversation's persisted `chat_mode`; new conversations
+    default to **Execute** (`full_agent`). When set to `auto`, the request also runs
+    as **Execute** (`full_agent`); Auto is currently accepted for compatibility but
+    does not predict Ask, Extended, or Execute per message. When set to a concrete
+    mode, that concrete mode is used directly. The default `agent_model` for Execute
+    is `magpie-2.5` unless `config.agent_model` explicitly sets another supported
+    model.
     """
 
     config: Optional[Config]
@@ -126,6 +130,24 @@ class ClientConverseParams(TypedDict, total=False):
     history.
     """
 
+    skill_ids: Optional[SequenceNotStr[str]]
+    """Array of skill IDs to force-activate for this turn.
+
+    Each ID must refer to an account-shared or builtin skill reachable by the API
+    key's teamspace. User-scoped (private) skills are not accessible from API keys.
+    Deduped and merged with `slash_keys` before the turn begins. Maximum 32 entries.
+    Returns 400 if any ID is unresolved, disabled, or out of scope.
+    """
+
+    slash_keys: Optional[SequenceNotStr[str]]
+    """Array of slash-key tokens (e.g.
+
+    `"budget-check"` or `"/rfi-triage"`) to force-activate for this turn. Leading
+    slashes are stripped. Resolved account-shared → builtin in precedence order.
+    Deduped and merged with `skill_ids` before the turn begins. Maximum 32 entries.
+    Returns 400 if any token cannot be resolved to an enabled, reachable skill.
+    """
+
     stream: Optional[bool]
     """Determines the response type of the converse.
 
@@ -137,7 +159,8 @@ class ClientConverseParams(TypedDict, total=False):
     Contains the format property used to specify the structured output schema
     (`text.format`). Structured output is supported for all `agent_model` values and
     `chat_mode` settings when `text.format` is provided (same JSON Schema mechanism
-    everywhere). **Ask** in the web app maps to `chat_mode` `magpie-2.5-flash`;.
+    everywhere). **Ask** in the web app maps to `chat_mode: llm_router`; `auto`
+    currently maps to **Execute** (`full_agent`).
     """
 
     user: Optional[User]
@@ -273,7 +296,11 @@ class AgentRoutingManualTargetAgentConfigWithID(TypedDict, total=False):
     """The ID of the agent to use for routing."""
 
     agent_model: Union[
-        Literal["magpie-1.1", "magpie-1.1-flash", "magpie-2.0", "magpie-2.5", "magpie-2.5-flash", "llm-only"], str, None
+        Literal[
+            "magpie-1.1", "magpie-1.1-flash", "magpie-2.0", "magpie-2.5", "magpie-2.5-flash", "magpie-3.0", "llm-only"
+        ],
+        str,
+        None,
     ]
     """The agent model determines the processing mode for Converse requests.
 
@@ -285,9 +312,8 @@ class AgentRoutingManualTargetAgentConfigWithID(TypedDict, total=False):
     **Execute** (full tool use, planning, and multi-step reasoning; aligns with
     **Execute** in the web app / `full_agent`):
 
-    - `magpie-2.0` — Default. Full agent model with proactive planning and
-      reasoning.
-    - `magpie-2.5` — Beta. Latest full-agent model — faster, more adaptable, and
+    - `magpie-2.0` — Legacy full-agent model with proactive planning and reasoning.
+    - `magpie-2.5` — Default. Latest full-agent model — faster, more adaptable, and
       built to handle a broader range of real-world tasks.
     - `magpie-1.1` — Previous-generation full agent model.
 
@@ -303,6 +329,11 @@ class AgentRoutingManualTargetAgentConfigWithID(TypedDict, total=False):
 
     - `llm-only` — Runs a direct LLM conversation with no planning or tool calls. A
       400 error will be returned if tools are specified.
+
+    **BETA**: Magpie 3.0. Behavior and schema may change.
+
+    - `magpie-3.0` — **BETA**. Available on the public Converse API. In-app rollout
+      flags do not apply to this request.
 
     Can also accept any custom string value for future model versions.
     """
@@ -334,48 +365,69 @@ class AgentRoutingManualTargetAgentConfigWithID(TypedDict, total=False):
 
     llm_model: Union[
         Literal[
-            "gemini-3.5-flash",
-            "gemini-3.1-flash-lite",
-            "gemini-3-pro-preview",
-            "gemini-3.1-pro-preview",
-            "gemini-3-flash-preview",
-            "gemini-2.5-pro",
-            "gemini-2.5-pro-preview-05-06",
-            "gemini-2.5-flash",
-            "gemini-2.5-flash-preview-04-17",
-            "gemini-2.5-flash-native-audio-preview-12-2025",
-            "gemini-2.5-flash-lite",
-            "gpt-5",
-            "gpt-5.1",
-            "gemini-2.0-flash-001",
             "gemini-2.0-flash",
+            "gemini-2.5-flash",
+            "gemini-2.5-flash-lite",
+            "gemini-2.5-pro",
+            "gemini-3-flash-preview",
+            "gemini-3-pro-preview",
+            "gemini-3.1-flash-lite",
+            "gemini-3.1-pro-preview",
+            "gemini-3.5-flash",
+            "gemini-3.5-flash-lite",
+            "gemini-3.6-flash",
+            "gemini-3.8-flash",
+            "gemini-live-2.5-flash-native-audio",
+            "gemini-1.5-flash-001",
+            "gemini-1.5-flash-002",
+            "gemini-2.0-flash-001",
+            "gemini-2.5-flash-preview-04-17",
             "gemini-1.5-pro-001",
             "gemini-1.5-pro-002",
-            "gemini-1.5-flash-002",
-            "gemini-1.5-flash-001",
-            "chatgpt-4o-latest",
-            "gpt-4o",
-            "gpt-4",
-            "gpt-4-turbo",
-            "gpt-4o-mini",
+            "gemini-2.5-pro-preview-05-06",
             "claude-haiku-4-5@20251001",
             "claude-sonnet-4-6@default",
             "claude-opus-4-6@default",
             "claude-opus-4-7",
             "claude-opus-4-8",
+            "claude-sonnet-5",
+            "claude-opus-5",
+            "claude-opus-5-5",
             "anthropic.claude-haiku-4-5-20251001-v1:0",
+            "anthropic.claude-sonnet-4-5-20250929-v1:0",
             "anthropic.claude-sonnet-4-6",
+            "anthropic.claude-opus-4-5-20251101-v1:0",
             "anthropic.claude-opus-4-6-v1",
             "anthropic.claude-opus-4-7",
             "anthropic.claude-opus-4-8",
+            "anthropic.claude-sonnet-5",
+            "anthropic.claude-opus-5",
+            "anthropic.claude-opus-5-5",
+            "gpt-4o-mini",
+            "gpt-4o",
+            "gpt-4.1-mini",
+            "gpt-4.1",
+            "gpt-5-mini",
+            "gpt-5",
+            "gpt-5.1",
+            "chatgpt-4o-latest",
+            "gpt-4-turbo",
+            "gpt-4",
+            "openai.gpt-5.5",
+            "openai.gpt-5.6-luna",
+            "openai.gpt-5.6-sol",
+            "openai.gpt-5.6-terra",
+            "amazon.nova-2-lite-v1:0",
         ],
         str,
         None,
     ]
     """The LLM used to generate responses.
 
-    Deprecated Gemini 2.0 Flash ids are accepted for backward compatibility and
-    automatically run as gemini-3.1-flash-lite.
+    Any id returned by `GET /v1/models` with `type: llm` is accepted; the enum lists
+    the ids known when this spec was generated. Deprecated Gemini 2.x Flash ids are
+    accepted for backward compatibility and automatically run as
+    gemini-3.1-flash-lite.
     """
 
     mcp_servers: Optional[Iterable[AgentRoutingManualTargetAgentConfigWithIDMcpServer]]
@@ -404,7 +456,11 @@ class AgentRoutingManualTargetAgentConfigWithID(TypedDict, total=False):
     a tool, it will use that specific connection instead of the default one.
 
     **Structured outputs (Converse):** All `agent_model` values support JSON Schema
-    constrained responses via **`text.format`** on the Converse request.
+    constrained responses via **`text.format`** on the Converse request. Responses
+    are validated server-side against the schema and returned as a `json` content
+    item; output that cannot be made schema-valid is rejected with a deterministic
+    `structured_output_generation_failed` error instead of being returned as a
+    success.
 
     **Tool availability by agent model** (aligned with in-app **Execute** /
     **Extended** / direct LLM; see Converse `chat_mode` for **Ask** vs
@@ -542,7 +598,11 @@ class Config(TypedDict, total=False):
     """
 
     agent_model: Union[
-        Literal["magpie-1.1", "magpie-1.1-flash", "magpie-2.0", "magpie-2.5", "magpie-2.5-flash", "llm-only"], str, None
+        Literal[
+            "magpie-1.1", "magpie-1.1-flash", "magpie-2.0", "magpie-2.5", "magpie-2.5-flash", "magpie-3.0", "llm-only"
+        ],
+        str,
+        None,
     ]
     """The agent model determines the processing mode for Converse requests.
 
@@ -554,9 +614,8 @@ class Config(TypedDict, total=False):
     **Execute** (full tool use, planning, and multi-step reasoning; aligns with
     **Execute** in the web app / `full_agent`):
 
-    - `magpie-2.0` — Default. Full agent model with proactive planning and
-      reasoning.
-    - `magpie-2.5` — Beta. Latest full-agent model — faster, more adaptable, and
+    - `magpie-2.0` — Legacy full-agent model with proactive planning and reasoning.
+    - `magpie-2.5` — Default. Latest full-agent model — faster, more adaptable, and
       built to handle a broader range of real-world tasks.
     - `magpie-1.1` — Previous-generation full agent model.
 
@@ -572,6 +631,11 @@ class Config(TypedDict, total=False):
 
     - `llm-only` — Runs a direct LLM conversation with no planning or tool calls. A
       400 error will be returned if tools are specified.
+
+    **BETA**: Magpie 3.0. Behavior and schema may change.
+
+    - `magpie-3.0` — **BETA**. Available on the public Converse API. In-app rollout
+      flags do not apply to this request.
 
     Can also accept any custom string value for future model versions.
     """
@@ -612,48 +676,69 @@ class Config(TypedDict, total=False):
 
     llm_model: Union[
         Literal[
-            "gemini-3.5-flash",
-            "gemini-3.1-flash-lite",
-            "gemini-3-pro-preview",
-            "gemini-3.1-pro-preview",
-            "gemini-3-flash-preview",
-            "gemini-2.5-pro",
-            "gemini-2.5-pro-preview-05-06",
-            "gemini-2.5-flash",
-            "gemini-2.5-flash-preview-04-17",
-            "gemini-2.5-flash-native-audio-preview-12-2025",
-            "gemini-2.5-flash-lite",
-            "gpt-5",
-            "gpt-5.1",
-            "gemini-2.0-flash-001",
             "gemini-2.0-flash",
+            "gemini-2.5-flash",
+            "gemini-2.5-flash-lite",
+            "gemini-2.5-pro",
+            "gemini-3-flash-preview",
+            "gemini-3-pro-preview",
+            "gemini-3.1-flash-lite",
+            "gemini-3.1-pro-preview",
+            "gemini-3.5-flash",
+            "gemini-3.5-flash-lite",
+            "gemini-3.6-flash",
+            "gemini-3.8-flash",
+            "gemini-live-2.5-flash-native-audio",
+            "gemini-1.5-flash-001",
+            "gemini-1.5-flash-002",
+            "gemini-2.0-flash-001",
+            "gemini-2.5-flash-preview-04-17",
             "gemini-1.5-pro-001",
             "gemini-1.5-pro-002",
-            "gemini-1.5-flash-002",
-            "gemini-1.5-flash-001",
-            "chatgpt-4o-latest",
-            "gpt-4o",
-            "gpt-4",
-            "gpt-4-turbo",
-            "gpt-4o-mini",
+            "gemini-2.5-pro-preview-05-06",
             "claude-haiku-4-5@20251001",
             "claude-sonnet-4-6@default",
             "claude-opus-4-6@default",
             "claude-opus-4-7",
             "claude-opus-4-8",
+            "claude-sonnet-5",
+            "claude-opus-5",
+            "claude-opus-5-5",
             "anthropic.claude-haiku-4-5-20251001-v1:0",
+            "anthropic.claude-sonnet-4-5-20250929-v1:0",
             "anthropic.claude-sonnet-4-6",
+            "anthropic.claude-opus-4-5-20251101-v1:0",
             "anthropic.claude-opus-4-6-v1",
             "anthropic.claude-opus-4-7",
             "anthropic.claude-opus-4-8",
+            "anthropic.claude-sonnet-5",
+            "anthropic.claude-opus-5",
+            "anthropic.claude-opus-5-5",
+            "gpt-4o-mini",
+            "gpt-4o",
+            "gpt-4.1-mini",
+            "gpt-4.1",
+            "gpt-5-mini",
+            "gpt-5",
+            "gpt-5.1",
+            "chatgpt-4o-latest",
+            "gpt-4-turbo",
+            "gpt-4",
+            "openai.gpt-5.5",
+            "openai.gpt-5.6-luna",
+            "openai.gpt-5.6-sol",
+            "openai.gpt-5.6-terra",
+            "amazon.nova-2-lite-v1:0",
         ],
         str,
         None,
     ]
     """The LLM used to generate responses.
 
-    Deprecated Gemini 2.0 Flash ids are accepted for backward compatibility and
-    automatically run as gemini-3.1-flash-lite.
+    Any id returned by `GET /v1/models` with `type: llm` is accepted; the enum lists
+    the ids known when this spec was generated. Deprecated Gemini 2.x Flash ids are
+    accepted for backward compatibility and automatically run as
+    gemini-3.1-flash-lite.
     """
 
     mcp_servers: Optional[Iterable[ConfigMcpServer]]
@@ -691,7 +776,11 @@ class Config(TypedDict, total=False):
     a tool, it will use that specific connection instead of the default one.
 
     **Structured outputs (Converse):** All `agent_model` values support JSON Schema
-    constrained responses via **`text.format`** on the Converse request.
+    constrained responses via **`text.format`** on the Converse request. Responses
+    are validated server-side against the schema and returned as a `json` content
+    item; output that cannot be made schema-valid is rejected with a deterministic
+    `structured_output_generation_failed` error instead of being returned as a
+    success.
 
     **Tool availability by agent model** (aligned with in-app **Execute** /
     **Extended** / direct LLM; see Converse `chat_mode` for **Ask** vs
@@ -751,13 +840,25 @@ class Config(TypedDict, total=False):
 class Text(TypedDict, total=False):
     """
     Contains the format property used to specify the structured output schema (`text.format`).
-    Structured output is supported for all `agent_model` values and `chat_mode` settings when `text.format` is provided (same JSON Schema mechanism everywhere). **Ask** in the web app maps to `chat_mode` `magpie-2.5-flash`;.
+    Structured output is supported for all `agent_model` values and `chat_mode` settings when `text.format` is provided (same JSON Schema mechanism everywhere). **Ask** in the web app maps to `chat_mode: llm_router`; `auto` currently maps to **Execute** (`full_agent`).
     """
 
     format: object
-    """
-    The converse response will be a JSON string object, that adheres to the provided
-    JSON schema.
+    """Constrain the Converse response to the provided JSON Schema.
+
+    The agent's output is **validated server-side against this schema**: a
+    conforming result is returned as structured content, while non-conforming output
+    (missing required fields, invalid enum values, or disallowed properties) is
+    converted into an application-level error payload rather than returned as a
+    structured success.
+
+    On success the structured result is returned as a `json` content item with the
+    value already parsed (no `JSON.parse` required), alongside a JSON-string `text`
+    content item kept for backward compatibility with callers that read
+    `content[0].text`. When the agent cannot produce schema-valid JSON, no `json`
+    item is returned — a `text` content item carries a deterministic error object
+    instead:
+    `{ "error": { "code": "structured_output_generation_failed", "message": "..." } }`.
 
     ```javascript
     const exampleJsonSchema = {
@@ -787,8 +888,12 @@ class Text(TypedDict, total=False):
       text: { format: exampleJsonSchema },
     });
 
-    // Example response: "{ "name": "Gladiator", "director": "Ridley Scott", "release_year": 2000 }"
-    const parsedResponse = JSON.parse(response.content[0].text);
+    // Structured output is returned as a `json` content item (already
+    // parsed); `content[0].text` still holds the JSON string for
+    // backward compatibility.
+    const jsonPart = response.content.find((part) => part.type === "json");
+    const movie = jsonPart?.json;
+    // => { name: "Gladiator", director: "Ridley Scott", release_year: 2000 }
     ```
     """
 

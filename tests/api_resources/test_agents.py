@@ -11,6 +11,7 @@ from datagrid_ai import Datagrid, AsyncDatagrid
 from tests.utils import assert_matches_type
 from datagrid_ai.types import (
     Agent,
+    AgentListItem,
     AgentClaimResponse,
     AgentGenerateResponse,
 )
@@ -41,7 +42,7 @@ class TestAgents:
             description="description",
             disabled_tools=["string"],
             knowledge_ids=["string"],
-            llm_model="gemini-3.5-flash",
+            llm_model="gemini-2.0-flash",
             mcp_servers=[
                 {
                     "server_id": "server_id",
@@ -137,7 +138,7 @@ class TestAgents:
             disabled_tools=["string"],
             emoji="emoji",
             knowledge_ids=["string"],
-            llm_model="gemini-3.5-flash",
+            llm_model="gemini-2.0-flash",
             mcp_servers=[
                 {
                     "server_id": "server_id",
@@ -186,7 +187,7 @@ class TestAgents:
     @parametrize
     def test_method_list(self, client: Datagrid) -> None:
         agent = client.agents.list()
-        assert_matches_type(SyncCursorIDPage[Agent], agent, path=["response"])
+        assert_matches_type(SyncCursorIDPage[AgentListItem], agent, path=["response"])
 
     @parametrize
     def test_method_list_with_all_params(self, client: Datagrid) -> None:
@@ -196,7 +197,7 @@ class TestAgents:
             limit=1,
             search="search",
         )
-        assert_matches_type(SyncCursorIDPage[Agent], agent, path=["response"])
+        assert_matches_type(SyncCursorIDPage[AgentListItem], agent, path=["response"])
 
     @parametrize
     def test_raw_response_list(self, client: Datagrid) -> None:
@@ -205,7 +206,7 @@ class TestAgents:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         agent = response.parse()
-        assert_matches_type(SyncCursorIDPage[Agent], agent, path=["response"])
+        assert_matches_type(SyncCursorIDPage[AgentListItem], agent, path=["response"])
 
     @parametrize
     def test_streaming_response_list(self, client: Datagrid) -> None:
@@ -214,7 +215,7 @@ class TestAgents:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             agent = response.parse()
-            assert_matches_type(SyncCursorIDPage[Agent], agent, path=["response"])
+            assert_matches_type(SyncCursorIDPage[AgentListItem], agent, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -343,7 +344,7 @@ class TestAsyncAgents:
             description="description",
             disabled_tools=["string"],
             knowledge_ids=["string"],
-            llm_model="gemini-3.5-flash",
+            llm_model="gemini-2.0-flash",
             mcp_servers=[
                 {
                     "server_id": "server_id",
@@ -439,7 +440,7 @@ class TestAsyncAgents:
             disabled_tools=["string"],
             emoji="emoji",
             knowledge_ids=["string"],
-            llm_model="gemini-3.5-flash",
+            llm_model="gemini-2.0-flash",
             mcp_servers=[
                 {
                     "server_id": "server_id",
@@ -488,7 +489,7 @@ class TestAsyncAgents:
     @parametrize
     async def test_method_list(self, async_client: AsyncDatagrid) -> None:
         agent = await async_client.agents.list()
-        assert_matches_type(AsyncCursorIDPage[Agent], agent, path=["response"])
+        assert_matches_type(AsyncCursorIDPage[AgentListItem], agent, path=["response"])
 
     @parametrize
     async def test_method_list_with_all_params(self, async_client: AsyncDatagrid) -> None:
@@ -498,7 +499,7 @@ class TestAsyncAgents:
             limit=1,
             search="search",
         )
-        assert_matches_type(AsyncCursorIDPage[Agent], agent, path=["response"])
+        assert_matches_type(AsyncCursorIDPage[AgentListItem], agent, path=["response"])
 
     @parametrize
     async def test_raw_response_list(self, async_client: AsyncDatagrid) -> None:
@@ -507,7 +508,7 @@ class TestAsyncAgents:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         agent = await response.parse()
-        assert_matches_type(AsyncCursorIDPage[Agent], agent, path=["response"])
+        assert_matches_type(AsyncCursorIDPage[AgentListItem], agent, path=["response"])
 
     @parametrize
     async def test_streaming_response_list(self, async_client: AsyncDatagrid) -> None:
@@ -516,7 +517,7 @@ class TestAsyncAgents:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             agent = await response.parse()
-            assert_matches_type(AsyncCursorIDPage[Agent], agent, path=["response"])
+            assert_matches_type(AsyncCursorIDPage[AgentListItem], agent, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
