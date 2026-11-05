@@ -50,8 +50,9 @@ class ModelsResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> ModelListResponse:
         """
-        Returns the agent models and LLMs accepted by `config.agent_model` and
-        `config.llm_model` on `POST /converse`.
+        Returns the agent models and released LLMs accepted by `config.agent_model` and
+        `config.llm_model` on `POST /converse`. LLMs still in rollout appear here once
+        they are released.
         """
         return self._get(
             "/models",
@@ -93,8 +94,9 @@ class AsyncModelsResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> ModelListResponse:
         """
-        Returns the agent models and LLMs accepted by `config.agent_model` and
-        `config.llm_model` on `POST /converse`.
+        Returns the agent models and released LLMs accepted by `config.agent_model` and
+        `config.llm_model` on `POST /converse`. LLMs still in rollout appear here once
+        they are released.
         """
         return await self._get(
             "/models",
