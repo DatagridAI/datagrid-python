@@ -48,6 +48,7 @@ class TestVoice:
             },
             voice_config={
                 "input_transcription": True,
+                "language": "language",
                 "output_transcription": True,
                 "segment_max_duration_ms": 0,
                 "silence_commit_ms": 0,
@@ -118,6 +119,7 @@ class TestAsyncVoice:
             },
             voice_config={
                 "input_transcription": True,
+                "language": "language",
                 "output_transcription": True,
                 "segment_max_duration_ms": 0,
                 "silence_commit_ms": 0,

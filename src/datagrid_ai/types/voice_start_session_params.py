@@ -149,6 +149,15 @@ class VoiceConfig(TypedDict, total=False):
     input_transcription: Optional[bool]
     """Enable transcription of user input audio. Default: true."""
 
+    language: Optional[str]
+    """BCP-47 tag for the client's locale (e.g.
+
+    'en-US'). Used as the transcription language hint when the agent has no
+    configured language; without it the provider detects the language per utterance
+    and can transcribe speech in an unexpected script. The agent's configured
+    language takes precedence.
+    """
+
     output_transcription: Optional[bool]
     """Enable transcription of agent output audio. Default: true."""
 
