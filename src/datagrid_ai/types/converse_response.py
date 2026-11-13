@@ -7,15 +7,62 @@ from .._models import BaseModel
 from .tool_def import ToolDef
 from .conversations.message import Message
 
-__all__ = ["ConverseResponse", "ConverseResponseReasoning", "ConverseResponseSkill", "ConverseResponseToolCall"]
+__all__ = [
+    "ConverseResponse",
+    "ConverseResponseDelegation",
+    "ConverseResponseReasoning",
+    "ConverseResponseSkill",
+    "ConverseResponseToolCall",
+]
+
+
+class ConverseResponseDelegation(BaseModel):
+    """A delegation call to a specialist agent that finished.
+
+    A delegation still running when the turn ends is not listed.
+    """
+
+    id: str
+    """Identifies the delegation. Matches the `id` of its `delegation` events."""
+
+    agent_id: str
+    """The ID of the specialist agent."""
+
+    agent_name: str
+    """The name of the specialist agent."""
+
+    credits_consumed: Optional[float] = None
+    """Credits the specialist's run consumed. Null when the run reported no charge."""
+
+    elapsed_ms: Optional[float] = None
+    """How long the specialist's run took, in milliseconds.
+
+    Null when it was not measured.
+    """
+
+    is_partial: bool
+    """
+    True when the specialist's text was salvaged mid-run rather than returned in
+    full.
+    """
+
+    status: Literal["completed", "failed", "timed_out", "budget_exhausted", "cancelled"]
+    """
+    Why the run ended: `completed`, or a failure (`failed`, `timed_out`,
+    `budget_exhausted`, `cancelled`). `cancelled` means the user or host stopped the
+    run.
+    """
 
 
 class ConverseResponseReasoning(BaseModel):
     id: str
     """The ID of the reasoning step."""
 
-    status: Literal["in_progress", "completed", "failed"]
-    """The current status of the reasoning step."""
+    status: Literal["in_progress", "completed", "failed", "cancelled"]
+    """The current status of the reasoning step.
+
+    `cancelled` when the conversation was stopped while the step was in progress.
+    """
 
     type: Literal["reasoning"]
     """The type of the delta, which is always reasoning."""
@@ -60,7 +107,12 @@ class ConverseResponseToolCall(BaseModel):
     id: str
     """The ID of the tool call."""
 
-    status: Literal["in_progress", "completed", "failed"]
+    status: Literal["in_progress", "completed", "failed", "cancelled"]
+    """The status of the tool call.
+
+    `cancelled` when the conversation was stopped while the tool call was in
+    progress.
+    """
 
     tool: ToolDef
     """The `Tool` object represents a tool that can be used by agents."""
@@ -81,7 +133,18 @@ class ConverseResponse(Message):
     """
     The chat mode used for this response (web app: Execute = full_agent, Extended =
     light_agent, Ask = llm_router). Auto mode currently runs and reports as Execute
-    (full_agent).
+    (full_agent). A turn that runs on the orchestrator agent always runs and reports
+    as full_agent, whatever `chat_mode` was requested.
+    """
+
+    delegations: Optional[List[ConverseResponseDelegation]] = None
+    """Each delegation the orchestrator made on this turn, in the order they finished.
+
+    One entry per delegation call, not per specialist run: a message sent to a
+    specialist that is still running is its own entry, and only the entry that ended
+    the run carries its `credits_consumed`. `credits.consumed` includes what they
+    consumed. Null when no delegation finished, and on turns that do not run on the
+    orchestrator agent.
     """
 
     generated_title: Optional[str] = None

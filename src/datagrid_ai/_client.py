@@ -563,9 +563,9 @@ class Datagrid(SyncAPIClient):
           generate_title: Determines whether generated_title metadata should be included. Defaults to
               false. generated_title is emitted only when this flag is explicitly true.
 
-          include_steps: When set to false, tool call and reasoning step events are omitted from SSE
-              streams. Non-streaming responses always include the tool_calls and reasoning
-              fields (as null when empty).
+          include_steps: When set to false, tool call, reasoning step and delegation events are omitted
+              from SSE streams. Non-streaming responses always include the tool_calls and
+              reasoning fields (as null when empty).
 
           reference_date: Optional deterministic reference date override in YYYY-MM-DD format. Must be a
               real calendar date (for example, rejects impossible dates like 2026-02-31). When
@@ -1123,9 +1123,9 @@ class AsyncDatagrid(AsyncAPIClient):
           generate_title: Determines whether generated_title metadata should be included. Defaults to
               false. generated_title is emitted only when this flag is explicitly true.
 
-          include_steps: When set to false, tool call and reasoning step events are omitted from SSE
-              streams. Non-streaming responses always include the tool_calls and reasoning
-              fields (as null when empty).
+          include_steps: When set to false, tool call, reasoning step and delegation events are omitted
+              from SSE streams. Non-streaming responses always include the tool_calls and
+              reasoning fields (as null when empty).
 
           reference_date: Optional deterministic reference date override in YYYY-MM-DD format. Must be a
               real calendar date (for example, rejects impossible dates like 2026-02-31). When
