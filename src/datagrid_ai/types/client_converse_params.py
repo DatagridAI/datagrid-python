@@ -31,6 +31,7 @@ __all__ = [
     "AgentRoutingManualTargetAgentConfigWithIDDisabledTool",
     "AgentRoutingManualTargetAgentConfigWithIDMcpServer",
     "AgentRoutingManualTargetAgentConfigWithIDTool",
+    "AgentRoutingOrchestrator",
     "Config",
     "ConfigAgentTool",
     "ConfigCorpus",
@@ -110,9 +111,9 @@ class ClientConverseParams(TypedDict, total=False):
 
     include_steps: Optional[bool]
     """
-    When set to false, tool call and reasoning step events are omitted from SSE
-    streams. Non-streaming responses always include the tool_calls and reasoning
-    fields (as null when empty).
+    When set to false, tool call, reasoning step and delegation events are omitted
+    from SSE streams. Non-streaming responses always include the tool_calls and
+    reasoning fields (as null when empty).
     """
 
     reference_date: Annotated[Union[str, date, None], PropertyInfo(format="iso8601")]
@@ -533,7 +534,16 @@ class AgentRoutingManual(TypedDict, total=False):
     """
 
 
-AgentRouting: TypeAlias = Union[AgentRoutingAuto, AgentRoutingManual]
+class AgentRoutingOrchestrator(TypedDict, total=False):
+    """
+    The Teamspace's orchestrator answers the turn and delegates parts of it to specialist agents. The response reports the orchestrator as `agent_id`. A conversation started in this mode stays with the orchestrator when a later turn sends only `conversation_id`. Only a personal conversation can be continued in this mode. The orchestrator cannot be named as `agent_id` or as a `manual` target.
+    """
+
+    mode: Required[Literal["orchestrator"]]
+    """The Teamspace's orchestrator answers and delegates to specialist agents."""
+
+
+AgentRouting: TypeAlias = Union[AgentRoutingAuto, AgentRoutingManual, AgentRoutingOrchestrator]
 
 ConfigAgentTool: TypeAlias = Union[ToolName, ToolParam]
 
