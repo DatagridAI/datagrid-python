@@ -77,6 +77,7 @@ if TYPE_CHECKING:
         organization,
         conversations,
         batch_predictions,
+        agentic_automations,
         connection_providers,
     )
     from .resources.files import FilesResource, AsyncFilesResource
@@ -97,6 +98,7 @@ if TYPE_CHECKING:
     from .resources.agents.agents import AgentsResource, AsyncAgentsResource
     from .resources.memory.memory import MemoryResource, AsyncMemoryResource
     from .resources.batch_predictions import BatchPredictionsResource, AsyncBatchPredictionsResource
+    from .resources.agentic_automations import AgenticAutomationsResource, AsyncAgenticAutomationsResource
     from .resources.knowledge.knowledge import KnowledgeResource, AsyncKnowledgeResource
     from .resources.connection_providers import ConnectionProvidersResource, AsyncConnectionProvidersResource
     from .resources.data_views.data_views import DataViewsResource, AsyncDataViewsResource
@@ -246,6 +248,12 @@ class Datagrid(SyncAPIClient):
         from .resources.skills import SkillsResource
 
         return SkillsResource(self)
+
+    @cached_property
+    def agentic_automations(self) -> AgenticAutomationsResource:
+        from .resources.agentic_automations import AgenticAutomationsResource
+
+        return AgenticAutomationsResource(self)
 
     @cached_property
     def agents(self) -> AgentsResource:
@@ -808,6 +816,12 @@ class AsyncDatagrid(AsyncAPIClient):
         return AsyncSkillsResource(self)
 
     @cached_property
+    def agentic_automations(self) -> AsyncAgenticAutomationsResource:
+        from .resources.agentic_automations import AsyncAgenticAutomationsResource
+
+        return AsyncAgenticAutomationsResource(self)
+
+    @cached_property
     def agents(self) -> AsyncAgentsResource:
         from .resources.agents import AsyncAgentsResource
 
@@ -1306,6 +1320,12 @@ class DatagridWithRawResponse:
         return SkillsResourceWithRawResponse(self._client.skills)
 
     @cached_property
+    def agentic_automations(self) -> agentic_automations.AgenticAutomationsResourceWithRawResponse:
+        from .resources.agentic_automations import AgenticAutomationsResourceWithRawResponse
+
+        return AgenticAutomationsResourceWithRawResponse(self._client.agentic_automations)
+
+    @cached_property
     def agents(self) -> agents.AgentsResourceWithRawResponse:
         from .resources.agents import AgentsResourceWithRawResponse
 
@@ -1453,6 +1473,12 @@ class AsyncDatagridWithRawResponse:
         from .resources.skills import AsyncSkillsResourceWithRawResponse
 
         return AsyncSkillsResourceWithRawResponse(self._client.skills)
+
+    @cached_property
+    def agentic_automations(self) -> agentic_automations.AsyncAgenticAutomationsResourceWithRawResponse:
+        from .resources.agentic_automations import AsyncAgenticAutomationsResourceWithRawResponse
+
+        return AsyncAgenticAutomationsResourceWithRawResponse(self._client.agentic_automations)
 
     @cached_property
     def agents(self) -> agents.AsyncAgentsResourceWithRawResponse:
@@ -1604,6 +1630,12 @@ class DatagridWithStreamedResponse:
         return SkillsResourceWithStreamingResponse(self._client.skills)
 
     @cached_property
+    def agentic_automations(self) -> agentic_automations.AgenticAutomationsResourceWithStreamingResponse:
+        from .resources.agentic_automations import AgenticAutomationsResourceWithStreamingResponse
+
+        return AgenticAutomationsResourceWithStreamingResponse(self._client.agentic_automations)
+
+    @cached_property
     def agents(self) -> agents.AgentsResourceWithStreamingResponse:
         from .resources.agents import AgentsResourceWithStreamingResponse
 
@@ -1751,6 +1783,12 @@ class AsyncDatagridWithStreamedResponse:
         from .resources.skills import AsyncSkillsResourceWithStreamingResponse
 
         return AsyncSkillsResourceWithStreamingResponse(self._client.skills)
+
+    @cached_property
+    def agentic_automations(self) -> agentic_automations.AsyncAgenticAutomationsResourceWithStreamingResponse:
+        from .resources.agentic_automations import AsyncAgenticAutomationsResourceWithStreamingResponse
+
+        return AsyncAgenticAutomationsResourceWithStreamingResponse(self._client.agentic_automations)
 
     @cached_property
     def agents(self) -> agents.AsyncAgentsResourceWithStreamingResponse:

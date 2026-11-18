@@ -176,6 +176,14 @@ from .batch_predictions import (
     BatchPredictionsResourceWithStreamingResponse,
     AsyncBatchPredictionsResourceWithStreamingResponse,
 )
+from .agentic_automations import (
+    AgenticAutomationsResource,
+    AsyncAgenticAutomationsResource,
+    AgenticAutomationsResourceWithRawResponse,
+    AsyncAgenticAutomationsResourceWithRawResponse,
+    AgenticAutomationsResourceWithStreamingResponse,
+    AsyncAgenticAutomationsResourceWithStreamingResponse,
+)
 from .connection_providers import (
     ConnectionProvidersResource,
     AsyncConnectionProvidersResource,
@@ -246,6 +254,12 @@ __all__ = [
     "AsyncSkillsResourceWithRawResponse",
     "SkillsResourceWithStreamingResponse",
     "AsyncSkillsResourceWithStreamingResponse",
+    "AgenticAutomationsResource",
+    "AsyncAgenticAutomationsResource",
+    "AgenticAutomationsResourceWithRawResponse",
+    "AsyncAgenticAutomationsResourceWithRawResponse",
+    "AgenticAutomationsResourceWithStreamingResponse",
+    "AsyncAgenticAutomationsResourceWithStreamingResponse",
     "AgentsResource",
     "AsyncAgentsResource",
     "AgentsResourceWithRawResponse",
