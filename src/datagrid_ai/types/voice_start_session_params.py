@@ -164,13 +164,14 @@ class VoiceConfig(TypedDict, total=False):
     segment_max_duration_ms: Optional[float]
     """Maximum duration in milliseconds of a buffered segment before force-commit.
 
-    Default: 180000 (3 minutes).
+    Default: 60000 (1 minute).
     """
 
     silence_commit_ms: Optional[float]
     """
-    Duration of silence (no agent audio) in milliseconds before auto-committing a
-    segment. Default: 30000 (30 seconds).
+    Silence in the agent's audio, in milliseconds, before the buffered conversation
+    segment is committed to history. Does not decide when the user's turn ends; see
+    turn_end_mode. Default: 2000 (2 seconds).
     """
 
     silence_discard_ratio: Optional[float]

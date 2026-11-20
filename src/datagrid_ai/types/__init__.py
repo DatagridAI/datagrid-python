@@ -43,6 +43,7 @@ from .agent_list_params import AgentListParams as AgentListParams
 from .converse_response import ConverseResponse as ConverseResponse
 from .skill_list_params import SkillListParams as SkillListParams
 from .agent_claim_params import AgentClaimParams as AgentClaimParams
+from .agentic_automation import AgenticAutomation as AgenticAutomation
 from .file_create_params import FileCreateParams as FileCreateParams
 from .file_update_params import FileUpdateParams as FileUpdateParams
 from .i_frame_event_type import IFrameEventType as IFrameEventType
@@ -124,4 +125,7 @@ from .channel_create_thread_message_params import ChannelCreateThreadMessagePara
 from .webhook_list_active_for_event_params import WebhookListActiveForEventParams as WebhookListActiveForEventParams
 from .webhook_list_active_for_event_response import (
     WebhookListActiveForEventResponse as WebhookListActiveForEventResponse,
+)
+from .agentic_automation_create_scheduled_params import (
+    AgenticAutomationCreateScheduledParams as AgenticAutomationCreateScheduledParams,
 )

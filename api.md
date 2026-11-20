@@ -245,6 +245,18 @@ Methods:
 - <code title="post /skills/{skill_id}/promote">client.skills.<a href="./src/datagrid_ai/resources/skills.py">promote</a>(skill_id) -> <a href="./src/datagrid_ai/types/skill.py">Skill</a></code>
 - <code title="post /skills/builtin/{builtin_key}/reset">client.skills.<a href="./src/datagrid_ai/resources/skills.py">reset_builtin_override</a>(builtin_key) -> None</code>
 
+# AgenticAutomations
+
+Types:
+
+```python
+from datagrid_ai.types import AgenticAutomation
+```
+
+Methods:
+
+- <code title="post /agentic-automations/scheduled">client.agentic_automations.<a href="./src/datagrid_ai/resources/agentic_automations.py">create_scheduled</a>(\*\*<a href="src/datagrid_ai/types/agentic_automation_create_scheduled_params.py">params</a>) -> <a href="./src/datagrid_ai/types/agentic_automation.py">AgenticAutomation</a></code>
+
 # Agents
 
 Types:
